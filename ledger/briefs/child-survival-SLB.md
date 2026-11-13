@@ -12,6 +12,16 @@
 
 **Independent check** (reviewer-loo-permutation): unit_only. unit is a real outlier; practice difference is not distinguishable from chance here Adjusted p = 1.000 for SH.XPD.CHEX.GD.ZS. Leave-one-out z = 2.19.
 
+**Candidate practices (model-extracted from its general knowledge, unverified; @cf/meta/llama-3.3-70b-instruct-fp8-fast).**
+
+- Solomon Islands Health Sector Improvement Program [medium]: Aims to improve health service delivery and management To check: World Bank project documents
+- National Health Strategic Plan 2016-2020 [medium]: Outlines strategies for improving health outcomes To check: Government of Solomon Islands publications
+
+Possible measurement artefacts:
+- Small population size may lead to large variations in estimates
+- Modelled estimates used due to limited data availability
+- Conflict and instability may affect data collection and quality
+
 **Prediction (scored automatically).** On the next data refresh, Solomon Islands's residual z stays at or above the problem's threshold, probability 1.00. The result is recorded whether it holds or not.
 
 **What this cannot show.** The data is observational and aggregate. A practice that differs is a lead for investigation, not proof that copying it works.

@@ -11,6 +11,19 @@
 
 **Independent check** (reviewer-loo-permutation): unit_only. unit is a real outlier; practice difference is not distinguishable from chance here Adjusted p = 0.519 for SH.STA.BASS.ZS. Leave-one-out z = 1.62.
 
+**Candidate practices (model-extracted from its general knowledge, unverified; @cf/meta/llama-3.3-70b-instruct-fp8-fast).**
+
+- National Health Strategy [medium]: Improved healthcare infrastructure and services To check: World Bank reports, WHO country profiles
+- Malaria Control Program [medium]: Targeted interventions to reduce malaria incidence To check: WHO malaria reports, Global Fund grants
+- Health Promotion Program [low]: Community-based health education and awareness campaigns To check: UNICEF reports, national health ministry websites
+- Essential Medicines Program [medium]: Increased access to essential medicines and healthcare services To check: WHO Essential Medicines List, national pharmaceutical policies
+- Community Health Worker Program [low]: Trained community health workers providing basic healthcare services To check: WHO community health worker reports, national health worker policies
+
+Possible measurement artefacts:
+- Small population size may affect statistical robustness
+- Modelled estimates used due to data limitations
+- Potential definition changes in health outcome indicators
+
 **Prediction (scored automatically).** On the next data refresh, Sao Tome and Principe's residual z stays at or above the problem's threshold, probability 1.00. The result is recorded whether it holds or not.
 
 **What this cannot show.** The data is observational and aggregate. A practice that differs is a lead for investigation, not proof that copying it works.

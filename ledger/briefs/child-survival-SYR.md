@@ -12,6 +12,19 @@
 
 **Independent check** (reviewer-loo-permutation): verified. practice differs from matched peers beyond chance Adjusted p = 0.096 for SH.STA.BASS.ZS. Leave-one-out z = 1.81.
 
+**Candidate practices (model-extracted from its general knowledge, unverified; @cf/meta/llama-3.3-70b-instruct-fp8-fast).**
+
+- National Health Strategy 2008-2015 [medium]: Improved healthcare infrastructure and services To check: World Health Organization reports or Syrian Ministry of Health publications
+- Expanded Program on Immunization (EPI) [medium]: Increased vaccination coverage To check: World Health Organization EPI reports or Syrian Ministry of Health publications
+- Primary Health Care (PHC) system [medium]: Decentralized healthcare services To check: World Health Organization PHC reports or Syrian Ministry of Health publications
+- Healthcare system reform [low]: Improved healthcare management and financing To check: World Bank or Syrian Ministry of Health publications
+- Disease surveillance and response system [low]: Enhanced disease detection and response To check: World Health Organization disease surveillance reports or Syrian Ministry of Health publications
+
+Possible measurement artefacts:
+- Conflict-related data disruptions
+- Modelled estimates due to incomplete data
+- Definition changes in health indicators
+
 **Prediction (scored automatically).** On the next data refresh, Syrian Arab Republic's residual z stays at or above the problem's threshold, probability 1.00. The result is recorded whether it holds or not.
 
 **What this cannot show.** The data is observational and aggregate. A practice that differs is a lead for investigation, not proof that copying it works.
