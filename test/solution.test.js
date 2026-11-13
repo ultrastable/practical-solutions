@@ -20,3 +20,9 @@ test('every failure mode names a root cause and a closing probe', () => {
   assert.equal(FAILURE_MODES.length, 5);
   for (const fm of FAILURE_MODES) { assert.match(fm.name, /root cause/); assert.ok(fm.contract.closing_probe); }
 });
+
+test('a lever whose indicator is lower than the peers is not promoted as the solution', () => {
+  const spot = { id: 'XX', name: 'Place', z: 2.5, stability: 0.9, observed: 10, expected: 20, peers: ['A'], practices: [{ key: 'SH.IMM.IDPT', effect: -1.2 }] };
+  const b = makeBrief({ id: 'child-survival', title: cfg.title, config: cfg }, { higherIsBetter: false, contextKeys: ['gdp'], units: [1, 2, 3] }, spot, 'h');
+  assert.equal(b.levers.length, 0);
+});

@@ -9,7 +9,7 @@ export const FAILURE_MODES = [
   fm('FM-PS-TICK-INCOMPLETE', 'a tick finished with steps undone', 'a step threw (bad data, schema drift, bundle bug), so later steps never ran',
     `SELECT COALESCE((SELECT steps_total - steps_completed FROM tick_runs WHERE finished_at IS NOT NULL ORDER BY id DESC LIMIT 1), 0) AS value`, 4),
   fm('FM-PS-BLOCKED-ITEM', 'an item is blocked after three failed attempts', 'a source or handler keeps failing; the retry item does not clear it',
-    `SELECT COUNT(*) AS value FROM items WHERE status = 'blocked'`, 3),
+    `SELECT COUNT(*) AS value FROM items WHERE status = 'blocked' AND id NOT LIKE 'FM-%'`, 3),
   fm('FM-PS-MODEL-FAILING', 'a model call failed in the last day', 'the model binding or key is missing, rate-limited or the model id retired',
     `SELECT COUNT(*) AS value FROM ps_model_calls WHERE ok = 0 AND at > datetime('now', '-1 day')`, 2),
   fm('FM-PS-PREDICTION-OVERDUE', 'a prediction is more than a day past due and unscored', 'the cycle that scores it is not running or its dataset fetch fails',

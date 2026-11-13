@@ -18,7 +18,7 @@ export function makeBrief(problem, ds, spot, hash) {
     higherIsBetter: ds.higherIsBetter, peers: spot.peers, practices: spot.practices.slice(0, 3),
     contextKeys: ds.contextKeys, n: ds.units.length, dataset: hash, source: ds.source || 'unspecified',
     statement: problem.config?.statement || problem.statement || null,
-    levers: spot.practices.slice(0, 3).map(p => ({ key: p.key, effect: p.effect, ...((problem.config?.levers || problem.levers || {})[p.key] || {}) })).filter(l => l.solution),
+    levers: spot.practices.filter(p => p.effect > 0).slice(0, 3).map(p => ({ key: p.key, effect: p.effect, ...((problem.config?.levers || problem.levers || {})[p.key] || {}) })).filter(l => l.solution),
   };
 }
 
