@@ -22,8 +22,8 @@ export function createPs({ db, env = {}, secrets = env, fetch: f = globalThis.fe
   async function handle(request) {
     const url = new URL(request.url);
     if (url.pathname === '/ps/briefs') {
-      const rows = (await db.prepare(`SELECT payload, verification, narrative, published_at FROM ps_briefs WHERE status='published' ORDER BY published_at DESC LIMIT 100`).all()).results;
-      const out = rows.map(r => { const b = JSON.parse(r.payload), v = JSON.parse(r.verification || 'null'); return { id: b.id, unit: b.unit, name: b.name, z: b.z, published_at: r.published_at, markdown: renderBrief(b, v, r.narrative) }; });
+      const rows = (await db.prepare(`SELECT payload, verification, narrative, published_at, id FROM ps_briefs WHERE status='published' ORDER BY published_at DESC LIMIT 100`).all()).results;
+      const out = await Promise.all(rows.map(async r => { const b = JSON.parse(r.payload), v = JSON.parse(r.verification || 'null'); return { id: b.id, unit: b.unit, name: b.name, z: b.z, published_at: r.published_at, markdown: renderBrief(b, v, r.narrative, JSON.parse(((await db.prepare(`SELECT payload FROM ps_extractions WHERE brief_id=?`).bind(r.id).first()) || {}).payload || 'null')) }; }));
       return Response.json({ briefs: out });
     }
     if (url.pathname === '/ps/criticality') {

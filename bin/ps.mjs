@@ -73,7 +73,8 @@ async function main() {
     const rows = (await db.prepare(`SELECT * FROM ps_briefs WHERE status='published'`).all()).results;
     const index = [];
     for (const r of rows) {
-      const b = JSON.parse(r.payload), md = renderBrief(b, JSON.parse(r.verification || 'null'), r.narrative);
+      const ex = async (d, id) => ((await d.prepare(`SELECT payload FROM ps_extractions WHERE brief_id=?`).bind(id).first()) || {}).payload;
+      const b = JSON.parse(r.payload), md = renderBrief(b, JSON.parse(r.verification || 'null'), r.narrative, JSON.parse((await ex(db, r.id)) || 'null'));
       const f = `${b.problem}-${b.unit}.md`; writeFileSync(path.join(out, f), md + '\n');
       index.push({ file: f, id: b.id, z: b.z, sha256: createHash('sha256').update(md).digest('hex') });
     }

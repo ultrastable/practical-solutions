@@ -20,7 +20,7 @@ export function makeBrief(problem, ds, spot, hash) {
   };
 }
 
-export function renderBrief(b, verification, narrative) {
+export function renderBrief(b, verification, narrative, extraction) {
   const dir = b.higherIsBetter ? 'higher' : 'lower';
   const lines = [
     `# ${b.title}: ${b.name}`, '',
@@ -31,6 +31,12 @@ export function renderBrief(b, verification, narrative) {
   ];
   if (verification) lines.push(`**Independent check** (${verification.by}): ${verification.verdict}. ${verification.reason || ''}${verification.pAdj != null ? ` Adjusted p = ${verification.pAdj.toFixed(3)} for ${verification.practice}.` : ''} Leave-one-out z = ${verification.zLoo != null ? verification.zLoo.toFixed(2) : 'n/a'}.`, '');
   if (narrative) lines.push('**Transfer hypothesis.**', '', narrative, '');
+  if (extraction && (extraction.practices?.length || extraction.artefact_risks?.length)) {
+    lines.push(`**Candidate practices (model-extracted from its general knowledge, unverified; ${extraction.model}).**`, '');
+    for (const p of extraction.practices) lines.push(`- ${p.name} [${p.confidence}]: ${p.what} To check: ${p.how_to_check}`);
+    if (extraction.artefact_risks.length) lines.push('', 'Possible measurement artefacts:', ...extraction.artefact_risks.map(x => `- ${x}`));
+    lines.push('');
+  }
   lines.push(
     `**Prediction (scored automatically).** On the next data refresh, ${b.name}'s residual z stays at or above the problem's threshold, probability ${(b.stability).toFixed(2)}. The result is recorded whether it holds or not.`, '',
     '**What this cannot show.** The data is observational and aggregate. A practice that differs is a lead for investigation, not proof that copying it works.', '',
