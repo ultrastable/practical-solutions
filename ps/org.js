@@ -9,14 +9,15 @@ import { psSteps } from './steps.js';
 import { makeSource } from './sources.js';
 import { evaluate } from './criticality.js';
 import { renderBrief } from './brief.js';
+import { psMetrics } from './metrics.js';
 
 const presence = env => Object.fromEntries(Object.entries(env || {}).filter(([, v]) => typeof v === 'string' && v).map(([k]) => [k, true]));
 
 export function createPs({ db, env = {}, secrets = env, fetch: f = globalThis.fetch, now = () => Date.now(), config } = {}) {
   const cfg = config || buildConfig();
-  const org = createOrg({ db, env, config: cfg, fetch: f, now });
+  const org = createOrg({ db, env, config: cfg, fetch: f, now, metrics: psMetrics });
   const steps = psSteps({ fetch: f, secrets, config: cfg, sourceFor: spec => makeSource(spec, { fetch: f }) });
-  const tick = (e = env) => runTick(db, { config: cfg, env: presence(e), now: now(), extraSteps: [...org.extraSteps(e), ...steps] });
+  const tick = (e = env) => runTick(db, { config: cfg, env: presence(e), now: now(), extraSteps: [...org.extraSteps(e), ...steps], metrics: psMetrics });
 
   async function handle(request) {
     const url = new URL(request.url);

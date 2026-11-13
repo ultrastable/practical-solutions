@@ -116,6 +116,7 @@ async function verify(item, S) {
     const prob = ((hist.h || 0) + 0.5 * 2) / (hist.n + 2);
     await run(S.db, `INSERT OR IGNORE INTO ps_predictions (id, brief_id, problem_id, unit, klass, metric, op, target, probability, due_at) VALUES (?,?,?,?,?,?,?,?,?,?)`,
       `pred:${id}`, id, row.problem_id, row.unit, status, 'ps_residual_z', '>=', params.stableZ, Math.min(0.99, Math.max(0.01, prob)), iso(S.now + refresh));
+    await run(S.db, `INSERT OR IGNORE INTO predictions (id, item_id, metric, op, target, due_at) VALUES (?,?,?,?,?,?)`, `core:pred:${id}`, `ps:brief:${id}`, 'ps_residual_z', '>=', params.stableZ, iso(S.now + refresh)); // graded by core through the registered domain metric
   }
   if (status !== 'rejected') await addItem(S, { id: `ps:publish:${id}`, title: `Publish brief ${b.name} (${b.problem})`, owner_role: 'operations', priority: 30, surface: 'ps_publish', action_class: 'publish',
     done_check: 'brief status is published and its prediction is registered', closing_probe: 'ps_briefs.status = published' }, item.id);
@@ -266,5 +267,19 @@ export function psSteps({ fetch: f = globalThis.fetch, secrets = {}, sourceFor, 
       ctx.notes.push(`criticality: ${rep.critical ? 'CRITICAL' : 'not yet'} (${rep.failing.join(',') || 'all measured tests pass'})`);
     },
   };
-  return [work, snapshot, crit];
+  // UPSTREAM-1 closes only on evidence that the upstream fix works here: core itself graded a ps_residual_z prediction.
+  const upstream = {
+    name: 'ps_upstream',
+    async run(db, ctx) {
+      const it = await first(db, `SELECT id FROM items WHERE id='UPSTREAM-1' AND status!='done'`);
+      if (!it) return;
+      const r = await first(db, `SELECT COUNT(*) n FROM predictions WHERE metric='ps_residual_z' AND verdict IS NOT NULL AND observed IS NOT NULL`);
+      if (!r.n) { ctx.notes.push('upstream: UPSTREAM-1 waits for core to grade its first ps_residual_z prediction'); return; }
+      const ev = `core graded ${r.n} prediction(s) through the registered domain metric (ultrastable/workers#175)`;
+      await run(db, `UPDATE items SET status='done', disposition=?, updated_at=? WHERE id='UPSTREAM-1'`, `completed: ${ev}`, ctx.nowIso);
+      await run(db, `INSERT INTO outcomes (item_id, agent, surface, action_class, result, evidence, at) VALUES ('UPSTREAM-1', ?, 'ps_upstream', 'verify', 'verified', ?, ?)`, ANALYST, ev, ctx.nowIso);
+      ctx.notes.push('upstream: UPSTREAM-1 closed on evidence');
+    },
+  };
+  return [work, snapshot, upstream, crit];
 }
