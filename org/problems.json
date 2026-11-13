@@ -1,0 +1,10 @@
+[
+  { "id": "synthetic-demo", "title": "Synthetic world with planted truth", "enabled": false, "refresh_days": 30, "top_k": 5, "boot": 80,
+    "source": { "type": "synthetic", "seed": 11, "n": 80 } },
+  { "id": "child-survival", "title": "Child survival beyond what income and setting predict", "enabled": true, "refresh_days": 30, "top_k": 4, "boot": 150,
+    "source": { "type": "worldbank",
+      "outcome": { "id": "SH.DYN.MORT", "higherIsBetter": false },
+      "context": ["NY.GDP.PCAP.PP.KD", "SP.URB.TOTL.IN.ZS", "SP.POP.TOTL"],
+      "transform": { "NY.GDP.PCAP.PP.KD": "log", "SP.POP.TOTL": "log" },
+      "practices": ["SH.XPD.CHEX.GD.ZS", "SH.MED.PHYS.ZS", "SH.STA.BASS.ZS", "SH.IMM.IDPT"] } }
+]

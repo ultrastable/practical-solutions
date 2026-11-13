@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+  schedule: [{ cron: '17 5 * * *' }]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test
+      - run: npm run test:vendor
+      - run: node tools/build_migrations.mjs --check
+      - name: the loop runs from birth on a fake clock and reports its own criticality
+        run: node --no-warnings bin/ps.mjs simulate --days 150 | tee simulate.txt || true
+      - uses: actions/upload-artifact@v4
+        with: { name: simulate, path: simulate.txt }
