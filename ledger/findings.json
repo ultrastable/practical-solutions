@@ -1,0 +1,28 @@
+{
+  "schema": "ps-findings/1",
+  "as_of": "2026-11-13",
+  "problem": "child-survival",
+  "source": "World Bank open API, mrnev 2015-2024, 185 countries after listwise deletion",
+  "ledger_cycle": 12,
+  "reading": {
+    "bright_spots_detected": 4,
+    "survived_independent_check": [{ "unit": "SYR", "verdict": "verified", "adjusted_p": 0.096, "practice": "SH.STA.BASS.ZS", "note": "passes only at the loop's loose threshold; not significant at 0.05" }],
+    "outlier_only": ["SLB", "STP", "VUT"],
+    "predictions_resolved": 0,
+    "predictions_open": 4,
+    "hit_rate": null,
+    "brier": null
+  },
+  "honest_conclusion": "Nothing found here is a solution anyone should copy. Three of the four units are small island states whose child-mortality figures are modelled estimates with wide uncertainty; the fourth, Syria, is conflict-affected, where a low modelled estimate is more plausibly a data artefact than a success. Only one brief passed the independent practice check, at adjusted p = 0.096. Predictions cannot be scored before the next 30-day data refresh, so the loop has no measured hit rate yet.",
+  "model_extraction": {
+    "route": "worker-ai (GitHub OIDC to a Workers AI binding), @cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "result": "8 of 8 calls succeeded after two root-cause fixes; the practices it lists are generic national health programmes (strategy documents, immunisation, primary care) with no evidence that any explains the gap. All are stored as unverified hypotheses.",
+    "github_models_route": "models.github.ai answered HTTP 200 text 'OK' for chat and catalog from the runner (modelprobe run 1), so it is not usable from there."
+  },
+  "failures_found_and_fixed": [
+    { "id": "run-5", "cause": "checkout pinned the dispatch SHA, so a queued run started from state older than the previous run's commit and hit add/add conflicts on ledger files", "fix": "checkout ref main, bounded retry, final ancestor check" },
+    { "id": "extract-object-response", "cause": "Workers AI returns an already-parsed object for JSON answers; String(object) is '[object Object]'", "fix": "textOf() in ps/llm.js and ps-llm" },
+    { "id": "extract-retry", "cause": "a skipped extraction was never retried after its route was fixed", "fix": "route fingerprint with a version; retry on change or after 6 h" }
+  ],
+  "open_criticality_tests": { "C3": "see ledger/cycles.jsonl", "C4": "plus share below target", "C6": "trust ledger has not moved in both directions", "C10": "UPSTREAM item open", "C5": "unmeasured until predictions resolve" }
+}
