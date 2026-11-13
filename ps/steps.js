@@ -129,8 +129,8 @@ async function publish(item, S) {
   if (!row || !['verified', 'unit_only'].includes(row.status)) throw new Error('brief not verified');
   let narrative = null;
   const key = S.secrets.ANTHROPIC_API_KEY;
-  if (key) {
-    const r = await narrate({ fetch: S.fetch, key, brief: JSON.parse(row.payload) });
+  if (key || (S.secrets.AI && S.secrets.AI.run)) {
+    const r = await narrate({ fetch: S.fetch, key, ai: S.secrets.AI, brief: JSON.parse(row.payload) });
     await run(S.db, `INSERT INTO ps_model_calls (at, role, model, ok, cost_usd) VALUES (?,?,?,?,0)`, S.nowIso, NARRATOR, r.model || 'unknown', r.ok ? 1 : 0);
     narrative = r.text;
   }

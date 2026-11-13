@@ -20,3 +20,12 @@ test('core grades a bright-spot prediction through the registered ps_residual_z 
   assert.equal(r.verdict, 'hit');
   assert.ok(Number.isFinite(r.observed));
 });
+
+import { narrate, WORKERS_AI_MODEL } from '../ps/narrate.js';
+test('the model role runs on an account-bound Workers AI binding with no key, and the call names its model', async () => {
+  const ai = { run: async (m, body) => ({ response: `hypothesis via ${m} ${body.messages.length}` }) };
+  const r = await narrate({ ai, brief: { name: 'X', problem: 'p', z: 2 } });
+  assert.equal(r.ok, true);
+  assert.equal(r.model, WORKERS_AI_MODEL);
+  assert.equal((await narrate({ brief: {} })).called, false);
+});
