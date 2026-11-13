@@ -33,7 +33,7 @@ jobs:
           node -e "for (const b of JSON.parse(require('fs').readFileSync('ledger/briefs/index.json','utf8'))) console.log(b.file)" | while read f; do
             t="Bright spot: ${f%.md}"
             n=$(gh issue list -R "$GITHUB_REPOSITORY" --label bright-spot --state all --search "\"$t\" in:title" --json number --jq length)
-            [ "$n" = 0 ] && { gh issue create -R "$GITHUB_REPOSITORY" --label bright-spot --title "$t" --body-file "ledger/briefs/$f" || echo "issue create failed for $f"; }
+            if [ "$n" = 0 ]; then gh issue create -R "$GITHUB_REPOSITORY" --label bright-spot --title "$t" --body-file "ledger/briefs/$f" || echo "issue create failed for $f"; fi
           done
       - name: commit state
         run: |
