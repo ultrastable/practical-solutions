@@ -244,6 +244,11 @@ export function psSteps({ fetch: f = globalThis.fetch, secrets = {}, sourceFor, 
         await addItem(S, { id: `ps:extract:${b.id}`, title: `Extract candidate practices for ${nm.name} (${nm.problem})`, owner_role: 'analyst', priority: 25, surface: 'ps_extract', action_class: 'extract',
           done_check: 'model practice hypotheses stored on the brief, or the missing model route recorded', closing_probe: 'ps_extractions row for the brief' });
       }
+      // A brief whose model pass was skipped (no route, or every route failed) is retried at most every 6 hours, so a route that comes up later fills it in.
+      for (const x of await all(db, `SELECT brief_id, at FROM ps_extractions WHERE payload LIKE '%"skipped"%' AND at < ?`, iso(ctx.now - 6 * 3600e3))) {
+        await run(db, `UPDATE items SET status='ready', updated_at=? WHERE id=? AND status='done'`, ctx.nowIso, `ps:extract:${x.brief_id}`);
+        await run(db, `DELETE FROM ps_extractions WHERE brief_id=?`, x.brief_id);
+      }
       const ready = await all(db, `SELECT * FROM items WHERE status='ready' ORDER BY priority, created_at LIMIT 300`);
       let done = 0, failed = 0;
       for (const item of ready) {

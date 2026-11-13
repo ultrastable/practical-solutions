@@ -38,3 +38,29 @@ test('the brief shows extracted practices as unverified hypotheses', () => {
   const md = renderBrief(brief, null, null, { model: 'm', practices: [{ name: 'Mobile clinics', confidence: 'low', what: 'w', how_to_check: 'c' }], artefact_risks: ['conflict-era modelled estimate'] });
   assert.match(md, /unverified/); assert.match(md, /Mobile clinics/); assert.match(md, /artefacts/);
 });
+
+import { generateKeyPairSync, createSign } from 'node:crypto';
+import { verifyOidc, ISSUER } from '../ps/oidc.js';
+const b64 = o => Buffer.from(typeof o === 'string' ? o : JSON.stringify(o)).toString('base64url');
+function mint(claims, kid = 'k1') {
+  const { privateKey, publicKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+  const h = b64({ alg: 'RS256', kid }), p = b64(claims);
+  const sig = createSign('RSA-SHA256').update(`${h}.${p}`).sign(privateKey).toString('base64url');
+  return { token: `${h}.${p}.${sig}`, jwks: [{ ...publicKey.export({ format: 'jwk' }), kid }] };
+}
+const good = { iss: ISSUER, aud: 'practical-solutions-llm', repository: 'QNFO/practical-solutions', exp: Math.floor(Date.now() / 1000) + 300 };
+test('oidc: a valid run token passes; wrong repository, audience, expiry or key fail', async () => {
+  const a = mint(good); const opt = { audience: 'practical-solutions-llm', repository: 'QNFO/practical-solutions', jwks: a.jwks };
+  assert.equal((await verifyOidc(a.token, opt)).ok, true);
+  assert.equal((await verifyOidc(a.token, { ...opt, repository: 'x/y' })).reason, 'repository');
+  assert.equal((await verifyOidc(a.token, { ...opt, audience: 'other' })).reason, 'audience');
+  assert.equal((await verifyOidc(mint({ ...good, exp: 1 }).token, opt)).reason, 'expired');
+  assert.equal((await verifyOidc(a.token, { ...opt, jwks: mint(good).jwks })).reason, 'signature');
+  assert.equal((await verifyOidc('a.b', opt)).reason, 'malformed token');
+});
+test('worker-ai route: mints an OIDC token, then calls the Worker with it', async () => {
+  const seen = [];
+  const f = async (u, o) => { seen.push(u); return u.includes('ID_TOKEN') ? ok({ value: 'jwt' })() : ok({ text: 'answer', model: 'm' })(); };
+  const r = await complete({ fetch: f, secrets: { PS_LLM_URL: 'https://w/ps/llm', ACTIONS_ID_TOKEN_REQUEST_URL: 'https://x/ID_TOKEN?a=1', ACTIONS_ID_TOKEN_REQUEST_TOKEN: 't' }, prompt: 'p' });
+  assert.equal(r.route, 'worker-ai'); assert.equal(r.text, 'answer'); assert.match(seen[0], /audience=practical-solutions-llm/);
+});
