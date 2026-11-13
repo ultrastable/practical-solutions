@@ -1,0 +1,30 @@
+[
+ {
+  "file": "child-survival-SLB.md",
+  "id": "child-survival:SLB:f073b40a",
+  "z": 2.804782651564912,
+  "status": "hypothesis, to be checked by a person or partner",
+  "sha256": "e8fb597a3cb412c069370976104ab4440879a8c1d00b15d77655c1daa2ca93b7"
+ },
+ {
+  "file": "child-survival-SYR.md",
+  "id": "child-survival:SYR:f073b40a",
+  "z": 2.3225925176178737,
+  "status": "hypothesis, to be checked by a person or partner",
+  "sha256": "e332cc87feef3e2ffc7316bedf3a423bf7f0c80f5f01fe5e8bf5dd5d0d4e3a2f"
+ },
+ {
+  "file": "child-survival-VUT.md",
+  "id": "child-survival:VUT:f073b40a",
+  "z": 2.2788380316394745,
+  "status": "hypothesis, to be checked by a person or partner",
+  "sha256": "112a4c7032228c77e62f13dd479097ccf055d4ca21c4b07ded291b2af0c8c492"
+ },
+ {
+  "file": "child-survival-STP.md",
+  "id": "child-survival:STP:f073b40a",
+  "z": 2.0650850242388725,
+  "status": "hypothesis, to be checked by a person or partner",
+  "sha256": "352f17dff16c09c2004e3427e447f2326dfccbbe6fafb21d96a2f68838650e8c"
+ }
+]
