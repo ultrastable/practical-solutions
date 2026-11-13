@@ -17,14 +17,20 @@ export function makeBrief(problem, ds, spot, hash) {
     z: spot.z, stability: spot.stability, observed: spot.observed, expected: spot.expected,
     higherIsBetter: ds.higherIsBetter, peers: spot.peers, practices: spot.practices.slice(0, 3),
     contextKeys: ds.contextKeys, n: ds.units.length, dataset: hash, source: ds.source || 'unspecified',
+    statement: problem.config?.statement || problem.statement || null,
+    levers: spot.practices.slice(0, 3).map(p => ({ key: p.key, effect: p.effect, ...((problem.config?.levers || problem.levers || {})[p.key] || {}) })).filter(l => l.solution),
   };
 }
 
 export function renderBrief(b, verification, narrative, extraction) {
   const dir = b.higherIsBetter ? 'higher' : 'lower';
+  const top = (b.levers || [])[0];
   const lines = [
-    `# ${b.title}: ${b.name}`, '',
-    `**Bright spot.** ${b.name} (${b.unit}) has an outcome of ${b.observed.toFixed(3)} where its context (${b.contextKeys.join(', ')}) predicts ${b.expected.toFixed(3)}; ${dir} is better. That is ${b.z.toFixed(2)} robust standard deviations above expectation, and it stays above 1 in ${(b.stability * 100).toFixed(0)}% of bootstrap refits (n = ${b.n}).`, '',
+    `# Solution brief: ${top ? top.solution : b.title}`, '',
+    ...(b.statement ? [`**Problem.** ${b.statement}`, ''] : []),
+    ...(top ? [`**Candidate solution.** ${top.solution}`, '', `**What implementing it takes.** ${top.implement}`, '', `**Who could implement it.** ${top.who}`, '', `**Cheapest first test.** ${top.first_test}`, ''] : []),
+    ...((b.levers || []).slice(1).map(l => `- Also worth testing: ${l.solution}`)), ...((b.levers || []).length > 1 ? [''] : []),
+    `**Evidence case (a place, not the solution).** ${b.name} (${b.unit}) has an outcome of ${b.observed.toFixed(3)} where its context (${b.contextKeys.join(', ')}) predicts ${b.expected.toFixed(3)}; ${dir} is better. That is ${b.z.toFixed(2)} robust standard deviations above expectation, and it stays above 1 in ${(b.stability * 100).toFixed(0)}% of bootstrap refits (n = ${b.n}).`, '',
     `**Matched peers** (nearest in context, not bright): ${b.peers.join(', ')}.`, '',
     '**What differs from those peers** (standardized difference; association, not cause):', '',
     ...(b.practices.length ? b.practices.map(p => `- ${p.key}: ${p.effect >= 0 ? '+' : ''}${p.effect.toFixed(2)}`) : ['- no practice differs by more than the noise threshold']), '',

@@ -3,6 +3,8 @@
 // The executor. Ultrastable's tick claims and dispatches work, and records outcomes; this module is what actually does the work
 // for Practical Solutions: it runs each ready item's handler, closes it with a disposition, writes the outcome the trust ledger
 // reads, and spawns the follow-up items. One tick runs everything that is due. Nothing here waits on a person.
+import { registerFailureMode } from '../vendor/ultrastable/core/kernel/failure.js';
+import { FAILURE_MODES } from './failure_modes.js';
 import * as claims from '../vendor/ultrastable/core/claims/index.js';
 import { detect, unitZ } from './detect.js';
 import { verifyBrief, REVIEWER } from './verify.js';
@@ -80,7 +82,7 @@ async function cycle(item, S) {
   let created = 0;
   for (const spot of d.spots) {
     if (known.has(spot.id)) continue;
-    const b = makeBrief(problem, ds, spot, hash);
+    const b = makeBrief({ ...problem, config: cfg }, ds, spot, hash);
     await run(S.db, `INSERT OR IGNORE INTO ps_briefs (id, problem_id, dataset_id, unit, z, stability, payload, status, created_by, created_at) VALUES (?,?,?,?,?,?,?, 'draft', ?, ?)`,
       b.id, pid, dsRow.id, b.unit, b.z, b.stability, JSON.stringify(b), ANALYST, S.nowIso);
     await addItem(S, { id: `ps:verify:${b.id}`, title: `Verify brief ${b.name} (${pid})`, owner_role: 'reviewer', priority: 20, surface: 'ps_verify', action_class: 'verify',
@@ -314,5 +316,9 @@ export function psSteps({ fetch: f = globalThis.fetch, secrets = {}, sourceFor, 
       ctx.notes.push('upstream: UPSTREAM-1 closed on evidence');
     },
   };
-  return [work, snapshot, upstream, crit];
+  const modes = {
+    name: 'ps_failure_modes',
+    async run(db, ctx) { for (const fm of FAILURE_MODES) await registerFailureMode(db, fm, ctx.now); return { registered: FAILURE_MODES.length }; },
+  };
+  return [modes, work, snapshot, upstream, crit];
 }
