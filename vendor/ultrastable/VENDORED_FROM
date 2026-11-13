@@ -1,5 +1,5 @@
 {
- "commit": "6ab8290c65047b025333dfce1c14116538098362",
+ "commit": "145fdfeb20b436655ffdfd44dc36e092b2064d5e",
  "files": {
   ".claude/settings.json": "db2a7917aac18605c5ba25c2bb717aacf61ddae27873766a7c0a51856b9dec43",
   ".cursor/rules/ultrastable.mdc": "1851a79c79f313ae375bb32af2ea5786ed08722e124886b099c8eb7673c41f48",
@@ -238,7 +238,7 @@
   "core/observe/migrations/0001_observe.sql": "0f8806419280d4fbb24d16cf2c2a51bb36bed959ea37798daa49992705f5b854",
   "core/observe/observe.test.js": "77debf03a2ab867301c1e42651658aea3a1352b684b2e22ad8b06bbdcbd085c8",
   "core/org/README.md": "9285dd1a460e98d6596aa143f29971ae5c4804a4140ba7ff49d535458fe7c8b0",
-  "core/org/index.js": "dd2aedce6e08da59fa9bfdee2c622890390eada37750048e71e2da90172ebc98",
+  "core/org/index.js": "13addec77d293ada8e642fc726b2d65c4213dca13e2ebca37958235fb14ea1bf",
   "core/org/migrations.test.js": "81ae9e20fab2a50eb65b5d35e73a61d7cb1e0f0287d4682a2de9ff1186813e2a",
   "core/org/modules.js": "0c9da83effcfc9baaff18c9806b05d7e0362ccd5ebd0ff83e931c6532c684311",
   "core/org/org.test.js": "b751dc0802e45065f3bd90ef4452fd60d14ce40e445ffaa88747ca120e826233",
@@ -301,7 +301,7 @@
   "core/src/help-data.js": "72a55e52b188c8f39f1a0bfc3d53261f4df4edec4eb1c5335620094f06986e1c",
   "core/src/secrets-ui.js": "d589ba42f56c455c801a7ff2e190ef3636944f8c5f3b4b9d59ae3a9e249e395e",
   "core/src/secrets-ui.test.js": "a59c7d7a64e79f2ec1c6e09c9ad917163f2435f46efed8bcd83f68114253d46f",
-  "core/src/tick.js": "0489846c5f50c0099db30d858537d0bac1a779065bcb3fc73f39408a2b4fa353",
+  "core/src/tick.js": "37f440540300815d7988ec412cb7c16519d7b30bca21c7f97a55417199a338ce",
   "core/steward/README.md": "4096bd6b8b38cf2ed98b87d4d6b7bb5da253e6aa2f9df335661eb7bb23935c9c",
   "core/steward/index.js": "30608539211fe885eb88ff8f0daa21caf2a9d817532c3adcccdd94a97cd92312",
   "core/steward/migrations/0001_steward.sql": "ec899f5d5913751299030e06ae063f6c9213900590e5cbfa6e3815c2ab739223",
@@ -321,6 +321,7 @@
   "core/test/org-wiring.test.js": "955d5a83dbc4dc8e064b6d033b6a2c766d8a8e446d3c784de03aa7862f3fc58d",
   "core/test/second-installation.test.js": "7ecdffb04c58e4fbd13e4b334a3a1205e86e35f6563b6048e798aaee8020d647",
   "core/test/self-doer.test.js": "38c890cdcd71254b101917c6861182cf6a6b2d2b466204e04eb1d0c65b400b3a",
+  "core/test/tick-metrics.test.js": "59fa0c9ebff8437308fb6c46b0b46064d2f4a982ca19dd7433be22d1a4a9fa2b",
   "core/test/tick.test.js": "fdf49e90fa66a61281fc8285dfd51980ee07a50c61ce197487759aafbe629d3d",
   "core/vault/index.js": "0a5c321b7ed423a7bc7168fe4d7043d32ec9a6d55165b0873f2236c8a32b5438",
   "core/vault/migrations/0001_vault.sql": "eeaa41a8a22b90269e5fbcba9fa8c3c10d341d10fc176ba414a99bc455be3646",
