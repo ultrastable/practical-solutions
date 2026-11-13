@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# budget: under 1 minute per dispatch.
+# trigger: workflow_dispatch only; a probe of the keyless model route, run when the route's answer changes.
+# free-alternative: the cycle workflow records the same failure in ps_extractions.
+name: modelprobe
+on: { workflow_dispatch: {} }
+permissions: { contents: read, models: read }
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: call GitHub Models with the run's own token
+        env: { T: '${{ github.token }}' }
+        run: |
+          for m in openai/gpt-4.1 openai/gpt-4o-mini; do
+            echo "== $m"; curl -sS -i -X POST https://models.github.ai/inference/chat/completions -H "Authorization: Bearer $T" -H "Content-Type: application/json" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -d "{\"model\":\"$m\",\"messages\":[{\"role\":\"user\",\"content\":\"Reply with the word pong\"}],\"max_tokens\":10}" | head -30
+          done
+          echo "== catalog"; curl -sS -i https://models.github.ai/catalog/models -H "Authorization: Bearer $T" -H "Accept: application/vnd.github+json" | head -12
