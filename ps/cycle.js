@@ -17,6 +17,8 @@ import { renderBrief } from './brief.js';
 const all = async (db, sql, ...a) => (await db.prepare(sql).bind(...a).all()).results || [];
 const first = async (db, sql, ...a) => (await db.prepare(sql).bind(...a).first()) || null;
 
+const ex = async (db, id) => ((await first(db, `SELECT payload FROM ps_extractions WHERE brief_id=?`, id)) || {}).payload;
+
 export async function essentials(db) {
   const briefs = Object.fromEntries((await all(db, `SELECT status, COUNT(*) n FROM ps_briefs GROUP BY status`)).map(r => [r.status, r.n]));
   const res = await all(db, `SELECT probability p, verdict FROM ps_predictions WHERE verdict IS NOT NULL`);
@@ -37,7 +39,7 @@ export async function publish(db, out, cycleNo, at) {
   const known = new Set(prev.map(x => x.id));
   const index = [], added = [];
   for (const r of rows) {
-    const b = JSON.parse(r.payload), md = renderBrief(b, JSON.parse(r.verification || 'null'), r.narrative);
+    const b = JSON.parse(r.payload), md = renderBrief(b, JSON.parse(r.verification || 'null'), r.narrative, JSON.parse((await ex(db, r.id)) || 'null'));
     const f = `${b.problem}-${b.unit}.md`;
     writeFileSync(path.join(out, f), md + '\n');
     const e = { file: f, id: b.id, z: b.z, status: 'hypothesis, to be checked by a person or partner', sha256: createHash('sha256').update(md).digest('hex') };

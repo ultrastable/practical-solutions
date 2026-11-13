@@ -9,6 +9,7 @@ import { verifyBrief, REVIEWER } from './verify.js';
 import { makeBrief, hashDataset } from './brief.js';
 import { narrate, NARRATOR } from './narrate.js';
 import { evaluate } from './criticality.js';
+import { extractPractices, EXTRACTOR } from './extract.js';
 
 export const ANALYST = 'analyst-detector';
 const DAY = 86400e3;
@@ -118,9 +119,26 @@ async function verify(item, S) {
       `pred:${id}`, id, row.problem_id, row.unit, status, 'ps_residual_z', '>=', params.stableZ, Math.min(0.99, Math.max(0.01, prob)), iso(S.now + refresh));
     await run(S.db, `INSERT OR IGNORE INTO predictions (id, item_id, metric, op, target, due_at) VALUES (?,?,?,?,?,?)`, `core:pred:${id}`, `ps:brief:${id}`, 'ps_residual_z', '>=', params.stableZ, iso(S.now + refresh)); // graded by core through the registered domain metric
   }
-  if (status !== 'rejected') await addItem(S, { id: `ps:publish:${id}`, title: `Publish brief ${b.name} (${b.problem})`, owner_role: 'operations', priority: 30, surface: 'ps_publish', action_class: 'publish',
-    done_check: 'brief status is published and its prediction is registered', closing_probe: 'ps_briefs.status = published' }, item.id);
+  if (status !== 'rejected') await addItem(S, { id: `ps:extract:${id}`, title: `Extract candidate practices for ${b.name} (${b.problem})`, owner_role: 'analyst', priority: 25, surface: 'ps_extract', action_class: 'extract',
+    done_check: 'model practice hypotheses stored on the brief, or the missing model route recorded', closing_probe: 'ps_extractions row for the brief' }, item.id);
   return { evidence: `${b.name}: ${v.verdict} (${v.reason || ''})` };
+}
+
+// The model reads the verified brief and lists named practices as unverified hypotheses. No model route is not a failure of the loop: it is recorded,
+// the brief still publishes, and criticality test C9 stays red until a route works. A model answer that is not the expected JSON is recorded as a failed call (ok=0)
+// with its reason and the brief still publishes: the statistical record never waits on a model.
+async function extract(item, S) {
+  const id = item.id.slice('ps:extract:'.length);
+  const row = await first(S.db, `SELECT payload, status FROM ps_briefs WHERE id=?`, id);
+  if (!row || !['verified', 'unit_only', 'published'].includes(row.status)) throw new Error('brief not verified');
+  const r = await extractPractices({ fetch: S.fetch, secrets: S.secrets, brief: JSON.parse(row.payload) });
+  if (r.called) await run(S.db, `INSERT INTO ps_model_calls (at, role, model, ok, cost_usd) VALUES (?,?,?,?,0)`, S.nowIso, EXTRACTOR, `${r.route || 'none'}:${r.model || 'unknown'}`, r.ok ? 1 : 0);
+  const stored = r.ok ? { practices: r.practices, artefact_risks: r.artefact_risks, route: r.route, model: r.model, at: S.nowIso } : { practices: [], artefact_risks: [], route: null, skipped: r.reason, at: S.nowIso };
+  await run(S.db, `INSERT OR REPLACE INTO ps_extractions (brief_id, payload, route, at) VALUES (?,?,?,?)`, id, JSON.stringify(stored), stored.route, S.nowIso);
+  const b = JSON.parse(row.payload);
+  if (row.status !== 'published') await addItem(S, { id: `ps:publish:${id}`, title: `Publish brief ${b.name} (${b.problem})`, owner_role: 'operations', priority: 30, surface: 'ps_publish', action_class: 'publish',
+    done_check: 'brief status is published and its prediction is registered', closing_probe: 'ps_briefs.status = published' }, item.id);
+  return { evidence: r.ok ? `${b.name}: ${r.practices.length} practice hypothesis(es) via ${r.route}` : `${b.name}: no model route (${r.reason})` };
 }
 
 async function publish(item, S) {
@@ -207,7 +225,7 @@ async function fix(item, S) {
 }
 
 const ROUTES = [
-  ['ps:cycle:', cycle], ['ps:verify:', verify], ['ps:publish:', publish], ['ps:audit:', audit], ['ps:calibrate:', calibrate],
+  ['ps:cycle:', cycle], ['ps:verify:', verify], ['ps:extract:', extract], ['ps:publish:', publish], ['ps:audit:', audit], ['ps:calibrate:', calibrate],
   ['REBALANCE-', rebalance], ['LADDER-', ladder], ['TICKFAIL-', tickfail], ['ps:fix:', fix],
 ];
 const handlerFor = id => (ROUTES.find(([p]) => id.startsWith(p)) || [])[1];
@@ -220,6 +238,12 @@ export function psSteps({ fetch: f = globalThis.fetch, secrets = {}, sourceFor, 
     async run(db, ctx) {
       const S = { db, now: ctx.now, nowIso: ctx.nowIso, config, fetch: f, secrets, sourceFor };
       const limit = config.ps?.max_per_tick ?? 8;
+      // Briefs that predate the extraction stage (or whose item was never filed) get one: nothing published is left without its model pass.
+      for (const b of await all(db, `SELECT id, payload FROM ps_briefs WHERE status IN ('verified','unit_only','published') AND id NOT IN (SELECT brief_id FROM ps_extractions)`)) {
+        const nm = JSON.parse(b.payload);
+        await addItem(S, { id: `ps:extract:${b.id}`, title: `Extract candidate practices for ${nm.name} (${nm.problem})`, owner_role: 'analyst', priority: 25, surface: 'ps_extract', action_class: 'extract',
+          done_check: 'model practice hypotheses stored on the brief, or the missing model route recorded', closing_probe: 'ps_extractions row for the brief' });
+      }
       const ready = await all(db, `SELECT * FROM items WHERE status='ready' ORDER BY priority, created_at LIMIT 300`);
       let done = 0, failed = 0;
       for (const item of ready) {
