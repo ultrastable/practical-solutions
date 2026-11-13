@@ -1,5 +1,5 @@
 {
- "exported_at": "2026-11-13T19:50:24.829Z",
+ "exported_at": "2026-11-13T20:02:15.739Z",
  "url": "https://ps-practical-solutions.q08.workers.dev",
  "schema": "ps-ledger/1",
  "tables": {
@@ -30,13 +30,13 @@
     "z": 2.804782651564912,
     "stability": 1,
     "payload": "{\"id\":\"child-survival:SLB:1afc12f3\",\"problem\":\"child-survival\",\"title\":\"Child survival beyond what income and setting predict\",\"unit\":\"SLB\",\"name\":\"Solomon Islands\",\"z\":2.804782651564912,\"stability\":1,\"observed\":20,\"expected\":53.013141962932714,\"higherIsBetter\":false,\"peers\":[\"COM\",\"TLS\",\"LSO\",\"GNB\",\"FSM\"],\"practices\":[{\"key\":\"SH.XPD.CHEX.GD.ZS\",\"effect\":-1.4172711705013523},{\"key\":\"SH.STA.BASS.ZS\",\"effect\":-0.9562568375690668},{\"key\":\"SH.IMM.IDPT\",\"effect\":0.7453848998187456}],\"contextKeys\":[\"NY.GDP.PCAP.PP.KD\",\"SP.URB.TOTL.IN.ZS\",\"SP.POP.TOTL\"],\"n\":185,\"dataset\":\"1afc12f3\",\"source\":\"worldbank\"}",
-    "status": "draft",
+    "status": "published",
     "created_by": "analyst-detector",
-    "verified_by": null,
-    "verification": null,
+    "verified_by": "reviewer-loo-permutation",
+    "verification": "{\"verdict\":\"unit_only\",\"zLoo\":2.187483522857908,\"practice\":\"SH.XPD.CHEX.GD.ZS\",\"p\":0.2934131736526946,\"pAdj\":1,\"by\":\"reviewer-loo-permutation\",\"reason\":\"unit is a real outlier; practice difference is not distinguishable from chance here\"}",
     "narrative": null,
     "created_at": "2026-11-13 19:50:20",
-    "published_at": null
+    "published_at": "2026-11-13 20:00:38"
    },
    {
     "id": "child-survival:SYR:1afc12f3",
@@ -46,13 +46,13 @@
     "z": 2.3225925176178737,
     "stability": 1,
     "payload": "{\"id\":\"child-survival:SYR:1afc12f3\",\"problem\":\"child-survival\",\"title\":\"Child survival beyond what income and setting predict\",\"unit\":\"SYR\",\"name\":\"Syrian Arab Republic\",\"z\":2.3225925176178737,\"stability\":1,\"observed\":18.4,\"expected\":45.73761793035307,\"higherIsBetter\":false,\"peers\":[\"NPL\",\"AGO\",\"GHA\",\"CMR\",\"SEN\"],\"practices\":[{\"key\":\"SH.STA.BASS.ZS\",\"effect\":1.5456325774459319},{\"key\":\"SH.IMM.IDPT\",\"effect\":-0.9356959380703402},{\"key\":\"SH.MED.PHYS.ZS\",\"effect\":0.6964028989901516}],\"contextKeys\":[\"NY.GDP.PCAP.PP.KD\",\"SP.URB.TOTL.IN.ZS\",\"SP.POP.TOTL\"],\"n\":185,\"dataset\":\"1afc12f3\",\"source\":\"worldbank\"}",
-    "status": "draft",
+    "status": "published",
     "created_by": "analyst-detector",
-    "verified_by": null,
-    "verification": null,
+    "verified_by": "reviewer-loo-permutation",
+    "verification": "{\"verdict\":\"verified\",\"zLoo\":1.806772777723174,\"practice\":\"SH.STA.BASS.ZS\",\"p\":0.023952095808383235,\"pAdj\":0.09580838323353294,\"by\":\"reviewer-loo-permutation\",\"reason\":\"practice differs from matched peers beyond chance\"}",
     "narrative": null,
     "created_at": "2026-11-13 19:50:20",
-    "published_at": null
+    "published_at": "2026-11-13 20:00:38"
    },
    {
     "id": "child-survival:VUT:1afc12f3",
@@ -62,13 +62,13 @@
     "z": 2.2788380316394745,
     "stability": 1,
     "payload": "{\"id\":\"child-survival:VUT:1afc12f3\",\"problem\":\"child-survival\",\"title\":\"Child survival beyond what income and setting predict\",\"unit\":\"VUT\",\"name\":\"Vanuatu\",\"z\":2.2788380316394745,\"stability\":1,\"observed\":17.1,\"expected\":43.922614368022096,\"higherIsBetter\":false,\"peers\":[\"FSM\",\"COM\",\"WSM\",\"TLS\",\"TON\"],\"practices\":[{\"key\":\"SH.XPD.CHEX.GD.ZS\",\"effect\":-1.3532900715162974},{\"key\":\"SH.STA.BASS.ZS\",\"effect\":-1.3287048513524893},{\"key\":\"SH.IMM.IDPT\",\"effect\":-0.9991329508208717}],\"contextKeys\":[\"NY.GDP.PCAP.PP.KD\",\"SP.URB.TOTL.IN.ZS\",\"SP.POP.TOTL\"],\"n\":185,\"dataset\":\"1afc12f3\",\"source\":\"worldbank\"}",
-    "status": "draft",
+    "status": "published",
     "created_by": "analyst-detector",
-    "verified_by": null,
-    "verification": null,
+    "verified_by": "reviewer-loo-permutation",
+    "verification": "{\"verdict\":\"unit_only\",\"zLoo\":1.7883744835604727,\"practice\":\"SH.XPD.CHEX.GD.ZS\",\"p\":0.12574850299401197,\"pAdj\":0.5029940119760479,\"by\":\"reviewer-loo-permutation\",\"reason\":\"unit is a real outlier; practice difference is not distinguishable from chance here\"}",
     "narrative": null,
     "created_at": "2026-11-13 19:50:20",
-    "published_at": null
+    "published_at": "2026-11-13 20:00:38"
    },
    {
     "id": "child-survival:STP:1afc12f3",
@@ -78,26 +78,178 @@
     "z": 2.0650850242388725,
     "stability": 1,
     "payload": "{\"id\":\"child-survival:STP:1afc12f3\",\"problem\":\"child-survival\",\"title\":\"Child survival beyond what income and setting predict\",\"unit\":\"STP\",\"name\":\"Sao Tome and Principe\",\"z\":2.0650850242388725,\"stability\":1,\"observed\":13.6,\"expected\":37.90667668052155,\"higherIsBetter\":false,\"peers\":[\"KIR\",\"CPV\",\"DJI\",\"MHL\",\"FJI\"],\"practices\":[{\"key\":\"SH.STA.BASS.ZS\",\"effect\":-0.9519827133998867},{\"key\":\"SH.XPD.CHEX.GD.ZS\",\"effect\":-0.4334735589849629}],\"contextKeys\":[\"NY.GDP.PCAP.PP.KD\",\"SP.URB.TOTL.IN.ZS\",\"SP.POP.TOTL\"],\"n\":185,\"dataset\":\"1afc12f3\",\"source\":\"worldbank\"}",
-    "status": "draft",
+    "status": "published",
     "created_by": "analyst-detector",
-    "verified_by": null,
-    "verification": null,
+    "verified_by": "reviewer-loo-permutation",
+    "verification": "{\"verdict\":\"unit_only\",\"zLoo\":1.6213230192185921,\"practice\":\"SH.STA.BASS.ZS\",\"p\":0.12974051896207583,\"pAdj\":0.5189620758483033,\"by\":\"reviewer-loo-permutation\",\"reason\":\"unit is a real outlier; practice difference is not distinguishable from chance here\"}",
     "narrative": null,
     "created_at": "2026-11-13 19:50:20",
-    "published_at": null
+    "published_at": "2026-11-13 20:00:38"
    }
   ],
-  "ps_predictions": [],
+  "ps_predictions": [
+   {
+    "id": "pred:child-survival:SLB:1afc12f3",
+    "brief_id": "child-survival:SLB:1afc12f3",
+    "problem_id": "child-survival",
+    "unit": "SLB",
+    "klass": "unit_only",
+    "metric": "ps_residual_z",
+    "op": ">=",
+    "target": 1,
+    "probability": 0.5,
+    "due_at": "2026-12-13 19:54:49",
+    "observed": null,
+    "verdict": null,
+    "scored_at": null
+   },
+   {
+    "id": "pred:child-survival:SYR:1afc12f3",
+    "brief_id": "child-survival:SYR:1afc12f3",
+    "problem_id": "child-survival",
+    "unit": "SYR",
+    "klass": "verified",
+    "metric": "ps_residual_z",
+    "op": ">=",
+    "target": 1,
+    "probability": 0.5,
+    "due_at": "2026-12-13 19:54:49",
+    "observed": null,
+    "verdict": null,
+    "scored_at": null
+   },
+   {
+    "id": "pred:child-survival:VUT:1afc12f3",
+    "brief_id": "child-survival:VUT:1afc12f3",
+    "problem_id": "child-survival",
+    "unit": "VUT",
+    "klass": "unit_only",
+    "metric": "ps_residual_z",
+    "op": ">=",
+    "target": 1,
+    "probability": 0.5,
+    "due_at": "2026-12-13 19:54:49",
+    "observed": null,
+    "verdict": null,
+    "scored_at": null
+   },
+   {
+    "id": "pred:child-survival:STP:1afc12f3",
+    "brief_id": "child-survival:STP:1afc12f3",
+    "problem_id": "child-survival",
+    "unit": "STP",
+    "klass": "unit_only",
+    "metric": "ps_residual_z",
+    "op": ">=",
+    "target": 1,
+    "probability": 0.5,
+    "due_at": "2026-12-13 19:54:49",
+    "observed": null,
+    "verdict": null,
+    "scored_at": null
+   }
+  ],
   "ps_decisions": [],
-  "ps_audits": [],
+  "ps_audits": [
+   {
+    "id": 1,
+    "problem_id": "child-survival",
+    "at": "2026-11-13 19:54:49",
+    "jaccard": 0.8333333333333334,
+    "detail": "{\"base\":[\"SLB\",\"SYR\",\"VUT\",\"STP\",\"HND\",\"BDI\",\"TON\",\"LKA\"]}"
+   }
+  ],
   "ps_model_calls": [],
-  "ps_trust_history": [],
+  "ps_trust_history": [
+   {
+    "id": 1,
+    "at": "2026-11-13 19:54:49",
+    "surface": "ps_detect",
+    "action_class": "detect",
+    "reliability": 0.6666666666666666,
+    "rung": "assisted"
+   },
+   {
+    "id": 2,
+    "at": "2026-11-13 20:00:38",
+    "surface": "ps_detect",
+    "action_class": "detect",
+    "reliability": 0.6666666666666666,
+    "rung": "assisted"
+   },
+   {
+    "id": 3,
+    "at": "2026-11-13 20:00:38",
+    "surface": "ps_audit",
+    "action_class": "audit",
+    "reliability": 0.6666666666666666,
+    "rung": "assisted"
+   },
+   {
+    "id": 4,
+    "at": "2026-11-13 20:00:38",
+    "surface": "ps_verify",
+    "action_class": "verify",
+    "reliability": 0.8333333333333334,
+    "rung": "assisted"
+   },
+   {
+    "id": 5,
+    "at": "2026-11-13 20:02:11",
+    "surface": "ps_detect",
+    "action_class": "detect",
+    "reliability": 0.6666666666666666,
+    "rung": "assisted"
+   },
+   {
+    "id": 6,
+    "at": "2026-11-13 20:02:11",
+    "surface": "ps_audit",
+    "action_class": "audit",
+    "reliability": 0.6666666666666666,
+    "rung": "assisted"
+   },
+   {
+    "id": 7,
+    "at": "2026-11-13 20:02:11",
+    "surface": "ps_verify",
+    "action_class": "verify",
+    "reliability": 0.8333333333333334,
+    "rung": "assisted"
+   },
+   {
+    "id": 8,
+    "at": "2026-11-13 20:02:11",
+    "surface": "ps_publish",
+    "action_class": "publish",
+    "reliability": 0.8333333333333334,
+    "rung": "observed"
+   }
+  ],
   "ps_criticality": [
    {
     "id": 1,
     "at": "2026-11-13 19:50:20",
     "critical": 0,
     "payload": "{\"at\":\"2026-11-13 19:50:20\",\"window_days\":14,\"active\":6,\"tests\":[{\"id\":\"C1\",\"name\":\"reproducible birth\",\"status\":\"unmeasured\",\"value\":null,\"need\":\"two fresh builds from the idea file are identical\"},{\"id\":\"C2\",\"name\":\"published briefs trace to tick-run items checked by a different reviewer\",\"status\":\"unmeasured\",\"value\":\"no published briefs in window\",\"need\":\">= 80%\"},{\"id\":\"C3\",\"name\":\"self-sustaining: branching ratio in band and backlog bounded\",\"status\":\"fail\",\"value\":\"ratio 6.00, active 6\",\"need\":\"0.8 to 1.25, backlog bounded\"},{\"id\":\"C4\",\"name\":\"plus share of finished items\",\"status\":\"fail\",\"value\":\"0% (0/1)\",\"need\":\">= 20%\"},{\"id\":\"C5\",\"name\":\"predictions scored; Brier better than a coin; every published brief has one\",\"status\":\"unmeasured\",\"value\":\"0 resolved\",\"need\":\">= 5 resolved, Brier <= 0.25\"},{\"id\":\"C6\",\"name\":\"trust ledger moves in both directions\",\"status\":\"unmeasured\",\"value\":\"0 up, 0 down\",\"need\":\"at least one of each\"},{\"id\":\"C7\",\"name\":\"no item waits on a person\",\"status\":\"pass\",\"value\":\"0 stale blocked\",\"need\":\"0\"},{\"id\":\"C8\",\"name\":\"cost inside the cap\",\"status\":\"pass\",\"value\":\"$0.00\",\"need\":\"<= $5\"},{\"id\":\"C9\",\"name\":\"a real model role ran\",\"status\":\"fail\",\"value\":\"0 successful calls\",\"need\":\">= 1\"},{\"id\":\"C10\",\"name\":\"defects found here are fixed upstream\",\"status\":\"fail\",\"value\":\"UPSTREAM-1:ready\",\"need\":\"all UPSTREAM items done\"}],\"failing\":[\"C3\",\"C4\",\"C9\",\"C10\"],\"unmeasured\":[\"C1\",\"C2\",\"C5\",\"C6\"],\"critical\":false}"
+   },
+   {
+    "id": 2,
+    "at": "2026-11-13 19:54:49",
+    "critical": 0,
+    "payload": "{\"at\":\"2026-11-13 19:54:49\",\"window_days\":14,\"active\":5,\"tests\":[{\"id\":\"C1\",\"name\":\"reproducible birth\",\"status\":\"unmeasured\",\"value\":null,\"need\":\"two fresh builds from the idea file are identical\"},{\"id\":\"C2\",\"name\":\"published briefs trace to tick-run items checked by a different reviewer\",\"status\":\"unmeasured\",\"value\":\"no published briefs in window\",\"need\":\">= 80%\"},{\"id\":\"C3\",\"name\":\"self-sustaining: branching ratio in band and backlog bounded\",\"status\":\"fail\",\"value\":\"ratio 1.67, active 5\",\"need\":\"0.8 to 1.25, backlog bounded\"},{\"id\":\"C4\",\"name\":\"plus share of finished items\",\"status\":\"fail\",\"value\":\"17% (1/6)\",\"need\":\">= 20%\"},{\"id\":\"C5\",\"name\":\"predictions scored; Brier better than a coin; every published brief has one\",\"status\":\"unmeasured\",\"value\":\"0 resolved\",\"need\":\">= 5 resolved, Brier <= 0.25\"},{\"id\":\"C6\",\"name\":\"trust ledger moves in both directions\",\"status\":\"fail\",\"value\":\"0 up, 0 down\",\"need\":\"at least one of each\"},{\"id\":\"C7\",\"name\":\"no item waits on a person\",\"status\":\"pass\",\"value\":\"0 stale blocked\",\"need\":\"0\"},{\"id\":\"C8\",\"name\":\"cost inside the cap\",\"status\":\"pass\",\"value\":\"$0.00\",\"need\":\"<= $5\"},{\"id\":\"C9\",\"name\":\"a real model role ran\",\"status\":\"fail\",\"value\":\"0 successful calls\",\"need\":\">= 1\"},{\"id\":\"C10\",\"name\":\"defects found here are fixed upstream\",\"status\":\"fail\",\"value\":\"UPSTREAM-1:ready\",\"need\":\"all UPSTREAM items done\"}],\"failing\":[\"C3\",\"C4\",\"C6\",\"C9\",\"C10\"],\"unmeasured\":[\"C1\",\"C2\",\"C5\"],\"critical\":false}"
+   },
+   {
+    "id": 3,
+    "at": "2026-11-13 20:00:38",
+    "critical": 0,
+    "payload": "{\"at\":\"2026-11-13 20:00:38\",\"window_days\":14,\"active\":1,\"tests\":[{\"id\":\"C1\",\"name\":\"reproducible birth\",\"status\":\"unmeasured\",\"value\":null,\"need\":\"two fresh builds from the idea file are identical\"},{\"id\":\"C2\",\"name\":\"published briefs trace to tick-run items checked by a different reviewer\",\"status\":\"pass\",\"value\":\"4/4\",\"need\":\">= 80%\"},{\"id\":\"C3\",\"name\":\"self-sustaining: branching ratio in band and backlog bounded\",\"status\":\"pass\",\"value\":\"ratio 1.00, active 1\",\"need\":\"0.8 to 1.25, backlog bounded\"},{\"id\":\"C4\",\"name\":\"plus share of finished items\",\"status\":\"fail\",\"value\":\"10% (1/10)\",\"need\":\">= 20%\"},{\"id\":\"C5\",\"name\":\"predictions scored; Brier better than a coin; every published brief has one\",\"status\":\"unmeasured\",\"value\":\"0 resolved\",\"need\":\">= 5 resolved, Brier <= 0.25\"},{\"id\":\"C6\",\"name\":\"trust ledger moves in both directions\",\"status\":\"fail\",\"value\":\"0 up, 0 down\",\"need\":\"at least one of each\"},{\"id\":\"C7\",\"name\":\"no item waits on a person\",\"status\":\"pass\",\"value\":\"0 stale blocked\",\"need\":\"0\"},{\"id\":\"C8\",\"name\":\"cost inside the cap\",\"status\":\"pass\",\"value\":\"$0.00\",\"need\":\"<= $5\"},{\"id\":\"C9\",\"name\":\"a real model role ran\",\"status\":\"fail\",\"value\":\"0 successful calls\",\"need\":\">= 1\"},{\"id\":\"C10\",\"name\":\"defects found here are fixed upstream\",\"status\":\"fail\",\"value\":\"UPSTREAM-1:ready\",\"need\":\"all UPSTREAM items done\"}],\"failing\":[\"C4\",\"C6\",\"C9\",\"C10\"],\"unmeasured\":[\"C1\",\"C5\"],\"critical\":false}"
+   },
+   {
+    "id": 4,
+    "at": "2026-11-13 20:02:11",
+    "critical": 0,
+    "payload": "{\"at\":\"2026-11-13 20:02:11\",\"window_days\":14,\"active\":1,\"tests\":[{\"id\":\"C1\",\"name\":\"reproducible birth\",\"status\":\"unmeasured\",\"value\":null,\"need\":\"two fresh builds from the idea file are identical\"},{\"id\":\"C2\",\"name\":\"published briefs trace to tick-run items checked by a different reviewer\",\"status\":\"pass\",\"value\":\"4/4\",\"need\":\">= 80%\"},{\"id\":\"C3\",\"name\":\"self-sustaining: branching ratio in band and backlog bounded\",\"status\":\"pass\",\"value\":\"ratio 1.00, active 1\",\"need\":\"0.8 to 1.25, backlog bounded\"},{\"id\":\"C4\",\"name\":\"plus share of finished items\",\"status\":\"fail\",\"value\":\"10% (1/10)\",\"need\":\">= 20%\"},{\"id\":\"C5\",\"name\":\"predictions scored; Brier better than a coin; every published brief has one\",\"status\":\"unmeasured\",\"value\":\"0 resolved\",\"need\":\">= 5 resolved, Brier <= 0.25\"},{\"id\":\"C6\",\"name\":\"trust ledger moves in both directions\",\"status\":\"fail\",\"value\":\"0 up, 0 down\",\"need\":\"at least one of each\"},{\"id\":\"C7\",\"name\":\"no item waits on a person\",\"status\":\"pass\",\"value\":\"0 stale blocked\",\"need\":\"0\"},{\"id\":\"C8\",\"name\":\"cost inside the cap\",\"status\":\"pass\",\"value\":\"$0.00\",\"need\":\"<= $5\"},{\"id\":\"C9\",\"name\":\"a real model role ran\",\"status\":\"fail\",\"value\":\"0 successful calls\",\"need\":\">= 1\"},{\"id\":\"C10\",\"name\":\"defects found here are fixed upstream\",\"status\":\"fail\",\"value\":\"UPSTREAM-1:ready\",\"need\":\"all UPSTREAM items done\"}],\"failing\":[\"C4\",\"C6\",\"C9\",\"C10\"],\"unmeasured\":[\"C1\",\"C5\"],\"critical\":false}"
    }
   ],
   "items": [
@@ -147,13 +299,13 @@
     "done_check": "leave-one-out and permutation verdict stored on the brief by a reviewer different from its author",
     "closing_probe": "ps_briefs.verified_by is set",
     "priority": 20,
-    "status": "ready",
-    "disposition": null,
+    "status": "done",
+    "disposition": "completed: Solomon Islands: unit_only (unit is a real outlier; practice difference is not distinguishable from chance here)",
     "blocker": null,
     "surface": "ps_verify",
     "action_class": "verify",
     "created_at": "2026-11-13 19:50:23",
-    "updated_at": "2026-11-13 19:50:23"
+    "updated_at": "2026-11-13 19:54:49"
    },
    {
     "id": "ps:verify:child-survival:SYR:1afc12f3",
@@ -165,13 +317,13 @@
     "done_check": "leave-one-out and permutation verdict stored on the brief by a reviewer different from its author",
     "closing_probe": "ps_briefs.verified_by is set",
     "priority": 20,
-    "status": "ready",
-    "disposition": null,
+    "status": "done",
+    "disposition": "completed: Syrian Arab Republic: verified (practice differs from matched peers beyond chance)",
     "blocker": null,
     "surface": "ps_verify",
     "action_class": "verify",
     "created_at": "2026-11-13 19:50:23",
-    "updated_at": "2026-11-13 19:50:23"
+    "updated_at": "2026-11-13 19:54:49"
    },
    {
     "id": "ps:verify:child-survival:VUT:1afc12f3",
@@ -183,13 +335,13 @@
     "done_check": "leave-one-out and permutation verdict stored on the brief by a reviewer different from its author",
     "closing_probe": "ps_briefs.verified_by is set",
     "priority": 20,
-    "status": "ready",
-    "disposition": null,
+    "status": "done",
+    "disposition": "completed: Vanuatu: unit_only (unit is a real outlier; practice difference is not distinguishable from chance here)",
     "blocker": null,
     "surface": "ps_verify",
     "action_class": "verify",
     "created_at": "2026-11-13 19:50:24",
-    "updated_at": "2026-11-13 19:50:24"
+    "updated_at": "2026-11-13 19:54:49"
    },
    {
     "id": "ps:verify:child-survival:STP:1afc12f3",
@@ -201,13 +353,13 @@
     "done_check": "leave-one-out and permutation verdict stored on the brief by a reviewer different from its author",
     "closing_probe": "ps_briefs.verified_by is set",
     "priority": 20,
-    "status": "ready",
-    "disposition": null,
+    "status": "done",
+    "disposition": "completed: Sao Tome and Principe: unit_only (unit is a real outlier; practice difference is not distinguishable from chance here)",
     "blocker": null,
     "surface": "ps_verify",
     "action_class": "verify",
     "created_at": "2026-11-13 19:50:24",
-    "updated_at": "2026-11-13 19:50:24"
+    "updated_at": "2026-11-13 19:54:49"
    },
    {
     "id": "ps:cycle:child-survival:1",
@@ -237,13 +389,85 @@
     "done_check": "detector spot set compared across settings",
     "closing_probe": "ps_audits row",
     "priority": 60,
-    "status": "ready",
-    "disposition": null,
+    "status": "done",
+    "disposition": "completed: spot set stable across settings, jaccard 0.83",
     "blocker": null,
     "surface": "ps_audit",
     "action_class": "audit",
     "created_at": "2026-11-13 19:50:24",
-    "updated_at": "2026-11-13 19:50:24"
+    "updated_at": "2026-11-13 19:54:49"
+   },
+   {
+    "id": "ps:publish:child-survival:SLB:1afc12f3",
+    "title": "Publish brief Solomon Islands (child-survival)",
+    "kind": "work",
+    "project": null,
+    "owner_role": "operations",
+    "trigger_on": null,
+    "done_check": "brief status is published and its prediction is registered",
+    "closing_probe": "ps_briefs.status = published",
+    "priority": 30,
+    "status": "done",
+    "disposition": "completed: published SLB",
+    "blocker": null,
+    "surface": "ps_publish",
+    "action_class": "publish",
+    "created_at": "2026-11-13 19:54:52",
+    "updated_at": "2026-11-13 20:00:38"
+   },
+   {
+    "id": "ps:publish:child-survival:SYR:1afc12f3",
+    "title": "Publish brief Syrian Arab Republic (child-survival)",
+    "kind": "work",
+    "project": null,
+    "owner_role": "operations",
+    "trigger_on": null,
+    "done_check": "brief status is published and its prediction is registered",
+    "closing_probe": "ps_briefs.status = published",
+    "priority": 30,
+    "status": "done",
+    "disposition": "completed: published SYR",
+    "blocker": null,
+    "surface": "ps_publish",
+    "action_class": "publish",
+    "created_at": "2026-11-13 19:54:53",
+    "updated_at": "2026-11-13 20:00:38"
+   },
+   {
+    "id": "ps:publish:child-survival:VUT:1afc12f3",
+    "title": "Publish brief Vanuatu (child-survival)",
+    "kind": "work",
+    "project": null,
+    "owner_role": "operations",
+    "trigger_on": null,
+    "done_check": "brief status is published and its prediction is registered",
+    "closing_probe": "ps_briefs.status = published",
+    "priority": 30,
+    "status": "done",
+    "disposition": "completed: published VUT",
+    "blocker": null,
+    "surface": "ps_publish",
+    "action_class": "publish",
+    "created_at": "2026-11-13 19:54:54",
+    "updated_at": "2026-11-13 20:00:38"
+   },
+   {
+    "id": "ps:publish:child-survival:STP:1afc12f3",
+    "title": "Publish brief Sao Tome and Principe (child-survival)",
+    "kind": "work",
+    "project": null,
+    "owner_role": "operations",
+    "trigger_on": null,
+    "done_check": "brief status is published and its prediction is registered",
+    "closing_probe": "ps_briefs.status = published",
+    "priority": 30,
+    "status": "done",
+    "disposition": "completed: published STP",
+    "blocker": null,
+    "surface": "ps_publish",
+    "action_class": "publish",
+    "created_at": "2026-11-13 19:54:55",
+    "updated_at": "2026-11-13 20:00:38"
    }
   ],
   "tick_runs": [
@@ -254,6 +478,33 @@
     "steps_completed": 16,
     "steps_total": 16,
     "report": "Happened: tick 1 ran 16/16 steps; reconciled: 0 reopened, 0 became ready; dispatched 0 item(s); l2 9/9; claims reaped: {\"reaped\":0}; claims released on terminal items: {\"released\":0}; describe: 0/0 claims pass, 0 withdrawn, output stored; yield: 0 filed, 0 closed; ps_work: 1 done, 0 failed; criticality: not yet (C3,C4,C9,C10).\nDecided: dispatched 0 item(s) in driver order.\nNext: tick 2 on the next cron.\nOpen: 7 active item(s), 0 gate card(s).",
+    "errors": null
+   },
+   {
+    "id": 2,
+    "started_at": "2026-11-13 19:54:49",
+    "finished_at": "2026-11-13 19:54:49",
+    "steps_completed": 17,
+    "steps_total": 17,
+    "report": "Happened: tick 2 ran 17/17 steps; reconciled: 0 reopened, 0 became ready; dispatched 0 item(s); l2 9/9; claims reaped: {\"reaped\":0}; claims released on terminal items: {\"released\":0}; describe: 0/0 claims pass, 0 withdrawn, output stored; yield: 0 filed, 0 closed; ps_work: 5 done, 0 failed; upstream: UPSTREAM-1 waits for core to grade its first ps_residual_z prediction; criticality: not yet (C3,C4,C6,C9,C10).\nDecided: dispatched 0 item(s) in driver order.\nNext: tick 3 on the next cron.\nOpen: 6 active item(s), 0 gate card(s).",
+    "errors": null
+   },
+   {
+    "id": 3,
+    "started_at": "2026-11-13 20:00:38",
+    "finished_at": "2026-11-13 20:00:38",
+    "steps_completed": 17,
+    "steps_total": 17,
+    "report": "Happened: tick 3 ran 17/17 steps; reconciled: 0 reopened, 0 became ready; dispatched 0 item(s); l2 9/9; claims reaped: {\"reaped\":0}; claims released on terminal items: {\"released\":0}; describe: 0/0 claims pass, 0 withdrawn, output stored; yield: 0 filed, 0 closed; ps_work: 4 done, 0 failed; upstream: UPSTREAM-1 waits for core to grade its first ps_residual_z prediction; criticality: not yet (C4,C6,C9,C10).\nDecided: dispatched 0 item(s) in driver order.\nNext: tick 4 on the next cron.\nOpen: 2 active item(s), 0 gate card(s).",
+    "errors": null
+   },
+   {
+    "id": 4,
+    "started_at": "2026-11-13 20:02:11",
+    "finished_at": "2026-11-13 20:02:11",
+    "steps_completed": 17,
+    "steps_total": 17,
+    "report": "Happened: tick 4 ran 17/17 steps; reconciled: 0 reopened, 0 became ready; dispatched 0 item(s); l2 9/9; claims reaped: {\"reaped\":0}; claims released on terminal items: {\"released\":0}; describe: 0/0 claims pass, 0 withdrawn, output stored; yield: 0 filed, 0 closed; ps_work: 0 done, 0 failed; upstream: UPSTREAM-1 waits for core to grade its first ps_residual_z prediction; criticality: not yet (C4,C6,C9,C10).\nDecided: dispatched 0 item(s) in driver order.\nNext: tick 5 on the next cron.\nOpen: 2 active item(s), 1 gate card(s).",
     "errors": null
    }
   ]
