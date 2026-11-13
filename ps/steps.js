@@ -10,7 +10,7 @@ import { makeBrief, hashDataset } from './brief.js';
 import { narrate, NARRATOR } from './narrate.js';
 import { evaluate } from './criticality.js';
 import { extractPractices, EXTRACTOR } from './extract.js';
-import { routesFor } from './llm.js';
+import { fingerprint } from './llm.js';
 
 export const ANALYST = 'analyst-detector';
 const DAY = 86400e3;
@@ -134,7 +134,7 @@ async function extract(item, S) {
   if (!row || !['verified', 'unit_only', 'published'].includes(row.status)) throw new Error('brief not verified');
   const r = await extractPractices({ fetch: S.fetch, secrets: S.secrets, brief: JSON.parse(row.payload) });
   if (r.called) await run(S.db, `INSERT INTO ps_model_calls (at, role, model, ok, cost_usd) VALUES (?,?,?,?,0)`, S.nowIso, EXTRACTOR, `${r.route || 'none'}:${r.model || 'unknown'}`, r.ok ? 1 : 0);
-  const stored = r.ok ? { practices: r.practices, artefact_risks: r.artefact_risks, route: r.route, model: r.model, at: S.nowIso } : { practices: [], artefact_risks: [], route: null, skipped: r.reason, routes: routesFor(S.secrets).join(','), at: S.nowIso };
+  const stored = r.ok ? { practices: r.practices, artefact_risks: r.artefact_risks, route: r.route, model: r.model, at: S.nowIso } : { practices: [], artefact_risks: [], route: null, skipped: r.reason, routes: fingerprint(S.secrets), at: S.nowIso };
   await run(S.db, `INSERT OR REPLACE INTO ps_extractions (brief_id, payload, route, at) VALUES (?,?,?,?)`, id, JSON.stringify(stored), stored.route, S.nowIso);
   const b = JSON.parse(row.payload);
   if (row.status !== 'published') await addItem(S, { id: `ps:publish:${id}`, title: `Publish brief ${b.name} (${b.problem})`, owner_role: 'operations', priority: 30, surface: 'ps_publish', action_class: 'publish',
@@ -246,7 +246,7 @@ export function psSteps({ fetch: f = globalThis.fetch, secrets = {}, sourceFor, 
           done_check: 'model practice hypotheses stored on the brief, or the missing model route recorded', closing_probe: 'ps_extractions row for the brief' });
       }
       // A brief whose model pass was skipped is retried when the set of bound model routes has changed since, or after 6 hours, so a route that comes up later fills it in.
-      const routesNow = routesFor(secrets).join(',');
+      const routesNow = fingerprint(secrets);
       for (const x of await all(db, `SELECT brief_id, at, payload FROM ps_extractions WHERE payload LIKE '%"skipped"%'`)) {
         const was = (JSON.parse(x.payload).routes || '');
         if (was === routesNow && x.at >= iso(ctx.now - 6 * 3600e3)) continue;
