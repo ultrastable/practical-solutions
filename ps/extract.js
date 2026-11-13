@@ -29,6 +29,6 @@ export async function extractPractices({ fetch, secrets, brief }) {
   const r = await complete({ fetch, secrets, prompt: promptFor(brief), maxTokens: 700 });
   if (!r.ok) return { ok: false, called: r.tried.length > 0, reason: r.tried.join('; ') || 'no model route bound', route: null, model: null };
   const parsed = parseExtraction(r.text);
-  if (!parsed) return { ok: false, called: true, reason: 'model answer was not the expected JSON', route: r.route, model: r.model };
+  if (!parsed) return { ok: false, called: true, reason: `model answer was not the expected JSON: ${JSON.stringify(String(r.text).slice(0, 300))}`, route: r.route, model: r.model };
   return { ok: true, called: true, route: r.route, model: r.model, ...parsed };
 }
