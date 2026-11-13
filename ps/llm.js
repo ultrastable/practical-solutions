@@ -13,6 +13,10 @@ export const ANTHROPIC_MODEL = 'claude-sonnet-5-5';
 // Workers AI returns `response` already parsed (an object) when the model's answer is JSON; String() of that is "[object Object]" (the cause of run 9's rejected answers).
 export const textOf = out => { const r = out && (out.response ?? out.result); return (r && typeof r === 'object' ? JSON.stringify(r) : String(r ?? '')).trim(); };
 
+// Bump when a route's behaviour changes: skipped extractions are retried when the route fingerprint differs.
+export const ROUTES_VERSION = 'r3';
+export const fingerprint = secrets => `${ROUTES_VERSION}:${routesFor(secrets).join(',')}`;
+
 export function routesFor(secrets = {}) {
   const r = [];
   const gh = secrets.GITHUB_MODELS_TOKEN || secrets.GITHUB_TOKEN;
