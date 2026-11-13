@@ -7,6 +7,7 @@
 //   ps simulate [--days D] [--step-hours H]   run the loop on a fake clock against the synthetic world; prints the criticality report
 //   ps criticality [--db FILE]                evaluate criticality; exit 0 only when critical
 //   ps export [--db FILE] [--out DIR]         write published briefs as files
+//   ps cycle [--db FILE] [--ledger FILE] [--n N] [--out DIR]   one scheduled cycle on persisted state: tick, measure, record, publish
 //   ps selfcheck                               two fresh builds from the idea file must be identical
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -18,6 +19,8 @@ import { seedOrg } from '../ps/seed.js';
 import { evaluate } from '../ps/criticality.js';
 import { renderBrief } from '../ps/brief.js';
 import { buildConfig } from '../ps/config.js';
+import { getParams } from '../ps/steps.js';
+import { runCycle } from '../ps/cycle.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const args = process.argv.slice(2);
@@ -76,6 +79,10 @@ async function main() {
     }
     writeFileSync(path.join(out, 'index.json'), JSON.stringify(index, null, 2) + '\n');
     console.log(`exported ${rows.length} brief(s) to ${out}`);
+  } else if (cmd === 'cycle') {
+    const rec = await runCycle({ db: opt('db', 'ledger/state.sqlite'), ledger: opt('ledger', 'ledger/cycles.jsonl'), out: opt('out', 'ledger/briefs'),
+      n: Number(opt('n', 4)), run: opt('run', process.env.GITHUB_RUN_NUMBER || '0'), problems: problemsFor(null) });
+    console.log(JSON.stringify(rec, null, 1));
   } else if (cmd === 'selfcheck') {
     const t = Date.parse('2026-12-01T00:00:00Z');
     const a = await birthHash(t), b = await birthHash(t);
