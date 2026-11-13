@@ -13,7 +13,8 @@ const PROBLEM = { id: 'synthetic-demo', title: 'Synthetic world with planted tru
 const rows = (db, sql, ...a) => db.raw.prepare(sql).all(...a);
 const one = (db, sql, ...a) => db.raw.prepare(sql).get(...a);
 
-async function boot({ problems = [PROBLEM], secrets = {}, fetch, config } = {}) {
+const PROBLEM_B = { ...PROBLEM, id: 'synthetic-b', title: 'Second synthetic world', source: { type: 'synthetic', seed: 23 } };
+async function boot({ problems = [PROBLEM, PROBLEM_B], secrets = {}, fetch, config } = {}) {
   const clock = { t: T0 };
   const db = openDb(':memory:');
   await seedOrg(db, { problems, now: T0 });
@@ -45,7 +46,7 @@ test('from birth, the loop runs by itself: detect, verify by a different reviewe
   const status = Object.fromEntries(rep.tests.map(t => [t.id, t.status]));
   for (const id of ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8']) assert.equal(status[id], 'pass', `${id} ${JSON.stringify(rep.tests.find(t => t.id === id))}`);
   assert.equal(status.C9, 'fail', 'no real model has run yet: said plainly');
-  assert.equal(status.C10, 'pass', 'UPSTREAM-1 merged upstream and closed on evidence that core graded a ps prediction');
+  assert.equal(status.C10, 'pass', 'upstream hook merged and core graded a ps_residual_z prediction through it');
   assert.equal(rep.critical, false, 'not critical until every test passes');
 });
 

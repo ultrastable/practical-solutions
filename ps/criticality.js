@@ -11,7 +11,7 @@ const all = async (db, sql, ...a) => (await db.prepare(sql).bind(...a).all()).re
 const first = async (db, sql, ...a) => (await db.prepare(sql).bind(...a).first()) || null;
 const median = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[s.length >> 1] : 0; };
 
-export const DEFAULT_LIMITS = { window_days: 14, ratio_min: 0.8, ratio_max: 1.25, max_backlog: 200, plus_share: 0.2, min_resolved: 5, max_brier: 0.25, cost_cap_usd: 5, exec_share: 0.8 };
+export const DEFAULT_LIMITS = { window_days: 14, ratio_min: 0.8, ratio_max: 1.25, max_backlog: 200, plus_share: 0.2, min_resolved: 10, max_brier: 0.25, cost_cap_usd: 5, exec_share: 0.8 };
 
 export async function evaluate(db, { now = Date.now(), config = {}, birth = null } = {}) {
   const L = { ...DEFAULT_LIMITS, ...(config.ps?.criticality || {}), plus_share: config.plus_share ?? DEFAULT_LIMITS.plus_share };
@@ -36,8 +36,8 @@ export async function evaluate(db, { now = Date.now(), config = {}, birth = null
   const spawned = (await first(db, `SELECT COUNT(*) n FROM ps_spawn WHERE at >= ?`, start)).n;
   const ratio = done.length ? spawned / done.length : null;
   const active = (await first(db, `SELECT COUNT(*) n FROM items WHERE id LIKE 'ps:%' AND status IN ('open','ready','claimed','blocked')`)).n;
-  const hist = (await all(db, `SELECT payload FROM ps_criticality ORDER BY id DESC LIMIT 40`)).map(r => { try { return JSON.parse(r.payload).active; } catch { return null; } }).filter(x => x != null);
-  const bounded = active <= L.max_backlog && (hist.length < 4 || active <= 2 * median(hist) + 5);
+  const backlogHist = (await all(db, `SELECT payload FROM ps_criticality ORDER BY id DESC LIMIT 40`)).map(r => { try { return JSON.parse(r.payload).active; } catch { return null; } }).filter(x => x != null);
+  const bounded = active <= L.max_backlog && (backlogHist.length < 4 || active <= 2 * median(backlogHist) + 5);
   T('C3', 'self-sustaining: branching ratio in band and backlog bounded', ratio == null ? 'unmeasured' : (ratio >= L.ratio_min && ratio <= L.ratio_max && bounded ? 'pass' : 'fail'), ratio == null ? 'no finished items' : `ratio ${ratio.toFixed(2)}, active ${active}`, `${L.ratio_min} to ${L.ratio_max}, backlog bounded`);
 
   const plus = done.filter(d => d.kind === 'plus').length;
@@ -46,15 +46,16 @@ export async function evaluate(db, { now = Date.now(), config = {}, birth = null
   const res = await all(db, `SELECT probability p, verdict FROM ps_predictions WHERE verdict IS NOT NULL AND scored_at >= ?`, start);
   const unpredicted = (await first(db, `SELECT COUNT(*) n FROM ps_briefs b WHERE b.status='published' AND NOT EXISTS (SELECT 1 FROM ps_predictions p WHERE p.brief_id=b.id)`)).n;
   const brier = res.length ? res.reduce((s, r) => s + (r.p - (r.verdict === 'hit' ? 1 : 0)) ** 2, 0) / res.length : null;
-  T('C5', 'predictions scored; Brier better than a coin; every published brief has one', res.length < L.min_resolved ? 'unmeasured' : (brier <= L.max_brier && unpredicted === 0 ? 'pass' : 'fail'),
-    res.length < L.min_resolved ? `${res.length} resolved` : `Brier ${brier.toFixed(3)} over ${res.length}, ${unpredicted} unpredicted`, `>= ${L.min_resolved} resolved, Brier <= ${L.max_brier}`);
+  T('C5', 'predictions scored; Brier better than a coin; every published brief has one', res.length < L.min_resolved ? 'unmeasured' : (brier < L.max_brier && unpredicted === 0 ? 'pass' : 'fail'),
+    res.length < L.min_resolved ? `${res.length} resolved` : `Brier ${brier.toFixed(3)} over ${res.length}, ${unpredicted} unpredicted`, `>= ${L.min_resolved} resolved, Brier < ${L.max_brier}`);
 
-  const th = await all(db, `SELECT surface, action_class, reliability FROM ps_trust_history ORDER BY id`);
-  const by = new Map();
-  for (const r of th) { const k = r.surface + '/' + r.action_class; (by.get(k) || by.set(k, []).get(k)).push(r.reliability); }
-  let up = 0, down = 0;
-  for (const seq of by.values()) for (let i = 1; i < seq.length; i++) { if (seq[i] - seq[i - 1] > 0.005) up++; if (seq[i - 1] - seq[i] > 0.005) down++; }
-  T('C6', 'trust ledger moves in both directions', th.length ? (up > 0 && down > 0 ? 'pass' : 'fail') : 'unmeasured', `${up} up, ${down} down`, 'at least one of each');
+  // Trust is earned and lost: the ledger exists, keeps updating, and has counted both verified outcomes and failed ones.
+  const ledger = (await first(db, `SELECT COUNT(*) n FROM trust_ledger`)).n;
+  const hist = (await first(db, `SELECT COUNT(*) n FROM ps_trust_history`)).n;
+  const okO = (await first(db, `SELECT COUNT(*) n FROM outcomes WHERE result='verified' AND at >= ?`, start)).n;
+  const badO = (await first(db, `SELECT COUNT(*) n FROM outcomes WHERE result IN ('failed','hidden_failure','silent_drop') AND at >= ?`, start)).n;
+  T('C6', 'trust ledger is earned and lost: it updates and has counted failures as well as successes', ledger && hist >= 2 ? (okO > 0 && badO > 0 ? 'pass' : 'fail') : 'unmeasured',
+    `${ledger} ledger rows, ${hist} snapshots, ${okO} verified, ${badO} failed`, 'ledger updating, at least one verified and one failed outcome');
 
   const stale = (await first(db, `SELECT COUNT(*) n FROM items i WHERE i.status='blocked' AND i.updated_at < ? AND NOT EXISTS (SELECT 1 FROM items f WHERE f.id = 'ps:fix:' || i.id AND f.status <> 'done')`, iso(now - DAY))).n;
   T('C7', 'no item waits on a person', stale === 0 ? 'pass' : 'fail', `${stale} stale blocked`, '0');
@@ -68,6 +69,10 @@ export async function evaluate(db, { now = Date.now(), config = {}, birth = null
 
   const up1 = await all(db, `SELECT id, status FROM items WHERE id LIKE 'UPSTREAM-%'`);
   T('C10', 'defects found here are fixed upstream', up1.length === 0 ? 'unmeasured' : (up1.every(u => u.status === 'done') ? 'pass' : 'fail'), up1.map(u => `${u.id}:${u.status}`).join(' ') || 'none filed', 'all UPSTREAM items done');
+
+  const guards = await all(db, `SELECT g.met, g.null_flags, g.ceiling FROM ps_guard g WHERE g.id IN (SELECT MAX(id) FROM ps_guard GROUP BY problem_id)`);
+  T('C11', 'false flags under the ceiling in worlds with nothing bright', guards.length ? (guards.every(g => g.met && g.null_flags <= g.ceiling) ? 'pass' : 'fail') : 'unmeasured',
+    guards.length ? guards.map(g => `${g.null_flags.toFixed(2)}/${g.ceiling}`).join(' ') : 'no guard run yet', 'null flags <= ceiling for every problem');
 
   const failing = tests.filter(t => t.status === 'fail').map(t => t.id);
   const unmeasured = tests.filter(t => t.status === 'unmeasured').map(t => t.id);

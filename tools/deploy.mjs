@@ -32,10 +32,10 @@ export function seedSql(problems, nowIso) {
   const lines = [`INSERT OR REPLACE INTO org (key, value) VALUES ('org_slug', 'practical-solutions');`];
   for (const p of problems) {
     lines.push(`INSERT OR IGNORE INTO ps_problems (id, title, config) VALUES (${q(p.id)}, ${q(p.title)}, ${q(JSON.stringify(p))});`);
-    lines.push(`INSERT OR IGNORE INTO items (id, title, kind, owner_role, done_check, closing_probe, priority, status, surface, action_class) VALUES (${q(`ps:cycle:${p.id}:0`)}, ${q(`Cycle 0 for ${p.id}: fetch data, detect bright spots`)}, 'work', 'analyst', 'dataset stored and detector run', 'ps_datasets row for epoch 0', 40, 'ready', 'ps_detect', 'detect');`);
+    lines.push(`INSERT OR IGNORE INTO items (id, title, kind, owner_role, done_check, closing_probe, priority, status, surface, action_class) VALUES (${q(`ps:cycle:${p.id}:0`)}, ${q(`Cycle 0 for ${p.id}: fetch data, find evidence cases and candidate solutions`)}, 'work', 'analyst', 'dataset stored and detector run', 'ps_datasets row for epoch 0', 40, 'ready', 'ps_detect', 'detect');`);
     lines.push(`INSERT OR REPLACE INTO ps_schedule (item_id, due_at) VALUES (${q(`ps:cycle:${p.id}:0`)}, ${q(nowIso)});`);
   }
-  lines.push(`INSERT OR IGNORE INTO items (id, title, kind, owner_role, done_check, closing_probe, priority, status) VALUES ('UPSTREAM-1', 'Core score_predictions marks any metric it does not know as a miss; add a metric registration hook so domain metrics can be scored by core', 'fix', 'operations', 'PR merged in ultrastable/workers adding metric registration, then this repo drops its own scorer', 'core grades a ps_residual_z prediction (workers#175 merged at 145fdfe)', 30, 'ready');`);
+  lines.push(`INSERT OR IGNORE INTO items (id, title, kind, owner_role, done_check, closing_probe, priority, status) VALUES ('UPSTREAM-1', 'Core score_predictions marks any metric it does not know as a miss; add a metric registration hook so domain metrics can be scored by core', 'fix', 'operations', 'PR merged in ultrastable/workers adding metric registration, then this repo drops its own scorer', 'upstream PR merged', 30, 'ready');`);
   return lines.join('\n') + '\n';
 }
 

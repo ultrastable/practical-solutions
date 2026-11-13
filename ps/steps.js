@@ -7,19 +7,21 @@ import * as claims from '../vendor/ultrastable/core/claims/index.js';
 import { detect, unitZ } from './detect.js';
 import { verifyBrief, REVIEWER } from './verify.js';
 import { makeBrief, hashDataset } from './brief.js';
-import { narrate, NARRATOR } from './narrate.js';
+import { narrate, narrateAI, NARRATOR } from './narrate.js';
 import { evaluate } from './criticality.js';
-import { extractPractices, EXTRACTOR } from './extract.js';
-import { fingerprint } from './llm.js';
+import { guardZ } from './guard.js';
+import { registerFailureMode } from '../vendor/ultrastable/core/kernel/failure.js';
+import { FAILURE_MODES } from './failure_modes.js';
 
 export const ANALYST = 'analyst-detector';
 const DAY = 86400e3;
+const PRIOR_WEIGHT = 4;
 const iso = ms => new Date(ms).toISOString().replace('T', ' ').slice(0, 19);
 const all = async (db, sql, ...a) => (await db.prepare(sql).bind(...a).all()).results || [];
 const first = async (db, sql, ...a) => (await db.prepare(sql).bind(...a).first()) || null;
 const run = (db, sql, ...a) => db.prepare(sql).bind(...a).run();
 
-export const PARAM_DEFAULTS = { z: 1.5, stableZ: 1.0, audits_per_cycle: 1 };
+export const PARAM_DEFAULTS = { z: 1.5, z_floor: 1.0, stableZ: 1.0, audits_per_cycle: 1 };
 export async function getParams(db) {
   const rows = await all(db, `SELECT key, value FROM ps_params`);
   return { ...PARAM_DEFAULTS, ...Object.fromEntries(rows.map(r => [r.key, r.value])) };
@@ -68,14 +70,22 @@ async function cycle(item, S) {
   const problem = await first(S.db, `SELECT * FROM ps_problems WHERE id=? AND status='active'`, pid);
   if (!problem) return { evidence: `problem ${pid} not active; chain ends` };
   const cfg = JSON.parse(problem.config);
-  const params = await getParams(S.db);
+  let params = await getParams(S.db);
   const ds = await S.sourceFor(cfg.source).get({ epoch: n });
   const hash = hashDataset(ds);
   await run(S.db, `INSERT OR IGNORE INTO ps_datasets (problem_id, epoch, hash, fetched_at, payload) VALUES (?,?,?,?,?)`, pid, n, hash, S.nowIso, JSON.stringify(ds));
   const dsRow = await first(S.db, `SELECT id FROM ps_datasets WHERE problem_id=? AND hash=?`, pid, hash);
 
   const scored = await scorePredictions(S, problem, ds, params);
-  const d = detect(ds, { z: params.z, stableZ: params.stableZ, topK: cfg.top_k || 3, boot: cfg.boot || 100, seed: n + 1 });
+  // Essential variable: false flags in worlds where nothing is bright. The loosest threshold under the ceiling is the floor; the
+  // calibration loop may raise the threshold above it but never below it.
+  if (cfg.guard !== false) {
+    const g = guardZ(ds, { z: params.z }, { ceiling: cfg.null_ceiling ?? 0.5, nNull: cfg.null_worlds ?? 6, seed: n + 1 });
+    await run(S.db, `INSERT INTO ps_guard (problem_id, at, z, null_flags, ceiling, met, archive) VALUES (?,?,?,?,?,?,?)`, pid, S.nowIso, g.z, g.nullFlags, g.ceiling, g.met ? 1 : 0, JSON.stringify(g.archive));
+    if (g.z !== params.z_floor) await setParam(S, 'z_floor', g.z, `negative control: ${g.nullFlags.toFixed(2)} false flags per null world at z ${g.z} (ceiling ${g.ceiling})`);
+    params = await getParams(S.db);
+  }
+  const d = detect(ds, { z: Math.max(params.z, params.z_floor), stableZ: params.stableZ, topK: cfg.top_k || 3, boot: cfg.boot || 100, seed: n + 1 });
   const known = new Set((await all(S.db, `SELECT unit FROM ps_briefs WHERE problem_id=? AND status<>'rejected'`, pid)).map(r => r.unit));
   let created = 0;
   for (const spot of d.spots) {
@@ -114,32 +124,17 @@ async function verify(item, S) {
     const problem = await first(S.db, `SELECT config FROM ps_problems WHERE id=?`, row.problem_id);
     const refresh = (JSON.parse(problem.config).refresh_days || 30) * DAY;
     const params = await getParams(S.db);
-    const hist = await first(S.db, `SELECT COUNT(*) n, SUM(CASE WHEN verdict='hit' THEN 1 ELSE 0 END) h FROM ps_predictions WHERE problem_id=? AND klass=? AND verdict IS NOT NULL`, row.problem_id, status);
-    const prob = ((hist.h || 0) + 0.5 * 2) / (hist.n + 2);
+    // Stated prior per class of brief (an assumption, not a measurement), pulled toward the observed hit rate of resolved predictions of
+    // the same class, pooled over problems, with the prior worth PRIOR_WEIGHT observations.
+    const priors = { verified: 0.75, unit_only: 0.35, ...(S.config.ps?.priors || {}) };
+    const hist = await first(S.db, `SELECT COUNT(*) n, SUM(CASE WHEN verdict='hit' THEN 1 ELSE 0 END) h FROM ps_predictions WHERE klass=? AND verdict IS NOT NULL`, status);
+    const prob = ((hist.h || 0) + PRIOR_WEIGHT * priors[status]) / (hist.n + PRIOR_WEIGHT);
     await run(S.db, `INSERT OR IGNORE INTO ps_predictions (id, brief_id, problem_id, unit, klass, metric, op, target, probability, due_at) VALUES (?,?,?,?,?,?,?,?,?,?)`,
       `pred:${id}`, id, row.problem_id, row.unit, status, 'ps_residual_z', '>=', params.stableZ, Math.min(0.99, Math.max(0.01, prob)), iso(S.now + refresh));
-    await run(S.db, `INSERT OR IGNORE INTO predictions (id, item_id, metric, op, target, due_at) VALUES (?,?,?,?,?,?)`, `core:pred:${id}`, `ps:brief:${id}`, 'ps_residual_z', '>=', params.stableZ, iso(S.now + refresh)); // graded by core through the registered domain metric
   }
-  if (status !== 'rejected') await addItem(S, { id: `ps:extract:${id}`, title: `Extract candidate practices for ${b.name} (${b.problem})`, owner_role: 'analyst', priority: 25, surface: 'ps_extract', action_class: 'extract',
-    done_check: 'model practice hypotheses stored on the brief, or the missing model route recorded', closing_probe: 'ps_extractions row for the brief' }, item.id);
-  return { evidence: `${b.name}: ${v.verdict} (${v.reason || ''})` };
-}
-
-// The model reads the verified brief and lists named practices as unverified hypotheses. No model route is not a failure of the loop: it is recorded,
-// the brief still publishes, and criticality test C9 stays red until a route works. A model answer that is not the expected JSON is recorded as a failed call (ok=0)
-// with its reason and the brief still publishes: the statistical record never waits on a model.
-async function extract(item, S) {
-  const id = item.id.slice('ps:extract:'.length);
-  const row = await first(S.db, `SELECT payload, status FROM ps_briefs WHERE id=?`, id);
-  if (!row || !['verified', 'unit_only', 'published'].includes(row.status)) throw new Error('brief not verified');
-  const r = await extractPractices({ fetch: S.fetch, secrets: S.secrets, brief: JSON.parse(row.payload) });
-  if (r.called) await run(S.db, `INSERT INTO ps_model_calls (at, role, model, ok, cost_usd) VALUES (?,?,?,?,0)`, S.nowIso, EXTRACTOR, `${r.route || 'none'}:${r.model || 'unknown'}`, r.ok ? 1 : 0);
-  const stored = r.ok ? { practices: r.practices, artefact_risks: r.artefact_risks, route: r.route, model: r.model, at: S.nowIso } : { practices: [], artefact_risks: [], route: null, skipped: r.reason, routes: fingerprint(S.secrets), at: S.nowIso };
-  await run(S.db, `INSERT OR REPLACE INTO ps_extractions (brief_id, payload, route, at) VALUES (?,?,?,?)`, id, JSON.stringify(stored), stored.route, S.nowIso);
-  const b = JSON.parse(row.payload);
-  if (row.status !== 'published') await addItem(S, { id: `ps:publish:${id}`, title: `Publish brief ${b.name} (${b.problem})`, owner_role: 'operations', priority: 30, surface: 'ps_publish', action_class: 'publish',
+  if (status !== 'rejected') await addItem(S, { id: `ps:publish:${id}`, title: `Publish brief ${b.name} (${b.problem})`, owner_role: 'operations', priority: 30, surface: 'ps_publish', action_class: 'publish',
     done_check: 'brief status is published and its prediction is registered', closing_probe: 'ps_briefs.status = published' }, item.id);
-  return { evidence: r.ok ? `${b.name}: ${r.practices.length} practice hypothesis(es) via ${r.route}` : `${b.name}: no model route (${r.reason})` };
+  return { evidence: `${b.name}: ${v.verdict} (${v.reason || ''})` };
 }
 
 async function publish(item, S) {
@@ -148,8 +143,12 @@ async function publish(item, S) {
   if (!row || !['verified', 'unit_only'].includes(row.status)) throw new Error('brief not verified');
   let narrative = null;
   const key = S.secrets.ANTHROPIC_API_KEY;
-  if (key || (S.secrets.AI && S.secrets.AI.run)) {
-    const r = await narrate({ fetch: S.fetch, key, ai: S.secrets.AI, brief: JSON.parse(row.payload) });
+  if (key) {
+    const r = await narrate({ fetch: S.fetch, key, brief: JSON.parse(row.payload) });
+    await run(S.db, `INSERT INTO ps_model_calls (at, role, model, ok, cost_usd) VALUES (?,?,?,?,0)`, S.nowIso, NARRATOR, r.model || 'unknown', r.ok ? 1 : 0);
+    narrative = r.text;
+  } else if (S.secrets.AI) {
+    const r = await narrateAI({ ai: S.secrets.AI, brief: JSON.parse(row.payload) });
     await run(S.db, `INSERT INTO ps_model_calls (at, role, model, ok, cost_usd) VALUES (?,?,?,?,0)`, S.nowIso, NARRATOR, r.model || 'unknown', r.ok ? 1 : 0);
     narrative = r.text;
   }
@@ -226,7 +225,7 @@ async function fix(item, S) {
 }
 
 const ROUTES = [
-  ['ps:cycle:', cycle], ['ps:verify:', verify], ['ps:extract:', extract], ['ps:publish:', publish], ['ps:audit:', audit], ['ps:calibrate:', calibrate],
+  ['ps:cycle:', cycle], ['ps:verify:', verify], ['ps:publish:', publish], ['ps:audit:', audit], ['ps:calibrate:', calibrate],
   ['REBALANCE-', rebalance], ['LADDER-', ladder], ['TICKFAIL-', tickfail], ['ps:fix:', fix],
 ];
 const handlerFor = id => (ROUTES.find(([p]) => id.startsWith(p)) || [])[1];
@@ -239,20 +238,6 @@ export function psSteps({ fetch: f = globalThis.fetch, secrets = {}, sourceFor, 
     async run(db, ctx) {
       const S = { db, now: ctx.now, nowIso: ctx.nowIso, config, fetch: f, secrets, sourceFor };
       const limit = config.ps?.max_per_tick ?? 8;
-      // Briefs that predate the extraction stage (or whose item was never filed) get one: nothing published is left without its model pass.
-      for (const b of await all(db, `SELECT id, payload FROM ps_briefs WHERE status IN ('verified','unit_only','published') AND id NOT IN (SELECT brief_id FROM ps_extractions)`)) {
-        const nm = JSON.parse(b.payload);
-        await addItem(S, { id: `ps:extract:${b.id}`, title: `Extract candidate practices for ${nm.name} (${nm.problem})`, owner_role: 'analyst', priority: 25, surface: 'ps_extract', action_class: 'extract',
-          done_check: 'model practice hypotheses stored on the brief, or the missing model route recorded', closing_probe: 'ps_extractions row for the brief' });
-      }
-      // A brief whose model pass was skipped is retried when the set of bound model routes has changed since, or after 6 hours, so a route that comes up later fills it in.
-      const routesNow = fingerprint(secrets);
-      for (const x of await all(db, `SELECT brief_id, at, payload FROM ps_extractions WHERE payload LIKE '%"skipped"%'`)) {
-        const was = (JSON.parse(x.payload).routes || '');
-        if (was === routesNow && x.at >= iso(ctx.now - 6 * 3600e3)) continue;
-        await run(db, `UPDATE items SET status='ready', updated_at=? WHERE id=? AND status='done'`, ctx.nowIso, `ps:extract:${x.brief_id}`);
-        await run(db, `DELETE FROM ps_extractions WHERE brief_id=?`, x.brief_id);
-      }
       const ready = await all(db, `SELECT * FROM items WHERE status='ready' ORDER BY priority, created_at LIMIT 300`);
       let done = 0, failed = 0;
       for (const item of ready) {
@@ -300,19 +285,25 @@ export function psSteps({ fetch: f = globalThis.fetch, secrets = {}, sourceFor, 
       ctx.notes.push(`criticality: ${rep.critical ? 'CRITICAL' : 'not yet'} (${rep.failing.join(',') || 'all measured tests pass'})`);
     },
   };
-  // UPSTREAM-1 closes only on evidence that the upstream fix works here: core itself graded a ps_residual_z prediction.
+  // Closes UPSTREAM-1 from evidence: core must grade a ps_residual_z prediction through the registered metric hook.
   const upstream = {
     name: 'ps_upstream',
     async run(db, ctx) {
-      const it = await first(db, `SELECT id FROM items WHERE id='UPSTREAM-1' AND status!='done'`);
-      if (!it) return;
-      const r = await first(db, `SELECT COUNT(*) n FROM predictions WHERE metric='ps_residual_z' AND verdict IS NOT NULL AND observed IS NOT NULL`);
-      if (!r.n) { ctx.notes.push('upstream: UPSTREAM-1 waits for core to grade its first ps_residual_z prediction'); return; }
-      const ev = `core graded ${r.n} prediction(s) through the registered domain metric (ultrastable/workers#175)`;
-      await run(db, `UPDATE items SET status='done', disposition=?, updated_at=? WHERE id='UPSTREAM-1'`, `completed: ${ev}`, ctx.nowIso);
-      await run(db, `INSERT INTO outcomes (item_id, agent, surface, action_class, result, evidence, at) VALUES ('UPSTREAM-1', ?, 'ps_upstream', 'verify', 'verified', ?, ?)`, ANALYST, ev, ctx.nowIso);
-      ctx.notes.push('upstream: UPSTREAM-1 closed on evidence');
+      const preds = await all(db, `SELECT id, brief_id, target, due_at FROM ps_predictions`);
+      for (const p of preds) await run(db, `INSERT OR IGNORE INTO predictions (id, item_id, metric, op, target, due_at) VALUES (?,?,?,?,?,?)`, `core:${p.id}`, p.brief_id, 'ps_residual_z', '>=', p.target, p.due_at);
+      const probe = preds[0];
+      if (probe) await run(db, `INSERT OR IGNORE INTO predictions (id, item_id, metric, op, target, due_at) VALUES (?,?,?,?,?,?)`, `core:probe:${probe.brief_id}`, probe.brief_id, 'ps_residual_z', '>=', probe.target, ctx.nowIso);
+      const graded = await first(db, `SELECT id, observed, verdict FROM predictions WHERE metric='ps_residual_z' AND verdict IS NOT NULL AND observed IS NOT NULL LIMIT 1`);
+      if (graded) {
+        const r = await run(db, `UPDATE items SET status='done', disposition=?, updated_at=? WHERE id='UPSTREAM-1' AND status<>'done'`, `core graded ${graded.id}: observed ${graded.observed} ${graded.verdict} via the metric hook (ultrastable/workers #175)`, ctx.nowIso);
+        if (r.meta.changes) ctx.notes.push('UPSTREAM-1 closed: core graded a domain metric');
+      }
     },
   };
-  return [work, snapshot, upstream, crit];
+  // Registers this instance's failure modes (idempotent upsert); the vendored kernel's detectors then watch them every tick.
+  const modes = {
+    name: 'ps_failure_modes',
+    async run(db, ctx) { for (const fm of FAILURE_MODES) await registerFailureMode(db, fm, ctx.now); },
+  };
+  return [modes, work, snapshot, upstream, crit];
 }

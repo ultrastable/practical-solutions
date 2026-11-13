@@ -10,8 +10,19 @@ export function hashDataset(ds) {
 
 export function briefId(problemId, unit, hash) { return `${problemId}:${unit}:${hash}`; }
 
+const cfgOf = problem => { try { return typeof problem.config === 'string' ? JSON.parse(problem.config) : (problem.config || problem); } catch { return {}; } };
+
+// The solution a practice stands for: from the problem's `levers` (code reads them), else the practice key itself.
+export function solutionFor(problem, key) {
+  const lv = (cfgOf(problem).levers || {})[key] || {};
+  return { key, solution: lv.solution || key, implement: lv.implement || null, who: lv.who || null, first_test: lv.first_test || null };
+}
+
 export function makeBrief(problem, ds, spot, hash) {
+  const top = spot.practices.slice(0, 3);
   return {
+    candidates: top.map(p => ({ ...solutionFor(problem, p.key), effect: p.effect })),
+    problemStatement: cfgOf(problem).statement || problem.title,
     id: briefId(problem.id, spot.id, hash),
     problem: problem.id, title: problem.title, unit: spot.id, name: spot.name,
     z: spot.z, stability: spot.stability, observed: spot.observed, expected: spot.expected,
@@ -20,26 +31,27 @@ export function makeBrief(problem, ds, spot, hash) {
   };
 }
 
-export function renderBrief(b, verification, narrative, extraction) {
+export function renderBrief(b, verification, narrative) {
   const dir = b.higherIsBetter ? 'higher' : 'lower';
+  const cands = b.candidates || [];
+  const lead = cands[0];
   const lines = [
-    `# ${b.title}: ${b.name}`, '',
-    `**Bright spot.** ${b.name} (${b.unit}) has an outcome of ${b.observed.toFixed(3)} where its context (${b.contextKeys.join(', ')}) predicts ${b.expected.toFixed(3)}; ${dir} is better. That is ${b.z.toFixed(2)} robust standard deviations above expectation, and it stays above 1 in ${(b.stability * 100).toFixed(0)}% of bootstrap refits (n = ${b.n}).`, '',
-    `**Matched peers** (nearest in context, not bright): ${b.peers.join(', ')}.`, '',
-    '**What differs from those peers** (standardized difference; association, not cause):', '',
-    ...(b.practices.length ? b.practices.map(p => `- ${p.key}: ${p.effect >= 0 ? '+' : ''}${p.effect.toFixed(2)}`) : ['- no practice differs by more than the noise threshold']), '',
+    `# Solution brief: ${lead ? lead.solution : b.title}`, '',
+    `**Problem.** ${b.problemStatement || b.title}`, '',
+    lead ? `**Candidate solution.** ${lead.solution}.` : '**Candidate solution.** None stands out from the noise in this refresh; the case below is kept as evidence only.', '',
   ];
-  if (verification) lines.push(`**Independent check** (${verification.by}): ${verification.verdict}. ${verification.reason || ''}${verification.pAdj != null ? ` Adjusted p = ${verification.pAdj.toFixed(3)} for ${verification.practice}.` : ''} Leave-one-out z = ${verification.zLoo != null ? verification.zLoo.toFixed(2) : 'n/a'}.`, '');
-  if (narrative) lines.push('**Transfer hypothesis.**', '', narrative, '');
-  if (extraction && (extraction.practices?.length || extraction.artefact_risks?.length)) {
-    lines.push(`**Candidate practices (model-extracted from its general knowledge, unverified; ${extraction.model}).**`, '');
-    for (const p of extraction.practices) lines.push(`- ${p.name} [${p.confidence}]: ${p.what} To check: ${p.how_to_check}`);
-    if (extraction.artefact_risks.length) lines.push('', 'Possible measurement artefacts:', ...extraction.artefact_risks.map(x => `- ${x}`));
-    lines.push('');
-  }
+  if (lead && lead.implement) lines.push(`**What implementing it takes.** ${lead.implement}`, '');
+  if (lead && lead.who) lines.push(`**Who could implement it.** ${lead.who}`, '');
+  if (lead && lead.first_test) lines.push(`**Cheapest first test.** ${lead.first_test}`, '');
   lines.push(
-    `**Prediction (scored automatically).** On the next data refresh, ${b.name}'s residual z stays at or above the problem's threshold, probability ${(b.stability).toFixed(2)}. The result is recorded whether it holds or not.`, '',
-    '**What this cannot show.** The data is observational and aggregate. A practice that differs is a lead for investigation, not proof that copying it works.', '',
+    `**Evidence.** ${b.name} (${b.unit}) does better than its setting predicts: outcome ${b.observed.toFixed(3)} where context (${b.contextKeys.join(', ')}) predicts ${b.expected.toFixed(3)}; ${dir} is better. That is ${b.z.toFixed(2)} robust standard deviations above expectation, and it holds in ${(b.stability * 100).toFixed(0)}% of bootstrap refits (n = ${b.n}). It is evidence for the solution, not the subject of the brief. Matched comparison cases: ${b.peers.join(', ')}.`, '',
+    '**What differs from comparison cases** (standardized difference; association, not cause):', '',
+    ...(cands.length ? cands.map(p => `- ${p.solution} (${p.key}): ${p.effect >= 0 ? '+' : ''}${p.effect.toFixed(2)}`) : ['- no solution differs by more than the noise threshold']), '');
+  if (verification) lines.push(`**Independent check** (${verification.by}): ${verification.verdict}. ${verification.reason || ''}${verification.pAdj != null ? ` Adjusted p = ${verification.pAdj.toFixed(3)} for ${verification.practice}.` : ''} Leave-one-out z = ${verification.zLoo != null ? verification.zLoo.toFixed(2) : 'n/a'}.`, '');
+  if (narrative) lines.push('**Adoption path.**', '', narrative, '');
+  lines.push(
+    `**Prediction (scored automatically).** On the next data refresh the evidence case still stands at or above the threshold, probability ${(b.stability).toFixed(2)}. The result is recorded whether it holds or not.`, '',
+    '**What this cannot show.** The data is observational and aggregate. A solution that differs is a lead to pilot, not proof that adopting it works elsewhere.', '',
     `Dataset ${b.dataset}; source ${b.source}.`);
   return lines.join('\n');
 }

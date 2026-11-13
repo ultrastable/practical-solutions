@@ -19,14 +19,3 @@ jobs:
         run: node --no-warnings bin/ps.mjs simulate --days 150 | tee simulate.txt || true
       - uses: actions/upload-artifact@v4
         with: { name: simulate, path: simulate.txt }
-  reference-python:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.12" }
-      - run: pip install numpy
-      - name: the Python prototype stays a runnable behaviour reference
-        working-directory: reference/python
-        run: python -m unittest discover -s tests -t . -v

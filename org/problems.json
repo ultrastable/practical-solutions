@@ -1,10 +1,85 @@
 [
-  { "id": "synthetic-demo", "title": "Synthetic world with planted truth", "enabled": false, "refresh_days": 30, "top_k": 5, "boot": 80,
-    "source": { "type": "synthetic", "seed": 11, "n": 80 } },
-  { "id": "child-survival", "title": "Child survival beyond what income and setting predict", "enabled": true, "refresh_days": 30, "top_k": 4, "boot": 150,
-    "source": { "type": "worldbank",
-      "outcome": { "id": "SH.DYN.MORT", "higherIsBetter": false },
-      "context": ["NY.GDP.PCAP.PP.KD", "SP.URB.TOTL.IN.ZS", "SP.POP.TOTL"],
-      "transform": { "NY.GDP.PCAP.PP.KD": "log", "SP.POP.TOTL": "log" },
-      "practices": ["SH.XPD.CHEX.GD.ZS", "SH.MED.PHYS.ZS", "SH.STA.BASS.ZS", "SH.IMM.IDPT"] } }
+  {
+    "id": "synthetic-demo",
+    "title": "Synthetic world with planted truth",
+    "enabled": false,
+    "refresh_days": 30,
+    "top_k": 5,
+    "boot": 80,
+    "source": {
+      "type": "synthetic",
+      "seed": 11,
+      "n": 80
+    }
+  },
+  {
+    "id": "synthetic-b",
+    "title": "Second synthetic world with planted truth",
+    "enabled": false,
+    "refresh_days": 30,
+    "top_k": 5,
+    "boot": 80,
+    "source": {
+      "type": "synthetic",
+      "seed": 23,
+      "n": 80
+    }
+  },
+  {
+    "id": "child-survival",
+    "title": "Keep young children alive: which implementable measures work beyond what a country's income and setting predict",
+    "enabled": true,
+    "refresh_days": 30,
+    "top_k": 4,
+    "boot": 150,
+    "source": {
+      "type": "worldbank",
+      "outcome": {
+        "id": "SH.DYN.MORT",
+        "higherIsBetter": false
+      },
+      "context": [
+        "NY.GDP.PCAP.PP.KD",
+        "SP.URB.TOTL.IN.ZS",
+        "SP.POP.TOTL"
+      ],
+      "transform": {
+        "NY.GDP.PCAP.PP.KD": "log",
+        "SP.POP.TOTL": "log"
+      },
+      "practices": [
+        "SH.XPD.CHEX.GD.ZS",
+        "SH.MED.PHYS.ZS",
+        "SH.STA.BASS.ZS",
+        "SH.IMM.IDPT"
+      ]
+    },
+    "statement": "Children under five die of causes that known, deliverable measures prevent. Which of those measures are worth a foundation or government implementing first?",
+    "levers": {
+      "SH.IMM.IDPT": {
+        "solution": "Routine childhood immunization (DTP3 coverage) delivered through existing primary care",
+        "implement": "Sustain cold chain, reliable vaccine supply and outreach sessions; track coverage by district and chase dropouts.",
+        "who": "Ministries of health with Gavi-style financing, NGOs running outreach",
+        "first_test": "Pick two low-coverage districts, add monthly outreach and dropout tracing for 6 months, compare DTP3 coverage with matched districts."
+      },
+      "SH.STA.BASS.ZS": {
+        "solution": "Basic sanitation access (safely managed toilets and hygiene)",
+        "implement": "Subsidized household latrines plus behaviour-change and local maintenance; pair with water treatment.",
+        "who": "Municipal water and sanitation authorities, community-led total sanitation programs",
+        "first_test": "Roll out in one sub-district with a village-level sanitation committee; compare diarrhoeal admissions against a matched sub-district after a year."
+      },
+      "SH.MED.PHYS.ZS": {
+        "solution": "Frontline clinical coverage (physicians and trained community health workers)",
+        "implement": "Train, pay and supervise community health workers with a clear package of treatments and referral.",
+        "who": "Ministries of health, health-worker training institutions, NGO program partners",
+        "first_test": "Deploy supervised community health workers in one catchment; compare under-five treatment rates and referrals with a comparable catchment."
+      },
+      "SH.XPD.CHEX.GD.ZS": {
+        "solution": "Dedicated public financing for primary care and child health",
+        "implement": "Ring-fence a budget line for primary care with transparent disbursement to facilities.",
+        "who": "Finance and health ministries, donors pooling funds",
+        "first_test": "Ring-fence funds for primary care in one region; compare facility stock-outs and child outcomes after two budget cycles."
+      }
+    }
+  }
 ]

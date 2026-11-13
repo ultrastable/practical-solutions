@@ -71,3 +71,23 @@ export function nearest(Z, i, k, allowed) { // k nearest rows to row i among all
   for (const j of allowed) if (j !== i) d.push([j, Z[i].reduce((s, v, c) => s + (v - Z[j][c]) ** 2, 0)]);
   return d.sort((a, b) => a[1] - b[1]).slice(0, k).map(x => x[0]);
 }
+
+// Standard normal upper tail, via the complementary error function (Numerical Recipes erfcc, relative error < 1.2e-7).
+export function erfc(x) {
+  const z = Math.abs(x), t = 1 / (1 + 0.5 * z);
+  const r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+  return x >= 0 ? r : 2 - r;
+}
+export const normalTail = z => 0.5 * erfc(z / Math.SQRT2);
+
+// Benjamini-Hochberg: which hypotheses are rejected at false-discovery level q.
+export function bh(p, q) {
+  const n = p.length, order = p.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0]);
+  let cut = -1;
+  order.forEach(([v], k) => { if (v <= q * (k + 1) / n) cut = k; });
+  const keep = new Array(n).fill(false);
+  for (let k = 0; k <= cut; k++) keep[order[k][1]] = true;
+  return keep;
+}
+
+export function quantile(a, q) { const s = [...a].sort((x, y) => x - y); const i = (s.length - 1) * q, lo = Math.floor(i), hi = Math.ceil(i); return s[lo] + (s[hi] - s[lo]) * (i - lo); }

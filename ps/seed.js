@@ -9,10 +9,10 @@ export async function seedOrg(db, { problems, now = Date.now(), slug = 'practica
     await db.prepare(`INSERT OR IGNORE INTO ps_problems (id, title, config) VALUES (?,?,?)`).bind(p.id, p.title, JSON.stringify(p)).run();
     const id = `ps:cycle:${p.id}:0`;
     await db.prepare(`INSERT OR IGNORE INTO items (id, title, kind, owner_role, done_check, closing_probe, priority, status, surface, action_class)
-      VALUES (?,?, 'work', 'analyst', ?, ?, 40, 'ready', 'ps_detect', 'detect')`).bind(id, `Cycle 0 for ${p.id}: fetch data, detect bright spots`, 'dataset stored and detector run', 'ps_datasets row for epoch 0').run();
+      VALUES (?,?, 'work', 'analyst', ?, ?, 40, 'ready', 'ps_detect', 'detect')`).bind(id, `Cycle 0 for ${p.id}: fetch data, find evidence cases and candidate solutions`, 'dataset stored and detector run', 'ps_datasets row for epoch 0').run();
     await db.prepare(`INSERT OR REPLACE INTO ps_schedule (item_id, due_at) VALUES (?,?)`).bind(id, iso(now)).run();
   }
   await db.prepare(`INSERT OR IGNORE INTO items (id, title, kind, owner_role, done_check, closing_probe, priority, status)
     VALUES ('UPSTREAM-1', 'Core score_predictions marks any metric it does not know as a miss; add a metric registration hook so domain metrics can be scored by core', 'fix', 'operations',
-            'PR merged in ultrastable/workers adding metric registration, then this repo drops its own scorer', 'core grades a ps_residual_z prediction (workers#175 merged at 145fdfe)', 30, 'ready')`).run();
+            'PR merged in ultrastable/workers adding metric registration, then this repo drops its own scorer', 'upstream PR merged', 30, 'ready')`).run();
 }
