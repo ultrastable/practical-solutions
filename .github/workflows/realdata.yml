@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Runs the real World Bank problem end to end on a throwaway SQLite database inside Actions (which has internet), then prints
+# the report and the criticality evaluation. Needs no secrets.
+name: realdata
+on: { workflow_dispatch: {} }
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node --no-warnings bin/ps.mjs init --db ps.sqlite
+      - run: node --no-warnings bin/ps.mjs tick --db ps.sqlite --n 8
+      - run: node --no-warnings bin/ps.mjs export --db ps.sqlite --out briefs && ls briefs
+      - run: node --no-warnings bin/ps.mjs criticality --db ps.sqlite || true
