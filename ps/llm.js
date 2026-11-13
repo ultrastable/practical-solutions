@@ -10,6 +10,9 @@ export const GITHUB_MODEL = 'openai/gpt-4.1';
 export const WORKERS_AI_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 export const ANTHROPIC_MODEL = 'claude-sonnet-5-5';
 
+// Workers AI returns `response` already parsed (an object) when the model's answer is JSON; String() of that is "[object Object]" (the cause of run 9's rejected answers).
+export const textOf = out => { const r = out && (out.response ?? out.result); return (r && typeof r === 'object' ? JSON.stringify(r) : String(r ?? '')).trim(); };
+
 export function routesFor(secrets = {}) {
   const r = [];
   const gh = secrets.GITHUB_MODELS_TOKEN || secrets.GITHUB_TOKEN;
@@ -43,7 +46,7 @@ export async function complete({ fetch: f = globalThis.fetch, secrets = {}, prom
         tried.push('worker-ai empty');
       } else if (route === 'workers-ai') {
         const out = await secrets.AI.run(WORKERS_AI_MODEL, { messages: [{ role: 'user', content: prompt }], max_tokens: maxTokens });
-        const text = String((out && (out.response || out.result)) || '').trim();
+        const text = textOf(out);
         if (text) return { text, route, model: WORKERS_AI_MODEL, ok: true, tried };
         tried.push('workers-ai empty');
       } else {

@@ -64,3 +64,9 @@ test('worker-ai route: mints an OIDC token, then calls the Worker with it', asyn
   const r = await complete({ fetch: f, secrets: { PS_LLM_URL: 'https://w/ps/llm', ACTIONS_ID_TOKEN_REQUEST_URL: 'https://x/ID_TOKEN?a=1', ACTIONS_ID_TOKEN_REQUEST_TOKEN: 't' }, prompt: 'p' });
   assert.equal(r.route, 'worker-ai'); assert.equal(r.text, 'answer'); assert.match(seen[0], /audience=practical-solutions-llm/);
 });
+
+import { textOf } from '../ps/llm.js';
+test('Workers AI object responses become JSON text, not [object Object]', () => {
+  assert.equal(textOf({ response: { practices: [] } }), '{"practices":[]}');
+  assert.equal(textOf({ response: ' hi ' }), 'hi'); assert.equal(textOf(null), '');
+});

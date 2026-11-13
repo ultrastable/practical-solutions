@@ -3,7 +3,7 @@
 // ps-llm: the keyless model route. A workflow run of this repository proves itself with its own GitHub OIDC token (no stored secret);
 // the Worker verifies it and runs its Workers AI binding. Deployed by tools/deploy_llm.mjs (bundle) as its own small Worker.
 import { verifyOidc } from '../../ps/oidc.js';
-import { WORKERS_AI_MODEL } from '../../ps/llm.js';
+import { WORKERS_AI_MODEL, textOf } from '../../ps/llm.js';
 
 export const LLM_AUDIENCE = 'practical-solutions-llm';
 export const LLM_REPOSITORY = 'QNFO/practical-solutions';
@@ -20,6 +20,6 @@ export default {
     const b = await request.json().catch(() => null);
     if (!b || typeof b.prompt !== 'string' || b.prompt.length > 6000) return Response.json({ error: 'bad_request' }, { status: 400 });
     const out = await env.AI.run(WORKERS_AI_MODEL, { messages: [{ role: 'user', content: b.prompt }], max_tokens: Math.min(Number(b.max_tokens) || 600, 800) });
-    return Response.json({ text: String((out && (out.response || out.result)) || '').trim(), model: WORKERS_AI_MODEL });
+    return Response.json({ text: textOf(out), model: WORKERS_AI_MODEL });
   },
 };
