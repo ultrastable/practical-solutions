@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# One entrypoint: from an empty repo plus the secrets CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID (and optionally ANTHROPIC_API_KEY)
+# this brings the whole instance up, runs the first cycle and commits its ledger. Daily it re-runs `up`, which is idempotent, so a
+# deleted deployment comes back with no person involved.
+name: bootstrap
+on:
+  workflow_dispatch:
+    inputs:
+      action: { description: 'up | down | rebuild', default: 'up', required: true }
+  schedule: [{ cron: '41 4 * * *' }]
+concurrency: { group: bootstrap, cancel-in-progress: false }
+permissions: { contents: write }
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test
+      - run: node tools/bootstrap.mjs ${{ github.event.inputs.action || 'up' }}
+      - name: commit the ledger
+        if: always()
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger
+          git diff --cached --quiet || { git commit -m "ledger: bootstrap run ${{ github.run_number }}"; git pull --rebase -q; git push; }
