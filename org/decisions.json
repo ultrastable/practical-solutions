@@ -1,0 +1,10 @@
+[
+  { "id": "D-IMPL-1", "date": "2026-11-13",
+    "decision": "The JavaScript build on the vendored Ultrastable core is the system of record; the Python prototype is kept as a behaviour reference with its own CI job.",
+    "why": "The repository already runs the whole loop (World Bank adapter, independent verification, predictions with Brier scoring, trust ledger, criticality tests, Worker, bootstrap) on Ultrastable's tick, claims and org modules, with 462 vendored upstream tests. The Python prototype has the detector only and was never run on real data.",
+    "evidence_paths": ["ps/steps.js", "ps/criticality.js", "reference/python/practical_solutions/detect.py", "reference/python/tests/test_pipeline.py"],
+    "revisit_when": "a recall or precision comparison on the same synthetic world shows the Python detector beating ps/detect.js; the comparison belongs in ps/ as a test" },
+  { "id": "D-DEP-1", "date": "2026-11-13",
+    "decision": "Dependency runs one way: this repository vendors Ultrastable with tools/vendor.py from ultrastable/workers; Ultrastable never references this repository.",
+    "evidence_paths": ["vendor/ultrastable/VENDORED_FROM"], "revisit_when": "never" }
+]

@@ -1,7 +1,12 @@
 # SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
-# The continuous loop on GitHub's own compute, needing no secret beyond the built-in GITHUB_TOKEN: restore state, run ticks on the
-# real clock against live World Bank data, publish briefs as files and one issue per new brief, record criticality, commit state.
-# State is ledger/ps.sqlite (small, committed), so the next scheduled run continues where this one stopped and predictions come due.
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: about 3 minutes a day.
+# trigger: daily; the loop's refresh cadence is days, so faster adds cost and no information.
+# free-alternative: a Cloudflare cron worker that dispatches this workflow.
+# The continuous loop on GitHub's own compute, needing no secret beyond the built-in GITHUB_TOKEN: `ps cycle` restores the committed
+# state (ledger/ps.sqlite), ticks against live World Bank data, records essential variables, corrective actions and out-of-bounds
+# tests as one line in ledger/cycles.jsonl, publishes verified briefs as open data with a changelog, and this job files one issue
+# per new brief. Predictions registered in one cycle come due and are scored in a later one.
 name: cycle
 on:
   schedule: [{ cron: '17 3 * * *' }]
@@ -11,6 +16,7 @@ permissions: { contents: write, issues: write }
 jobs:
   cycle:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       GH_TOKEN: ${{ github.token }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -19,25 +25,19 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm test
-      - name: restore or create state
+      - name: run one cycle on persisted state
+        run: node --no-warnings bin/ps.mjs cycle --db ledger/ps.sqlite --ledger ledger/cycles.jsonl --out ledger/briefs --n 8 --run ${{ github.run_number }}
+      - name: one issue per new brief
         run: |
-          mkdir -p ledger
-          [ -f ledger/ps.sqlite ] || node --no-warnings bin/ps.mjs init --db ledger/ps.sqlite
-      - name: run ticks
-        run: node --no-warnings bin/ps.mjs tick --db ledger/ps.sqlite --n 8 | tee ledger/last-cycle.txt
-      - name: publish briefs and record criticality
-        run: |
-          node --no-warnings bin/ps.mjs export --db ledger/ps.sqlite --out briefs
-          node --no-warnings bin/ps.mjs criticality --db ledger/ps.sqlite > ledger/criticality.json || true
-          gh label create bright-spot -R "$GITHUB_REPOSITORY" --color 0e8a16 --description "Lead from the loop; a hypothesis to check, not a finding" 2>/dev/null || true
-          node -e "for (const b of JSON.parse(require('fs').readFileSync('briefs/index.json','utf8'))) console.log(b.file)" | while read f; do
+          gh label create bright-spot -R "$GITHUB_REPOSITORY" --color 0e8a16 --description "Lead from the loop; a hypothesis to check, not a finding" || true
+          node -e "for (const b of JSON.parse(require('fs').readFileSync('ledger/briefs/index.json','utf8'))) console.log(b.file)" | while read f; do
             t="Bright spot: ${f%.md}"
             n=$(gh issue list -R "$GITHUB_REPOSITORY" --label bright-spot --state all --search "\"$t\" in:title" --json number --jq length)
-            [ "$n" = 0 ] && gh issue create -R "$GITHUB_REPOSITORY" --label bright-spot --title "$t" --body-file "briefs/$f" || true
+            [ "$n" = 0 ] && { gh issue create -R "$GITHUB_REPOSITORY" --label bright-spot --title "$t" --body-file "ledger/briefs/$f" || echo "issue create failed for $f"; }
           done
       - name: commit state
         run: |
           git config user.name practical-solutions-bot
           git config user.email bot@users.noreply.github.com
-          git add ledger briefs
-          git diff --cached --quiet || { git commit -m "cycle ${{ github.run_number }}: state, briefs, criticality"; git pull --rebase -q; git push; }
+          git add ledger
+          git diff --cached --quiet || { git commit -m "cycle ${{ github.run_number }}: state, ledger, briefs"; git pull --rebase -q; git push; }

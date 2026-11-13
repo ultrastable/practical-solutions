@@ -1,6 +1,7 @@
 node_modules
 *.sqlite
+!ledger/ps.sqlite
 simulate.txt
 worker/wrangler.jsonc
 worker/seed.sql
-briefs/
+/briefs/

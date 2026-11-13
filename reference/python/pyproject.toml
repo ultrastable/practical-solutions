@@ -1,0 +1,16 @@
+[project]
+name = "practical-solutions"
+version = "0.1.0"
+description = "Unsupervised bright-spot detection with a self-tuning false-discovery guard."
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.scripts]
+practical-solutions = "practical_solutions.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["practical_solutions"]
