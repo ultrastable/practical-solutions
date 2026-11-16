@@ -93,5 +93,9 @@ test('the Worker serves health, briefs and the criticality report from the same 
   assert.ok(Array.isArray(c.tests));
   const b = await (await worker.fetch(new Request('https://x/ps/briefs'), env)).json();
   assert.ok(Array.isArray(b.briefs));
+  const home = await worker.fetch(new Request('https://x/'), env);
+  assert.equal(home.status, 200);
+  assert.match(home.headers.get('content-type'), /text\/html/);
+  assert.match(await home.text(), /Practical Solutions/);
   assert.equal((await worker.fetch(new Request('https://x/nope'), env)).status, 404);
 });
