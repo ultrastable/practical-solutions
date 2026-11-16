@@ -10,6 +10,7 @@ const WORDS = {
   problem_moved: c => ({ title: `Problem ${c.id} moved from rank ${c.from_rank} to ${c.to_rank}`, summary: `New World Bank data (${c.year}) changed its gap to the SDG target.`, link: '/' }),
   problem_added: c => ({ title: `New problem ranked: ${c.id}`, summary: 'A problem entered the ranking.', link: '/' }),
   candidate_added: c => ({ title: `New evidence found: ${c.title}`, summary: `A recent Cochrane review was found for problem ${c.problem}. Unreviewed.`, link: '/' }),
+  brightspot_added: c => ({ title: `New bright spot for ${c.problem}: ${c.title}`, summary: `${c.title} does better than its income predicts on ${c.problem} in two separate periods. A lead to investigate, not a finding.`, link: '/' }),
   draft_reviewed: c => ({ title: `Evidence draft passed review: ${c.title}`, summary: 'Quoted sentences and numbers were re-checked against the record by a separate step.', link: '/' }),
 };
 

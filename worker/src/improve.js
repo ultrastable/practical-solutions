@@ -6,6 +6,7 @@
 //   3. look for new candidate evidence: recent Cochrane reviews for the problems that rank highest
 //   4. append every change to a capped changelog
 // Self-contained and injectable: `store` has get/put (a KV namespace fits), `fetchFn` is fetch. No model calls, no core bindings.
+import { findSpots } from './brightspots.js';
 const EPMC = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search';
 const HOUR = 3600e3;
 
@@ -90,6 +91,20 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
       cand[p.id] = { at, items };
       await putJson(store, 'candidates', cand);
     } catch (e) { changes.push({ kind: 'candidate_error', problem: p.id, error: String(e.message || e) }); }
+  }
+  // 3a. bright spots: countries beating their income-predicted level in two periods, for one top problem per tick
+  const bs = await getJson(store, 'brightspots', {});
+  if (top.length) {
+    const p = [...top].sort((a, b) => Date.parse((bs[a.id] || { at: 0 }).at) - Date.parse((bs[b.id] || { at: 0 }).at))[0];
+    if (!bs[p.id] || now - Date.parse(bs[p.id].at) > 24 * HOUR) {
+      try {
+        const r = await findSpots(fetchFn, p, { now: new Date(now).getUTCFullYear() });
+        const before = new Set(((bs[p.id] || {}).spots || []).map(x => x.iso));
+        for (const s of r.spots) if (bs[p.id] && !before.has(s.iso)) changes.push({ kind: 'brightspot_added', problem: p.id, id: s.iso, title: s.name });
+        bs[p.id] = { at, ...r };
+        await putJson(store, 'brightspots', bs);
+      } catch (e) { changes.push({ kind: 'brightspot_error', problem: p.id, error: String(e.message || e) }); }
+    }
   }
   // 3b. extract and independently review drafts from candidate evidence
   changes.push(...await draftStep({ store, fetchFn, at }));
