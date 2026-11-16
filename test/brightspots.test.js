@@ -26,6 +26,13 @@ test('the two periods are fetched from their own year ranges, never from a short
   assert.ok(wb.some(u => u.includes('date=2022:2026')) && wb.some(u => u.includes('date=2016:2020')));
 });
 
+test('a transient World Bank 5xx is retried and the run still succeeds', async () => {
+  let failed = 0;
+  const flaky = async u => { if (!failed++) return { ok: false, status: 502, json: async () => ({}) }; return fakeWb(u); };
+  const out = await findSpots(flaky, P, { now: 2026 });
+  assert.ok(Array.isArray(out.spots));
+});
+
 test('residuals: sign flips for lower-is-better and the planted outlier stands out', () => {
   const rows = ISO.map((id, i) => ({ iso: id, x: income(i), y: mort(i, 0) }));
   assert.ok(residuals(rows, true).C05 > 1.5);

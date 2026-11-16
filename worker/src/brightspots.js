@@ -7,7 +7,12 @@ const WB = 'https://api.worldbank.org/v2';
 const INCOME = 'NY.GDP.PCAP.PP.CD';
 
 async function getJson(fetchFn, url) {
-  const r = await fetchFn(url);
+  let r;
+  for (let i = 0; i < 4; i++) {
+    r = await fetchFn(url);
+    if (r.ok || r.status < 500) break; // World Bank answers 502/524 intermittently; retry only server errors
+    await new Promise(res => setTimeout(res, 500 * (i + 1)));
+  }
   if (!r.ok) throw new Error(`World Bank HTTP ${r.status}`);
   return r.json();
 }
