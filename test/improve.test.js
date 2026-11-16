@@ -80,3 +80,13 @@ test('an empty ranking is not kept for six hours, and the World Bank is called o
   await tick({ store, fetchFn: epmcFake([]), rank: async () => { called++; return { basis: 'b', problems: [{ id: 'under5', rank: 1, year: 2023, title: 'x' }], unranked: [] }; }, now: Date.parse('2026-11-16T00:30:00Z') });
   assert.equal(called, 1);
 });
+
+test('extraction handles Cochrane headings without colons and curly apostrophes, and skips protocols', async () => {
+  const abs = "Rationale Why. Objectives To assess x. Main results We included 19 trials. Mortality was lower (risk ratio 0.88, 95% CI 0.83 to 0.93). Authors\u2019 conclusions Supplementation probably reduces deaths. Effects vary.";
+  const d = extractDraft({ pmid: '5', title: 'T', abstract_full: abs });
+  assert.ok(d, 'draft expected');
+  assert.ok(d.quotes.results[0].includes('0.88'));
+  assert.ok(d.quotes.conclusions[0].startsWith('Supplementation'));
+  assert.equal((await reviewDraft(epmcFake([{ abstractText: abs }]), d)).pass, true);
+  assert.equal(extractDraft({ pmid: '6', abstract_full: 'Objectives This is a protocol for a Cochrane Review. Main results 5%. Authors\u2019 conclusions x.' }), null);
+});
