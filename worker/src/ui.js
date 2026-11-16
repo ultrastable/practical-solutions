@@ -18,7 +18,8 @@ details summary{cursor:pointer;font-weight:600}details .md{margin-top:10px;font-
 </style></head><body><main>
 <h1>Practical Solutions</h1>
 <p class="sub">Implementable solutions to pressing problems: what to do, what it takes, who can do it, and the cheapest first test. Each cites the published evidence it rests on, and says where it may not hold.</p>
-<div id="sols" class="mut">Loading…</div>
+<h2>Which problems, and why</h2><p class="mut" id="basis">Loading…</p><div id="probs" class="mut"></div>
+<h2>Solutions</h2><div id="sols" class="mut">Loading…</div>
 <h2>Open leads from the loop</h2><p class="mut">Places the loop found doing better than their context predicts. These are hypotheses for people to check, not solutions.</p><div id="briefs" class="mut">Loading…</div>
 <details><summary>Loop health</summary><div id="crit" class="mut">Loading…</div></details>
 <p class="mut" id="foot"></p>
@@ -44,7 +45,15 @@ function sol(x){return '<div class="card"><span class="pill">'+esc(x.problem)+'<
  '<p><b>Worked where.</b> '+esc(x.works_where)+'</p><p><b>What it takes.</b> '+esc(x.takes)+'</p><p><b>Who can act.</b> '+esc(x.who)+'</p><p><b>Limits.</b> '+esc(x.limits)+'</p>'+
  '<p class="mut">Source check: '+esc(x.verified||'not yet checked')+' Seeded from the literature; check the cited source before relying on it.</p></div></details></div>'}
 async function load(){
-  try{const {solutions}=await get('/solutions.json');document.getElementById('sols').innerHTML=solutions.map(sol).join('')}catch(e){document.getElementById('sols').textContent='Could not load solutions: '+e.message}
+  let solutions=[];
+  try{solutions=(await get('/solutions.json')).solutions;document.getElementById('sols').innerHTML=solutions.map(sol).join('')}catch(e){document.getElementById('sols').textContent='Could not load solutions: '+e.message}
+  try{
+    const pr=await get('/problems.json');
+    document.getElementById('basis').textContent='How these were chosen: '+pr.basis;
+    document.getElementById('probs').innerHTML='<table><tr><th>#</th><th>Problem</th><th>Now</th><th>Target</th><th>Gap</th><th>Solutions here</th></tr>'+pr.problems.map(x=>{
+      const m=solutions.filter(y=>(y.problem_ids||[]).includes(x.id)).map(y=>esc(y.title)).join('; ')||'<span class="mut">none yet</span>';
+      return '<tr><td>'+x.rank+'</td><td><b>'+esc(x.title)+'</b><div class="mut">'+esc(x.domain+' · '+x.unit)+'</div></td><td>'+(+x.value).toFixed(1)+' <span class="mut">('+x.year+')</span></td><td>'+(+x.target).toFixed(1)+'<div class="mut">'+esc(x.target_src)+'</div></td><td>'+Math.round(x.shortfall*100)+'%</td><td>'+m+'</td></tr>'}).join('')+'</table>'+(pr.unranked.length?'<p class="mut">No usable data this run: '+pr.unranked.map(u=>esc(u.title)).join(', ')+'.</p>':'');
+  }catch(e){document.getElementById('basis').textContent='Could not load the problem ranking: '+e.message}
   try{
     const {briefs}=await get('/ps/briefs');
     document.getElementById('briefs').innerHTML=briefs.length?briefs.map(b=>
