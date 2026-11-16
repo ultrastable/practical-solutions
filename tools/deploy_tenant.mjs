@@ -11,6 +11,7 @@ import path from 'node:path';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const NAME = 'tenant-ps-web';
+export const HOST_ACCOUNT = process.env.PS_TENANT_HOST_ACCOUNT || '81e3a4efb4eb66e613529b87682911bb'; // tenancy.json host_account (ultrastable)
 export const metadata = () => ({ main_module: 'worker.js', compatibility_date: '2026-10-01', keep_bindings: ['kv_namespace', 'plain_text', 'secret_text'] });
 
 export function build() {
@@ -20,22 +21,32 @@ export function build() {
   return readFileSync(out);
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const code = build();
-  const sha = createHash('sha256').update(code).digest('hex');
-  if (process.argv.includes('--dry-run')) { console.log(JSON.stringify({ worker: NAME, bytes: code.length, sha256: sha, metadata: metadata() })); process.exit(0); }
-  const { CLOUDFLARE_API_TOKEN: token, CLOUDFLARE_ACCOUNT_ID: acct } = process.env;
-  if (!token || !acct) { console.error('CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are required'); process.exit(2); }
+export function guard(env = process.env) {
+  const miss = ['CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_ACCOUNT_ID'].filter(k => !env[k]);
+  if (miss.length) throw new Error('missing secrets: ' + miss.join(', '));
+  if (env.CLOUDFLARE_ACCOUNT_ID !== HOST_ACCOUNT) throw new Error('refusing: CLOUDFLARE_ACCOUNT_ID is not the tenant host account');
+}
+
+// Uploads, then reads the module back and requires the built bytes inside it. Throws on any failure; returns the proof.
+export async function deployTenant({ fetchFn = fetch, env = process.env, code }) {
+  guard(env);
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(metadata())], { type: 'application/json' }));
   form.append('worker.js', new Blob([code], { type: 'application/javascript+module' }), 'worker.js');
-  const base = `https://api.cloudflare.com/client/v4/accounts/${acct}/workers/scripts/${NAME}`;
-  const put = await fetch(base, { method: 'PUT', headers: { authorization: `Bearer ${token}` }, body: form });
+  const base = `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/workers/scripts/${NAME}`;
+  const auth = { authorization: `Bearer ${env.CLOUDFLARE_API_TOKEN}` };
+  const put = await fetchFn(base, { method: 'PUT', headers: auth, body: form });
   const j = await put.json();
-  if (!put.ok || !j.success) { console.error('deploy failed', put.status, JSON.stringify(j.errors)); process.exit(1); }
-  // Prove it: read the deployed module back and compare hashes.
-  const back = await fetch(base + '/content/v2', { headers: { authorization: `Bearer ${token}` } });
-  const got = createHash('sha256').update(Buffer.from(await back.arrayBuffer())).digest('hex');
-  console.log(JSON.stringify({ deployed: true, built_sha256: sha, readback_sha256: got, same: got === sha }));
-  if (got !== sha) console.error('read-back differs from the built bundle (the API may wrap the module in multipart); verify with /feed.xml and /brightspots.json');
+  if (!put.ok || !j.success) throw new Error(`deploy failed ${put.status} ${JSON.stringify(j.errors)}`);
+  const back = await fetchFn(base + '/content/v2', { headers: auth });
+  if (!back.ok) throw new Error(`read-back failed ${back.status}`);
+  const text = Buffer.from(await back.arrayBuffer()).toString('utf8');
+  if (!text.includes(Buffer.from(code).toString('utf8'))) throw new Error('read-back does not contain the built bundle');
+  return { deployed: true, sha256: createHash('sha256').update(code).digest('hex') };
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const code = build();
+  if (process.argv.includes('--dry-run')) { console.log(JSON.stringify({ worker: NAME, bytes: code.length, sha256: createHash('sha256').update(code).digest('hex'), metadata: metadata() })); process.exit(0); }
+  try { console.log(JSON.stringify(await deployTenant({ code }))); } catch (e) { console.error(String(e.message || e)); process.exit(1); }
 }
