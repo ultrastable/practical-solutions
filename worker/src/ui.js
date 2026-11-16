@@ -20,6 +20,8 @@ details summary{cursor:pointer;font-weight:600}details .md{margin-top:10px;font-
 <p class="sub">Implementable solutions to pressing problems: what to do, what it takes, who can do it, and the cheapest first test. Each cites the published evidence it rests on, and says where it may not hold.</p>
 <h2>Which problems, and why</h2><p class="mut" id="basis">Loading…</p><div id="probs" class="mut"></div>
 <h2>Solutions</h2><div id="sols" class="mut">Loading…</div>
+<h2>Candidate evidence the loop found</h2><p class="mut">Recent Cochrane reviews matching the highest-ranked problems, found by search. Unreviewed: nobody has judged whether they yield a solution.</p><div id="cands" class="mut">Loading…</div>
+<h2>What changed recently</h2><div id="chg" class="mut">Loading…</div>
 <h2>Open leads from the loop</h2><p class="mut">Places the loop found doing better than their context predicts. These are hypotheses for people to check, not solutions.</p><div id="briefs" class="mut">Loading…</div>
 <details><summary>Loop health</summary><div id="crit" class="mut">Loading…</div></details>
 <p class="mut" id="foot"></p>
@@ -54,6 +56,8 @@ async function load(){
       const m=solutions.filter(y=>(y.problem_ids||[]).includes(x.id)).map(y=>esc(y.title)).join('; ')||'<span class="mut">none yet</span>';
       return '<tr><td>'+x.rank+'</td><td><b>'+esc(x.title)+'</b><div class="mut">'+esc(x.domain+' · '+x.unit)+'</div></td><td>'+(+x.value).toFixed(1)+' <span class="mut">('+x.year+')</span></td><td>'+(+x.target).toFixed(1)+'<div class="mut">'+esc(x.target_src)+'</div></td><td>'+Math.round(x.shortfall*100)+'%</td><td>'+m+'</td></tr>'}).join('')+'</table>'+(pr.unranked.length?'<p class="mut">No usable data this run: '+pr.unranked.map(u=>esc(u.title)).join(', ')+'.</p>':'');
   }catch(e){document.getElementById('basis').textContent='Could not load the problem ranking: '+e.message}
+  try{const c=await get('/candidates.json');const ids=Object.keys(c);document.getElementById('cands').innerHTML=ids.length?ids.map(k=>'<div class="card"><span class="pill">'+esc(k)+'</span>'+c[k].items.map(i=>'<p style="margin:6px 0"><b>'+esc(i.title)+'</b> <span class="mut">('+esc(i.year)+(i.pmid?', PMID '+esc(i.pmid):'')+')</span><br><span class="mut">'+esc(i.abstract)+'</span></p>').join('')+'</div>').join(''):'<span class="mut">None yet; the first ticks are still running.</span>'}catch(e){document.getElementById('cands').textContent='Could not load candidates: '+e.message}
+  try{const {changes,last_tick}=await get('/changes.json');document.getElementById('chg').innerHTML='<p class="mut">Last tick: '+esc(last_tick?last_tick.at:'none yet')+'</p>'+(changes.length?'<table>'+changes.slice(0,25).map(x=>'<tr><td class="mut">'+esc(String(x.at).slice(0,16))+'</td><td>'+esc(x.kind)+'</td><td>'+esc(x.id||x.problem||'')+' '+esc(x.status||x.title||x.error||'')+'</td></tr>').join('')+'</table>':'<span class="mut">No changes recorded yet.</span>')}catch(e){document.getElementById('chg').textContent='Could not load changes: '+e.message}
   try{
     const {briefs}=await get('/ps/briefs');
     document.getElementById('briefs').innerHTML=briefs.length?briefs.map(b=>
