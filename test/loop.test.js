@@ -93,5 +93,13 @@ test('the Worker serves health, briefs and the criticality report from the same 
   assert.ok(Array.isArray(c.tests));
   const b = await (await worker.fetch(new Request('https://x/ps/briefs'), env)).json();
   assert.ok(Array.isArray(b.briefs));
+  const home = await worker.fetch(new Request('https://x/'), env);
+  assert.equal(home.status, 200);
+  assert.match(home.headers.get('content-type'), /text\/html/);
+  assert.match(await home.text(), /Practical Solutions/);
+  const sols = (await (await worker.fetch(new Request('https://x/solutions.json'), env)).json()).solutions;
+  assert.ok(sols.length >= 5);
+  for (const x of sols) for (const k of ['problem', 'title', 'first_test', 'who', 'takes', 'limits']) assert.ok(x[k], `${x.id} lacks ${k}`);
+  for (const x of sols) assert.ok(x.evidence.length > 0 && x.evidence.every(e => e.src && e.finding), `${x.id} needs a cited source`);
   assert.equal((await worker.fetch(new Request('https://x/nope'), env)).status, 404);
 });
