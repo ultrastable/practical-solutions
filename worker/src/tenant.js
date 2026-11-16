@@ -5,9 +5,8 @@
 import { PAGE } from './ui.js';
 import { rankProblems } from './problems.js';
 import { tick, verifiedText } from './improve.js';
-import { toRss, toJsonFeed, itemsFrom } from '../../platform/feed.js';
-import { createOutbox } from '../../platform/outbox.js';
-import { describeChange, solutionPage, FOOTER } from './publish.js';
+import { toRss, toJsonFeed, itemsFrom } from '../../vendor/ultrastable/core/feed/index.js';
+import { describeChange, solutionPage } from './publish.js';
 
 const BACKEND = 'https://ps-practical-solutions.q08.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
@@ -40,11 +39,6 @@ export default {
       const verif = await j(env, 'verif', {});
       const s = (await j(env, 'solutions', [])).find(x => x.id === sp[1]);
       return s ? new Response(solutionPage(s, verifiedText(verif[s.id]) || s.verified, origin), { headers }) : new Response('not found', { status: 404 });
-    }
-    if (u.pathname === '/outbox.json') {
-      if (!(env.OPERATOR_NAME && env.OPERATOR_POSTAL && env.REPLY_TO)) return Response.json({ configured: false, note: 'no operator identity set; nothing can be sent' });
-      const ob = createOutbox({ store: env.STATE, sender: { name: env.OPERATOR_NAME, postal: env.OPERATOR_POSTAL, reply_to: env.REPLY_TO }, footer: FOOTER });
-      return Response.json({ configured: true, ...(await ob.stats()) });
     }
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
     return new Response('not found', { status: 404 });
