@@ -17,9 +17,10 @@ details summary{cursor:pointer;font-weight:600}details .md{margin-top:10px;font-
 .md ul{padding-left:20px;margin:6px 0}table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
 </style></head><body><main>
 <h1>Practical Solutions</h1>
-<p class="sub">An autonomous loop that finds units doing better than their context predicts, checks each with an independent method, and scores its own predictions. Everything below is a lead to check, not a finding to copy.</p>
-<h2>Briefs</h2><div id="briefs" class="mut">Loading…</div>
-<h2>Criticality</h2><div id="crit" class="mut">Loading…</div>
+<p class="sub">Implementable solutions to pressing problems: what to do, what it takes, who can do it, and the cheapest first test. Each cites the published evidence it rests on, and says where it may not hold.</p>
+<div id="sols" class="mut">Loading…</div>
+<h2>Open leads from the loop</h2><p class="mut">Places the loop found doing better than their context predicts. These are hypotheses for people to check, not solutions.</p><div id="briefs" class="mut">Loading…</div>
+<details><summary>Loop health</summary><div id="crit" class="mut">Loading…</div></details>
 <p class="mut" id="foot"></p>
 </main>
 <script>
@@ -37,11 +38,17 @@ function md(src){
   if(list)out.push('</ul>');return out.join('');
 }
 async function get(p){const r=await fetch(p);if(!r.ok)throw new Error(p+' '+r.status);return r.json()}
+function sol(x){return '<div class="card"><span class="pill">'+esc(x.problem)+'</span><h3 style="margin:8px 0 4px">'+esc(x.title)+'</h3><p style="margin:4px 0">'+esc(x.claim)+'</p>'+
+ '<p style="margin:6px 0"><b>First test.</b> '+esc(x.first_test)+'</p><details><summary>Evidence, what it takes, limits</summary><div class="md">'+
+ x.evidence.map(e=>'<p><b>'+esc(e.src)+'.</b> '+esc(e.finding)+'</p>').join('')+
+ '<p><b>Worked where.</b> '+esc(x.works_where)+'</p><p><b>What it takes.</b> '+esc(x.takes)+'</p><p><b>Who can act.</b> '+esc(x.who)+'</p><p><b>Limits.</b> '+esc(x.limits)+'</p>'+
+ '<p class="mut">Seeded from the literature. Check the cited source before relying on it.</p></div></details></div>'}
 async function load(){
+  try{const {solutions}=await get('/solutions.json');document.getElementById('sols').innerHTML=solutions.map(sol).join('')}catch(e){document.getElementById('sols').textContent='Could not load solutions: '+e.message}
   try{
     const {briefs}=await get('/ps/briefs');
     document.getElementById('briefs').innerHTML=briefs.length?briefs.map(b=>
-      '<div class="card"><details><summary>'+esc(b.name||b.unit)+' <span class="pill">z '+(+b.z).toFixed(2)+'</span><span class="mut">'+esc(String(b.published_at||'').slice(0,10))+'</span></summary><div class="md">'+md(b.markdown)+'</div></details></div>').join(''):'<span class="mut">No published briefs yet. The loop publishes only what passes the independent check.</span>';
+      '<div class="card"><details><summary>'+esc(b.name||b.unit)+' <span class="pill">z '+(+b.z).toFixed(2)+'</span><span class="mut">'+esc(String(b.published_at||'').slice(0,10))+'</span></summary><div class="md">'+md(b.markdown)+'</div></details></div>').join(''):'<span class="mut">No leads published yet.</span>';
   }catch(e){document.getElementById('briefs').textContent='Could not load briefs: '+e.message}
   try{
     const c=await get('/ps/criticality');
