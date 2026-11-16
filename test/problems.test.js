@@ -31,3 +31,11 @@ test('every solution maps to a known problem', () => {
   const ids = new Set(PROBLEMS.map(p => p.id));
   for (const s of SOLUTIONS) assert.ok(s.problem_ids.length && s.problem_ids.every(i => ids.has(i)), s.id);
 });
+
+test('a 502 is retried and requests do not overlap', async () => {
+  let live = 0, peak = 0, fails = 0;
+  const f = async () => { live++; peak = Math.max(peak, live); await new Promise(r => setTimeout(r, 5)); live--; if (fails++ < 2) return { ok: false, status: 502 }; return { ok: true, json: async () => [{}, [{ date: '2023', value: 37 }]] }; };
+  const r = await rankProblems(f);
+  assert.equal(peak, 1);
+  assert.ok(r.problems.length >= 1);
+});

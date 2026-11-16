@@ -25,12 +25,17 @@ export function shortfall(p, value, baseline) {
   return { target, shortfall: Math.max(0, Math.min(1, s)) };
 }
 
-async function series(fetchFn, ind) {
-  const r = await fetchFn(`https://api.worldbank.org/v2/country/WLD/indicator/${ind}?format=json&per_page=80&date=2000:2025`);
+async function series0(fetchFn, ind) {
+  const url = `https://api.worldbank.org/v2/country/WLD/indicator/${ind}?format=json&per_page=80&date=2000:2025`;
+  let r;
+  for (let a = 0; a < 3; a++) { r = await fetchFn(url); if (r.ok) break; await new Promise(z => setTimeout(z, 400 * (a + 1))); }
   if (!r.ok) throw new Error(`${ind}: HTTP ${r.status}`);
   const rows = ((await r.json())[1] || []).filter(x => x.value != null).map(x => ({ year: +x.date, value: +x.value }));
   return rows.sort((a, b) => b.year - a.year);
 }
+// one request at a time: the World Bank answered 502 to eleven at once
+let wbq = Promise.resolve();
+function series(fetchFn, ind) { const run = () => series0(fetchFn, ind); wbq = wbq.then(run, run); return wbq; }
 
 export async function rankProblems(fetchFn = fetch) {
   const out = await Promise.all(PROBLEMS.map(async p => {

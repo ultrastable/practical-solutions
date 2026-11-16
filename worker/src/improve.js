@@ -17,8 +17,8 @@ export const SEARCH = {
 
 const strip = s => String(s || '').replace(/<[^>]+>/g, ' ');
 
-async function epmc(fetchFn, query, size) {
-  const u = `${EPMC}?query=${encodeURIComponent(query)}&format=json&resultType=core&pageSize=${size}&sort=${encodeURIComponent('P_PDATE_D desc')}`;
+async function epmc(fetchFn, query, size, sorted = true) {
+  const u = `${EPMC}?query=${encodeURIComponent(query)}&format=json&resultType=core&pageSize=${size}${sorted ? '&sort=' + encodeURIComponent('P_PDATE_D desc') : ''}`;
   const r = await fetchFn(u);
   if (!r.ok) throw new Error(`Europe PMC HTTP ${r.status}`);
   return ((await r.json()).resultList || {}).result || [];
@@ -29,7 +29,7 @@ export async function verifySolution(fetchFn, sol) {
   if (!checks.length) return { status: 'no_check', detail: 'no automated check defined' };
   const out = [];
   for (const c of checks) {
-    const rows = await epmc(fetchFn, `${c.q} AND PUB_YEAR:${c.year}`, 10);
+    const rows = await epmc(fetchFn, c.title ? `TITLE:"${c.title}" AND PUB_YEAR:${c.year}` : `${c.q} AND PUB_YEAR:${c.year}`, 10, false);
     const hit = rows.find(x => c.numbers.every(n => strip(x.abstractText).includes(n)));
     out.push(hit ? { ok: true, title: hit.title, pmid: hit.pmid || null, doi: hit.doi || null } : { ok: false, found: rows.length });
   }
@@ -53,7 +53,7 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
   const changes = [];
   // 1. problems
   const prev = await getJson(store, 'problems', null);
-  if (!prev || now - Date.parse(prev.at) > 6 * HOUR) {
+  if (!prev || !(prev.problems || []).length || now - Date.parse(prev.at) > 6 * HOUR) {
     const r = await rank(fetchFn);
     const old = Object.fromEntries(((prev || {}).problems || []).map(p => [p.id, p]));
     for (const p of r.problems) {
