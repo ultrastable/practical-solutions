@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { tick, verifySolution } from '../worker/src/improve.js';
+import { tick, verifySolution, extractDraft, reviewDraft } from '../worker/src/improve.js';
 import { SOLUTIONS } from '../worker/src/solutions.js';
 
 const mem = () => { const m = new Map(); return { get: async k => m.get(k) ?? null, put: async (k, v) => { m.set(k, v); }, m }; };
@@ -50,4 +50,24 @@ test('the tenant Worker serves data from its own store and never touches core', 
   assert.deepEqual(await (await w.fetch(new Request('https://x/candidates.json'), env)).json(), {});
   const src = (await import('node:fs')).readFileSync(new URL('../worker/src/tenant.js', import.meta.url), 'utf8');
   assert.ok(!/ultrastable-|env\.(DB|AI|AGENTS|SITE|DASHBOARD)/.test(src));
+});
+
+const ABS = "BACKGROUND: x. MAIN RESULTS: We included 19 trials. Vitamin A reduced all-cause mortality (risk ratio 0.88, 95% CI 0.83 to 0.93). AUTHORS' CONCLUSIONS: Supplementation probably reduces deaths. Effects vary by baseline deficiency.";
+
+test('extraction is purely quotation and the reviewer passes it only when the abstract contains every quote', async () => {
+  const d = extractDraft({ pmid: '9', title: 'T', year: '2022', abstract_full: ABS });
+  assert.ok(d && d.quotes.results[0].includes('0.88') && d.numbers.includes('0.88'));
+  assert.equal((await reviewDraft(epmcFake([{ abstractText: ABS }]), d)).pass, true);
+  assert.equal((await reviewDraft(epmcFake([{ abstractText: ABS.replace('0.88', '0.99') }]), d)).pass, false);
+  assert.equal((await reviewDraft(epmcFake([]), d)).pass, false);
+  assert.equal(extractDraft({ pmid: '1', abstract_full: 'no sections here' }), null);
+});
+
+test('a tick turns a candidate into a reviewed draft', async () => {
+  const store = mem();
+  await store.put('solutions', '[]');
+  const f = epmcFake([{ title: 'Review', pubYear: '2022', pmid: '9', abstractText: ABS }]);
+  await tick({ store, fetchFn: f, rank, now: Date.parse('2026-11-16T00:00:00Z') });
+  const drafts = JSON.parse(await store.get('drafts'));
+  assert.equal(drafts['9'].status, 'reviewed');
 });

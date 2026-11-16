@@ -21,6 +21,7 @@ export default {
       return Response.json({ solutions: sols });
     }
     if (u.pathname === '/problems.json') return Response.json(await j(env, 'problems', null) || await rankProblems());
+    if (u.pathname === '/drafts.json') { const d = await j(env, 'drafts', {}); return Response.json({ drafts: Object.values(d).filter(x => x.status === 'reviewed') }); }
     if (u.pathname === '/candidates.json') return Response.json(await j(env, 'candidates', {}));
     if (u.pathname === '/changes.json') return Response.json({ changes: await j(env, 'changes', []), last_tick: await j(env, 'last_tick', null) });
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });

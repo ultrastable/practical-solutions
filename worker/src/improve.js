@@ -91,10 +91,64 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
       await putJson(store, 'candidates', cand);
     } catch (e) { changes.push({ kind: 'candidate_error', problem: p.id, error: String(e.message || e) }); }
   }
+  // 3b. extract and independently review drafts from candidate evidence
+  changes.push(...await draftStep({ store, fetchFn, at }));
   // 4. changelog
   const log = await getJson(store, 'changes', []);
   const next = [...changes.map(c => ({ at, ...c })), ...log].slice(0, 200);
   await putJson(store, 'changes', next);
   await putJson(store, 'last_tick', { at, changes: changes.length });
   return { at, changes };
+}
+
+// ---- extraction and independent review -------------------------------------------------------------------------------
+// Extractive only: a draft quotes sentences from a Cochrane abstract; it never paraphrases, so it cannot invent a claim.
+// The reviewer is a separate function that re-fetches the record by PMID and confirms every quoted sentence is in the abstract
+// and every effect number in the draft appears there too. A draft shows on the site only after the reviewer passes it.
+// A draft is evidence for a solution, not a solution: what it takes, who acts and the first test need a person to specify.
+const sentences = t => String(t || '').split(/(?<=[.!?])\s+(?=[A-Z])/).map(s => s.trim()).filter(Boolean);
+const section = (t, name, next) => {
+  const m = new RegExp(`${name}:?\\s*([\\s\\S]*?)(?=\\s(?:${next}):|$)`, 'i').exec(t);
+  return m ? m[1].trim() : '';
+};
+
+export function extractDraft(item) {
+  const text = strip(item.abstract_full || item.abstract || '').replace(/\s+/g, ' ').trim();
+  if (!text) return null;
+  const concl = sentences(section(text, "AUTHORS'? CONCLUSIONS", 'DATA SOURCES|SELECTION CRITERIA|MAIN RESULTS|SEARCH METHODS|OBJECTIVES')).slice(0, 2);
+  const results = sentences(section(text, 'MAIN RESULTS', "AUTHORS'? CONCLUSIONS|SEARCH METHODS|DATA COLLECTION")).filter(s => /\d/.test(s) && /(risk ratio|odds ratio|RR|OR|mean difference|MD|SMD|%)/.test(s)).slice(0, 2);
+  if (!concl.length || !results.length) return null;
+  const numbers = [...new Set(results.join(' ').match(/\d+\.\d+|\d+/g) || [])].slice(0, 6);
+  return { pmid: item.pmid, title: item.title, year: item.year, quotes: { results, conclusions: concl }, numbers, status: 'draft' };
+}
+
+export async function reviewDraft(fetchFn, draft) {
+  const rows = await epmc(fetchFn, `EXT_ID:${draft.pmid} AND SRC:MED`, 1);
+  const abs = strip((rows[0] || {}).abstractText).replace(/\s+/g, ' ');
+  if (!abs) return { pass: false, reason: 'record or abstract not found' };
+  const all = [...draft.quotes.results, ...draft.quotes.conclusions];
+  const missing = all.filter(q => !abs.includes(q));
+  const nums = draft.numbers.filter(n => !abs.includes(n));
+  const pass = !missing.length && !nums.length;
+  return { pass, reason: pass ? 'every quoted sentence and number found in the abstract' : `not found: ${missing.length} quote(s), ${nums.length} number(s)` };
+}
+
+export async function draftStep({ store, fetchFn, at, max = 2 }) {
+  const changes = [];
+  const cands = await getJson(store, 'candidates', {});
+  const drafts = await getJson(store, 'drafts', {});
+  const todo = Object.entries(cands).flatMap(([pid, c]) => c.items.map(i => ({ ...i, problem: pid }))).filter(i => i.pmid && !drafts[i.pmid]).slice(0, max);
+  for (const it of todo) {
+    try {
+      const rows = await epmc(fetchFn, `EXT_ID:${it.pmid} AND SRC:MED`, 1);
+      const full = strip((rows[0] || {}).abstractText);
+      const d = extractDraft({ ...it, abstract_full: full });
+      if (!d) { drafts[it.pmid] = { pmid: it.pmid, title: it.title, problem: it.problem, status: 'no_extractable_result', at }; continue; }
+      const rev = await reviewDraft(fetchFn, d);
+      drafts[it.pmid] = { ...d, problem: it.problem, status: rev.pass ? 'reviewed' : 'rejected', review: rev.reason, at };
+      changes.push({ kind: 'draft_' + drafts[it.pmid].status, id: it.pmid, title: it.title });
+    } catch (e) { changes.push({ kind: 'draft_error', id: it.pmid, error: String(e.message || e) }); }
+  }
+  await putJson(store, 'drafts', drafts);
+  return changes;
 }
