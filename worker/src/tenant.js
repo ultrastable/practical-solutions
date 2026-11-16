@@ -5,6 +5,9 @@
 import { PAGE } from './ui.js';
 import { rankProblems } from './problems.js';
 import { tick, verifiedText } from './improve.js';
+import { toRss, toJsonFeed, itemsFrom } from '../../platform/feed.js';
+import { createOutbox } from '../../platform/outbox.js';
+import { describeChange, solutionPage, FOOTER } from './publish.js';
 
 const BACKEND = 'https://ps-practical-solutions.q08.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
@@ -24,6 +27,24 @@ export default {
     if (u.pathname === '/drafts.json') { const d = await j(env, 'drafts', {}); return Response.json({ drafts: Object.values(d).filter(x => x.status === 'reviewed') }); }
     if (u.pathname === '/candidates.json') return Response.json(await j(env, 'candidates', {}));
     if (u.pathname === '/changes.json') return Response.json({ changes: await j(env, 'changes', []), last_tick: await j(env, 'last_tick', null) });
+    const origin = u.origin;
+    if (['/feed.xml', '/feed.json'].includes(u.pathname)) {
+      const meta = { title: 'Practical Solutions: what changed', link: origin, description: 'Every automatic change the improvement loop made: re-rankings, evidence checks, new candidate evidence.' };
+      const items = itemsFrom(await j(env, 'changes', []), c => describeChange(c, origin));
+      return u.pathname === '/feed.xml' ? new Response(toRss({ ...meta, items }), { headers: { 'content-type': 'application/rss+xml; charset=utf-8' } })
+        : Response.json(toJsonFeed({ ...meta, feedUrl: origin + '/feed.json', items }));
+    }
+    const sp = /^\/solutions\/([a-z0-9-]+)$/.exec(u.pathname);
+    if (sp) {
+      const verif = await j(env, 'verif', {});
+      const s = (await j(env, 'solutions', [])).find(x => x.id === sp[1]);
+      return s ? new Response(solutionPage(s, verifiedText(verif[s.id]) || s.verified, origin), { headers }) : new Response('not found', { status: 404 });
+    }
+    if (u.pathname === '/outbox.json') {
+      if (!(env.OPERATOR_NAME && env.OPERATOR_POSTAL && env.REPLY_TO)) return Response.json({ configured: false, note: 'no operator identity set; nothing can be sent' });
+      const ob = createOutbox({ store: env.STATE, sender: { name: env.OPERATOR_NAME, postal: env.OPERATOR_POSTAL, reply_to: env.REPLY_TO }, footer: FOOTER });
+      return Response.json({ configured: true, ...(await ob.stats()) });
+    }
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
     return new Response('not found', { status: 404 });
   },
