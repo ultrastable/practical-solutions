@@ -2,7 +2,7 @@
 # Deploys the tenant front-end Worker whenever its code changes on main, after the tests pass. Fails visibly if the secrets are missing.
 name: deploy-tenant
 on:
-  push: { branches: [main], paths: ['worker/src/**', 'platform/**', 'tools/deploy_tenant.mjs'] }
+  push: { branches: [main], paths: ['worker/src/**', 'vendor/ultrastable/core/feed/**', 'tools/deploy_tenant.mjs'] }
   workflow_dispatch: {}
 concurrency: { group: deploy-tenant, cancel-in-progress: false }
 permissions: { contents: read }

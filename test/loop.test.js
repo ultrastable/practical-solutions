@@ -45,8 +45,8 @@ test('from birth, the loop runs by itself: detect, verify by a different reviewe
   const status = Object.fromEntries(rep.tests.map(t => [t.id, t.status]));
   for (const id of ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8']) assert.equal(status[id], 'pass', `${id} ${JSON.stringify(rep.tests.find(t => t.id === id))}`);
   assert.equal(status.C9, 'fail', 'no real model has run yet: said plainly');
-  assert.equal(rep.tests.find(t => t.id === 'C10').value.includes('UPSTREAM-1:done'), true, 'UPSTREAM-1 merged upstream and closed on evidence that core graded a ps prediction');
-  assert.equal(status.C10, 'fail', 'UPSTREAM-2 (platform/ capabilities) is filed and open until upstreamed: said plainly');
+  assert.equal(status.C10, 'pass', 'UPSTREAM-1 and UPSTREAM-2 are both closed on evidence');
+  assert.ok(rep.tests.find(t => t.id === 'C10').value.includes('UPSTREAM-2:done'));
   assert.equal(rep.critical, false, 'not critical until every test passes');
 });
 
