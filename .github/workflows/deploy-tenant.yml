@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Deploys the tenant front-end Worker whenever its code changes on main, after the tests pass. Fails visibly if the secrets are missing.
+name: deploy-tenant
+on:
+  push: { branches: [main], paths: ['worker/src/**', 'platform/**', 'tools/deploy_tenant.mjs'] }
+  workflow_dispatch: {}
+concurrency: { group: deploy-tenant, cancel-in-progress: false }
+permissions: { contents: read }
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test
+      - run: node tools/deploy_tenant.mjs
+      - name: live check
+        run: |
+          for p in /feed.xml /brightspots.json /solutions/kmc; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://tenant-ps-web.ultrastable.workers.dev$p"); echo "$p $code"; [ "$code" = 200 ] || exit 1
+          done
