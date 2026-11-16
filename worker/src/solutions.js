@@ -4,7 +4,7 @@
 // every entry names its source so a reader can check it. The loop's data-found leads are shown separately and never mixed in.
 // status: "seed, from the literature; verify against the cited source before relying on it". Numbers are the sources' own, rounded.
 export const SOLUTIONS = [
-  { id: 'kmc', checks: [{ q: 'immediate kangaroo mother care low birth weight infants', year: 2021, numbers: ['12.0', '15.7'] }], problem_ids: ['neonatal', 'under5'], verified: 'checked 2026-11-16 against the PMC summary of the trial (weight range and 25% figure).', problem: 'Newborn deaths', title: 'Start kangaroo mother care at birth for small babies',
+  { id: 'kmc', checks: [{ title: 'Immediate Kangaroo Mother Care and Survival of Infants with Low Birth Weight', q: 'immediate kangaroo mother care low birth weight infants', year: 2021, numbers: ['12.0', '15.7'] }], problem_ids: ['neonatal', 'under5'], verified: 'checked 2026-11-16 against the PMC summary of the trial (weight range and 25% figure).', problem: 'Newborn deaths', title: 'Start kangaroo mother care at birth for small babies',
     claim: 'Skin-to-skin contact with a parent, begun immediately after birth for babies weighing 1.0 to 1.8 kg, cut deaths in the first 28 days by about a quarter.',
     evidence: [{ src: 'WHO Immediate KMC Study Group, New England Journal of Medicine, 2021', finding: 'Randomised trial in five hospitals in Ghana, India, Malawi, Nigeria and Tanzania: 3,211 babies of 1.0-1.8 kg; about 25% lower neonatal mortality for immediate versus conventional KMC.' }],
     works_where: 'Tertiary newborn units in Ghana, India, Malawi, Nigeria, Tanzania (2017-2020).',
@@ -28,7 +28,7 @@ export const SOLUTIONS = [
     who: 'Water authorities, NGOs, village committees.',
     first_test: '20 shared water points: install dispensers, test free chlorine residual at household level monthly, track diarrhoea clinic visits against 20 matched points.',
     limits: 'Effect depends on people using the dispensers; works poorly where households already treat water or sources are piped and treated.' },
-  { id: 'itn', checks: [{ q: 'insecticide-treated nets child mortality malaria', year: 2004, numbers: ['17'] }], problem_ids: ['under5'], verified: 'not yet checked against the source', problem: 'Malaria deaths', title: 'Distribute insecticide-treated bed nets, choosing nets that beat local resistance',
+  { id: 'itn', checks: [{ title: 'Insecticide-treated bed nets and curtains for preventing malaria', q: 'insecticide-treated nets child mortality malaria', year: 2004, numbers: ['17'] }], problem_ids: ['under5'], verified: 'not yet checked against the source', problem: 'Malaria deaths', title: 'Distribute insecticide-treated bed nets, choosing nets that beat local resistance',
     claim: 'Sleeping under treated nets cuts child deaths in malaria areas; newer dual-insecticide nets work better where mosquitoes resist pyrethroids.',
     evidence: [{ src: 'Lengeler, Cochrane Review, 2004', finding: 'About 17% lower all-cause child mortality in trial settings.' }, { src: 'Accrombessi et al., Lancet, 2023 (Benin); Mosha et al., Lancet, 2022 (Tanzania)', finding: 'Chlorfenapyr dual-insecticide nets lowered malaria infection versus standard pyrethroid nets in resistance areas.' }],
     works_where: 'Mass campaigns across sub-Saharan Africa; large trials in Tanzania and Benin.',
@@ -52,7 +52,7 @@ export const SOLUTIONS = [
     who: 'District health officers, NGOs.',
     first_test: '10 villages: fixed monthly camp plus incentive, versus the current service; compare full immunisation at 12 months.',
     limits: 'One region; incentive cost and supply reliability are essential, and effects elsewhere need local testing.' },
-  { id: 'vita', checks: [{ q: 'vitamin A supplementation children six months to five years mortality', year: 2022, numbers: ['0.88', '0.83', '0.93'] }], problem_ids: ['under5'], verified: 'checked 2026-11-16 against the Cochrane review page.', problem: 'Child deaths where vitamin A is scarce', title: 'Vitamin A supplementation in deficient populations',
+  { id: 'vita', checks: [{ title: 'Vitamin A supplementation for preventing morbidity and mortality in children from six months to five years of age', q: 'vitamin A supplementation children six months to five years mortality', year: 2022, numbers: ['0.88', '0.83', '0.93'] }], problem_ids: ['under5'], verified: 'checked 2026-11-16 against the Cochrane review page.', problem: 'Child deaths where vitamin A is scarce', title: 'Vitamin A supplementation in deficient populations',
     claim: 'Where children are vitamin A deficient, twice-yearly high-dose capsules reduce child mortality.',
     evidence: [{ src: 'Imdad et al., Cochrane Review, 2022', finding: '19 trials, 1.2 million children: risk ratio 0.88 (95% CI 0.83-0.93) for all-cause mortality; high-certainty evidence.' }],
     works_where: 'Trials in South Asia and Africa; routine programmes in many countries.',
@@ -68,7 +68,7 @@ export const SOLUTIONS = [
     who: 'Social-protection ministries, NGOs and funders.',
     first_test: '500 households: transfer a fixed sum, survey consumption and food security at 6 and 12 months against matched villages.',
     limits: 'Effects on long-run income are weaker than on consumption; inflation and targeting errors depend on local markets.' },
-  { id: 'hypertension', checks: [{ q: 'hypertension control Kaiser Permanente Northern California', year: 2013, numbers: ['43.6', '80.4'] }], problem_ids: ['ncd'], verified: 'not yet checked against the source', problem: 'Heart disease and stroke', title: 'Treat high blood pressure with one standard protocol',
+  { id: 'hypertension', checks: [{ title: 'Improved blood pressure control associated with a large-scale hypertension program', q: 'hypertension control Kaiser Permanente Northern California', year: 2013, numbers: ['43.6', '80.4'] }], problem_ids: ['ncd'], verified: 'not yet checked against the source', problem: 'Heart disease and stroke', title: 'Treat high blood pressure with one standard protocol',
     claim: 'A single simple drug protocol, with follow-up and tracking of who is controlled, raises blood-pressure control far above usual care.',
     evidence: [{ src: 'Jaffe et al., JAMA, 2013 (Kaiser Permanente Northern California)', finding: 'Hypertension control rose from about 44% to about 80% over 2001-2009 after a system-wide protocol and registry.' }],
     works_where: 'Kaiser Permanente Northern California; adapted in the WHO HEARTS package.',

@@ -71,3 +71,12 @@ test('a tick turns a candidate into a reviewed draft', async () => {
   const drafts = JSON.parse(await store.get('drafts'));
   assert.equal(drafts['9'].status, 'reviewed');
 });
+
+test('an empty ranking is not kept for six hours, and the World Bank is called one request at a time', async () => {
+  const store = mem();
+  await store.put('solutions', '[]');
+  await tick({ store, fetchFn: epmcFake([]), rank: async () => ({ basis: 'b', problems: [], unranked: [] }), now: Date.parse('2026-11-16T00:00:00Z') });
+  let called = 0;
+  await tick({ store, fetchFn: epmcFake([]), rank: async () => { called++; return { basis: 'b', problems: [{ id: 'under5', rank: 1, year: 2023, title: 'x' }], unranked: [] }; }, now: Date.parse('2026-11-16T00:30:00Z') });
+  assert.equal(called, 1);
+});
