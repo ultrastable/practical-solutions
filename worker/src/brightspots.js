@@ -12,11 +12,16 @@ async function getJson(fetchFn, url) {
   return r.json();
 }
 
-// Latest non-empty value per country between two years, for real countries only.
+// Latest non-empty value per country within [from, to], for real countries only. The range is honoured by taking every row in it
+// and keeping the newest per country; the API's most-recent-non-empty shortcut ignores the range, which made both periods identical.
 export async function snapshot(fetchFn, ind, from, to, countries) {
-  const j = await getJson(fetchFn, `${WB}/country/all/indicator/${ind}?format=json&per_page=1000&date=${from}:${to}&mrnev=1`);
+  const j = await getJson(fetchFn, `${WB}/country/all/indicator/${ind}?format=json&per_page=20000&date=${from}:${to}`);
   const out = {};
-  for (const r of (Array.isArray(j) ? j[1] : null) || []) if (r.value != null && countries.has(r.countryiso3code)) out[r.countryiso3code] = { v: +r.value, name: r.country.value, year: +r.date };
+  for (const r of (Array.isArray(j) ? j[1] : null) || []) {
+    if (r.value == null || !countries.has(r.countryiso3code)) continue;
+    const year = +r.date;
+    if (!out[r.countryiso3code] || year > out[r.countryiso3code].year) out[r.countryiso3code] = { v: +r.value, name: r.country.value, year };
+  }
   return out;
 }
 

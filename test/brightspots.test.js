@@ -18,6 +18,14 @@ const fakeWb = async url => {
   return { ok: true, json: async () => [{}, rows] };
 };
 
+test('the two periods are fetched from their own year ranges, never from a shortcut that ignores them', async () => {
+  const urls = [];
+  await findSpots(async u => { urls.push(u); return fakeWb(u); }, P, { now: 2026 });
+  const wb = urls.filter(u => u.includes('/indicator/'));
+  assert.ok(wb.every(u => !u.includes('mrnev')));
+  assert.ok(wb.some(u => u.includes('date=2022:2026')) && wb.some(u => u.includes('date=2016:2020')));
+});
+
 test('residuals: sign flips for lower-is-better and the planted outlier stands out', () => {
   const rows = ISO.map((id, i) => ({ iso: id, x: income(i), y: mort(i, 0) }));
   assert.ok(residuals(rows, true).C05 > 1.5);
