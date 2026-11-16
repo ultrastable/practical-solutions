@@ -25,6 +25,7 @@ export default {
     }
     if (u.pathname === '/problems.json') return Response.json(await j(env, 'problems', null) || await rankProblems());
     if (u.pathname === '/drafts.json') { const d = await j(env, 'drafts', {}); return Response.json({ drafts: Object.values(d).filter(x => x.status === 'reviewed') }); }
+    if (u.pathname === '/brightspots.json') return Response.json(await j(env, 'brightspots', {}));
     if (u.pathname === '/candidates.json') return Response.json(await j(env, 'candidates', {}));
     if (u.pathname === '/changes.json') return Response.json({ changes: await j(env, 'changes', []), last_tick: await j(env, 'last_tick', null) });
     const origin = u.origin;
