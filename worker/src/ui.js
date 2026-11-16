@@ -42,7 +42,7 @@ function sol(x){return '<div class="card"><span class="pill">'+esc(x.problem)+'<
  '<p style="margin:6px 0"><b>First test.</b> '+esc(x.first_test)+'</p><details><summary>Evidence, what it takes, limits</summary><div class="md">'+
  x.evidence.map(e=>'<p><b>'+esc(e.src)+'.</b> '+esc(e.finding)+'</p>').join('')+
  '<p><b>Worked where.</b> '+esc(x.works_where)+'</p><p><b>What it takes.</b> '+esc(x.takes)+'</p><p><b>Who can act.</b> '+esc(x.who)+'</p><p><b>Limits.</b> '+esc(x.limits)+'</p>'+
- '<p class="mut">Seeded from the literature. Check the cited source before relying on it.</p></div></details></div>'}
+ '<p class="mut">Source check: '+esc(x.verified||'not yet checked')+' Seeded from the literature; check the cited source before relying on it.</p></div></details></div>'}
 async function load(){
   try{const {solutions}=await get('/solutions.json');document.getElementById('sols').innerHTML=solutions.map(sol).join('')}catch(e){document.getElementById('sols').textContent='Could not load solutions: '+e.message}
   try{
