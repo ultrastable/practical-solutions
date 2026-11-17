@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm test
-      - run: npx --yes esbuild worker/src/index.js --bundle --format=esm --platform=neutral --external:node:* --minify --outfile=.build-backend.js
+      - run: npx --yes esbuild worker/src/index.js --bundle --format=esm --platform=neutral --external:node:* --define:import.meta.url='"file:///worker/"' --minify --outfile=.build-backend.js
       - name: deploy via gateway
         run: |
           tok=$(curl -fsS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$GATEWAY" | jq -r .value)
