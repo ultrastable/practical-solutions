@@ -33,10 +33,18 @@ export async function refresh({ fetch: f = globalThis.fetch, prev = { countries:
   let hdi = null;
   for (const u of HDR) { try { hdi = parseHdr(await get(f, u, 'text')); if (Object.keys(hdi).length > 100) { sources.hdi = 'ok: ' + u; break; } hdi = null; sources.hdi = 'failed: file had no usable rows'; } catch (e) { sources.hdi = 'failed: ' + e.message; } }
   if (!hdi) hdi = Object.fromEntries(Object.values(prev.countries || {}).filter(c => c.hdi).map(c => [c.iso3, c.hdi]));
-  const series = {};
-  for (const p of PROBLEMS) {
+  // three at a time: sequential requests ran past the run deadline (6 of 21 series missed on the first run); the World Bank answers 502 to many at once
+  const series = {}, queue = [...PROBLEMS];
+  const worker = async () => { for (let p; (p = queue.shift());) {
     try { series[p.id] = parseGroupSeries(await get(f, `${WB}/country/LIC;LMC;UMC;HIC/indicator/${p.ind}?format=json&per_page=500&date=2000:2025`)); sources['levels.' + p.id] = 'ok'; }
     catch (e) { sources['levels.' + p.id] = 'failed: ' + e.message; series[p.id] = null; }
+  } };
+  await Promise.all([worker(), worker(), worker()]);
+  // a failed series keeps the group's previous figures for that problem, so one bad day does not drop a problem from the ranking
+  for (const p of PROBLEMS) if (!series[p.id] && prev.levels) {
+    const back = {};
+    for (const [g, lv] of Object.entries({ LIC: 'low', LMC: 'lower-middle', UMC: 'upper-middle', HIC: 'high' })) { const r = ((prev.levels[lv] || {}).ranked || []).find(x => x.id === p.id); if (r && r.value != null) back[g] = [{ year: r.year, value: r.value }, ...(p.target_from && r.target != null ? [{ year: p.target_from, value: r.target / p.factor }] : [])]; }
+    if (Object.keys(back).length) series[p.id] = back;
   }
   const okLevels = PROBLEMS.filter(p => series[p.id]).length;
   const levels = okLevels ? rankLevels(PROBLEMS, series) : prev.levels;
