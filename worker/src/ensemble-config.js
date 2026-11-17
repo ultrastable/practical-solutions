@@ -15,16 +15,24 @@ export const ENSEMBLE = {
   min_effective_votes: 1.3,        // measured n_eff = 2 / (1 + phi) over verifier verdicts; below this the most correlated vendor is benched
   fields: ['claim', 'limits', 'works_where', 'takes', 'first_test'],  // the only entry fields a proposal may change
   max_growth: 1.5,                 // a replacement may be at most this many times as long as the text it replaces (plus 80 characters)
+  // The voting pool is Workers AI, reached from Actions through the tenant's model Worker on the run's OIDC token. GitHub Models answered every call with a
+  // bare "OK" (no completion) on 2026-11-17, so its members are kept apart, used only by the red team, and rejoin the pool when they serve again.
   pool: [
+    { id: 'gpt-oss-120b', route: 'workers-ai', model: '@cf/openai/gpt-oss-120b', vendor: 'openai', lineage: 'gpt-oss' },
+    { id: 'llama-3.3-70b', route: 'workers-ai', model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast', vendor: 'meta', lineage: 'llama' },
+    { id: 'mistral-small-3.1', route: 'workers-ai', model: '@cf/mistralai/mistral-small-3.1-24b-instruct', vendor: 'mistral', lineage: 'mistral' },
+    { id: 'gemma-4', route: 'workers-ai', model: '@cf/google/gemma-4-26b-a4b-it', vendor: 'google', lineage: 'gemma' },
+    { id: 'qwen3-30b', route: 'workers-ai', model: '@cf/qwen/qwen3-30b-a3b-fp8', vendor: 'alibaba', lineage: 'qwen' },
+    { id: 'glm-5.3-flash', route: 'workers-ai', model: '@cf/zai-org/glm-5.3-flash', vendor: 'zai', lineage: 'glm' },
+    { id: 'kimi-k2.6', route: 'workers-ai', model: '@cf/moonshotai/kimi-k2.6', vendor: 'moonshot', lineage: 'kimi' },
+    { id: 'deepseek-v4-flash', route: 'workers-ai', model: '@cf/deepseek-ai/deepseek-v4-flash-0731', vendor: 'deepseek', lineage: 'deepseek' },
+    { id: 'nemotron-3', route: 'workers-ai', model: '@cf/nvidia/nemotron-3-120b-a12b', vendor: 'nvidia', lineage: 'nemotron' },
+  ],
+  github_models: [
     { id: 'gpt-4.1-mini', route: 'github-models', model: 'openai/gpt-4.1-mini', vendor: 'openai', lineage: 'gpt' },
-    { id: 'llama-3.3-70b', route: 'github-models', model: 'meta/llama-3.3-70b-instruct', vendor: 'meta', lineage: 'llama' },
-    { id: 'mistral-small', route: 'github-models', model: 'mistral-ai/mistral-small-2503', vendor: 'mistral', lineage: 'mistral' },
-    { id: 'deepseek-v3', route: 'github-models', model: 'deepseek/deepseek-v3-0324', vendor: 'deepseek', lineage: 'deepseek' },
+    { id: 'llama-3.3-70b-gh', route: 'github-models', model: 'meta/llama-3.3-70b-instruct', vendor: 'meta', lineage: 'llama' },
+    { id: 'mistral-small-gh', route: 'github-models', model: 'mistral-ai/mistral-small-2503', vendor: 'mistral', lineage: 'mistral' },
     { id: 'phi-4', route: 'github-models', model: 'microsoft/phi-4', vendor: 'microsoft', lineage: 'phi' },
-    { id: 'grok-3-mini', route: 'github-models', model: 'xai/grok-3-mini', vendor: 'xai', lineage: 'grok' },
-    { id: 'command-a', route: 'github-models', model: 'cohere/cohere-command-a', vendor: 'cohere', lineage: 'command' },
-    { id: 'gemma-3', route: 'workers-ai', model: '@cf/google/gemma-3-12b-it', vendor: 'google', lineage: 'gemma' },
-    { id: 'llama-3.3-fp8', route: 'workers-ai', model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast', vendor: 'meta', lineage: 'llama' },
   ],
 };
 // the models Workers AI may be asked for through the tenant's model Worker (worker-llm); anything else is refused there
