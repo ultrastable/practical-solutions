@@ -16,6 +16,6 @@ test('chlorine: positive, higher-order effects reported, weak links disclosed', 
 });
 test('unmodelled entries say so and the method page publishes every assumption', () => {
   assert.match(bcaBlock(bcaFor('kmc')), /Not yet estimated/);
-  const m = methodSection(); for (const k of ['neutral_point', 'discount', 'moral_weight_death_u5']) assert.match(m, new RegExp(k));
+  const m = methodSection(); for (const k of ['neutral_point', 'discount', 'death_u5_tria']) assert.match(m, new RegExp(k));
   assert.ok(coverage(['chlorine', 'kmc']).queue.includes('kmc'));
 });
