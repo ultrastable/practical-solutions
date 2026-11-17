@@ -15,11 +15,12 @@ export default {
     if (pathname !== '/ps/llm') return new Response('not found\n', { status: 404 });
     if (request.method !== 'POST') return new Response('POST only\n', { status: 405 });
     if (!env.AI || !env.AI.run) return Response.json({ error: 'no_ai_binding' }, { status: 503 });
+    // the code agent (tools/agent.mjs) sends whole source files and needs whole edits back: up to 40,000 characters in, 4,000 tokens out
     const v = await verifyOidc((request.headers.get('authorization') || '').replace(/^Bearer /, ''), { audience: LLM_AUDIENCE, repository: LLM_REPOSITORY });
     if (!v.ok) return Response.json({ error: 'forbidden', reason: v.reason }, { status: 403 });
     const b = await request.json().catch(() => null);
-    if (!b || typeof b.prompt !== 'string' || b.prompt.length > 6000) return Response.json({ error: 'bad_request' }, { status: 400 });
-    const out = await env.AI.run(WORKERS_AI_MODEL, { messages: [{ role: 'user', content: b.prompt }], max_tokens: Math.min(Number(b.max_tokens) || 600, 800) });
+    if (!b || typeof b.prompt !== 'string' || b.prompt.length > 40000) return Response.json({ error: 'bad_request' }, { status: 400 });
+    const out = await env.AI.run(WORKERS_AI_MODEL, { messages: [{ role: 'user', content: b.prompt }], max_tokens: Math.min(Number(b.max_tokens) || 600, 4000) });
     return Response.json({ text: textOf(out), model: WORKERS_AI_MODEL });
   },
 };
