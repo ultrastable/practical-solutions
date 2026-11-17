@@ -62,7 +62,8 @@
   "EE",
   "LU",
   "MT",
-  "CY"
+  "CY",
+  "CH"
  ],
  "role_local_parts": [
   "info",
@@ -86,7 +87,10 @@
   "implements": 3,
   "funds": 3,
   "regulates": 2,
-  "advises": 1
+  "advises": 1,
+  "reports": 3,
+  "researches": 2,
+  "convenes": 2
  },
  "gates": {
   "per_day": 5,
@@ -99,5 +103,34 @@
  "sender": {
   "reply_to": "replies@ultrastable.org",
   "from": "practical-solutions@outreach.ultrastable.org"
+ },
+ "per_audience_max": {
+  "agency": 4,
+  "ngo_foundation": 3,
+  "researcher": 3,
+  "media": 3,
+  "community": 2
+ },
+ "framing": {
+  "agency": {
+   "intro": "We are writing because {reason}, and this entry may be relevant to your work: \"{title}\".",
+   "ask": "If this is not relevant to you, no action is needed, and replying \"stop\" ensures you hear nothing further. If we have misread the evidence, replies are read by a person and corrections are published."
+  },
+  "ngo_foundation": {
+   "intro": "We are writing because {reason}. This evidence entry may be a candidate for a small, cheap test by your teams or partners: \"{title}\".",
+   "ask": "If this is not relevant to you, no action is needed, and replying \"stop\" ensures you hear nothing further. If we have misread the evidence, replies are read by a person and corrections are published."
+  },
+  "researcher": {
+   "intro": "We are writing because {reason}. We publish sourced evidence entries with their limits stated, and would value your critique of this one: \"{title}\".",
+   "ask": "A correction, a missing study or a replication we should cite is the most useful reply, and corrections are published with credit. Replying \"stop\" ensures you hear nothing further."
+  },
+  "media": {
+   "intro": "We are writing to your published press or contact address because {reason}. This is a sourced, checkable entry, offered as a possible reference, not a pitch for coverage: \"{title}\".",
+   "ask": "Every claim links to its source and states its limits, so it can be checked in minutes. Replying \"stop\" ensures you hear nothing further, and a correction request is answered by a person."
+  },
+  "community": {
+   "intro": "We are writing because {reason}. If your readers or members collect practical, evidence-based solutions, this entry may fit a roundup: \"{title}\".",
+   "ask": "If this is not a fit, no action is needed, and replying \"stop\" ensures you hear nothing further."
+  }
  }
 }

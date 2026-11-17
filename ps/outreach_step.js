@@ -3,10 +3,12 @@
 // The outreach tick step and the approval queue. Always dry-run: core/outreach sends nothing without a transport and a named human.
 import agenciesFile from '../org/agencies.json' with { type: 'json' };
 import targeting from '../org/targeting.json' with { type: 'json' };
-import { plan, roleAddresses, graphView, health } from './outreach.js';
+import targetsFile from '../org/targets.json' with { type: 'json' };
+import { plan, roleAddresses, graphView, health, contactPages } from './outreach.js';
 import { submit, approve, suppress, stats, dispatch } from '../vendor/ultrastable/core/outreach/index.js';
 
-const AGENCIES = agenciesFile.agencies;
+const AGENCIES = [...agenciesFile.agencies.map(a => ({ audience: 'agency', ...a })), ...targetsFile.targets];
+const RETRY_DAYS = 7;
 const all = async (db, sql, ...a) => (await db.prepare(sql).bind(...a).all()).results || [];
 const replyTo = env => env.OPERATOR_REPLY_TO || targeting.sender.reply_to;
 const fromAddr = env => env.OPERATOR_FROM || targeting.sender.from;
@@ -19,19 +21,28 @@ export async function contactsMap(db) {
   return m;
 }
 
-/** Read each agency's own public contact page (a few per tick, oldest first) and keep only role addresses on its domain. */
+/** Read each target's own public contact pages (a few per tick) and keep only role addresses on its domain. Every attempt is recorded, so a page that yields nothing is retried after RETRY_DAYS and never blocks the targets behind it. */
 export async function discover(db, { fetch: f, nowIso, max = 3 }) {
-  const seen = Object.fromEntries((await all(db, `SELECT agency_id, MAX(found_at) t FROM ps_agency_contacts GROUP BY agency_id`)).map(r => [r.agency_id, r.t]));
-  const todo = AGENCIES.filter(a => !seen[a.id]).slice(0, max);
+  const tried = Object.fromEntries((await all(db, `SELECT target_id, MAX(at) t FROM ps_target_attempts GROUP BY target_id`)).map(r => [r.target_id, r.t]));
+  const cutoff = new Date(Date.parse(nowIso.replace(' ', 'T') + 'Z') - RETRY_DAYS * 864e5).toISOString().replace('T', ' ').slice(0, 19);
+  const have = new Set((await all(db, `SELECT DISTINCT agency_id FROM ps_agency_contacts`)).map(r => r.agency_id));
+  const todo = AGENCIES.filter(a => !have.has(a.id) && (!tried[a.id] || tried[a.id] < cutoff)).sort((a, b) => (tried[a.id] || '').localeCompare(tried[b.id] || '') || a.id.localeCompare(b.id)).slice(0, max);
   const report = [];
   for (const a of todo) {
-    try {
-      const r = await f(a.contact_page, { headers: { 'user-agent': 'PracticalSolutionsBot (automated evidence service; honors robots.txt and opt-outs)' }, redirect: 'follow' });
-      if (!r.ok) { report.push({ agency: a.id, ok: false, status: r.status }); continue; }
-      const found = roleAddresses(await r.text(), a.domain, targeting);
-      for (const addr of found) await db.prepare(`INSERT OR IGNORE INTO ps_agency_contacts (agency_id, addr, source_url, found_at) VALUES (?,?,?,?)`).bind(a.id, addr, a.contact_page, nowIso).run();
-      report.push({ agency: a.id, ok: true, found: found.length });
-    } catch (e) { report.push({ agency: a.id, ok: false, error: String(e.message).slice(0, 120) }); }
+    let found = [], last = 'no page read', pages = 0;
+    for (const url of contactPages(a, targeting)) {
+      if (pages >= 4) break;
+      try {
+        const r = await f(url, { headers: { 'user-agent': 'PracticalSolutionsBot (automated evidence service; honors robots.txt and opt-outs)' }, redirect: 'follow' });
+        pages++; last = `HTTP ${r.status}`;
+        if (!r.ok) continue;
+        found = roleAddresses(await r.text(), a.domain, targeting);
+        if (found.length) { for (const addr of found) await db.prepare(`INSERT OR IGNORE INTO ps_agency_contacts (agency_id, addr, source_url, found_at) VALUES (?,?,?,?)`).bind(a.id, addr, url, nowIso).run(); break; }
+        last = 'page read, no role address';
+      } catch (e) { pages++; last = String(e.message).slice(0, 80); }
+    }
+    await db.prepare(`INSERT INTO ps_target_attempts (target_id, at, ok, found, detail) VALUES (?,?,?,?,?)`).bind(a.id, nowIso, found.length ? 1 : 0, found.length, last).run();
+    report.push({ agency: a.id, ok: found.length > 0, found: found.length, detail: last });
   }
   return report;
 }
