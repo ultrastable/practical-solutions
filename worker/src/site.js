@@ -11,11 +11,13 @@ import * as U from './unknowns.js';
 import { SECURITY_HEADERS } from './kit/index.js';
 import * as P from './pages.js';
 import { AUDIENCES, audience } from './audiences.js';
+import * as CP from './country-pages.js';
+import { LEVELS } from './context.js';
 
 const { esc } = ui;
 export const HEADERS = { ...SECURITY_HEADERS, 'cache-control': 'public, max-age=300' };
 export const legend = P.legend;
-const SITE_PATHS = ['/', '/problems', '/solutions', '/domains', '/for', '/context', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/api', '/about'];
+const SITE_PATHS = ['/', '/problems', '/solutions', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/api', '/about'];
 
 const solutionJson = (s, c, o) => ({ id: s.id, title: s.title, claim: s.claim, label: s.label, implementability: s.impl, design: s.design, verdict: s.verdict, problems: s.problem_ids, domains: s.domains, verified: s.verified,
   works_where: s.works_where, takes: s.takes, who: s.who, first_test: s.first_test, limits: s.limits, sources: s.links.map(l => ({ cite: l.cite, finding: l.finding, links: [...l.direct.map(d => d.url), l.search] })), url: o + '/solutions/' + s.id, cite: P.citation(s.title, '/solutions/' + s.id, o) });
@@ -23,7 +25,7 @@ const problemJson = (p, c, o) => ({ id: p.id, title: p.title, domain: p.domain, 
   solutions: (c.byProblem[p.id] || []).map(s => s.id), url: o + '/problems/' + p.id });
 
 export function sitemap(c, origin) {
-  const urls = [...SITE_PATHS, ...AUDIENCES.map(a => '/for/' + a.id), ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug)];
+  const urls = [...SITE_PATHS, ...AUDIENCES.map(a => '/for/' + a.id), ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug), ...LEVELS.map(l => '/levels/' + l.id), ...Object.keys((c.context || {}).countries || {}).map(i => '/country/' + i)];
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(u => `<url><loc>${esc(origin + u)}</loc></url>`).join('')}</urlset>`;
 }
 
@@ -90,7 +92,7 @@ const json = (o, s = 200) => Response.json(o, { status: s, headers: { 'cache-con
 // Returns a Response or null when the path is not an encyclopedia page.
 export function route(u, c) {
   const o = u.origin, p = u.pathname.replace(/\/$/, '') || '/';
-  const table = { '/': () => P.home(c, o), '/problems': () => P.problemsIndex(c, u, o), '/solutions': () => P.solutionsIndex(c, u, o), '/domains': () => P.domainsIndex(c, o), '/for': () => P.forIndex(c, o), '/context': () => P.contextPage(c, o), '/compare': () => P.comparePage(c, u, o),
+  const table = { '/': () => P.home(c, o), '/problems': () => P.problemsIndex(c, u, o), '/solutions': () => P.solutionsIndex(c, u, o), '/domains': () => P.domainsIndex(c, o), '/for': () => P.forIndex(c, o), '/context': () => P.contextPage(c, o), '/country': () => CP.countryIndex(c, u, o), '/compare': () => P.comparePage(c, u, o),
     '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o), '/method': () => methodPage(c, o), '/unknowns': () => page('/unknowns', o, 'What we do not know', 'Known unknowns, red-team findings and the new questions generated from them.', U.unknownsBody(c)), '/api': () => P.apiPage(c, o), '/about': () => P.aboutPage(c, o), '/search': () => P.searchPage(c, u, o) };
   if (table[p]) return h(table[p]());
   if (p === '/search.json') return json({ q: u.searchParams.get('q') || '', results: search(searchIndex(c), u.searchParams.get('q')) });
@@ -106,6 +108,8 @@ export function route(u, c) {
   if ((m = /^\/problems\/([a-z0-9-]+)(\.json)?$/.exec(p))) { const x = c.probs.find(y => y.id === m[1]); return m[2] ? (x ? json(problemJson(x, c, o)) : nfj()) : x ? h(P.problemPage(x, c, o)) : nf(); }
   if ((m = /^\/solutions\/([a-z0-9-]+)(\.json)?$/.exec(p))) { const x = c.sols.find(y => y.id === m[1]); return m[2] ? (x ? json(solutionJson(x, c, o)) : nfj()) : x ? h(P.solutionPage(x, c, o)) : nf(); }
   if ((m = /^\/domains\/([a-z0-9-]+)$/.exec(p))) { const x = c.domains.find(y => y.slug === m[1]); return x ? h(P.domainPage(x, c, o)) : nf(); }
+  if ((m = /^\/country\/([A-Za-z]{3})(\.json)?$/.exec(p))) { const x = (c.context && c.context.countries || {})[m[1].toUpperCase()]; return m[2] ? (x ? json(CP.countryJson(x, c, o)) : nfj()) : x ? h(CP.countryPage(x, c, o)) : nf(); }
+  if ((m = /^\/levels\/([a-z-]+)(\.json)?$/.exec(p))) { const l = LEVELS.find(v => v.id === m[1]); return m[2] ? (l ? json(CP.levelJson(l.id, c, o)) : nfj()) : l ? h(CP.levelPage(l.id, c, o)) : nf(); }
   if ((m = /^\/for\/([a-z0-9-]+)$/.exec(p))) { const a = audience(m[1]); return a ? h(P.forPage(a, c, o)) : nf(); }
   return null;
 }
