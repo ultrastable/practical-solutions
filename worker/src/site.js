@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 // The encyclopedia's pages. Server-rendered HTML, no script, every page reachable by a plain link. Every entry shows its label, sources and limits.
-import { esc, DESIGN, LABELS, search, searchIndex, openQuestions } from './catalog.js';
+import { esc, RULE, DESIGN, LABELS, search, searchIndex, openQuestions } from './catalog.js';
 import { FOOTER } from './publish.js';
 
 const CSS = `:root{--bg:#fafaf7;--fg:#1c1c1a;--mut:#666;--card:#fff;--line:#e2e0d8;--acc:#0b5cad;--ok:#1a7f37;--warn:#9a6700}
@@ -17,7 +17,7 @@ export const HEADERS = { 'content-type': 'text/html; charset=utf-8', 'content-se
 
 const page = (title, desc, path, body, origin) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}"><link rel="canonical" href="${esc(origin + path)}"><link rel="alternate" type="application/rss+xml" href="/feed.xml"><style>${CSS}</style></head><body>
-<header><b><a href="/">Practical Solutions</a></b><nav><a href="/problems">Problems</a><a href="/solutions">Solutions</a><a href="/domains">Domains</a><a href="/leads">Leads</a><a href="/method">Method</a><a href="/changes">Changes</a></nav>
+<header><b><a href="/">Practical Solutions</a></b><nav><a href="/problems">Problems</a><a href="/solutions">Solutions</a><a href="/domains">Domains</a><a href="/leads">Leads</a><a href="/method">Method</a><a href="/impact">Impact</a><a href="/changes">Changes</a></nav>
 <form action="/search" method="get"><input type="search" name="q" placeholder="Search" aria-label="Search"></form></header><main>${body}</main>
 <footer>${esc(FOOTER)} <a href="/method">How this works</a> · <a href="/index.json">JSON</a> · <a href="/feed.xml">Feed</a></footer></body></html>`;
 
@@ -25,7 +25,7 @@ const pill = (s, cls = '') => `<span class="pill ${cls}">${esc(s)}</span>`;
 const labelPill = l => pill(l, l === 'evidence-backed' ? 'ok' : 'warn');
 const solLink = s => `<a href="/solutions/${esc(s.id)}">${esc(s.title)}</a>`;
 const probLink = p => `<a href="/problems/${esc(p.id)}">${esc(p.title)}</a>`;
-const solRow = s => `<li>${solLink(s)} ${labelPill(s.label)}<br><span class="m">${esc(s.claim)}</span></li>`;
+const solRow = s => `<li>${solLink(s)} ${labelPill(s.label)}${s.impl ? pill(s.impl.band + ' (' + s.impl.score + '/8)') : ''}<br><span class="m">${esc(s.claim)}</span></li>`;
 const gapText = p => p.ranked ? `${p.value} ${esc(p.unit)} (${p.year}); target ${p.target} (${esc(p.target_src)}); gap ${(p.shortfall * 100).toFixed(0)}%` : 'No usable world figure yet. The loop retries every cycle.';
 
 export function legend() {
@@ -64,9 +64,9 @@ ${same.length ? `<h2>Related problems</h2><ul class="t">${same.map(x => `<li>${p
 
 function solutionsIndex(c, u, origin) {
   const g = u.searchParams.get('label'), d = u.searchParams.get('domain');
-  const list = c.sols.filter(s => (!g || s.label === g) && (!d || s.domains.map(x => x.toLowerCase().replace(/\W+/g, '-')).includes(d)));
+  const list = c.sols.filter(s => (!g || s.label === g) && (!d || s.domains.map(x => x.toLowerCase().replace(/\W+/g, '-')).includes(d))).sort((a, b) => ((b.impl || {}).score || 0) - ((a.impl || {}).score || 0));
   return page('All solutions | Practical Solutions', 'Every solution with its evidence label.', '/solutions', `<h1>Solutions</h1><p class="m">Filter: ${['evidence-backed', 'mixed evidence', 'cited, weaker design'].map(l => `<a href="/solutions?label=${encodeURIComponent(l)}">${esc(l)}</a>`).join(' · ')} · <a href="/solutions">all</a></p>
-<ul class="t">${list.map(solRow).join('') || '<li>None match.</li>'}</ul>${legend()}`, origin);
+<p class="m">Sorted by how implementable each is. ${esc(RULE)}</p><ul class="t">${list.map(solRow).join('') || '<li>None match.</li>'}</ul>${legend()}`, origin);
 }
 
 function solutionPage(s, c, origin) {
@@ -77,7 +77,7 @@ function solutionPage(s, c, origin) {
 <h2>Sources</h2>${s.links.map(l => `<div class="card"><b>${esc(l.cite)}</b><br>${esc(l.finding)}<br>${l.direct.map(d => `<a href="${esc(d.url)}">${esc(d.label)}</a> `).join('')}<a href="${esc(l.search)}">Find this paper on Europe PMC</a></div>`).join('')}
 <p class="m">Verification: ${esc(s.verified)}${s.checkable ? ' The loop re-checks the quoted numbers against the paper abstract every day.' : ' No automatic check is defined for this entry yet, so the figures are the source\'s own, unconfirmed here.'}</p>
 <p class="m">${esc(dz.note)} Sources without a DOI or PubMed link show a search link, because the loop only links papers it has found itself.</p>
-<h2>Where it works</h2><p>${esc(s.works_where)}</p><h2>What it takes</h2><p>${esc(s.takes)}</p><h2>Who can act</h2><p>${esc(s.who)}</p>
+${s.impl ? `<h2>Can it be implemented?</h2><div class="card"><b>${esc(s.impl.band)}</b> (${s.impl.score}/8)<ul class="t"><li>Cost to start: <b>${esc(s.impl.cost)}</b>. ${esc(s.impl.cost_note)}.</li><li>Real-world adoption: <b>${esc(s.impl.adoption)}</b>.</li><li>Delivery channel that already exists: ${s.impl.channel ? esc(s.impl.channel) : '<b>none identified</b>'}.</li><li>Who holds the remit and money: ${esc(s.impl.actors)}.</li></ul><span class="m">${esc(RULE)}</span></div>` : ''}<h2>Where it works</h2><p>${esc(s.works_where)}</p><h2>What it takes</h2><p>${esc(s.takes)}</p><h2>Who can act</h2><p>${esc(s.who)}</p>
 <h2>Cheapest first test</h2><p>${esc(s.first_test)}</p><h2>Limits</h2><p>${esc(s.limits)}</p>
 ${rel.length ? `<h2>See also</h2><ul class="t">${rel.map(r => `<li>${solLink(r)}</li>`).join('')}</ul>` : ''}`, origin);
 }
@@ -96,6 +96,17 @@ function leadsPage(c, origin) {
 <ul class="t">${withLeads.map(p => { const L = c.leads[p.id]; return `<li>${probLink(p)} <span class="m">${L.drafts.length} reviewed quote(s), ${L.candidates.length} review(s) found, ${L.spots.length} bright spot(s)</span></li>`; }).join('') || '<li>The loop has not found any yet.</li>'}</ul>`, origin);
 }
 
+function impactPage(c, origin) {
+  const r = c.reach || { views: 0, sections: {}, referrers: {}, kinds: {}, countries: {} }, ready = c.sols.filter(s => s.impl && s.impl.score >= 7), held = c.sols.filter(s => s.impl && !s.impl.practical);
+  const covered = c.probs.filter(p => (c.byProblem[p.id] || []).some(s => s.impl && s.impl.practical)), top = o => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([k, n]) => `<li>${esc(k)}: ${n}</li>`).join('') || '<li class="m">none yet</li>';
+  return page('Impact and reach | Practical Solutions', 'How many people read this, who links to it, and how much of it is implementable.', '/impact', `<h1>Impact and reach</h1>
+<p>Information is useless without implementation, so the site measures two things in public: whether it is being found, and whether what it lists can actually be done.</p>
+<h2>Implementability</h2><ul class="t"><li>${ready.length} of ${c.sols.length} solutions are ready to implement (score 7 or 8).</li><li>${covered.length} of ${c.probs.length} problems have at least one practical solution.</li><li>${held.length} held back as not yet practical${held.length ? ': ' + held.map(solLink).join(', ') : ''}.</li></ul><p class="m">${esc(RULE)}</p>
+<h2>Reach, last 30 days</h2><p>${r.views} page views. Counts are aggregate and approximate; no IP address or cookie is kept.</p>
+<div class="card"><b>Sections</b><ul class="t">${top(r.sections)}</ul><b>Who links here</b><ul class="t">${top(r.referrers)}</ul><b>People and agents</b><ul class="t">${top(r.kinds)}</ul><b>Countries</b><ul class="t">${top(r.countries)}</ul></div>
+<h2>Implementations reported</h2><p>None yet. This is the number that matters most; it will be filled from reports by the organisations that act on an entry. <a href="/metrics.json">Raw counters</a></p>`, origin);
+}
+
 function changesPage(c, origin) {
   return page('Changes | Practical Solutions', 'Every automatic change.', '/changes', `<h1>Changes</h1><p class="m">Every change the loop made, newest first. <a href="/feed.xml">RSS</a> · <a href="/feed.json">JSON Feed</a></p><ul class="t">${c.changes.map(x => `<li><span class="m">${esc(String(x.at).slice(0, 16).replace('T', ' '))}</span> ${esc(x.kind.replace(/_/g, ' '))}: ${esc(x.id || x.title || x.problem || '')}${x.status ? ' (' + esc(x.status) + ')' : ''}</li>`).join('') || '<li>None yet.</li>'}</ul>`, origin);
 }
@@ -108,7 +119,7 @@ function methodPage(c, origin) {
 <h2>3. Labels and evidence grading</h2><ul class="t">${Object.entries(DESIGN).map(([k, v]) => `<li><b>${esc(v.name)}</b>: ${esc(v.note)}</li>`).join('')}</ul>${legend()}
 <p>The label comes from the strongest design the entry cites and from whether its sources agree. It is a transparent rule, not a judgement of quality: a trial can still be small, and one setting may not transfer.</p>
 <h2>4. How sources are checked</h2><p>Every day the loop searches Europe PMC for the cited paper and confirms that the quoted numbers appear in its abstract. When it finds the paper it records the DOI and PubMed ID, and the entry links to them. Results are shown on the entry as verified, mismatch or not found; a mismatch is shown, never hidden.</p>
-<h2>5. How the loop iterates</h2><ol><li>Refresh the problem ranking from World Bank data (every 6 hours).</li><li>Re-check the stalest solution citations.</li><li>For each problem without a solution, and for the top-ranked problems, search for recent Cochrane systematic reviews on mortality and survival.</li><li>Find bright spots: countries doing better than their income predicts in two separate periods. Leads only.</li><li>Quote results sentences from reviews, unchanged, and have a separate step confirm every quote and number against the abstract.</li><li>Record every change in the public <a href="/changes">changelog</a> and <a href="/feed.xml">feed</a>.</li></ol>
+<h2>4b. How implementable is it</h2><p>Information is only useful once somebody acts on it, so every solution is also scored for implementability from four facts shown on its page. ${esc(RULE)} Facts and scoring are in <a href="https://github.com/QNFO/practical-solutions/blob/main/worker/src/implementability.js">code</a>.</p><h2>5. How the loop iterates</h2><ol><li>Refresh the problem ranking from World Bank data (every 6 hours).</li><li>Re-check the stalest solution citations.</li><li>For each problem without a solution, and for the top-ranked problems, search for recent Cochrane systematic reviews on mortality and survival.</li><li>Find bright spots: countries doing better than their income predicts in two separate periods. Leads only.</li><li>Quote results sentences from reviews, unchanged, and have a separate step confirm every quote and number against the abstract.</li><li>Record every change in the public <a href="/changes">changelog</a> and <a href="/feed.xml">feed</a>.</li></ol>
 <h2>6. What it will not do</h2><p>It does not present a lead as a finding, paraphrase a result into a stronger claim, or hide a failed check. Corrections: open an issue at <a href="https://github.com/QNFO/practical-solutions/issues">the repository</a>.</p>
 <h2>Machine-readable</h2><p><a href="/index.json">/index.json</a> holds the whole catalogue with labels and sources; <a href="/sitemap.xml">/sitemap.xml</a> lists every page.</p>`, origin);
 }
@@ -120,7 +131,7 @@ ${q ? `<p class="m">${hits.length} result(s)</p>` : ''}<ul class="t">${hits.map(
 }
 
 export function sitemap(c, origin) {
-  const urls = ['/', '/problems', '/solutions', '/domains', '/leads', '/method', '/changes', ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug)];
+  const urls = ['/', '/problems', '/solutions', '/domains', '/leads', '/method', '/impact', '/changes', ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug)];
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(u => `<url><loc>${esc(origin + u)}</loc></url>`).join('')}</urlset>`;
 }
 
@@ -128,7 +139,7 @@ export function indexJson(c, origin) {
   return {
     generated: new Date().toISOString(), origin, labels: LABELS,
     problems: c.probs.map(p => ({ id: p.id, title: p.title, domain: p.domain, indicator: p.ind, value: p.value ?? null, year: p.year ?? null, target: p.target ?? null, shortfall: p.shortfall ?? null, solutions: (c.byProblem[p.id] || []).map(s => s.id), url: origin + '/problems/' + p.id })),
-    solutions: c.sols.map(s => ({ id: s.id, title: s.title, claim: s.claim, label: s.label, design: s.design, verdict: s.verdict, problems: s.problem_ids, domains: s.domains, verified: s.verified, sources: s.links.map(l => ({ cite: l.cite, finding: l.finding, links: [...l.direct.map(d => d.url), l.search] })), related: c.related(s).map(r => r.id), url: origin + '/solutions/' + s.id })),
+    solutions: c.sols.map(s => ({ id: s.id, title: s.title, claim: s.claim, label: s.label, implementability: s.impl, design: s.design, verdict: s.verdict, problems: s.problem_ids, domains: s.domains, verified: s.verified, sources: s.links.map(l => ({ cite: l.cite, finding: l.finding, links: [...l.direct.map(d => d.url), l.search] })), related: c.related(s).map(r => r.id), url: origin + '/solutions/' + s.id })),
   };
 }
 
@@ -141,6 +152,7 @@ export function route(u, c) {
   if (p === '/solutions') return h(solutionsIndex(c, u, o));
   if (p === '/domains') return h(domainsIndex(c, o));
   if (p === '/leads') return h(leadsPage(c, o));
+  if (p === '/impact') return h(impactPage(c, o));
   if (p === '/changes') return h(changesPage(c, o));
   if (p === '/method') return h(methodPage(c, o));
   if (p === '/search') return h(searchPage(c, u.searchParams.get('q') || '', o));

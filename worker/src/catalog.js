@@ -5,6 +5,7 @@
 import { PROBLEMS } from './problems.js';
 import { SOLUTIONS } from './solutions.js';
 import { verifiedText } from './improve.js';
+import { implementability } from './implementability.js';
 
 // strongest cited design and the overall reading for the older entries; newer entries carry these fields themselves
 const ANNOT = {
@@ -24,6 +25,7 @@ export const LABELS = {
   lead: 'Found automatically by the loop and checked only mechanically. A place to look, not a conclusion.',
 };
 
+export const RULE = 'Score 3 to 8 = cost to start (low 3, medium 2, high 1) + real-world adoption (scaled 3, piloted 2, trial-only 1) + an existing delivery channel (2). 7 or more is ready to implement; 5 or 6 is implementable with effort; below 5 is held back as not yet practical.';
 export const slug = s => String(s).toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const esc = s => String(s ?? '').replace(/[<>&"']/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -51,7 +53,8 @@ export function buildCatalog({ problems, solutions, verif = {}, cands = {}, draf
     const a = ANNOT[s.id];
     const full = { ...s, design: s.design || (a && a[0]) || 'guidance', verdict: s.verdict || (a && a[1]) || 'limited' };
     const v = verif[s.id];
-    return { ...full, label: labelOf(full), verified: verifiedText(v) || s.verified, ver: v || null, links: sourceLinks(s, v), checkable: !!(checks && checks.length),
+    const impl = implementability(s.id);
+    return { ...full, impl, label: labelOf(full), verified: verifiedText(v) || s.verified, ver: v || null, links: sourceLinks(s, v), checkable: !!(checks && checks.length),
       domains: [...new Set((s.problem_ids || []).map(id => (PROBLEMS.find(p => p.id === id) || {}).domain).filter(Boolean))] };
   });
   const byProblem = Object.fromEntries(probs.map(p => [p.id, sols.filter(s => (s.problem_ids || []).includes(p.id))]));

@@ -10,6 +10,7 @@ import { describeChange } from './publish.js';
 import { SOLUTIONS } from './solutions.js';
 import { buildCatalog } from './catalog.js';
 import { route } from './site.js';
+import { recordView, summary } from './reach.js';
 
 const BACKEND = 'https://ps-practical-solutions.q08.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
@@ -19,8 +20,10 @@ const catalog = async env => buildCatalog({ problems: await j(env, 'problems', n
 
 export default {
   async scheduled(_e, env, ctx) { ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); await tick({ store: env.STATE, rank: rankProblems }); })()); },
-  async fetch(r, env) {
+  async fetch(r, env, ctx) {
     const u = new URL(r.url);
+    if (ctx && ctx.waitUntil) ctx.waitUntil(recordView(env.STATE, r).catch(() => {}));
+    if (u.pathname === '/metrics.json') return Response.json(await summary(env.STATE), { headers: { 'cache-control': 'public, max-age=300' } });
     if (u.pathname === '/live') return new Response(PAGE, { headers });
     if (u.pathname === '/solutions.json') {
       const verif = await j(env, 'verif', {});
@@ -39,7 +42,8 @@ export default {
       return u.pathname === '/feed.xml' ? new Response(toRss({ ...meta, items }), { headers: { 'content-type': 'application/rss+xml; charset=utf-8' } })
         : Response.json(toJsonFeed({ ...meta, feedUrl: origin + '/feed.json', items }));
     }
-    const site = route(u, await catalog(env));
+    const cat = await catalog(env); cat.reach = u.pathname === '/impact' ? await summary(env.STATE) : null;
+    const site = route(u, cat);
     if (site) return site;
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
     return new Response('not found', { status: 404 });

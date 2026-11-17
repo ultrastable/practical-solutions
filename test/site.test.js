@@ -27,7 +27,7 @@ test('the catalogue spans several domains and labels honestly', () => {
 });
 
 test('every page renders, every internal link resolves, and no page runs script', () => {
-  const paths = ['/', '/problems', '/solutions', '/domains', '/leads', '/changes', '/method', '/search?q=water',
+  const paths = ['/', '/problems', '/solutions', '/domains', '/leads', '/changes', '/method', '/impact', '/search?q=water',
     ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug)];
   for (const p of paths) {
     const r = get(p); assert.equal(r.status, 200, p);
@@ -36,7 +36,7 @@ test('every page renders, every internal link resolves, and no page runs script'
     const html = await get(p).text();
     assert.ok(!/<script/i.test(html), p);
     for (const [, href] of html.matchAll(/href="(\/[^"#?]*)/g)) {
-      if (['/feed.xml', '/feed.json', '/index.json', '/sitemap.xml'].includes(href)) continue;
+      if (['/feed.xml', '/feed.json', '/index.json', '/sitemap.xml', '/metrics.json'].includes(href)) continue;
       assert.notEqual(get(href)?.status, 404, `${p} -> ${href}`);
       assert.ok(get(href), `${p} -> ${href}`);
     }
@@ -84,4 +84,30 @@ test('the tenant Worker serves the encyclopedia from its own store', async () =>
   assert.equal((await w.fetch(new Request('https://x/solutions/kmc'), env)).status, 200);
   assert.equal((await w.fetch(new Request('https://x/live'), env)).status, 200);
   assert.equal(slug('Energy and air'), 'energy-and-air');
+});
+
+import { IMPL, implementability } from '../worker/src/implementability.js';
+test('every solution has implementability facts and the score follows the published rule', () => {
+  for (const s of SOLUTIONS) assert.ok(IMPL[s.id], 'missing facts for ' + s.id);
+  assert.equal(implementability('chlorine').score, 8);
+  assert.equal(implementability('emissions-market').practical, false);
+  assert.equal(implementability('emissions-market').band, 'not yet practical');
+  assert.equal(implementability('cash').score, 1 + 3 + 2);
+  assert.ok(route(new URL('https://x/solutions/chlorine'), c).status === 200);
+});
+test('the solutions list is sorted most implementable first', async () => {
+  const html = await get('/solutions').text();
+  assert.ok(html.indexOf('/solutions/chlorine') < html.indexOf('/solutions/emissions-market'));
+});
+
+import { recordView, summary } from '../worker/src/reach.js';
+test('reach counters are aggregate, count page views only, and keep no visitor data', async () => {
+  const m = new Map(); const st = { get: async k => m.get(k) ?? null, put: async (k, v) => { m.set(k, v); } };
+  const t = Date.parse('2026-11-17T12:00:00Z');
+  await recordView(st, new Request('https://x/solutions/kmc', { headers: { referer: 'https://who.int/a', 'user-agent': 'Mozilla' } }), t);
+  await recordView(st, new Request('https://x/problems/tb', { headers: { 'user-agent': 'GPTBot' } }), t);
+  await recordView(st, new Request('https://x/index.json'), t);
+  const s = await summary(st, t);
+  assert.equal(s.views, 2); assert.equal(s.referrers['who.int'], 1); assert.equal(s.kinds.agents_and_bots, 1);
+  assert.ok(!JSON.stringify([...m.values()]).includes('Mozilla'));
 });
