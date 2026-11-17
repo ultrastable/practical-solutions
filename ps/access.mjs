@@ -23,5 +23,5 @@ export default {
     { pattern: '(please|you (need|must|should)|owner (must|needs?)|ask (the owner|rowan)).{0,80}(cloudflare|workers).{0,40}(secret|token|api key|credential)', capability: 'github.workflow_ran_ok', subject: 'QNFO/practical-solutions:deploy-tenant.yml' },
     { pattern: '(please|you (need|must|should)|owner (must|needs?)|ask (the owner|rowan)).{0,80}(install|authori[sz]e|grant|connect).{0,60}(cloudflare workers|workers & pages|workers and pages)', capability: 'github.app_installed', subject: 'QNFO/cloudflare-workers-and-pages' },
   ],
-  lint_paths: ['README.md', 'AGENTS.md', '.github', 'org', 'planning', 'worker/src', 'ps', 'tools'],
+  lint_paths: ['README.md', 'AGENTS.md', '.github', 'org', 'worker/src', 'tools'], // not ps/: this file holds the phrase patterns themselves,
 };

@@ -1,5 +1,5 @@
 {
- "commit": "d62251edab8b0ba62a33f761f64f67afa290c86f",
+ "commit": "fcce8bf9e16976eb1ed75499af85b86f605cc19a",
  "files": {
   ".claude/settings.json": "db2a7917aac18605c5ba25c2bb717aacf61ddae27873766a7c0a51856b9dec43",
   ".cursor/rules/ultrastable.mdc": "5b85ce4a068a628916dac979af4bf4da49015fc4183bc4ce06a6ccbf9d22c479",
@@ -193,8 +193,8 @@
   "core/_shared/testdb.js": "2a935dab4be1126b948579b3c533a56fea4e61dfc68a168319372d605de1118d",
   "core/access/README.md": "e154db98d2856daee136f1785ebc279a4656255e0963039a68b0881263d8e0dd",
   "core/access/access.test.js": "77b3402cf0b30cea0f10e56931361b32196bf21a257593098e0a39adcb64922d",
-  "core/access/cli.mjs": "129c5c564bc4279aee200688704eb24cd5e8273451ed009c8fdf94177ca46f27",
-  "core/access/cli.test.js": "6f4c322caa08b4d3b95619bebfe863b092de8c3607f14d20d953b1480487d6ac",
+  "core/access/cli.mjs": "3db2ce854d618d51be092d086f21e8da4967d223d333207fd07c54553039af05",
+  "core/access/cli.test.js": "70395e13f0decc9c764f9761fe1de871b8fb0aab8ffa1ba15deac10943d526f3",
   "core/access/index.js": "a328216332e841d7f43ea4018795024f3ec57eec56f509c3a2c8f76d3bc79c5c",
   "core/access/migrations/0001_access.sql": "b6ce6bba069bd6552a1668305472bb2aac9784ca65c7ffde1b5365b91e8e4251",
   "core/agents/README.md": "85faa104fd56d3d15ca0673e91b9133a4d1e76864cda303979102446d7ceffb3",
@@ -248,8 +248,8 @@
   "core/deploy/review.js": "887f83d50f510a4d7b8f848ae0854a6234ccf3d6df875114aa1a81418feed1ac",
   "core/deploy/review.test.js": "f4429ddcb4a51b484cead4d5184b3124bef4cb6adc7003d05943e1a2775c8ab1",
   "core/deploygate/README.md": "359f53262198267c83bc91c35852a101b350983eb249b862e59b48982e185680",
-  "core/deploygate/index.js": "bc2c2c92dee514a13e826b64559bdfc8f6321a745c37ac83242af001146155c8",
-  "core/deploygate/index.test.js": "a02096877f4a4e62dc190fa52b063e617426ffb5e388a201a13cbc95d97c85aa",
+  "core/deploygate/index.js": "919ee8099928f85609a414db8843fccf06b3f4782f2b3f78281c96c58d48b786",
+  "core/deploygate/index.test.js": "2c264340f3696c6f344ee92ad10f8a1d8270ab1717c97edfcb7d21808c3a11e1",
   "core/deploygate/worker.js": "612490e4cffdea46c9e98a9819077948d4cbd2fb3deed1a09f03347dd348bb9e",
   "core/describe/README.md": "17e31dd6f5b4d267d4e09203a92f69d7b1b7bbe74553535e7c9a723e35b0a75e",
   "core/describe/describe.test.js": "cac77ffbab13ad671f8a70e7b574fa7ebd6af00d9f27abcffc141761e7a60e06",
