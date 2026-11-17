@@ -36,7 +36,7 @@ const BASE = [
     who: 'National malaria programmes and funders such as the Global Fund.',
     first_test: 'Before the next campaign, test local mosquito resistance; where resistant, specify dual-insecticide nets for one district and compare malaria cases with neighbours.',
     limits: 'Net use, resistance and seasonality change the benefit; trial-era mortality effects are not guaranteed today.' },
-  { id: 'tarl', problem_ids: ['education'], verified: 'not yet checked against the source', problem: 'Children not learning to read', title: 'Teaching at the Right Level: group by skill, not grade',
+  { id: 'tarl', checks: [{ source: 'openalex', title: 'From Proof of Concept to Scalable Policies: Challenges and Solutions, with an Application', q: 'scalable policies Teaching at the Right Level', year: 2017, numbers: ['India'] }], problem_ids: ['education'], verified: 'not yet checked against the source', problem: 'Children not learning to read', title: 'Teaching at the Right Level: group by skill, not grade',
     claim: 'Sorting children by what they can do and teaching basics for about an hour a day raises reading and arithmetic far more than ordinary lessons.',
     evidence: [{ src: 'Banerjee, Banerji, Berry, Duflo, Kannan, Mukerji, Shotland and Walton, Journal of Economic Perspectives, 2017', finding: 'Randomised evaluations of Pratham programmes in India and replications in other countries show large gains in basic literacy and numeracy at low cost.' }],
     works_where: 'India (Pratham), then Ghana, Zambia, Nigeria, Kenya and others, delivered by teachers or volunteers.',

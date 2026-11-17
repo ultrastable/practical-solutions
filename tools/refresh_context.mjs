@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { PROBLEMS } from '../worker/src/problems.js';
 import { INFRA, parseCountries, parseIndicator, parseHdr, build } from '../worker/src/countries.js';
 import { parseGroupSeries, rankLevels } from '../worker/src/levels.js';
+import { ADJUST_SERIES, buildAdjust } from '../worker/src/adjust.js';
 
 const WB = 'https://api.worldbank.org/v2', OUT = 'data/context.json';
 const HDR = ['https://hdr.undp.org/sites/default/files/2025_HDR/HDR25_Composite_indices_complete_time_series.csv', 'https://hdr.undp.org/sites/default/files/2024-09/HDR25_Composite_indices_complete_time_series.csv', 'https://hdr.undp.org/sites/default/files/2023-24_HDR/HDR23-24_Composite_indices_complete_time_series.csv'];
@@ -48,8 +49,16 @@ export async function refresh({ fetch: f = globalThis.fetch, prev = { countries:
   }
   const okLevels = PROBLEMS.filter(p => series[p.id]).length;
   const levels = okLevels ? rankLevels(PROBLEMS, series) : prev.levels;
+  // per-income-group cost adjustments (cited World Bank series); a failed series keeps the previous figures
+  const adj = {};
+  for (const [k, v] of Object.entries(ADJUST_SERIES)) {
+    try { adj[k] = parseGroupSeries(await get(f, `${WB}/country/LIC;LMC;UMC;HIC/indicator/${v.code}?format=json&per_page=500&date=2010:2025`)); sources['adjust.' + k] = 'ok'; }
+    catch (e) { sources['adjust.' + k] = 'failed: ' + e.message; }
+  }
+  const fresh = buildAdjust(adj), adjust = { ...(prev.adjust || {}) };
+  for (const [lv, o] of Object.entries(fresh)) adjust[lv] = { ...(adjust[lv] || {}), ...o };
   const out = build({ countries, infra, hdi, sources, at: now() });
-  return { ...out, levels, ok: okLevels > 0 || countries.length > 0 };
+  return { ...out, levels, adjust, ok: okLevels > 0 || countries.length > 0 };
 }
 
 if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop())) {

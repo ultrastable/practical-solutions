@@ -2,13 +2,15 @@
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 // The continuous-improvement tick. Each cron run does a bounded slice of four jobs and records what changed:
 //   1. refresh the problem ranking from World Bank indicators (at most every 6 hours)
-//   2. re-verify solutions: search Europe PMC for the cited paper and check that the quoted numbers are in its abstract
+//   2. re-verify solutions: search Europe PMC (health) or OpenAlex (economics) for the cited paper and check that the quoted numbers are in its abstract
 //   3. look for new candidate evidence: recent Cochrane reviews for the problems that rank highest
 //   4. append every change to a capped changelog
 // Self-contained and injectable: `store` has get/put (a KV namespace fits), `fetchFn` is fetch. No model calls, no core bindings.
 import { findSpots } from './brightspots.js';
 import { buildGraph, questionsFor, unsolvedProblemIds } from './graph.js';
 const EPMC = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search';
+// Economics and development papers (JPE, Econometrica, JEP, QJE) are mostly outside Europe PMC; OpenAlex indexes them with abstracts.
+const OPENALEX = 'https://api.openalex.org/works';
 const HOUR = 3600e3;
 // cadence the /method page states, rendered from here
 export const CADENCE = { problemsHours: 6, checkHours: 24, maxVerify: 3, candidateSearchesPerRun: 1, brightSpotHours: 24 };
@@ -31,12 +33,27 @@ async function epmc(fetchFn, query, size, sorted = true) {
   return ((await r.json()).resultList || {}).result || [];
 }
 
+// OpenAlex returns abstracts as an inverted index (word -> positions); rebuild the text so the same quote check applies.
+export function oaAbstract(inv) {
+  if (!inv) return '';
+  const words = [];
+  for (const [w, pos] of Object.entries(inv)) for (const i of pos) words[i] = w;
+  return words.filter(w => w !== undefined).join(' ');
+}
+
+async function openalex(fetchFn, c) {
+  const u = `${OPENALEX}?search=${encodeURIComponent(c.title || c.q)}&filter=publication_year:${c.year}&per-page=10`;
+  const r = await fetchFn(u);
+  if (!r.ok) throw new Error(`OpenAlex HTTP ${r.status}`);
+  return ((await r.json()).results || []).map(x => ({ title: x.title || x.display_name, doi: x.doi || null, pmid: null, abstractText: oaAbstract(x.abstract_inverted_index) }));
+}
+
 export async function verifySolution(fetchFn, sol) {
   const checks = sol.checks || [];
   if (!checks.length) return { status: 'no_check', detail: 'no automated check defined' };
   const out = [];
   for (const c of checks) {
-    const rows = await epmc(fetchFn, c.title ? `TITLE:"${c.title}" AND PUB_YEAR:${c.year}` : `${c.q} AND PUB_YEAR:${c.year}`, 10, false);
+    const rows = c.source === 'openalex' ? await openalex(fetchFn, c) : await epmc(fetchFn, c.title ? `TITLE:"${c.title}" AND PUB_YEAR:${c.year}` : `${c.q} AND PUB_YEAR:${c.year}`, 10, false);
     const hit = rows.find(x => c.numbers.every(n => strip(x.abstractText).includes(n)));
     out.push(hit ? { ok: true, title: hit.title, pmid: hit.pmid || null, doi: hit.doi || null } : { ok: false, found: rows.length });
   }

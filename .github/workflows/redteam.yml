@@ -3,12 +3,12 @@
 # budget: about 2 minutes a day (public repository: Actions minutes are free)
 # trigger: daily, so each entry is challenged by a model about once every 10 days; no faster. The model rotates through the ensemble pool (worker/src/redteam-config.js).
 # free-alternative: Workers AI in the tenant Worker when its AI binding is present (worker/src/unknowns.js)
-# The model red team: GitHub Models on this run's own token (models: read). Writes ledger/redteam.json, which the site reads.
+# The model red team: GitHub Models on this run's own token (models: read), then Workers AI through the tenant model Worker (OIDC). Writes ledger/redteam.json, which the site reads.
 name: redteam
 on:
   schedule: [{ cron: '41 4 * * *' }]
   workflow_dispatch:
-permissions: { contents: write, models: read }
+permissions: { contents: write, models: read, id-token: write }
 concurrency: { group: redteam, cancel-in-progress: false }
 jobs:
   redteam:
@@ -16,6 +16,7 @@ jobs:
     timeout-minutes: 10
     env:
       GITHUB_TOKEN: ${{ github.token }}
+      PS_LLM_URL: https://ps-llm.q08.workers.dev/ps/llm
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

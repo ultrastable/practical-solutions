@@ -4,6 +4,14 @@
 import { score, PARAMS, GRADES, validate, scoreAcross, refineLoop, applyEvidence } from '../../vendor/ultrastable/core/benefitcost/index.js';
 import { MODELS, GAPS, CONTEXTS, APPLIES, FINDERS, QUEUE } from './bca-models.js';
 import { esc } from './catalog.js';
+import { costMultiplier } from './adjust.js';
+import SNAPSHOT from '../../data/context.json' with { type: 'json' };
+import { complete } from '../../ps/llm.js';
+
+// The group a model's figures were measured in: the first group the entry is marked as applying to. Other groups get a cost multiplier
+// from the cited price-level series; with no origin or no figure the cost is left as measured.
+export function originOf(id) { const a = APPLIES[id] || {}; return (CONTEXTS.find(c => a[c.id] && a[c.id].applies !== false) || {}).id || null; }
+export function adjustedContext(id, c, adjust = SNAPSHOT.adjust) { const o = originOf(id), cm = o && costMultiplier(adjust, o, c.id); return cm ? { ...c, cost_multiplier: cm.value, cost_note: cm.why } : c; }
 
 export const KEY = 'bca:v1', SEED = 20261117;
 // the engine settings the /method page states; the page renders them from here, so they cannot drift
@@ -21,7 +29,7 @@ export function bcaFor(id, state) {
   if (!cache.has(k)) {
     const errs = validate(m); let r;
     if (errs.length) r = { error: errs.join('; ') };
-    else { r = score(m, { draws: ENGINE.draws, seed: ENGINE.seed }); r.contexts = CONTEXTS.map(c => ({ ...c, measured: !!(APPLIES[id] && APPLIES[id][c.id] && APPLIES[id][c.id].applies !== false) || !!(m.contexts[c.id] && m.contexts[c.id].nodes), r: scoreAcross(m, [c], { draws: ENGINE.contextDraws, seed: ENGINE.seed })[c.id] }));
+    else { r = score(m, { draws: ENGINE.draws, seed: ENGINE.seed }); r.contexts = CONTEXTS.map(c => ({ ...c, measured: !!(APPLIES[id] && APPLIES[id][c.id] && APPLIES[id][c.id].applies !== false) || !!(m.contexts[c.id] && m.contexts[c.id].nodes), r: scoreAcross(m, [adjustedContext(id, c)], { draws: ENGINE.contextDraws, seed: ENGINE.seed })[c.id], cost_note: adjustedContext(id, c).cost_note || null }));
       r.evidence = m.evidence || []; r.draft = !!m.draft && r.evidence.length < 2; if (r.draft) delete r.rank_key; r.looked = (state && state.looked && state.looked[id]) || null; }
     cache.set(k, r);
   }
@@ -42,7 +50,31 @@ export function extractCost(text, per) {
   if (!(a > 0)) return null;
   return b && b > a ? { low: a, high: b, quoted: m[0] } : { low: a / 2, high: a * 2, quoted: m[0] };
 }
-async function findEvidence(fetchFn, model, finder, seen) {
+// Model-based extraction: the model port reads the abstract and returns the figure with the exact phrase it came from. The answer is accepted
+// only when the phrase occurs verbatim in the abstract and every number occurs verbatim in the phrase; otherwise (or with no model route) the
+// pattern reader above is used. At most MODEL_READS abstracts per run go to the model, and only abstracts that mention the unit at all.
+export const MODEL_READS = 4;
+export const extractPrompt = (text, per) => `From the abstract below, find the cost in US dollars per ${per === 'daly' ? 'disability-adjusted life year (DALY) or YLD averted' : 'death averted or life saved'}. Answer with JSON only: {"found":true|false,"low":"<first number exactly as written>","high":"<second number exactly as written, or empty>","quoted":"<the exact phrase from the abstract that states it>"}. Copy text exactly; do not convert, round or compute. If the abstract does not state such a cost, answer {"found":false}.\n\nABSTRACT:\n${text}`;
+export function checkExtraction(answer, text) {
+  const t = String(text || '').replace(/<[^>]+>/g, ' ');
+  const m = /\{[\s\S]*\}/.exec(String(answer || '')); if (!m) return null;
+  let j; try { j = JSON.parse(m[0]); } catch { return null; }
+  if (!j || j.found !== true || typeof j.quoted !== 'string' || !j.quoted.trim() || !t.includes(j.quoted)) return null;
+  const nums = [j.low, j.high].filter(x => x !== undefined && x !== null && String(x).trim() !== '').map(String);
+  if (!nums.length || !nums.every(n => j.quoted.includes(n))) return null;
+  const [a, b] = nums.map(n => Number(n.replace(/,/g, '')));
+  if (!(a > 0) || (b !== undefined && !(b > 0))) return null;
+  return b && b > a ? { low: a, high: b, quoted: j.quoted, by: 'model' } : { low: a / 2, high: a * 2, quoted: j.quoted, by: 'model' };
+}
+export async function readCost(text, per, llm) {
+  if (llm && llm.left > 0 && new RegExp(UNIT[per], 'i').test(String(text || ''))) {
+    llm.left--;
+    const r = await complete({ fetch: llm.fetch, secrets: llm.secrets, prompt: extractPrompt(String(text).slice(0, 6000), per), maxTokens: 200 });
+    if (r.ok) { const c = checkExtraction(r.text, text); if (c) return c; }
+  }
+  const c = extractCost(text, per); return c && { ...c, by: 'pattern' };
+}
+async function findEvidence(fetchFn, model, finder, seen, llm = null) {
   const q = '(' + finder.query + ') AND ("cost-effectiveness" OR "cost per") AND PUB_YEAR:[2010 TO 2030]';
   const r = await fetchFn(EPMC + '?query=' + encodeURIComponent(q) + '&format=json&resultType=core&pageSize=15');
   if (!r.ok) throw new Error('Europe PMC HTTP ' + r.status);
@@ -51,7 +83,7 @@ async function findEvidence(fetchFn, model, finder, seen) {
   for (const x of rows) {
     const src = 'Europe PMC ' + (x.pmid ? 'PMID ' + x.pmid : x.id) + ': ' + String(x.title || '').replace(/<[^>]+>/g, '').slice(0, 140) + ' (' + x.pubYear + ')';
     if (seen.has(src)) continue;
-    const c = extractCost(x.abstractText, finder.per); if (!c) continue;
+    const c = await readCost(x.abstractText, finder.per, llm); if (!c) continue;
     const est = { low: budget / c.high, high: budget / c.low }, mid = Math.sqrt(est.low * est.high);
     // a figure more than ten times away from the current estimate is more likely a different intervention, currency or unit than a discovery: kept as a lead, not pooled
     if (prior === null) prior = mid; // the first figure for a queued entry sets the scale the next ones are checked against
@@ -62,7 +94,8 @@ async function findEvidence(fetchFn, model, finder, seen) {
   return { items: out.slice(0, 2), rejected };
 }
 // One model per tick, the one looked at longest ago. Pools what it finds through the core loop, stores the refined model, and reports what moved.
-export async function bcaTick({ store, fetchFn = fetch, now = Date.now() }) {
+export async function bcaTick({ store, fetchFn = fetch, now = Date.now(), secrets = null }) {
+  const llm = secrets ? { fetch: fetchFn, secrets, left: MODEL_READS } : null;
   const at = new Date(now).toISOString(), raw = await store.get(KEY), state = raw ? JSON.parse(raw) : { models: {}, looked: {}, leads: [] }, changes = [];
   const ids = [...Object.keys(FINDERS).filter(id => MODELS[id]), ...Object.keys(QUEUE).filter(id => !MODELS[id])].sort((a, b) => Date.parse((state.looked[a] || { at: 0 }).at || 0) - Date.parse((state.looked[b] || { at: 0 }).at || 0));
   const id = ids[0]; if (!id) return { at, changes };
@@ -71,7 +104,7 @@ export async function bcaTick({ store, fetchFn = fetch, now = Date.now() }) {
   const seen = new Set(((base && base.evidence) || []).map(e => e.source.replace(/ \[.*$/, '')));
   try {
     if (!base) { // queued entry: draft a model from the first usable figure, then pool the rest as evidence
-      const r = await findEvidence(fetchFn, { cost: { upfront: 100000 }, nodes: [] }, finder, seen);
+      const r = await findEvidence(fetchFn, { cost: { upfront: 100000 }, nodes: [] }, finder, seen, llm);
       state.leads = [...r.rejected.map(x => ({ id, at, ...x })), ...(state.leads || [])].slice(0, 40);
       const first = r.items[0];
       if (first) {
@@ -82,7 +115,7 @@ export async function bcaTick({ store, fetchFn = fetch, now = Date.now() }) {
       }
     } else {
       const rep = await refineLoop({ at, seed: SEED, perModel: 1, load: async () => [base],
-        evidenceFor: async m => { const r = await findEvidence(fetchFn, m, finder, seen); state.leads = [...r.rejected.map(x => ({ id, at, ...x })), ...(state.leads || [])].slice(0, 40); return r.items; },
+        evidenceFor: async m => { const r = await findEvidence(fetchFn, m, finder, seen, llm); state.leads = [...r.rejected.map(x => ({ id, at, ...x })), ...(state.leads || [])].slice(0, 40); return r.items; },
         save: async (m, _res, changed) => { if (changed) state.models[id] = m; } });
       found = rep.applied;
       for (const mv of rep.moved) changes.push({ kind: 'estimate_moved', id, from: Number(mv.p50_from.toFixed(2)), to: Number(mv.p50_to.toFixed(2)) });
@@ -116,7 +149,7 @@ function drivers(b) {
 }
 function ctxTable(b) {
   if (!b.contexts) return '';
-  const rows = b.contexts.map(c => '<tr><td>' + esc(c.label) + '</td><td>' + (c.r.applicable ? f(c.r.wellby_per_1000_usd.p50) + ' (' + f(c.r.wellby_per_1000_usd.p5) + ' to ' + f(c.r.wellby_per_1000_usd.p95) + ')' : 'Does not apply') + '</td><td>' + esc(c.r.applicable ? (c.measured ? 'Evidence comes from settings like this' : 'Transferred from another setting; no local cost or effect figure yet') : c.r.reason) + '</td></tr>').join('');
+  const rows = b.contexts.map(c => '<tr><td>' + esc(c.label) + '</td><td>' + (c.r.applicable ? f(c.r.wellby_per_1000_usd.p50) + ' (' + f(c.r.wellby_per_1000_usd.p5) + ' to ' + f(c.r.wellby_per_1000_usd.p95) + ')' : 'Does not apply') + '</td><td>' + esc(c.r.applicable ? (c.measured ? 'Evidence comes from settings like this' : 'Transferred from another setting; no local cost or effect figure yet') + (c.cost_note ? '. Cost scaled by ' + c.cost_note : '') : c.r.reason) + '</td></tr>').join('');
   return '<div class="tablewrap" tabindex="0" role="region" aria-label="By level of development (World Bank income group), WELLBYs per USD 1,000"><table class="tbl"><caption>By level of development (World Bank income group), WELLBYs per USD 1,000</caption><thead><tr><th>Setting</th><th>Estimate (90% range)</th><th>Basis</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
 }
 function pooled(b) {
