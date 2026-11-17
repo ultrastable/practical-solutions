@@ -12,7 +12,7 @@ import { FOOTER } from './publish.js';
 import { handleInbound, recordEvent, metrics, queue, approveIntent, suppressAddr, agenciesGraph } from '../../ps/outreach_step.js';
 
 
-const ORIGIN = 'https://tenant-ps-web.ultrastable.workers.dev';
+const ORIGIN = 'https://ultrastable.org'; // the public home (tenant-ps-edge on the ultrastable.org zone); IndexNow and outreach links use it
 const ps = env => createPs({ db: env.DB, env, secrets: env, selfMigrate: { files: FILES, allow: ALLOW }, solutions: SOLUTIONS, footer: FOOTER, origin: env.PS_ORIGIN || ORIGIN });
 const authed = (request, env) => Boolean(env.PS_TICK_TOKEN) && request.headers.get('x-ps-token') === env.PS_TICK_TOKEN;
 
