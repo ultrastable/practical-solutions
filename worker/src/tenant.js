@@ -12,6 +12,7 @@ import { buildCatalog } from './catalog.js';
 import { route, notFoundResponse } from './site.js';
 import { recordView, summary } from './reach.js';
 import { ignoranceTick, ignView } from './unknowns.js';
+import { bcaTick, KEY as BCA_KEY } from './bca.js';
 import * as PV from '../../ps/provenance.js';  // PROVENANCE-1
 
 // Behind the ultrastable.org edge the request arrives on the workers.dev host with x-forwarded-host set; links and canonicals use the public host.
@@ -21,7 +22,7 @@ const BACKEND = 'https://ps-practical-solutions.q08.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
 const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' };
 
-const catalog = async env => buildCatalog({ problems: await j(env, 'problems', null), solutions: SOLUTIONS, verif: await j(env, 'verif', {}), cands: await j(env, 'candidates', {}), drafts: await j(env, 'drafts', {}), spots: await j(env, 'brightspots', {}), changes: await j(env, 'changes', []), lastTick: await j(env, 'last_tick', null) });
+const catalog = async env => buildCatalog({ problems: await j(env, 'problems', null), solutions: SOLUTIONS, verif: await j(env, 'verif', {}), cands: await j(env, 'candidates', {}), drafts: await j(env, 'drafts', {}), spots: await j(env, 'brightspots', {}), changes: await j(env, 'changes', []), lastTick: await j(env, 'last_tick', null), bcaState: await j(env, BCA_KEY, null) });
 
 export default {
   // The account is at the free plan's cron limit, so the backend has no cron of its own: this Worker's schedule also runs the backend tick
@@ -29,6 +30,7 @@ export default {
   async scheduled(_e, env, ctx) {
     if (env.CORE) ctx.waitUntil(env.CORE.fetch('https://core.internal/internal/tick', { method: 'POST', headers: { 'x-ps-internal': '1' } }).catch(() => {}));
     ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems }); await PV.recordChanges(env.STATE, r.changes, r.at);
+      try { const b = await bcaTick({ store: env.STATE }); if (b.changes.length) { await PV.recordChanges(env.STATE, b.changes, b.at); await env.STATE.put('changes', JSON.stringify([...b.changes.map(c => ({ at: b.at, ...c })), ...(await j(env, 'changes', []))].slice(0, 200))); } } catch (e) { await env.STATE.put('bca:error', String(e.message || e)); }
       try { await ignoranceTick({ store: env.STATE, env, cat: await catalog(env) }); await env.STATE.delete('ignorance:error'); } catch (e) { await env.STATE.put('ignorance:error', String(e.message || e)); } })());
   },
   async fetch(r, env, ctx) {

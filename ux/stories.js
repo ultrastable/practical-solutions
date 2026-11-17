@@ -21,6 +21,8 @@ export const STORIES = [
     steps: [v('/for/funders'), x({ heading: 'Low cost, proven at scale' }), { follow: { href: '^/solutions/[a-z0-9-]+$' } }, x({ text: 'Evidence label' })] },
   { id: 'FUN-2', who: 'funders', want: 'find problems with no practical solution listed yet', so: 'I know where research or pilots are needed before funding delivery', covers: ['problemsIndex', 'facets', 'badge'],
     steps: [v('/problems?coverage=none'), x({ text: '0 solution|Nothing matches', no_text: 'Internal error' })] },
+  { id: 'FUN-BCA', who: 'funders', want: 'see benefit per dollar in one unit that is not money, with its range and what it rests on', so: 'I can compare a water programme with a cash transfer', covers: ['solutionPage', 'section', 'table'],
+    steps: [v('/solutions/chlorine'), x({ heading: 'Benefit and cost, in WELLBYs', text: ['WELLBYs per USD 1,000', 'Does not apply', 'Causal chain'] }), v('/solutions?sort=benefit'), x({ link: '^/solutions/' }), v('/method'), x({ text: ['neutral_point', 'income group'] })] },
   { id: 'FUN-3', who: 'funders', want: 'sort solutions by strength of evidence', so: 'I back claims that rest on reviews and trials', covers: ['solutionsIndex', 'facets'],
     steps: [v('/solutions?sort=evidence'), x({ text: 'evidence-backed', link: '^/solutions/' })] },
   { id: 'RES-1', who: 'researchers', want: 'trace a claim to the paper it rests on', so: 'I can check it myself', covers: ['solutionPage', 'section'],
