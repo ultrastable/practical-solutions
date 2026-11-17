@@ -47,7 +47,7 @@ ISSUE #${issue.number}: ${issue.title}
 ${issue.body}
 
 CURRENT FILES:
-${files.map(f => `--- ${f.path}\n${clip(f.text, 9000)}`).join('\n')}`;
+${files.map(f => `--- ${f.path}\n${clip(f.text, Math.floor(30000 / Math.max(1, files.length)))}`).join('\n')}`;
 }
 
 export function parseEdits(text) {
@@ -91,7 +91,7 @@ export async function run({ issueNo, dry = false, root = process.cwd(), env = pr
   const { paths } = parseTask(issue.body);
   const files = paths.filter(allowed).filter(p => existsSync(resolve(root, p))).map(p => ({ path: p, text: readFileSync(resolve(root, p), 'utf8') }));
   const prompt = buildPrompt(issue, files);
-  const res = await complete({ secrets: { GITHUB_MODELS_TOKEN: env.GITHUB_TOKEN, PS_LLM_URL: env.PS_LLM_URL, ACTIONS_ID_TOKEN_REQUEST_URL: env.ACTIONS_ID_TOKEN_REQUEST_URL, ACTIONS_ID_TOKEN_REQUEST_TOKEN: env.ACTIONS_ID_TOKEN_REQUEST_TOKEN, ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY }, prompt, maxTokens: 6000 });
+  const res = await complete({ secrets: { GITHUB_MODELS_TOKEN: env.GITHUB_TOKEN, PS_LLM_URL: env.PS_LLM_URL, ACTIONS_ID_TOKEN_REQUEST_URL: env.ACTIONS_ID_TOKEN_REQUEST_URL, ACTIONS_ID_TOKEN_REQUEST_TOKEN: env.ACTIONS_ID_TOKEN_REQUEST_TOKEN, ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY }, prompt, maxTokens: 4000 });
   const fail = (why) => { console.log(JSON.stringify({ issue: issue.number, ok: false, why })); if (!dry) { try { gh('issue', 'edit', String(issue.number), '--add-label', 'agent-failed'); } catch (e) { console.error(e.message); } note(issue.number, `Attempt failed, main unchanged: ${why}. Remove the \`agent-failed\` label to retry.`); } return { issue: issue.number, ok: false, why }; };
   if (!res.ok) return fail(`no model route answered (${(res.tried || []).join('; ') || 'none configured'})`);
   let plan, changed;
