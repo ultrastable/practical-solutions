@@ -12,6 +12,9 @@ import { buildCatalog } from './catalog.js';
 import { route, notFoundResponse } from './site.js';
 import { recordView, summary } from './reach.js';
 
+// Behind the ultrastable.org edge the request arrives on the workers.dev host with x-forwarded-host set; links and canonicals use the public host.
+const PUBLIC_HOSTS = new Set(['ultrastable.org', 'solutions.ultrastable.org']);
+export const canonicalOrigin = (r, u) => { const f = (r.headers.get('x-forwarded-host') || '').toLowerCase(); return PUBLIC_HOSTS.has(f) ? 'https://' + (f === 'solutions.ultrastable.org' ? 'ultrastable.org' : f) : u.origin; };
 const BACKEND = 'https://ps-practical-solutions.q08.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
 const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' };
@@ -35,7 +38,7 @@ export default {
     if (u.pathname === '/brightspots.json') return Response.json(await j(env, 'brightspots', {}));
     if (u.pathname === '/candidates.json') return Response.json(await j(env, 'candidates', {}));
     if (u.pathname === '/changes.json') return Response.json({ changes: await j(env, 'changes', []), last_tick: await j(env, 'last_tick', null) });
-    const origin = u.origin;
+    const origin = canonicalOrigin(r, u);
     if (['/feed.xml', '/feed.json'].includes(u.pathname)) {
       const meta = { title: 'Practical Solutions: what changed', link: origin, description: 'Every automatic change the improvement loop made: re-rankings, evidence checks, new candidate evidence.' };
       const items = itemsFrom(await j(env, 'changes', []), c => describeChange(c, origin));
@@ -43,9 +46,9 @@ export default {
         : Response.json(toJsonFeed({ ...meta, feedUrl: origin + '/feed.json', items }));
     }
     const cat = await catalog(env); cat.reach = u.pathname === '/impact' ? await summary(env.STATE) : null;
-    const site = route(u, cat);
+    const site = route(new URL(u.pathname + u.search, origin), cat);
     if (site) return site;
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
-    return notFoundResponse(cat, u);
+    return notFoundResponse(cat, new URL(u.pathname + u.search, origin));
   },
 };
