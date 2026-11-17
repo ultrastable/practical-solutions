@@ -14,6 +14,7 @@ export const SEARCH = {
   under5: 'child mortality', neonatal: 'neonatal mortality newborn', maternal: 'maternal mortality', ncd: 'hypertension cardiovascular mortality',
   suicide: 'suicide prevention depression', tb: 'tuberculosis treatment', poverty: 'cash transfer poverty', hunger: 'malnutrition food insecurity',
   water: 'drinking water treatment diarrhoea', cooking: 'cookstove household air pollution', education: 'learning outcomes primary school',
+  road: 'road traffic injury prevention', electricity: 'rural electrification', sanitation: 'sanitation diarrhoea', stunting: 'child stunting nutrition', air: 'air pollution health', internet: 'internet access development', 'women-power': 'women political representation', finance: 'financial inclusion poverty', birthreg: 'birth registration',
 };
 
 const strip = s => String(s || '').replace(/<[^>]+>/g, ' ');
@@ -81,8 +82,11 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
   // 3. candidate evidence for one top problem per tick, rotating
   const cand = await getJson(store, 'candidates', {});
   const top = problems.problems.slice(0, 5);
+  // a problem with no solution in the catalogue always joins the search rotation, so gaps like TB are worked on until they are filled
+  const covered = new Set(sols.flatMap(s => s.problem_ids || []));
+  const pool = [...new Map([...problems.problems.filter(p => !covered.has(p.id)), ...top].map(p => [p.id, p])).values()];
   if (top.length) {
-    const p = top.sort((a, b) => Date.parse((cand[a.id] || { at: 0 }).at) - Date.parse((cand[b.id] || { at: 0 }).at))[0];
+    const p = [...pool].sort((a, b) => Date.parse((cand[a.id] || { at: 0 }).at) - Date.parse((cand[b.id] || { at: 0 }).at))[0];
     try {
       const rows = (await epmc(fetchFn, `(${SEARCH[p.id] || p.title}) AND JOURNAL:"Cochrane Database Syst Rev" AND PUB_YEAR:[2015 TO 2030] AND (mortality OR death OR survival)`, 12, false)).filter(x => !/This is a protocol/i.test(strip(x.abstractText))).slice(0, 4);
       const items = rows.map(x => ({ title: strip(x.title), year: x.pubYear, pmid: x.pmid || null, doi: x.doi || null, abstract: strip(x.abstractText).slice(0, 600) }));

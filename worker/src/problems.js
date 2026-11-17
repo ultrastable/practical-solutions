@@ -16,7 +16,17 @@ export const PROBLEMS = [
   { id: 'water', title: 'Unsafe drinking water', domain: 'Water', ind: 'SH.H2O.SMDW.ZS', unit: '% of people with safely managed water', lower: false, target: 100, target_src: 'SDG 6.1: universal' },
   { id: 'cooking', title: 'Smoky cooking fuel', domain: 'Energy and air', ind: 'EG.CFT.ACCS.ZS', unit: '% of people with clean cooking', lower: false, target: 100, target_src: 'SDG 7.1: universal' },
   { id: 'education', title: 'Children not finishing primary school', domain: 'Education', ind: 'SE.PRM.CMPT.ZS', unit: '% completing primary', lower: false, target: 100, target_src: 'SDG 4.1: universal' },
+  { id: 'road', title: 'Road traffic deaths', domain: 'Safety', ind: 'SH.STA.TRAF.P5', unit: 'deaths per 100,000', lower: true, target_from: 2015, factor: 0.5, target_src: 'SDG 3.6 / UN Decade of Action: halve deaths from 2015' },
+  { id: 'electricity', title: 'People without electricity', domain: 'Energy and air', ind: 'EG.ELC.ACCS.ZS', unit: '% of people with electricity', lower: false, target: 100, target_src: 'SDG 7.1: universal' },
+  { id: 'sanitation', title: 'Unsafe sanitation', domain: 'Water', ind: 'SH.STA.SMSS.ZS', unit: '% of people with safely managed sanitation', lower: false, target: 100, target_src: 'SDG 6.2: universal' },
+  { id: 'stunting', title: 'Stunted growth in children', domain: 'Food', ind: 'SH.STA.STNT.ZS', unit: '% of children under 5 stunted', lower: true, target_from: 2012, factor: 0.6, target_src: 'WHA 2025 target: 40% fewer than 2012' },
+  { id: 'air', title: 'Polluted air', domain: 'Energy and air', ind: 'EN.ATM.PM25.MC.M3', unit: 'annual mean PM2.5, micrograms per cubic metre', lower: true, target: 5, target_src: 'WHO 2021 air quality guideline: 5' },
+  { id: 'internet', title: 'People offline', domain: 'Digital access', ind: 'IT.NET.USER.ZS', unit: '% of people using the internet', lower: false, target: 100, target_src: 'SDG 9.c: universal access' },
+  { id: 'women-power', title: 'Women missing from national parliaments', domain: 'Governance and gender', ind: 'SG.GEN.PARL.ZS', unit: '% of parliamentary seats held by women', lower: false, target: 50, target_src: 'SDG 5.5 / parity: 50%' },
+  { id: 'finance', title: 'Adults without a financial account', domain: 'Poverty', ind: 'FX.OWN.TOTL.ZS', unit: '% of adults with an account', lower: false, target: 100, target_src: 'World Bank / G20: universal financial access' },
+  { id: 'birthreg', title: 'Children whose birth is never registered', domain: 'Governance and gender', ind: 'SP.REG.BRTH.ZS', unit: '% of children under 5 registered', lower: false, target: 100, target_src: 'SDG 16.9: universal' },
 ];
+
 
 export function shortfall(p, value, baseline) {
   const target = p.target ?? (baseline == null ? null : baseline * p.factor);

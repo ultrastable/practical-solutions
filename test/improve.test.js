@@ -26,7 +26,7 @@ test('a tick refreshes problems, verifies stale solutions, finds candidates and 
   assert.ok(JSON.parse(await store.get('candidates')).under5.items.length === 1);
   // a second tick one hour later checks the next solutions, not the same ones
   await tick({ store, fetchFn: f, rank, now: Date.parse('2026-11-16T01:00:00Z') });
-  assert.equal(Object.keys(JSON.parse(await store.get('verif'))).length, 4);
+  assert.equal(Object.keys(JSON.parse(await store.get('verif'))).length, Math.min(6, SOLUTIONS.filter(x => (x.checks || []).length).length));
   assert.ok(JSON.parse(await store.get('changes')).length >= 4);
 });
 

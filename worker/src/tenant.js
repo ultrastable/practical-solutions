@@ -6,17 +6,22 @@ import { PAGE } from './ui.js';
 import { rankProblems } from './problems.js';
 import { tick, verifiedText } from './improve.js';
 import { toRss, toJsonFeed, itemsFrom } from '../../vendor/ultrastable/core/feed/index.js';
-import { describeChange, solutionPage } from './publish.js';
+import { describeChange } from './publish.js';
+import { SOLUTIONS } from './solutions.js';
+import { buildCatalog } from './catalog.js';
+import { route } from './site.js';
 
 const BACKEND = 'https://ps-practical-solutions.q08.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
 const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' };
 
+const catalog = async env => buildCatalog({ problems: await j(env, 'problems', null), solutions: SOLUTIONS, verif: await j(env, 'verif', {}), cands: await j(env, 'candidates', {}), drafts: await j(env, 'drafts', {}), spots: await j(env, 'brightspots', {}), changes: await j(env, 'changes', []), lastTick: await j(env, 'last_tick', null) });
+
 export default {
-  async scheduled(_e, env, ctx) { ctx.waitUntil(tick({ store: env.STATE, rank: rankProblems })); },
+  async scheduled(_e, env, ctx) { ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); await tick({ store: env.STATE, rank: rankProblems }); })()); },
   async fetch(r, env) {
     const u = new URL(r.url);
-    if (u.pathname === '/' || u.pathname === '/index.html') return new Response(PAGE, { headers });
+    if (u.pathname === '/live') return new Response(PAGE, { headers });
     if (u.pathname === '/solutions.json') {
       const verif = await j(env, 'verif', {});
       const sols = (await j(env, 'solutions', [])).map(({ checks, ...s }) => ({ ...s, verified: verifiedText(verif[s.id]) || s.verified }));
@@ -34,12 +39,8 @@ export default {
       return u.pathname === '/feed.xml' ? new Response(toRss({ ...meta, items }), { headers: { 'content-type': 'application/rss+xml; charset=utf-8' } })
         : Response.json(toJsonFeed({ ...meta, feedUrl: origin + '/feed.json', items }));
     }
-    const sp = /^\/solutions\/([a-z0-9-]+)$/.exec(u.pathname);
-    if (sp) {
-      const verif = await j(env, 'verif', {});
-      const s = (await j(env, 'solutions', [])).find(x => x.id === sp[1]);
-      return s ? new Response(solutionPage(s, verifiedText(verif[s.id]) || s.verified, origin), { headers }) : new Response('not found', { status: 404 });
-    }
+    const site = route(u, await catalog(env));
+    if (site) return site;
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
     return new Response('not found', { status: 404 });
   },

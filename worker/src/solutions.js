@@ -3,7 +3,7 @@
 // The product's unit: an implementable solution to a pressing problem. Seeded from published trial and review evidence;
 // every entry names its source so a reader can check it. The loop's data-found leads are shown separately and never mixed in.
 // status: "seed, from the literature; verify against the cited source before relying on it". Numbers are the sources' own, rounded.
-export const SOLUTIONS = [
+const BASE = [
   { id: 'kmc', checks: [{ title: 'Immediate Kangaroo Mother Care and Survival of Infants with Low Birth Weight', q: 'immediate kangaroo mother care low birth weight infants', year: 2021, numbers: ['12.0', '15.7'] }], problem_ids: ['neonatal', 'under5'], verified: 'checked 2026-11-16 against the PMC summary of the trial (weight range and 25% figure).', problem: 'Newborn deaths', title: 'Start kangaroo mother care at birth for small babies',
     claim: 'Skin-to-skin contact with a parent, begun immediately after birth for babies weighing 1.0 to 1.8 kg, cut deaths in the first 28 days by about a quarter.',
     evidence: [{ src: 'WHO Immediate KMC Study Group, New England Journal of Medicine, 2021', finding: 'Randomised trial in five hospitals in Ghana, India, Malawi, Nigeria and Tanzania: 3,211 babies of 1.0-1.8 kg; about 25% lower neonatal mortality for immediate versus conventional KMC.' }],
@@ -85,3 +85,6 @@ export const SOLUTIONS = [
     first_test: '4 clinics: train 8 lay workers, screen and treat 200 patients, compare symptoms at 6 months with usual care.',
     limits: 'Measures symptoms, not suicide deaths; severe cases still need specialist care.' },
 ];
+
+import { MORE } from './more-solutions.js';
+export const SOLUTIONS = [...BASE, ...MORE];
