@@ -29,7 +29,7 @@ export default {
   async scheduled(_e, env, ctx) {
     if (env.CORE) ctx.waitUntil(env.CORE.fetch('https://core.internal/internal/tick', { method: 'POST', headers: { 'x-ps-internal': '1' } }).catch(() => {}));
     ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems }); await PV.recordChanges(env.STATE, r.changes, r.at);
-      try { await ignoranceTick({ store: env.STATE, env, cat: await catalog(env) }); await env.STATE.delete('ignorance:error'); } catch (e) { await env.STATE.put('ignorance:error', String(e.message || e)); } })());
+      try { await ignoranceTick({ store: env.STATE, env, cat: await catalog(env), fetchFn: (u) => fetch(u) }); await env.STATE.delete('ignorance:error'); } catch (e) { await env.STATE.put('ignorance:error', String(e.message || e)); } })());
   },
   async fetch(r, env, ctx) {
     const u = new URL(r.url);
