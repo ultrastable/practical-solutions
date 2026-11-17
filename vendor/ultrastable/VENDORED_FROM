@@ -1,5 +1,5 @@
 {
- "commit": "a77364dceec74307e7732e1b0036d2e58d59f1bf",
+ "commit": "d62251edab8b0ba62a33f761f64f67afa290c86f",
  "files": {
   ".claude/settings.json": "db2a7917aac18605c5ba25c2bb717aacf61ddae27873766a7c0a51856b9dec43",
   ".cursor/rules/ultrastable.mdc": "5b85ce4a068a628916dac979af4bf4da49015fc4183bc4ce06a6ccbf9d22c479",
@@ -192,10 +192,10 @@
   "core/README.md": "e4d249a5f9a643978b80956553ae25dd17d2649ab549c901de0f56895ea31e81",
   "core/_shared/testdb.js": "2a935dab4be1126b948579b3c533a56fea4e61dfc68a168319372d605de1118d",
   "core/access/README.md": "e154db98d2856daee136f1785ebc279a4656255e0963039a68b0881263d8e0dd",
-  "core/access/access.test.js": "fb4c156c83ed142e4bdea9925c0d13985658c1703005d5b9c24563de4c7d91c5",
+  "core/access/access.test.js": "77b3402cf0b30cea0f10e56931361b32196bf21a257593098e0a39adcb64922d",
   "core/access/cli.mjs": "129c5c564bc4279aee200688704eb24cd5e8273451ed009c8fdf94177ca46f27",
   "core/access/cli.test.js": "6f4c322caa08b4d3b95619bebfe863b092de8c3607f14d20d953b1480487d6ac",
-  "core/access/index.js": "ebcfb13a773566e9e6381ac627cdec020c1b80b721a9702ef3b21a50eb1d6ac6",
+  "core/access/index.js": "a328216332e841d7f43ea4018795024f3ec57eec56f509c3a2c8f76d3bc79c5c",
   "core/access/migrations/0001_access.sql": "b6ce6bba069bd6552a1668305472bb2aac9784ca65c7ffde1b5365b91e8e4251",
   "core/agents/README.md": "85faa104fd56d3d15ca0673e91b9133a4d1e76864cda303979102446d7ceffb3",
   "core/agents/agents.test.js": "9628152668bf33b607e7cefda66a10d33cd8ffcbeaf710a1cbfad1e6c153b628",
