@@ -1,1 +1,121 @@
-{ "schema": "ps-ensemble/1", "examined": {}, "proposals": [], "health": {}, "benched": {}, "history": [], "runs": [] }
+{
+ "schema": "ps-ensemble/1",
+ "examined": {
+  "cash": {
+   "at": "2026-11-17T17:48:56.425Z",
+   "outcome": "pending"
+  },
+  "chlorine": {
+   "at": "2026-11-17T17:48:56.425Z",
+   "outcome": "pending"
+  },
+  "clean-cooking": {
+   "at": "2026-11-17T17:48:56.425Z",
+   "outcome": "no change proposed: The entry already agrees with the sources, which discuss the relationship between household air pollution and health outcomes, but do not provide information that contradicts or updates the entry."
+  }
+ },
+ "proposals": [
+  {
+   "id": "5ae43e1b6bd5",
+   "entry": "cash",
+   "field": "works_where",
+   "old": "Rural Kenya; many other countries through GiveDirectly and government programmes.",
+   "new": "Rural Kenya; many other countries through GiveDirectly and government programmes; Massachusetts, USA; India",
+   "source": {
+    "url": "https://europepmc.org/article/MED/41688611",
+    "title": "Randomized unconditional cash transfers improved diet quantity and quality in a low-income community in Massachusetts, USA."
+   },
+   "quote": "During COVID-19, Chelsea, a city in Massachusetts, USA, implemented an unconditional cash transfer (UCT) programme ('Chelsea Eats') that provided a nine-month benefit of up to US$400 per month to low-income households, allocated via lottery.",
+   "why": "The new text includes additional locations where unconditional cash transfers have been implemented, as supported by source 3.",
+   "proposer": {
+    "id": "llama-3.3-fp8",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [],
+   "status": "pending",
+   "reason": "only 0 usable verifiers from distinct vendors; 2 are needed",
+   "at": "2026-11-17T17:48:56.425Z"
+  },
+  {
+   "id": "ff2fcd3eca4b",
+   "entry": "chlorine",
+   "field": "limits",
+   "old": "Effect depends on people using the dispensers; works poorly where households already treat water or sources are piped and treated.",
+   "new": "Effect depends on people using the dispensers; works poorly where households already treat water or sources are piped and treated, or where water infrastructure is lacking",
+   "source": {
+    "url": "https://europepmc.org/article/MED/40375160",
+    "title": "Social dynamics influencing cholera risk in the City of Goma, Democratic Republic of Congo: a qualitative study."
+   },
+   "quote": "The lack of water infrastructure was the main issue with cholera risk in Goma as it prompted use of unsafe drinking water from Lake Kivu, the small Lake vert and Mubambiro River",
+   "why": "The new text includes the additional limitation of lacking water infrastructure, which is supported by source 3.",
+   "proposer": {
+    "id": "llama-3.3-fp8",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [],
+   "status": "pending",
+   "reason": "only 0 usable verifiers from distinct vendors; 2 are needed",
+   "at": "2026-11-17T17:48:56.425Z"
+  }
+ ],
+ "health": {
+  "mistral-small": {
+   "calls": 3,
+   "errors": 3
+  },
+  "deepseek-v3": {
+   "calls": 4,
+   "errors": 4
+  },
+  "phi-4": {
+   "calls": 5,
+   "errors": 5
+  },
+  "grok-3-mini": {
+   "calls": 5,
+   "errors": 5
+  },
+  "command-a": {
+   "calls": 5,
+   "errors": 5
+  },
+  "gemma-3": {
+   "calls": 5,
+   "errors": 0
+  },
+  "gpt-4.1-mini": {
+   "calls": 2,
+   "errors": 2
+  }
+ },
+ "benched": {},
+ "history": [],
+ "runs": [
+  {
+   "at": "2026-11-17T17:48:56.425Z",
+   "examined": 3,
+   "proposed": 2,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 2,
+   "none": 1,
+   "panel_failures": 0
+  }
+ ],
+ "metrics": {
+  "measured": false,
+  "pairs": []
+ },
+ "at": "2026-11-17T17:48:56.425Z"
+}
