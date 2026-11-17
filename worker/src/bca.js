@@ -6,6 +6,8 @@ import { MODELS, GAPS, CONTEXTS, APPLIES, FINDERS, QUEUE } from './bca-models.js
 import { esc } from './catalog.js';
 
 export const KEY = 'bca:v1', SEED = 20261117;
+// the engine settings the /method page states; the page renders them from here, so they cannot drift
+export const ENGINE = { draws: 3000, contextDraws: 800, seed: SEED, ranking: 'p25', range: [5, 95], topDrivers: 3 };
 const cache = new Map();
 // the model in force: the refined copy the loop stored, else the seed model, each with the entry's context facts
 export function modelFor(id, state) {
@@ -19,7 +21,7 @@ export function bcaFor(id, state) {
   if (!cache.has(k)) {
     const errs = validate(m); let r;
     if (errs.length) r = { error: errs.join('; ') };
-    else { r = score(m, { draws: 3000, seed: SEED }); r.contexts = CONTEXTS.map(c => ({ ...c, measured: !!(APPLIES[id] && APPLIES[id][c.id] && APPLIES[id][c.id].applies !== false) || !!(m.contexts[c.id] && m.contexts[c.id].nodes), r: scoreAcross(m, [c], { draws: 800, seed: SEED })[c.id] }));
+    else { r = score(m, { draws: ENGINE.draws, seed: ENGINE.seed }); r.contexts = CONTEXTS.map(c => ({ ...c, measured: !!(APPLIES[id] && APPLIES[id][c.id] && APPLIES[id][c.id].applies !== false) || !!(m.contexts[c.id] && m.contexts[c.id].nodes), r: scoreAcross(m, [c], { draws: ENGINE.contextDraws, seed: ENGINE.seed })[c.id] }));
       r.evidence = m.evidence || []; r.draft = !!m.draft && r.evidence.length < 2; if (r.draft) delete r.rank_key; r.looked = (state && state.looked && state.looked[id]) || null; }
     cache.set(k, r);
   }
@@ -104,10 +106,14 @@ export function bcaBlock(b, id) {
   const assum = Object.entries(b.assumptions_used).filter(([k]) => ['ls_mean', 'neutral_point', 'discount', 'consumption_doubling_wellby', 'moral_weight_death_u5'].includes(k)).map(([k, s]) => esc(k) + ' (' + esc(s) + ')').join(', ');
   return lead + '<p><b>' + f(w.p50) + ' WELLBYs per USD 1,000</b> (90% range ' + f(w.p5) + ' to ' + f(w.p95) + '). Chance of net benefit: ' + pct(b.prob_net_positive) + '. First-order effects alone: ' + f(fo.p50) + '. Share of the estimate resting on weak evidence (grade C or D): ' + pct(b.evidence_share.C + b.evidence_share.D) + '.</p>'
     + '<div class="tablewrap" tabindex="0" role="region" aria-label="Causal chain, each link graded"><table class="tbl"><caption>Causal chain, each link graded</caption><thead><tr><th>Link</th><th>Order</th><th>Kind</th><th>Grade</th><th>Source</th></tr></thead><tbody>' + nodes + '</tbody></table></div>'
-    + ctxTable(b) + pooled(b)
+    + drivers(b) + ctxTable(b) + pooled(b)
     + '<p>Conversion assumptions used: ' + assum + '. See <a href="/method#bca">how this is calculated</a>.</p>';
 }
 
+function drivers(b) {
+  const top = (b.sensitivity || []).slice(0, ENGINE.topDrivers); if (!top.length) return '';
+  return '<p>Inputs that move this answer most (rank correlation with the result): ' + top.map(x => esc(x.id) + ' (' + (x.corr >= 0 ? '+' : '') + x.corr.toFixed(2) + ')').join(', ') + '.</p>';
+}
 function ctxTable(b) {
   if (!b.contexts) return '';
   const rows = b.contexts.map(c => '<tr><td>' + esc(c.label) + '</td><td>' + (c.r.applicable ? f(c.r.wellby_per_1000_usd.p50) + ' (' + f(c.r.wellby_per_1000_usd.p5) + ' to ' + f(c.r.wellby_per_1000_usd.p95) + ')' : 'Does not apply') + '</td><td>' + esc(c.r.applicable ? (c.measured ? 'Evidence comes from settings like this' : 'Transferred from another setting; no local cost or effect figure yet') : c.r.reason) + '</td></tr>').join('');
@@ -118,15 +124,9 @@ function pooled(b) {
   return (ev ? '<p>Evidence the loop has pooled into this estimate:</p><ul class="list">' + ev + '</ul>' : '') + (b.looked ? '<p class="m">The loop last searched for new cost evidence on ' + esc(String(b.looked.at).slice(0, 10)) + ' and pooled ' + (b.looked.found || 0) + ' new figure(s).</p>' : '');
 }
 
+// the live tables of /method: built from the engine's own data, so they cannot drift. All prose about the engine is in method-claims.js.
 export function methodSection() {
   const rows = Object.entries(PARAMS).map(([k, v]) => '<tr><td>' + esc(k) + '</td><td>' + esc(v.status) + '</td><td>' + esc(v.unit) + '</td><td>' + esc(v.note) + '</td></tr>').join('');
   const grades = Object.entries(GRADES).map(([g, v]) => '<li><b>' + g + '</b>: ' + esc(v.label) + '; credibility multiplier drawn between ' + v.haircut.min + ' and ' + v.haircut.max + '.</li>').join('');
-  return '<p>Money is a poor measure of a life, of happiness or of suffering, and it hides who gains. So benefits are measured in <b>WELLBYs</b>: one point of 0 to 10 life satisfaction for one person for one year, the unit used in UK Treasury Green Book wellbeing guidance and by the Happier Lives Institute. Costs stay in US dollars because they are resources someone must find. The result is <b>WELLBYs per USD 1,000</b>, which compares a water programme, a school reform and a cash transfer on one scale without pricing any benefit in money.</p>'
-    + '<p>Other candidates were weighed. DALYs and QALYs measure health only, so they cannot compare an education or income benefit; here a DALY is converted. GiveWell moral weights give the relative value of a death against a doubling of consumption; they are used as one of two routes for deaths averted (the other values the remaining life years above a neutral point). Copenhagen Consensus benefit-cost ratios price everything in money and are shown in their own units only where a source reports them. The capability approach is a richer framework with no agreed cardinal unit, so it informs which outcomes are listed but is not the metric. Social return on investment is a monetised ratio and inherits the weakness the WELLBY avoids.</p>'
-    + '<h3>Higher-order effects</h3><p>Each entry is a causal chain. A link may hang off another (second and third order effects, multipliers) or be negative (unintended consequences). Every link has an evidence grade and a source, and a child link inherits its parent\'s credibility multiplier, so a long chain of weak links is worth less than a short chain of strong ones. The page for an entry shows the estimate with and without higher-order effects.</p><ul>' + grades + '</ul>'
-    + '<h3>Uncertainty</h3><p>Every input is a range, not a point. The engine runs 3,000 Monte Carlo draws with a fixed seed, so the result can be reproduced, and shows the 90% range, the chance of net benefit, and which inputs drive the answer. Entries are ranked by the 25th percentile, so a wide, weakly evidenced estimate ranks below a tight, well evidenced one.</p>'
-    + '<h3>Published conversion assumptions</h3><p>Status <i>cited</i> is taken from a named source; <i>assumption</i> is our reading with a range meant to span the published disagreement, and is replaced as evidence is pooled.</p><div class="tablewrap" tabindex="0" role="region" aria-label="Conversion parameters and their status"><table class="tbl"><caption>Conversion parameters and their status</caption><thead><tr><th>Parameter</th><th>Status</th><th>Unit</th><th>Note</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
-    + '<h3>How it improves</h3><p>New evidence about a link is pooled into it by inverse-variance weighting, with prior evidence down-weighted by its grade; a link\'s grade rises only when higher-grade evidence has been pooled. The loop then points at the links that most affect the answer and have the weakest grade, and looks there first. Code: <a href="https://github.com/ultrastable/workers/tree/main/core/benefitcost">core/benefitcost</a> (generic, in Ultrastable core) and <a href="https://github.com/ultrastable/practical-solutions/blob/main/worker/src/bca-models.js">the models</a>. Entries without a model say so.</p>'
-    + '<h3>Different countries, different answers</h3><p>The same solution does not apply everywhere, and where it applies its cost and effect differ. Every estimate is therefore shown for each World Bank income group: whether the solution applies there at all (and why not), and whether the figures were measured in settings like it or transferred from elsewhere. No cost or wellbeing adjustment is asserted for a group until a source supports it; when the loop finds evidence from one group it updates that group only.</p>'
-    + '<h3>The evidence finder</h3><p>Each cycle the loop takes the estimate it looked at longest ago and searches Europe PMC for studies that quote a cost per DALY or per death averted for that intervention. A figure read from an abstract is graded C at most, a single figure is given a factor-of-two interval either side, and a figure more than ten times away from the current estimate is kept as a lead and not pooled. Every pooled source is listed on the entry, and each change appears in the <a href="/changes">changes feed</a>.</p>';
+  return '<ul>' + grades + '</ul><div class="tablewrap" tabindex="0" role="region" aria-label="Conversion parameters and their status"><table class="tbl"><caption>Conversion parameters and their status</caption><thead><tr><th>Parameter</th><th>Status</th><th>Unit</th><th>Note</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
 }

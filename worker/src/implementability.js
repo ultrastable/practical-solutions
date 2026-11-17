@@ -24,13 +24,16 @@ export const IMPL = {
   'clean-cooking': { cost: 'high', cost_note: 'Stove plus continuing fuel supply', adoption: 'piloted', channel: 'clean-cooking programmes', actors: 'energy ministries' },
   'emissions-market': { cost: 'high', cost_note: 'Monitors and a market platform', adoption: 'trial-only', channel: null, actors: 'state pollution control boards' },
 };
-const COST = { low: 3, medium: 2, high: 1 }, ADOPT = { scaled: 3, piloted: 2, 'trial-only': 1 };
-export const MIN_PRACTICAL = 5;
+export const COST = { low: 3, medium: 2, high: 1 }, ADOPT = { scaled: 3, piloted: 2, 'trial-only': 1 }, CHANNEL_POINTS = 2;
+export const MIN_PRACTICAL = 5, READY = 7;
+export const SCORED_FACTS = ['cost', 'adoption', 'channel'];
+const list = o => Object.entries(o).map(([k, v]) => `${k} ${v}`).join(', ');
+export const RULE = `Score ${Math.min(...Object.values(COST)) + Math.min(...Object.values(ADOPT))} to ${Math.max(...Object.values(COST)) + Math.max(...Object.values(ADOPT)) + CHANNEL_POINTS} = cost to start (${list(COST)}) + real-world adoption (${list(ADOPT)}) + an existing delivery channel (${CHANNEL_POINTS}). ${READY} or more is ready to implement; ${MIN_PRACTICAL} or ${READY - 1} is implementable with effort; below ${MIN_PRACTICAL} is held back as not yet practical.`;
 
-// Score 3-8: cost (1-3) + adoption (1-3) + an existing delivery channel (2 or 0). Below MIN_PRACTICAL a solution is held back from the main list.
+// Score 2-8: cost (1-3) + adoption (1-3) + an existing delivery channel (2 or 0). Below MIN_PRACTICAL a solution is held back from the main list.
 export function implementability(id) {
   const f = IMPL[id];
   if (!f) return null;
-  const score = COST[f.cost] + ADOPT[f.adoption] + (f.channel ? 2 : 0);
-  return { ...f, score, practical: score >= MIN_PRACTICAL, band: score >= 7 ? 'ready to implement' : score >= MIN_PRACTICAL ? 'implementable with effort' : 'not yet practical' };
+  const score = COST[f.cost] + ADOPT[f.adoption] + (f.channel ? CHANNEL_POINTS : 0);
+  return { ...f, score, practical: score >= MIN_PRACTICAL, band: score >= READY ? 'ready to implement' : score >= MIN_PRACTICAL ? 'implementable with effort' : 'not yet practical' };
 }

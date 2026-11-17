@@ -6,7 +6,7 @@ import { PROBLEMS } from './problems.js';
 import SNAPSHOT from '../../data/context.json' with { type: 'json' };
 import { SOLUTIONS } from './solutions.js';
 import { verifiedText } from './improve.js';
-import { implementability } from './implementability.js';
+import { implementability, RULE } from './implementability.js';
 import { bcaFor } from './bca.js';
 import { fitFor } from './context.js';
 
@@ -28,7 +28,7 @@ export const LABELS = {
   lead: 'Found automatically by the loop and checked only mechanically. A place to look, not a conclusion.',
 };
 
-export const RULE = 'Score 3 to 8 = cost to start (low 3, medium 2, high 1) + real-world adoption (scaled 3, piloted 2, trial-only 1) + an existing delivery channel (2). 7 or more is ready to implement; 5 or 6 is implementable with effort; below 5 is held back as not yet practical.';
+export { RULE };
 export const slug = s => String(s).toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const esc = s => String(s ?? '').replace(/[<>&"']/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&#39;' }[c]));
 

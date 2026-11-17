@@ -10,6 +10,8 @@ import { findSpots } from './brightspots.js';
 import { buildGraph, questionsFor, unsolvedProblemIds } from './graph.js';
 const EPMC = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search';
 const HOUR = 3600e3;
+// cadence the /method page states, rendered from here
+export const CADENCE = { problemsHours: 6, checkHours: 24, maxVerify: 3, candidateSearchesPerRun: 1, brightSpotHours: 24 };
 const BACKEND_URL = 'https://ps-practical-solutions.q08.workers.dev';
 
 export const SEARCH = {
@@ -53,12 +55,12 @@ export function verifiedText(v, today) {
 async function getJson(store, k, d) { const v = await store.get(k); return v ? JSON.parse(v) : d; }
 const putJson = (store, k, v) => store.put(k, JSON.stringify(v));
 
-export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), maxVerify = 3 }) {
+export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), maxVerify = CADENCE.maxVerify }) {
   const at = new Date(now).toISOString();
   const changes = [];
   // 1. problems
   const prev = await getJson(store, 'problems', null);
-  if (!prev || !(prev.problems || []).length || now - Date.parse(prev.at) > 6 * HOUR) {
+  if (!prev || !(prev.problems || []).length || now - Date.parse(prev.at) > CADENCE.problemsHours * HOUR) {
     const r = await rank(fetchFn);
     const old = Object.fromEntries(((prev || {}).problems || []).map(p => [p.id, p]));
     for (const p of r.problems) {
@@ -72,7 +74,7 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
   // 2. verification of the stalest solutions
   const sols = await getJson(store, 'solutions', []);
   const verif = await getJson(store, 'verif', {});
-  const due = sols.filter(s => (s.checks || []).length && (!verif[s.id] || now - Date.parse(verif[s.id].at) > 24 * HOUR))
+  const due = sols.filter(s => (s.checks || []).length && (!verif[s.id] || now - Date.parse(verif[s.id].at) > CADENCE.checkHours * HOUR))
     .sort((a, b) => Date.parse((verif[a.id] || { at: 0 }).at) - Date.parse((verif[b.id] || { at: 0 }).at)).slice(0, maxVerify);
   for (const s of due) {
     try {
@@ -103,7 +105,7 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
   const bs = await getJson(store, 'brightspots', {});
   if (top.length) {
     const p = [...top].sort((a, b) => Date.parse((bs[a.id] || { at: 0 }).at) - Date.parse((bs[b.id] || { at: 0 }).at))[0];
-    if (!bs[p.id] || now - Date.parse(bs[p.id].at) > 24 * HOUR) {
+    if (!bs[p.id] || now - Date.parse(bs[p.id].at) > CADENCE.brightSpotHours * HOUR) {
       try {
         const r = await findSpots(fetchFn, p, { now: new Date(now).getUTCFullYear() });
         const before = new Set(((bs[p.id] || {}).spots || []).map(x => x.iso));
