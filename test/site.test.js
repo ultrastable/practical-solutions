@@ -34,7 +34,7 @@ test('every page renders, every internal link resolves, and no page runs script'
   }
   return Promise.all(paths.map(async p => {
     const html = await get(p).text();
-    assert.ok(!/<script/i.test(html), p);
+    assert.ok(!/<script(?![^>]*application\/ld\+json)/i.test(html), p);
     for (const [, href] of html.matchAll(/href="(\/[^"#?]*)/g)) {
       if (['/feed.xml', '/feed.json', '/index.json', '/sitemap.xml', '/metrics.json'].includes(href)) continue;
       assert.notEqual(get(href)?.status, 404, `${p} -> ${href}`);
@@ -96,8 +96,9 @@ test('every solution has implementability facts and the score follows the publis
   assert.ok(route(new URL('https://x/solutions/chlorine'), c).status === 200);
 });
 test('the solutions list is sorted most implementable first', async () => {
-  const html = await get('/solutions').text();
-  assert.ok(html.indexOf('/solutions/chlorine') < html.indexOf('/solutions/emissions-market'));
+  const html = await get('/solutions?page=1').text(), last = await get('/solutions?page=2').text();
+  assert.ok(html.includes('/solutions/chlorine') && !html.includes('/solutions/emissions-market'));
+  assert.ok(last.includes('/solutions/emissions-market'));
 });
 
 import { recordView, summary } from '../worker/src/reach.js';
