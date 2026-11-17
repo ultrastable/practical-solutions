@@ -141,7 +141,7 @@ export async function run({ issueNo, dry = false, root = process.cwd(), env = pr
 export function settle({ root = process.cwd(), force = false } = {}) {
   if (!force) try { sh('npm', ['test'], { cwd: root, maxBuffer: 1 << 26 }); console.log(JSON.stringify({ settled: 'kept' })); return 'kept'; } catch { /* fall through to the revert */ }
   const sub = sh('git', ['log', '-1', '--format=%s']).trim(), m = /^Agent: .*\(#(\d+)\)/.exec(sub);
-  if (!m) { console.log(JSON.stringify({ settled: 'failing', why: 'head is not an agent commit' })); process.exitCode = 1; return 'failing'; }
+  if (!m) { console.log(JSON.stringify({ settled: force ? 'not-agent' : 'failing', why: 'head is not an agent commit; the failing deploy or test run reports it' })); if (!force) process.exitCode = 1; return force ? 'not-agent' : 'failing'; }
   sh('git', ['revert', '--no-edit', 'HEAD']); sh('git', ['push', 'origin', 'HEAD:main']);
   gh('issue', 'reopen', m[1]); gh('issue', 'edit', m[1], '--add-label', 'agent-failed'); note(m[1], 'The tests failed on main after this change, so it was reverted.');
   console.log(JSON.stringify({ settled: 'reverted', issue: Number(m[1]) })); return 'reverted';
