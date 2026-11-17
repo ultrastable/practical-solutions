@@ -32,7 +32,7 @@ export async function askPanel({ cands, want, ask, prompt, parse, cfg, excludeVe
     const h = (health[m.id] ||= { calls: 0, errors: 0 }); h.calls++;
     let r; try { r = await ask(m, prompt, maxTokens); } catch (e) { r = { ok: false, error: String(e.message).slice(0, 80) }; }
     const parsed = r && r.ok ? parse(r.text) : null;
-    if (!parsed) { h.errors++; tried.push({ id: m.id, ok: false, why: r && r.ok ? 'unparseable' : (r && r.error) || 'no answer' }); continue; }
+    if (!parsed) { const why = r && r.ok ? 'unparseable' : (r && r.error) || 'no answer'; h.errors++; h.last = why.slice(0, 120); tried.push({ id: m.id, ok: false, why }); continue; }
     // the route may substitute another model (an older model Worker serves one): the vendor that really answered is the one that counts
     const actual = (r.model && cfg.pool.find(p => p.model === r.model)) || m;
     if (actual.vendor !== m.vendor && (excludeVendors.includes(actual.vendor) || got.some(g => overlap(g.member, actual) > cfg.channel_overlap_max))) { tried.push({ id: m.id, ok: false, why: 'substituted by ' + actual.id }); continue; }
@@ -143,7 +143,8 @@ export function reviewDecision(votes) {
 // ---- one bounded run
 export async function ensembleRun({ ledger, entries, fileSrc, fetch: f, ask, now = () => Date.now(), cfg, seed = 0, budget = cfg.proposals_per_run }) {
   const L = { schema: 'ps-ensemble/1', examined: {}, proposals: [], health: {}, benched: {}, history: [], runs: [], ...ledger };
-  const at = new Date(now()).toISOString(), run = { at, examined: 0, proposed: 0, accepted: 0, uncertain: 0, rejected: 0, pending: 0, none: 0, panel_failures: 0 }, accepted = [];
+  const at = new Date(now()).toISOString(), run = { at, examined: 0, proposed: 0, accepted: 0, uncertain: 0, rejected: 0, pending: 0, none: 0, panel_failures: 0, failures: [] }, accepted = [];
+  const keep = t => { for (const x of t) if (!x.ok && run.failures.length < 24) run.failures.push(`${x.id}: ${String(x.why).slice(0, 110)}`); };
   for (const [v, until] of Object.entries(L.benched)) if (Date.parse(until) <= now()) delete L.benched[v];
   const order = [...entries].sort((a, b) => String((L.examined[a.id] || {}).at || '').localeCompare(String((L.examined[b.id] || {}).at || '')) || a.id.localeCompare(b.id)).slice(0, budget);
   for (const [k, entry] of order.entries()) {
@@ -153,6 +154,7 @@ export async function ensembleRun({ ledger, entries, fileSrc, fetch: f, ask, now
     if (!sources.length) { mark('no abstracts found'); continue; }
     const cand = candidates({ cfg, seed: seed + k, flagged: flaggedIds(L.health, cfg), benched: L.benched, now: now() });
     const pr = await askPanel({ cands: cand, want: 1, ask, prompt: proposalPrompt(entry, sources, cfg.fields), parse: parseProposal, cfg, health: L.health, maxTokens: 600 });
+    keep(pr.tried);
     if (!pr.got.length) { run.panel_failures++; mark('no proposer answered'); continue; }
     const proposer = pr.got[0], p = proposer.parsed;
     if (p.none) { run.none++; mark('no change proposed: ' + p.why); continue; }
@@ -165,6 +167,7 @@ export async function ensembleRun({ ledger, entries, fileSrc, fetch: f, ask, now
     let votes = [], verdict;
     if (checks.ok) {
       const vp = await askPanel({ cands: candidates({ cfg, seed: seed + k + 3, exclude: [], flagged: flaggedIds(L.health, cfg), benched: L.benched, now: now() }), want: cfg.min_verifiers, ask, prompt: votePrompt(full, src), parse: parseVote, cfg, excludeVendors: [proposer.member.vendor], health: L.health, maxTokens: 200 });
+      keep(vp.tried);
       votes = vp.got.map(g => ({ id: g.member.id, vendor: g.member.vendor, model: g.model, verdict: g.parsed.verdict, reason: g.parsed.reason }));
     }
     verdict = adjudicate({ checks, votes, proposerVendor: proposer.member.vendor, cfg });
