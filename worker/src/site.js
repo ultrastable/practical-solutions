@@ -4,6 +4,7 @@
 // label, sources and limits. Templates are in pages.js and are built only from core/ui components (kit/).
 import * as ui from './kit/index.js';
 import { LABELS, DESIGN, RULE, search, searchIndex } from './catalog.js';
+import { methodSection } from './bca.js';
 import { SECURITY_HEADERS } from './kit/index.js';
 import * as P from './pages.js';
 import { AUDIENCES, audience } from './audiences.js';
@@ -70,6 +71,7 @@ ${ui.section({ id: 'solutions', title: '2. How solutions get in', body: `<p>An e
 ${ui.section({ id: 'labels', title: '3. Labels and evidence grading', body: `<ul class="list">${Object.entries(DESIGN).map(([, v]) => `<li><b>${esc(v.name)}</b>: ${esc(v.note)}</li>`).join('')}</ul>${P.legend()}<p>The label comes from the strongest design the entry cites and from whether its sources agree. It is a transparent rule, not a judgement of quality: a trial can still be small, and one setting may not transfer.</p>` })}
 ${ui.section({ id: 'checks', title: '4. How sources are checked', body: `<p>Every day the loop searches Europe PMC for the cited paper and confirms that the quoted numbers appear in its abstract. When it finds the paper it records the DOI and PubMed ID, and the entry links to them. Results are shown on the entry as verified, mismatch or not found; a mismatch is shown, never hidden.</p>` })}
 ${ui.section({ id: 'impl', title: '5. How implementable is it', body: `<p>Information is only useful once somebody acts on it, so every solution is also scored for implementability from four facts shown on its page. ${esc(RULE)} Facts and scoring are in <a href="${repo}implementability.js">code</a>.</p>` })}
+${ui.section({ id: 'bca', title: 'Benefit and cost: one metric for everything', body: methodSection() })}
 ${ui.section({ id: 'loop', title: '6. How the loop iterates', body: '<ol><li>Refresh the problem ranking from World Bank data (every 6 hours).</li><li>Re-check the stalest solution citations.</li><li>For each problem without a solution, and for the top-ranked problems, search for recent Cochrane systematic reviews on mortality and survival.</li><li>Find bright spots: countries doing better than their income predicts in two separate periods. Leads only.</li><li>Quote results sentences from reviews, unchanged, and have a separate step confirm every quote and number against the abstract.</li><li>Record every change in the public <a href="/changes">changelog</a> and <a href="/feed.xml">feed</a>.</li></ol>' })}
 ${ui.section({ id: 'not', title: '7. What it will not do', body: `<p>It does not present a lead as a finding, paraphrase a result into a stronger claim, or hide a failed check. Corrections: every entry has a <b>Report an error</b> link.</p>` })}
 ${ui.section({ id: 'a11y', title: '8. Accessibility and speed', body: '<p>The site works without JavaScript, targets WCAG 2.2 AA, and is tested for contrast, structure, links and size on every change. Report anything that does not work for you using the correction link on the page.</p>' })}`;

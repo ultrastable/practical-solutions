@@ -1,5 +1,5 @@
 {
- "commit": "fcce8bf9e16976eb1ed75499af85b86f605cc19a",
+ "commit": "2851f4a633622086da0a554bbb4cde5797fe675b",
  "files": {
   ".claude/settings.json": "db2a7917aac18605c5ba25c2bb717aacf61ddae27873766a7c0a51856b9dec43",
   ".cursor/rules/ultrastable.mdc": "5b85ce4a068a628916dac979af4bf4da49015fc4183bc4ce06a6ccbf9d22c479",
@@ -189,7 +189,7 @@
   "bootstrap/cases.py": "2275f819524e2fed883da271e4824a159149c9b109404ef9a8b564666a86fb8e",
   "bootstrap/ladder.py": "ed4e49a7e0d37ed25208129486627567ab1b5fb3224e08999e31a8f285105cbe",
   "bootstrap/ownerdoc.py": "c4ef40bc9af59ff6056f569a2505d79023d970e9590ae5633d312b64ac506faf",
-  "core/README.md": "e4d249a5f9a643978b80956553ae25dd17d2649ab549c901de0f56895ea31e81",
+  "core/README.md": "17104883c849f66fb10482278fbe32d18178aeec78a909e74bbc2bd6bc20e083",
   "core/_shared/testdb.js": "2a935dab4be1126b948579b3c533a56fea4e61dfc68a168319372d605de1118d",
   "core/access/README.md": "e154db98d2856daee136f1785ebc279a4656255e0963039a68b0881263d8e0dd",
   "core/access/access.test.js": "77b3402cf0b30cea0f10e56931361b32196bf21a257593098e0a39adcb64922d",
@@ -765,7 +765,14 @@
   "tools/us.test.mjs": "4e43660633ebdb48716f978fae17eebc3092bdabd3c01eaa2f6ae4c86d288440",
   "tools/vendor.py": "8f24928e26f7af9b575f45abfe1daa2676f7a9a67466678026c6558225cfdfee",
   "tools/workflow_lint.py": "63fac081b45370889a728a8aa224bfb73c3137aa321af7e0d06d496268981525",
-  "ultrastable.json": "f9628959be16abde77d2fb0d0c1102df88491a7c1da350e95bac29903c272195"
+  "ultrastable.json": "f9628959be16abde77d2fb0d0c1102df88491a7c1da350e95bac29903c272195",
+  "core/benefitcost/conversions.js": "fb1516bacfa1b01142270bcb6217269169f05efa8505bf2dfb51ef5162c2e337",
+  "core/benefitcost/model.js": "9c6a33f1bf2a6a962eb8b92dea7fe3b814c15178a6c911d716c24b3ba6348ac8",
+  "core/benefitcost/dist.js": "e0a515b96ff38ea182cc5811ffd235c2f3a85fafa59cee3ae89ca3777280b4d1",
+  "core/benefitcost/README.md": "7532f4103561b654172f2f0f2aae550e8ae5eef95c8c790f3bf0dbb9681f13ff",
+  "core/benefitcost/refine.js": "312a5a1b4aa7994c49b025b3f3b091ea58add0a7129dc87880996af92ce82145",
+  "core/benefitcost/index.js": "f46c8779ecf191993739f548aabb70e5e82db980db3b06ec4aa5a307dbd94ad8",
+  "core/benefitcost/benefitcost.test.js": "1fc206d5cf96efc1b20b10318ad45e32a317c665a379d216c34ba42478955d0f"
  },
  "schema": "vendored-from/1",
  "source": "ultrastable/workers"

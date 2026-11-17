@@ -4,6 +4,7 @@
 // appears everywhere with no template change. A new kind of content plugs in with registerSection(); a new page with a route in site.js.
 import * as ui from './kit/index.js';
 import { LABELS, DESIGN, RULE, openQuestions, search, searchIndex } from './catalog.js';
+import { bcaBlock } from './bca.js';
 import { FOOTER } from './publish.js';
 import { AUDIENCES, audience } from './audiences.js';
 import { domainMeta } from './domains-meta.js';
@@ -71,6 +72,7 @@ registerSection('solution', { id: 'works', title: 'Where it works', order: 10, r
 registerSection('solution', { id: 'takes', title: 'What it takes', order: 20, render: s => `<p>${esc(s.takes)}</p><p><b>Who can act:</b> ${esc(s.who)}</p>` });
 registerSection('solution', { id: 'first-test', title: 'Cheapest first test', order: 30, render: s => `<p>${esc(s.first_test)}</p>` });
 registerSection('solution', { id: 'implementable', title: 'Can it be implemented?', order: 40, render: s => implBlock(s) });
+registerSection('solution', { id: 'bca', title: 'Benefit and cost, in WELLBYs', order: 45, render: s => bcaBlock(s.bca) });
 registerSection('solution', { id: 'evidence', title: 'Evidence and sources', order: 50, render: (s, c) => {
   const dz = DESIGN[s.design];
   return `<p>${esc(dz.name)}: ${esc(dz.note)}</p><ul class="list">${s.links.map(l => `<li><b>${esc(l.cite)}</b><br>${esc(l.finding)}<br>${l.direct.map(d => `<a href="${esc(d.url)}">${esc(d.label)}</a> `).join('')}<a href="${esc(l.search)}">Find this paper on Europe PMC</a></li>`).join('')}</ul>
@@ -130,7 +132,7 @@ export function filterSolutions(c, q) {
     && (!ready || (ready === 'ready' ? s.impl && s.impl.score >= 7 : ready === 'effort' ? s.impl && s.impl.score >= 5 && s.impl.score < 7 : s.impl && !s.impl.practical))
     && (!term || (s.title + ' ' + s.claim).toLowerCase().includes(term)));
   const ev = s => ({ 'evidence-backed': 3, 'mixed evidence': 2, 'cited, weaker design': 1 }[s.label] || 0);
-  list = [...list].sort(sort === 'title' ? (a, b) => a.title.localeCompare(b.title) : sort === 'evidence' ? (a, b) => ev(b) - ev(a) || ((b.impl || {}).score || 0) - ((a.impl || {}).score || 0) : (a, b) => ((b.impl || {}).score || 0) - ((a.impl || {}).score || 0) || ev(b) - ev(a));
+  list = [...list].sort(sort === 'title' ? (a, b) => a.title.localeCompare(b.title) : sort === 'benefit' ? (a, b) => ((b.bca || {}).rank_key ?? -1e9) - ((a.bca || {}).rank_key ?? -1e9) : sort === 'evidence' ? (a, b) => ev(b) - ev(a) || ((b.impl || {}).score || 0) - ((a.impl || {}).score || 0) : (a, b) => ((b.impl || {}).score || 0) - ((a.impl || {}).score || 0) || ev(b) - ev(a));
   return list;
 }
 const pageOf = (list, q) => { const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE)), page = Math.min(pages, Math.max(1, parseInt(q.get('page'), 10) || 1)); return { page, pages, items: list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE) }; };
@@ -142,7 +144,7 @@ export function solutionsIndex(c, u, o) {
   const facets = ui.facets({ action: '/solutions', reset: '/solutions', groups: [
     g('domain', 'Domain', c.domains.map(d => opt(d.slug, d.name))), g('label', 'Evidence', Object.keys(LABELS).filter(k => k !== 'lead').map(k => opt(k, k))),
     g('ready', 'Readiness', [opt('ready', 'Ready to implement'), opt('effort', 'Implementable with effort'), opt('held', 'Not yet practical')]), g('cost', 'Cost to start', [opt('low', 'Low'), opt('medium', 'Medium'), opt('high', 'High')]),
-    { name: 'sort', label: 'Sort by', options: [opt('impl', 'Implementability'), opt('evidence', 'Strength of evidence'), opt('title', 'Title A to Z')], value: q.get('sort') || 'impl' }] });
+    { name: 'sort', label: 'Sort by', options: [opt('impl', 'Implementability'), opt('evidence', 'Strength of evidence'), opt('benefit', 'Benefit per cost (WELLBYs)'), opt('title', 'Title A to Z')], value: q.get('sort') || 'impl' }] });
   const cards = items.map(s => ui.card({ title: s.title, href: sUrl(s), body: s.claim, meta: s.domains.join(' · '), hue: domainHue(c, s.domains[0]), badges: [labelBadge(s.label), implBadge(s.impl)],
     foot: `<label class="s"><input type="checkbox" name="ids" value="${esc(s.id)}"> Compare <span class="vh">${esc(s.title)}</span></label>` }));
   const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Solutions' }])}<h1>Solutions</h1><p class="lede">Every solution with its evidence label and how implementable it is. ${list.length} of ${c.sols.length} shown.</p>${facets}
