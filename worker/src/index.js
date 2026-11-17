@@ -29,6 +29,7 @@ export default {
     if (pathname === '/' || pathname === '/index.html') return new Response(PAGE, { headers: { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' } });
     if (pathname === '/problems.json') return Response.json(await rankProblems(), { headers: { 'cache-control': 'public, max-age=21600' } });
     if (pathname === '/solutions.json') return Response.json({ solutions: SOLUTIONS });
+    if (pathname === '/internal/tick' && request.method === 'POST' && request.headers.get('x-ps-internal') === '1') return Response.json({ report: (await ps(env).tick()).report });
     if (pathname === '/agencies.json') return Response.json(agenciesGraph(SOLUTIONS));
     if (pathname.startsWith('/ps/outreach/')) {
       if (!authed(request, env)) return new Response('forbidden\n', { status: 403 });

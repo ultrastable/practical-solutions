@@ -107,6 +107,7 @@ test('health gate pauses on a bounce rate above the limit once the sample is lar
 });
 
 import { handleInbound } from '../ps/outreach_step.js';
+import tenant from '../worker/src/tenant.js';
 test('inbound mail is stored and acted on: opt-out suppresses, bounce counts, reply is recorded', async () => {
   const env = { OPERATOR_NAME: 'Op', OPERATOR_POSTAL: '1 Example St' };
   const { db, step, ctx } = await fixture(env);
@@ -117,4 +118,13 @@ test('inbound mail is stored and acted on: opt-out suppresses, bounce counts, re
   assert.equal(await handleInbound(db, { from: 'mailer-daemon@x.org', subject: 'Undelivered Mail Returned', text: '' }, ctx.nowIso), 'bounce');
   assert.equal(await handleInbound(db, { from: 'someone@x.org', subject: 'Interesting', text: 'We would like to pilot this' }, ctx.nowIso), 'reply');
   assert.equal((await db.prepare("SELECT COUNT(*) n FROM ps_outreach_inbox").first()).n, 3);
+});
+
+test('the tenant schedule also runs the backend tick through the CORE service binding', async () => {
+  const calls = [];
+  const env = { STATE: { get: async () => null, put: async () => {} }, CORE: { fetch: async (u, init) => { calls.push([u, init.method, init.headers['x-ps-internal']]); return new Response('{}'); } } };
+  const waits = [];
+  await tenant.scheduled({}, env, { waitUntil: p => waits.push(p) });
+  await Promise.allSettled(waits);
+  assert.deepEqual(calls, [['https://core.internal/internal/tick', 'POST', '1']]);
 });

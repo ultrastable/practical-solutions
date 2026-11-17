@@ -22,7 +22,12 @@ const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-
 const catalog = async env => buildCatalog({ problems: await j(env, 'problems', null), solutions: SOLUTIONS, verif: await j(env, 'verif', {}), cands: await j(env, 'candidates', {}), drafts: await j(env, 'drafts', {}), spots: await j(env, 'brightspots', {}), changes: await j(env, 'changes', []), lastTick: await j(env, 'last_tick', null) });
 
 export default {
-  async scheduled(_e, env, ctx) { ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); await tick({ store: env.STATE, rank: rankProblems }); })()); },
+  // The account is at the free plan's cron limit, so the backend has no cron of its own: this Worker's schedule also runs the backend tick
+  // through a service binding (CORE). The backend has no public route, so only this call reaches /internal/tick.
+  async scheduled(_e, env, ctx) {
+    if (env.CORE) ctx.waitUntil(env.CORE.fetch('https://core.internal/internal/tick', { method: 'POST', headers: { 'x-ps-internal': '1' } }).catch(() => {}));
+    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); await tick({ store: env.STATE, rank: rankProblems }); })());
+  },
   async fetch(r, env, ctx) {
     const u = new URL(r.url);
     if (ctx && ctx.waitUntil) ctx.waitUntil(recordView(env.STATE, r).catch(() => {}));
