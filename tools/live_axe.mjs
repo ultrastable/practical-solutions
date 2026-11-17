@@ -11,7 +11,8 @@ const base = (process.argv[2] || process.env.BASE || '').replace(/\/$/, '');
 if (!base) { console.error('usage: live_axe.mjs <base url>'); process.exit(2); }
 const { chromium } = require('playwright');
 const axeSrc = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
-const idx = await (await fetch(base + '/index.json')).json();
+// the index read rides out edge throttling too (run 41 died parsing a Cloudflare 503 page as JSON)
+let idx; for (let i = 0; ; i++) { const r = await fetch(base + '/index.json'); if (r.ok) { idx = await r.json(); break; } await r.text(); if (i === 11) throw new Error(`/index.json HTTP ${r.status}`); await new Promise(res => setTimeout(res, Math.min(30000, 1000 * 2 ** i))); }
 const paths = ['/', '/for', '/for/implementers', '/solutions', '/problems', '/domains', '/compare?ids=' + idx.solutions.slice(0, 2).map(s => s.id).join('&ids='), '/search?q=water', '/method', '/api', '/about', '/impact',
   ...idx.solutions.slice(0, 4).map(s => '/solutions/' + s.id), '/problems/' + idx.problems[0].id, '/domains/' + idx.domains[0].slug, '/solutions/nope', '/country', '/levels/low'];
 const browser = await chromium.launch(); const bad = [];
