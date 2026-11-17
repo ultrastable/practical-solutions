@@ -3,7 +3,8 @@
 # The gateway must hold an ALLOW rule for this repo, script tenant-ps-core and refs/heads/main; until it does the gateway answers 403 and this job fails visibly.
 name: deploy-backend
 on:
-  workflow_dispatch: {}  # enable the push trigger once the gateway rule exists (needs ALLOW for tenant-ps-core, nodejs_compat, send_email kept)
+  push: { branches: [main], paths: ['worker/src/index.js', 'worker/src/solutions.js', 'worker/src/publish.js', 'worker/src/selfmigrate.gen.js', 'worker/self-migrate.json', 'ps/**', 'org/**', 'vendor/ultrastable/core/outreach/**', '.github/workflows/deploy-backend.yml'] }
+  workflow_dispatch: {}
 concurrency: { group: deploy-backend, cancel-in-progress: false }
 permissions: { contents: read, id-token: write }
 env:
