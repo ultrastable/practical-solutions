@@ -12,7 +12,7 @@ import path from 'node:path';
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const NAME = 'tenant-ps-web';
 export const HOST_ACCOUNT = process.env.PS_TENANT_HOST_ACCOUNT || '81e3a4efb4eb66e613529b87682911bb'; // tenancy.json host_account (ultrastable)
-export const metadata = () => ({ main_module: 'worker.js', compatibility_date: '2026-10-01', keep_bindings: ['kv_namespace', 'plain_text', 'secret_text'] });
+export const metadata = () => ({ main_module: 'worker.js', compatibility_date: '2026-10-01', keep_bindings: ['kv_namespace', 'plain_text', 'secret_text', 'ai'] });
 
 export function build() {
   const out = path.join(ROOT, '.build-tenant.js');
