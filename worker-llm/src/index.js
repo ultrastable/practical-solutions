@@ -6,7 +6,7 @@ import { verifyOidc } from '../../ps/oidc.js';
 import { WORKERS_AI_MODEL, textOf } from '../../ps/llm.js';
 
 export const LLM_AUDIENCE = 'practical-solutions-llm';
-export const LLM_REPOSITORY = 'QNFO/practical-solutions';
+export const LLM_REPOSITORY = 'ultrastable/practical-solutions';
 
 export default {
   async fetch(request, env) {
