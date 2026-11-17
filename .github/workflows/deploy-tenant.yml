@@ -1,23 +1,29 @@
 # SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
-# Deploys the tenant front-end Worker whenever its code changes on main, after the tests pass. Fails visibly if the secrets are missing.
+# Deploys the tenant front-end Worker whenever its code changes on main, after the tests pass.
+# No repo secrets: the run proves its identity to the ultrastable deploy gateway with a GitHub OIDC token.
 name: deploy-tenant
 on:
-  push: { branches: [main], paths: ['worker/src/**', 'vendor/ultrastable/core/feed/**', 'tools/deploy_tenant.mjs'] }
+  push: { branches: [main], paths: ['worker/src/**', 'vendor/ultrastable/core/feed/**', 'tools/deploy_tenant.mjs', '.github/workflows/deploy-tenant.yml'] }
   workflow_dispatch: {}
 concurrency: { group: deploy-tenant, cancel-in-progress: false }
-permissions: { contents: read }
+permissions: { contents: read, id-token: write }
+env:
+  GATEWAY: https://ultrastable-deploy-gateway.ultrastable.workers.dev
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm test
-      - run: node tools/deploy_tenant.mjs
+      - name: build
+        run: npx --yes esbuild worker/src/tenant.js --bundle --format=esm --platform=neutral --minify --outfile=.build-tenant.js
+      - name: deploy via gateway
+        run: |
+          tok=$(curl -fsS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$GATEWAY" | jq -r .value)
+          curl -sS -X POST "$GATEWAY/deploy" -H "Authorization: Bearer $tok" -F script=tenant-ps-web -F worker.js=@.build-tenant.js -o out.json -w '%{http_code}\n' | tee code.txt
+          cat out.json; echo; [ "$(cat code.txt)" = 200 ]
       - name: live check
         run: |
           for p in /feed.xml /brightspots.json /solutions/kmc; do
