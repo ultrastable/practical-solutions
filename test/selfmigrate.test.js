@@ -19,7 +19,7 @@ test('a database missing the access triggers gets them from the allow-listed mig
   const has = () => db.raw.prepare("SELECT name FROM sqlite_master WHERE type='trigger' AND name LIKE 'access_%'").all().length;
   assert.equal(has(), 0);
   const r = await applyPending(db, FILES, ALLOW, '2026-11-17 14:00:00');
-  assert.deepEqual(r.map(x => x.ok), [true]);
+  assert.deepEqual(r.map(x => x.ok), ALLOW.map(() => true));
   assert.equal(has(), 2);
   assert.deepEqual(await applyPending(db, FILES, ALLOW, '2026-11-17 14:10:00'), []);
 });
