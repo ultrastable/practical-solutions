@@ -73,7 +73,7 @@ registerSection('solution', { id: 'works', title: 'Where it works', order: 10, r
 registerSection('solution', { id: 'takes', title: 'What it takes', order: 20, render: s => `<p>${esc(s.takes)}</p><p><b>Who can act:</b> ${esc(s.who)}</p>` });
 registerSection('solution', { id: 'first-test', title: 'Cheapest first test', order: 30, render: s => `<p>${esc(s.first_test)}</p>` });
 registerSection('solution', { id: 'implementable', title: 'Can it be implemented?', order: 40, render: s => implBlock(s) });
-registerSection('solution', { id: 'bca', title: 'Benefit and cost, in WELLBYs', order: 45, render: s => bcaBlock(s.bca) });
+registerSection('solution', { id: 'bca', title: 'Benefit and cost, in WELLBYs', order: 45, render: s => bcaBlock(s.bca, s.id) });
 registerSection('solution', { id: 'unknowns', title: 'What we do not know, and the red team', order: 55, render: (s, c) => unknownsBlock(s.id, c) });
 registerSection('solution', { id: 'evidence', title: 'Evidence and sources', order: 50, render: (s, c) => {
   const dz = DESIGN[s.design];
