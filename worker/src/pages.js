@@ -7,6 +7,7 @@ import * as ui from './kit/index.js';
 import { LABELS, DESIGN, RULE, openQuestions, search, searchIndex } from './catalog.js';
 import { bcaBlock } from './bca.js';
 import { unknownsBlock } from './unknowns.js';
+import { ensembleBlock } from './ensemble-view.js';
 import { FOOTER } from './publish.js';
 import { AUDIENCES, audience } from './audiences.js';
 import { domainMeta } from './domains-meta.js';
@@ -77,6 +78,7 @@ registerSection('solution', { id: 'first-test', title: 'Cheapest first test', or
 registerSection('solution', { id: 'implementable', title: 'Can it be implemented?', order: 40, render: s => implBlock(s) });
 registerSection('solution', { id: 'bca', title: 'Benefit and cost, in WELLBYs', order: 45, render: s => bcaBlock(s.bca, s.id) });
 registerSection('solution', { id: 'unknowns', title: 'What we do not know, and the red team', order: 55, render: (s, c) => unknownsBlock(s.id, c) });
+registerSection('solution', { id: 'crosscheck', title: 'Cross-model check', order: 56, render: s => ensembleBlock(s.id) });
 registerSection('solution', { id: 'evidence', title: 'Evidence and sources', order: 50, render: (s, c) => {
   const dz = DESIGN[s.design];
   return `<p>${esc(dz.name)}: ${esc(dz.note)}</p><ul class="list">${s.links.map(l => `<li><b>${esc(l.cite)}</b><br>${esc(l.finding)}<span class="links">${l.direct.map(d => `<a href="${esc(d.url)}">${esc(d.label)}</a>`).join('')}<a href="${esc(l.search)}">Find this paper on Europe PMC</a></span></li>`).join('')}</ul>

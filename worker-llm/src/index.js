@@ -4,6 +4,7 @@
 // the Worker verifies it and runs its Workers AI binding. Deployed by tools/deploy_llm.mjs (bundle) as its own small Worker.
 import { verifyOidc } from '../../ps/oidc.js';
 import { WORKERS_AI_MODEL, textOf } from '../../ps/llm.js';
+import { WORKERS_AI_ALLOW } from '../../worker/src/ensemble-config.js';
 
 export const LLM_AUDIENCE = 'practical-solutions-llm';
 export const LLM_REPOSITORY = 'ultrastable/practical-solutions';
@@ -20,7 +21,9 @@ export default {
     if (!v.ok) return Response.json({ error: 'forbidden', reason: v.reason }, { status: 403 });
     const b = await request.json().catch(() => null);
     if (!b || typeof b.prompt !== 'string' || b.prompt.length > 40000) return Response.json({ error: 'bad_request' }, { status: 400 });
-    const out = await env.AI.run(WORKERS_AI_MODEL, { messages: [{ role: 'user', content: b.prompt }], max_tokens: Math.min(Number(b.max_tokens) || 600, 4000) });
-    return Response.json({ text: textOf(out), model: WORKERS_AI_MODEL });
+    // the ensemble asks for a named model; only the pool's Workers AI members are served, anything else gets the default
+    const model = WORKERS_AI_ALLOW.includes(b.model) ? b.model : WORKERS_AI_MODEL;
+    const out = await env.AI.run(model, { messages: [{ role: 'user', content: b.prompt }], max_tokens: Math.min(Number(b.max_tokens) || 600, 4000) });
+    return Response.json({ text: textOf(out), model });
   },
 };
