@@ -40,6 +40,9 @@ jobs:
       - name: work one agent-task issue
         id: agent
         run: node --no-warnings tools/agent.mjs run ${{ inputs.issue && format('--issue {0}', inputs.issue) || '' }} | tee agent.json
+      - name: record in the audit log
+        if: success()
+        run: node tools/audit_post.mjs --kind entry_change --subject agent --summary "code agent worked one agent-task issue" --payload-file agent.json
       - name: deploy what the agent merged (a push by the built-in token does not start workflows)
         if: ${{ always() }}
         run: grep -q '"ok":true' agent.json && gh workflow run deploy-tenant.yml -R "$GITHUB_REPOSITORY" --ref main || echo "nothing merged"

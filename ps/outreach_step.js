@@ -5,6 +5,7 @@ import agenciesFile from '../org/agencies.json' with { type: 'json' };
 import targeting from '../org/targeting.json' with { type: 'json' };
 import targetsFile from '../org/targets.json' with { type: 'json' };
 import { plan, roleAddresses, graphView, health, contactPages } from './outreach.js';
+import { record } from './audit.js';
 import { submit, approve, suppress, stats, dispatch } from '../vendor/ultrastable/core/outreach/index.js';
 
 const AGENCIES = [...agenciesFile.agencies.map(a => ({ audience: 'agency', ...a })), ...targetsFile.targets];
@@ -73,11 +74,11 @@ export function outreachStep({ solutions, fetch: f, env, footer, origin }) {
       let sentNow = 0;
       if (hasIdentity(env) && !h.paused) {
         const c = coreCtx(db, env, ctx.now, footer);
-        for (const r of await all(db, `SELECT id FROM outreach_intents WHERE status='pending_approval' AND tenant='ps'`)) await approve(c, r.id, targeting.approver);
+        for (const r of await all(db, `SELECT id FROM outreach_intents WHERE status='pending_approval' AND tenant='ps'`)) { await approve(c, r.id, targeting.approver); const a = await record(db, env, { actor: 'ps-outreach', kind: 'outreach_approve', subject: String(r.id), summary: `intent ${r.id} passed the automated gates and was approved as ${targeting.approver}`, ref: 'intent:' + r.id }, ctx.now); if (a.error) ctx.notes.push('audit: ' + a.error); }
         const relay = env.MAIL_RELAY_URL && env.MAIL_TOKEN ? async m => { const r = await (env.fetchImpl || fetch)(env.MAIL_RELAY_URL + '/send', { method: 'POST', headers: { 'x-ps-token': env.MAIL_TOKEN, 'content-type': 'application/json' }, body: JSON.stringify({ to: m.to, from: fromAddr(env), reply_to: m.reply_to, subject: m.subject, text: m.text }) }); if (!r.ok) throw new Error('mail relay refused: ' + r.status); } : null;
         const transport = relay || (env.EMAIL?.send ? async m => env.EMAIL.send({ to: m.to, from: fromAddr(env), replyTo: m.reply_to, subject: m.subject, text: m.text }) : undefined);
         const out = await dispatch(c, { transport, limits: { perDay: targeting.gates.per_day, perRecipient: targeting.gates.per_recipient } });
-        for (const o of out.filter(x => x.result === 'sent')) { sentNow++; await db.prepare(`INSERT INTO ps_outreach_events (intent_id, kind, at) VALUES (?, 'sent', ?)`).bind(o.id, ctx.nowIso).run(); }
+        for (const o of out.filter(x => x.result === 'sent')) { sentNow++; await db.prepare(`INSERT INTO ps_outreach_events (intent_id, kind, at) VALUES (?, 'sent', ?)`).bind(o.id, ctx.nowIso).run(); const a = await record(db, env, { actor: 'ps-outreach', kind: 'outreach_send', subject: String(o.id), summary: `intent ${o.id} sent`, ref: 'intent:' + o.id, payload: { id: o.id, result: o.result } }, ctx.now); if (a.error) ctx.notes.push('audit: ' + a.error); }
       }
       ctx.notes.push(`ps_outreach: ${sentNow} sent, ${h.paused ? 'PAUSED by health gate, ' : ''} contacts ${d.filter(x => x.ok).length}/${d.length} pages read, ${stored} planned, ${submitted} queued for approval${hasIdentity(env) ? '' : ' (operator identity not set: previews only)'}`);
     },

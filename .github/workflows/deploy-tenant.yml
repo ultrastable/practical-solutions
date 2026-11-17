@@ -33,6 +33,9 @@ jobs:
             done
             echo "$p $code"; [ "$code" = 200 ] || exit 1
           done
+      - name: record in the audit log
+        if: success()
+        run: node tools/audit_post.mjs --kind deploy --subject tenant-ps-web --summary "tenant web worker deployed through the gateway and passed the live check"
       - name: user stories and structural audit against the live site
         run: node tools/live_ux.mjs https://tenant-ps-web.ultrastable.workers.dev
       - name: real-browser accessibility check (axe, light and dark, desktop and phone)
