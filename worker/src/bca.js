@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 // Runs the core benefit-cost engine for the catalogue and renders the result. Deterministic (fixed seed), computed once per Worker instance.
 import { score, PARAMS, GRADES, validate } from '../../vendor/ultrastable/core/benefitcost/index.js';
-import { MODELS } from './bca-models.js';
+import { MODELS, GAPS } from './bca-models.js';
 import { esc } from './catalog.js';
 
 const cache = new Map();
@@ -15,8 +15,8 @@ export const coverage = ids => ({ modelled: ids.filter(i => MODELS[i]).length, t
 const f = x => (Math.abs(x) >= 100 ? Math.round(x).toLocaleString('en') : Math.abs(x) >= 10 ? x.toFixed(1) : x.toFixed(2));
 const pct = x => Math.round(x * 100) + '%';
 
-export function bcaBlock(b) {
-  if (!b) return '<p>Not yet estimated. It is in the queue; the loop builds a model when it has a cited effect size and a cost for this entry.</p>';
+export function bcaBlock(b, id) {
+  if (!b) return '<p>Not yet estimated. It is in the queue; the loop builds a model when it has a cited effect size and a published cost per outcome for this entry.' + (GAPS[id] ? ' What was searched: ' + esc(GAPS[id]) : '') + '</p>';
   if (b.error) return '<p>The model failed validation: ' + esc(b.error) + '</p>';
   const w = b.wellby_per_1000_usd, fo = b.first_order_only_per_1000_usd;
   const nodes = b.nodes.map(n => '<tr><td>' + esc(n.label) + '</td><td>' + n.order + '</td><td>' + esc(n.kind) + '</td><td>' + esc(n.grade) + '</td><td>' + esc(n.source) + '</td></tr>').join('');

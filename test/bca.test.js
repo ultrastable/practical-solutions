@@ -19,3 +19,9 @@ test('unmodelled entries say so and the method page publishes every assumption',
   const m = methodSection(); for (const k of ['neutral_point', 'discount', 'death_u5_tria']) assert.match(m, new RegExp(k));
   assert.ok(coverage(['chlorine', 'kmc']).queue.includes('kmc'));
 });
+
+test('sourced models for vitamin A, nets, vaccination and Friendship Bench rest on cited costs, and weak links are disclosed', () => {
+  for (const id of ['vita', 'itn', 'immunisation', 'friendship-bench']) { const b = bcaFor(id); assert.ok(b.wellby_per_1000_usd.p50 > 0, id); assert.match(JSON.stringify(MODELS[id]), /USD/); }
+  assert.ok(bcaFor('itn').order_share['2'] > 0);
+  assert.match(bcaBlock(bcaFor('helmets'), 'helmets'), /What was searched/);
+});
