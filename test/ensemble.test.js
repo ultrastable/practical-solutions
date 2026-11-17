@@ -91,3 +91,16 @@ test('evidence checks need the editable field and an exactly-once match in the f
   const src = [{ url: 'u', title: 's', year: 1, text: TEXT }], p = { field: 'claim', source: 1, quote: TEXT, new: 'The trial found a 12 percent reduction in infant deaths' };
   assert.ok(evidenceChecks({ proposal: p, entry: entries[0], sources: src, fileSrc, cfg: ENSEMBLE }).ok); assert.ok(!evidenceChecks({ proposal: p, entry: entries[0], sources: src, fileSrc: 'nothing here', cfg: ENSEMBLE }).ok);
 });
+
+test('the red team falls back to Workers AI through the tenant model Worker when GitHub Models does not answer (#59)', async () => {
+  const env = { GITHUB_TOKEN: 't', PS_LLM_URL: 'https://llm.example/ps/llm', ACTIONS_ID_TOKEN_REQUEST_URL: 'https://oidc.example/?x=1', ACTIONS_ID_TOKEN_REQUEST_TOKEN: 'r' };
+  const f = async (url) => {
+    const u = String(url);
+    if (u.startsWith('https://oidc.example')) return { ok: true, status: 200, json: async () => ({ value: 'jwt' }), text: async () => '{"value":"jwt"}' };
+    if (u.startsWith('https://llm.example')) { const body = { text: '{"findings":[{"pass":"inversion","q":"q","challenge":"What if the effect fades?","falsifier":"a follow-up","severity":"medium"}]}', model: 'llama' }; return { ok: true, status: 200, json: async () => body, text: async () => JSON.stringify(body) }; }
+    return { ok: true, status: 200, json: async () => { throw new SyntaxError('Unexpected token O'); }, text: async () => 'OK' };
+  };
+  const r = await runRedTeam({ env, fetch: f, now: () => NOW, budget: 1 });
+  assert.equal(r.model, 'workers-ai (tenant model Worker)');
+  assert.equal(Object.keys(r.bySubject).length, 1);
+});

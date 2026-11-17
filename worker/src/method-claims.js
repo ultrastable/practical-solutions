@@ -12,7 +12,7 @@ import { SOLUTIONS } from './solutions.js';
 import { tick, CADENCE, verifySolution, verifiedText, extractDraft, reviewDraft } from './improve.js';
 import { labelOf, DESIGN, buildCatalog, sourceLinks } from './catalog.js';
 import { IMPL, implementability, COST, ADOPT, CHANNEL_POINTS, MIN_PRACTICAL, READY, SCORED_FACTS, RULE } from './implementability.js';
-import { ENGINE, bcaFor, bcaBlock, bcaTick, extractCost, SEED } from './bca.js';
+import { ENGINE, bcaFor, bcaBlock, bcaTick, extractCost, SEED, MODEL_READS, checkExtraction } from './bca.js';
 import { MODELS, CONTEXTS, APPLIES, FINDERS } from './bca-models.js';
 import { findSpots } from './brightspots.js';
 import { filterSolutions } from './pages.js';
@@ -156,8 +156,12 @@ export const STATEMENTS = defineStatements([
       const m = MODELS[id], out = applyEvidence({ ...m, contexts: {} }, [{ node: m.nodes[0].id, context: 'low', estimate: { low: 1, high: 3 }, grade: 'C', source: 'ctx' }], { seed: 1 }).model; eq(out.nodes[0].amount, m.nodes[0].amount, 'base changed by context evidence'); must(out.contexts.low && !out.contexts.high, 'evidence reached another group');
       for (const f of Object.values(FINDERS)) must(!('context' in f), 'the finder now tags groups; update this statement');
     } },
-  { id: 'bca-finder', section: 'bca', evidence: 'worker/src/bca.js findEvidence(), bcaTick()', text: () => 'Each run the loop takes the estimate it looked at longest ago and searches Europe PMC for studies that quote a cost per DALY or per death averted for that intervention. A figure read from an abstract is graded C at most, a single figure is given a factor-of-two interval either side, and a figure more than ten times away from the current estimate is kept as a lead and not pooled. Every pooled source is listed on the entry, and each change appears in the changes feed.',
+  { id: 'bca-finder', section: 'bca', evidence: 'worker/src/bca.js findEvidence(), bcaTick()', text: () => 'Each run the loop takes the estimate it looked at longest ago and searches Europe PMC for studies that quote a cost per DALY or per death averted for that intervention. When the run has a model route, a model reads up to ' + MODEL_READS + ' abstracts and its figure is accepted only when the phrase it cites appears verbatim in the abstract and contains every number; otherwise, and in the deployed tick, which has no model route because tenants do not use core bindings, a fixed pattern reads the abstract. A figure read from an abstract is graded C at most, a single figure is given a factor-of-two interval either side, and a figure more than ten times away from the current estimate is kept as a lead and not pooled. Every pooled source is listed on the entry, and each change appears in the changes feed.',
     verify: async () => {
+      const ab = 'The programme cost US$ 40 per DALY averted.';
+      eq(checkExtraction('{"found":true,"low":"40","quoted":"US$ 40 per DALY averted"}', ab).low, 20, 'model figure with a verbatim phrase is accepted');
+      eq(checkExtraction('{"found":true,"low":"45","quoted":"US$ 40 per DALY averted"}', ab), null, 'number not in the phrase is rejected');
+      eq(checkExtraction('{"found":true,"low":"40","quoted":"US$40 per DALY"}', ab), null, 'phrase not verbatim in the abstract is rejected');
       const x = extractCost('about US$ 40 per DALY averted', 'daly'); eq([x.low, x.high], [20, 80], 'single figure interval'); const y = extractCost('US$28-72 per DALY', 'daly'); eq([y.low, y.high], [28, 72], 'range kept');
       const id = 'chlorine', m = MODELS[id], node = m.nodes.find(n => n.id === FINDERS[id].node), prior = Math.sqrt(node.amount.low * node.amount.high), budget = m.cost.upfront, row = (pmid, a) => ({ pmid, title: 'Cost study ' + pmid, pubYear: '2020', abstractText: `Cost was US$ ${a} per DALY averted.` });
       const store = mem(), r1 = await bcaTick({ store, fetchFn: epmc([row('1', budget / (prior * 4)), row('2', budget / (prior * 50))]), now: NOW });
