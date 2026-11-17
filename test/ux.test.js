@@ -38,7 +38,7 @@ test('colour tokens meet WCAG 2.2 AA in light and dark', () => {
 });
 
 const paths = () => ['/', '/about', '/for', '/api', '/method', '/impact', '/leads', '/changes', '/domains', '/problems', '/solutions', '/solutions?page=2', '/compare', '/compare?ids=kmc&ids=cash', '/search?q=water', '/search?q=zzzzqq', '/search',
-  '/solutions?ready=ready', '/solutions?label=mixed+evidence', '/problems?coverage=none', '/solutions/nope',
+  '/solutions?ready=ready', '/country', '/country?q=zzz', '/levels/low', '/levels/high', '/levels/nope', '/solutions?label=mixed+evidence', '/problems?coverage=none', '/solutions/nope',
   ...AUDIENCES.map(a => '/for/' + a.id), ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug)];
 
 test('every page passes the structural accessibility audit and the size budget', async () => {

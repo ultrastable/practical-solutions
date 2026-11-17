@@ -3,7 +3,7 @@
 # No repo secrets: the run proves its identity to the ultrastable deploy gateway with a GitHub OIDC token.
 name: deploy-tenant
 on:
-  push: { branches: [main], paths: ['worker/src/**', 'vendor/ultrastable/core/feed/**', 'tools/deploy_tenant.mjs', '.github/workflows/deploy-tenant.yml'] }
+  push: { branches: [main], paths: ['worker/src/**', 'data/**', 'vendor/ultrastable/core/feed/**', 'tools/deploy_tenant.mjs', '.github/workflows/deploy-tenant.yml'] }
   workflow_dispatch: {}
 concurrency: { group: deploy-tenant, cancel-in-progress: false }
 permissions: { contents: read, id-token: write }

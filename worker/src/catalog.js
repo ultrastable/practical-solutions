@@ -3,6 +3,7 @@
 // The encyclopedia's data model: problems, solutions, domains, cross-links, evidence labels, source links and search.
 // Pure functions over plain data, so every page and the JSON index come from the same place and can be tested.
 import { PROBLEMS } from './problems.js';
+import SNAPSHOT from '../../data/context.json' with { type: 'json' };
 import { SOLUTIONS } from './solutions.js';
 import { verifiedText } from './improve.js';
 import { implementability } from './implementability.js';
@@ -47,7 +48,7 @@ export function sourceLinks(sol, ver) {
   }));
 }
 
-export function buildCatalog({ problems, solutions, verif = {}, cands = {}, drafts = {}, spots = {}, changes = [], lastTick = null, bcaState = null }) {
+export function buildCatalog({ context = SNAPSHOT, problems, solutions, verif = {}, cands = {}, drafts = {}, spots = {}, changes = [], lastTick = null, bcaState = null }) {
   const ranked = (problems && problems.problems) || [];
   const rankOf = Object.fromEntries(ranked.map(p => [p.id, p]));
   const probs = PROBLEMS.map(p => ({ ...p, ...(rankOf[p.id] || {}), ranked: !!rankOf[p.id], dslug: slug(p.domain) }));
@@ -67,7 +68,7 @@ export function buildCatalog({ problems, solutions, verif = {}, cands = {}, draf
     spots: (spots[p.id] || {}).spots || [], spots_note: (spots[p.id] || {}).note || null, spots_at: (spots[p.id] || {}).at || null,
   }]));
   const related = s => sols.filter(o => o.id !== s.id && (o.problem_ids || []).some(id => (s.problem_ids || []).includes(id)));
-  return { probs, sols, byProblem, domains, leads, related, changes, lastTick, rankedAt: (problems && problems.at) || null };
+  return { context, probs, sols, byProblem, domains, leads, related, changes, lastTick, rankedAt: (problems && problems.at) || null };
 }
 
 // A small keyword index over problems and solutions: every word in a query must appear; titles weigh more than bodies.
