@@ -78,7 +78,7 @@ export function applyEdits(edits, root, fs = { read: p => readFileSync(p, 'utf8'
 
 const sh = (cmd, args, o = {}) => execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...o });
 const gh = (...a) => sh('gh', a);
-const note = (n, text) => { try { gh('issue', 'comment', String(n), '--body', text + '\n\n_Free code agent run (GitHub Models, then Workers AI through the tenant's own model Worker)._'); } catch (e) { console.error('comment failed', e.message); } };
+const note = (n, text) => { try { gh('issue', 'comment', String(n), '--body', text + '\n\n_Free code agent run (GitHub Models, then Workers AI through the tenant model Worker)._'); } catch (e) { console.error('comment failed', e.message); } };
 
 export async function run({ issueNo, dry = false, root = process.cwd(), env = process.env } = {}) {
   const issues = JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/issues?state=open&labels=${LABEL}&per_page=50`));
