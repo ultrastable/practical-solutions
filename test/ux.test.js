@@ -64,7 +64,7 @@ test('the crawl finds no broken internal link, anchor or JSON/CSV target', async
 
 test('pages are fast by construction: no scripts, no external requests, one inline stylesheet, small', async () => {
   const sizes = [];
-  for (const p of paths().slice(0, 40)) { const t = (await get(p)).text; sizes.push([p, new TextEncoder().encode(t).length]); assert.ok(!/<script(?![^>]*ld\+json)/i.test(t), p); assert.ok(!/(src|href)="https?:\/\/(?!(data\.worldbank|pubmed|europepmc|doi\.org|github))/.test(t.replace(/<link rel="(canonical|alternate)"[^>]*>/g, '').replace(/<meta[^>]*>/g, '')), p); }
+  for (const p of paths().slice(0, 40)) { const t = (await get(p)).text; sizes.push([p, new TextEncoder().encode(t).length]); assert.ok(!/<script(?![^>]*ld\+json)/i.test(t), p); assert.ok(!/(src|href)="https?:\/\/(?!(data\.worldbank|pubmed|europepmc|doi\.org|github|ultrastable\.(io|org)))/.test(t.replace(/<link rel="(canonical|alternate)"[^>]*>/g, '').replace(/<meta[^>]*>/g, '')), p); }
   assert.ok(Math.max(...sizes.map(s => s[1])) < 70000, JSON.stringify(sizes.sort((a, b) => b[1] - a[1])[0]));
   assert.ok(kit.css().length < 14000, 'stylesheet ' + kit.css().length);
 });
