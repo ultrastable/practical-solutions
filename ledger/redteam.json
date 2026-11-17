@@ -1,1 +1,158 @@
-{"schema":"ps-redteam/1","bySubject":{}}
+{
+ "schema": "ps-redteam/1",
+ "at": "2026-11-17T18:25:38.153Z",
+ "model": "workers-ai (tenant model Worker)",
+ "bySubject": {
+  "cash": {
+   "at": "2026-11-17T18:25:38.153Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "No impact on assets and consumption",
+     "falsifier": "A randomized controlled trial showing no significant difference in assets and consumption between treatment and control groups",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inflation hurts fixed-income households",
+     "falsifier": "Data showing a significant increase in poverty rates among fixed-income households in areas where cash transfers were implemented",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assuming perfect targeting",
+     "falsifier": "Evidence of significant targeting errors, such as a large proportion of cash transfers going to non-poor households",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Dependence on external funding",
+     "falsifier": "A scenario where external funding for cash transfers is suddenly withdrawn, leading to a collapse of the program and a decline in household incomes",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "chlorine": {
+   "at": "2026-11-17T18:25:38.153Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Unintended Consequences",
+     "falsifier": "Reports of adverse health effects or increased morbidity among children or other populations using chlorinated water from community points",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Implementation Failure",
+     "falsifier": "Evidence of poor maintenance, inadequate training, or insufficient supply chains for the chlorine dosing systems, leading to ineffective or inconsistent water treatment",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "clean-cooking": {
+   "at": "2026-11-17T18:25:38.153Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Alternative explanations for pneumonia reduction",
+     "falsifier": "A subsequent trial demonstrating significant pneumonia reduction with consistent LPG stove use",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Vulnerable populations' exposure to mixed fuel use",
+     "falsifier": "Data showing no significant difference in pneumonia rates between households with consistent LPG stove use and those with mixed fuel use",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumed consistent use of LPG stoves",
+     "falsifier": "Evidence of high adherence to LPG stove use among trial participants, correlated with significant health benefits",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Potential biases in the trial's methodology",
+     "falsifier": "A re-analysis of the trial data, controlling for potential biases, that finds a significant reduction in severe infant pneumonia",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "deworming": {
+   "at": "2026-11-17T18:25:38.153Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Lack of significant impact on attendance",
+     "falsifier": "A subsequent randomized controlled trial showing no improvement in school attendance",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Potential harm to children with undiagnosed conditions",
+     "falsifier": "Reports of adverse events or unintended consequences from mass treatment",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumption of uniform worm infestation rates",
+     "falsifier": "Studies showing significant variability in worm infestation rates among schools or regions",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate consideration of external factors",
+     "falsifier": "Analysis revealing that improvements in attendance or performance are due to external factors, such as changes in school resources or community health initiatives",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  }
+ },
+ "errors": []
+}
