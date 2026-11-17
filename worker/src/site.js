@@ -11,7 +11,7 @@ import { AUDIENCES, audience } from './audiences.js';
 const { esc } = ui;
 export const HEADERS = { ...SECURITY_HEADERS, 'cache-control': 'public, max-age=300' };
 export const legend = P.legend;
-const SITE_PATHS = ['/', '/problems', '/solutions', '/domains', '/for', '/compare', '/leads', '/method', '/impact', '/changes', '/api'];
+const SITE_PATHS = ['/', '/problems', '/solutions', '/domains', '/for', '/compare', '/leads', '/method', '/impact', '/changes', '/api', '/about'];
 
 const solutionJson = (s, c, o) => ({ id: s.id, title: s.title, claim: s.claim, label: s.label, implementability: s.impl, design: s.design, verdict: s.verdict, problems: s.problem_ids, domains: s.domains, verified: s.verified,
   works_where: s.works_where, takes: s.takes, who: s.who, first_test: s.first_test, limits: s.limits, sources: s.links.map(l => ({ cite: l.cite, finding: l.finding, links: [...l.direct.map(d => d.url), l.search] })), url: o + '/solutions/' + s.id, cite: P.citation(s.title, '/solutions/' + s.id, o) });
@@ -83,7 +83,7 @@ const json = (o, s = 200) => Response.json(o, { status: s, headers: { 'cache-con
 export function route(u, c) {
   const o = u.origin, p = u.pathname.replace(/\/$/, '') || '/';
   const table = { '/': () => P.home(c, o), '/problems': () => P.problemsIndex(c, u, o), '/solutions': () => P.solutionsIndex(c, u, o), '/domains': () => P.domainsIndex(c, o), '/for': () => P.forIndex(c, o), '/compare': () => P.comparePage(c, u, o),
-    '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o), '/method': () => methodPage(c, o), '/api': () => P.apiPage(c, o), '/search': () => P.searchPage(c, u, o) };
+    '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o), '/method': () => methodPage(c, o), '/api': () => P.apiPage(c, o), '/about': () => P.aboutPage(c, o), '/search': () => P.searchPage(c, u, o) };
   if (table[p]) return h(table[p]());
   if (p === '/search.json') return json({ q: u.searchParams.get('q') || '', results: search(searchIndex(c), u.searchParams.get('q')) });
   if (p === '/index.json') return json(indexJson(c, o));

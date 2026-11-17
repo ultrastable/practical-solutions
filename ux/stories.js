@@ -61,6 +61,8 @@ export const STORIES = [
     steps: [v('/solutions/kmc'), x({ link: 'issues/new\\?title=Correction', text: 'Report an error' })] },
   { id: 'EXP-3', who: 'experts', want: 'see whether the numbers were machine-checked', so: 'I know what still needs a human', covers: ['solutionPage'],
     steps: [v('/solutions/kmc'), x({ text: 'Verification:' })] },
+  { id: 'PUB-5', who: 'public', want: 'learn who is behind this and why', so: 'I can decide whether to trust it', covers: ['aboutPage', 'familyBar', 'siteFooter'],
+    steps: [v('/'), { follow: { href: '^/about$' } }, x({ heading: 'Why it exists', text: ['Ultrastable', 'takes no money'], link: '^/method$' })] },
   { id: 'ALL-1', who: 'everyone', want: 'skip straight to the content with the keyboard', so: 'I do not tab through navigation every page', covers: ['skipLink', 'siteHeader'],
     steps: [v('/'), x({ link: '^#main$', text: 'Skip to main content' }), v('/solutions/kmc'), x({ link: '^#main$' })] },
   { id: 'ALL-2', who: 'everyone', want: 'read on a phone and in print', so: 'the site works wherever I am', covers: ['siteFooter', 'toc'],
@@ -70,5 +72,5 @@ export const STORIES = [
 ];
 export const storiesFor = who => STORIES.filter(s => s.who === who);
 // Every template, route and component a story may claim to cover. A story that names something else fails the traceability test.
-export const TEMPLATES = ['home', 'forIndex', 'forPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage'];
+export const TEMPLATES = ['home', 'forIndex', 'forPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage'];
 export const ROUTES = ['json-entity', 'csv', 'llms', 'sitemap'];
