@@ -1,0 +1,3 @@
+# Deploy gateway (deployed as `ultrastable-deploy-gateway`)
+
+A Worker in the ultrastable Cloudflare account that deploys `tenant-ps-web` for GitHub Actions without any repo secret. The workflow sends the built bundle with its OIDC token (audience = gateway origin); the gateway verifies the signature against GitHub's JWKS and requires repository `QNFO/practical-solutions` on `refs/heads/main` (config in its `ALLOW` binding), then uploads and reads the bytes back. Its Cloudflare token is account-owned, Workers Scripts write only, and lives only as that Worker's secret `CF_DEPLOY_TOKEN`. It is tenant-agnostic (rules are config) and should move to ultrastable core.
