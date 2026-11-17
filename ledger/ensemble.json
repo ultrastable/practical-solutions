@@ -36,6 +36,18 @@
   "hypertension": {
    "at": "2026-11-17T19:04:41.635Z",
    "outcome": "no change proposed: The entry already agrees with the sources, which describe various health studies and outcomes within the Kaiser Permanente Northern California system, but do not provide information that contradicts o"
+  },
+  "immunisation": {
+   "at": "2026-11-17T19:19:50.543Z",
+   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, with no discrepancies or outdated information found."
+  },
+  "itn": {
+   "at": "2026-11-17T19:19:50.543Z",
+   "outcome": "no change proposed: All fields in the entry are consistent with the information provided in the cited sources."
+  },
+  "kmc": {
+   "at": "2026-11-17T19:19:50.543Z",
+   "outcome": "uncertain"
   }
  },
  "proposals": [
@@ -172,6 +184,47 @@
    "status": "rejected",
    "reason": "evidence check failed: the old text is not found exactly once in the source file",
    "at": "2026-11-17T19:04:41.635Z"
+  },
+  {
+   "id": "464a55601d8f",
+   "entry": "kmc",
+   "field": "claim",
+   "old": "Skin-to-skin contact with a parent, begun immediately after birth for babies weighing 1.0 to 1.8 kg, cut deaths in the first 28 days by about a quarter.",
+   "new": "Skin-to-skin contact with a parent, begun immediately after birth for babies weighing 1.0 to 1.8 kg, improves survival by about a third.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42744379",
+    "title": "Effect of Kangaroo Mother Care during the first 72 hours of life on early growth and breastfeeding in normal birthweight newborns: protocol for a randomised controlled trial."
+   },
+   "quote": "improving survival by 32% and conferring multiple clinical and neurodevelopmental benefits",
+   "why": "The source reports a 32% survival improvement, not a 25% reduction in deaths.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [
+    {
+     "id": "llama-3.3-70b",
+     "vendor": "meta",
+     "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+     "verdict": "contradicts",
+     "reason": "The abstract mentions that Kangaroo Mother Care improves survival by 32% for preterm and low birthweight infants, but the new sentence claims it improves survival by about a third for babies weighing "
+    },
+    {
+     "id": "mistral-small-3.1",
+     "vendor": "mistral",
+     "model": "@cf/mistralai/mistral-small-3.1-24b-instruct",
+     "verdict": "contradicts",
+     "reason": "The abstract states that KMC improves survival by 32%, not by about a third."
+    }
+   ],
+   "status": "uncertain",
+   "reason": "models disagree: 0 supports, 2 contradicts, 0 unclear",
+   "at": "2026-11-17T19:19:50.543Z"
   }
  ],
  "health": {
@@ -210,51 +263,59 @@
    "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "mistral-small-3.1": {
-   "calls": 1,
+   "calls": 3,
    "errors": 0
   },
   "gemma-4": {
-   "calls": 1,
-   "errors": 1,
+   "calls": 2,
+   "errors": 2,
    "last": "empty"
   },
   "qwen3-30b": {
-   "calls": 2,
-   "errors": 2,
+   "calls": 4,
+   "errors": 4,
    "last": "empty"
   },
   "glm-5.3-flash": {
-   "calls": 2,
-   "errors": 2,
+   "calls": 4,
+   "errors": 4,
    "last": "worker-ai HTTP 500"
   },
   "kimi-k2.6": {
-   "calls": 2,
-   "errors": 2,
+   "calls": 4,
+   "errors": 4,
    "last": "worker-ai HTTP 500"
   },
   "deepseek-v4-flash": {
-   "calls": 2,
-   "errors": 2,
+   "calls": 5,
+   "errors": 5,
    "last": "worker-ai HTTP 500"
   },
   "nemotron-3": {
-   "calls": 2,
-   "errors": 2,
+   "calls": 5,
+   "errors": 5,
    "last": "empty"
   },
   "gpt-oss-120b": {
-   "calls": 2,
+   "calls": 4,
    "errors": 2,
    "last": "empty"
   },
   "llama-3.3-70b": {
-   "calls": 2,
+   "calls": 3,
    "errors": 0
   }
  },
  "benched": {},
- "history": [],
+ "history": [
+  {
+   "id": "464a55601d8f",
+   "votes": {
+    "meta": "contradicts",
+    "mistral": "contradicts"
+   }
+  }
+ ],
  "runs": [
   {
    "at": "2026-11-17T17:48:56.425Z",
@@ -324,11 +385,37 @@
     "nemotron-3: empty",
     "gpt-oss-120b: empty"
    ]
+  },
+  {
+   "at": "2026-11-17T19:19:50.543Z",
+   "examined": 3,
+   "proposed": 1,
+   "accepted": 0,
+   "uncertain": 1,
+   "rejected": 0,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": [
+    "gemma-4: empty",
+    "qwen3-30b: empty",
+    "glm-5.3-flash: worker-ai HTTP 500",
+    "kimi-k2.6: worker-ai HTTP 500",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty",
+    "qwen3-30b: empty",
+    "glm-5.3-flash: worker-ai HTTP 500",
+    "kimi-k2.6: worker-ai HTTP 500",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-17T19:04:41.635Z"
+ "at": "2026-11-17T19:19:50.543Z"
 }
