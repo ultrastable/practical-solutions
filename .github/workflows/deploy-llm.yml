@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: about 1 minute per deploy (public repository: Actions minutes are free).
+# trigger: a change to the model Worker or its pool on main, or manual dispatch; never on a timer.
+# free-alternative: none needed; the deploy gateway uses the run's own OIDC token, no secret is stored here.
+# Deploys the tenant model Worker (worker-llm/src/index.js) as tenant-ps-llm in the Ultrastable account through the deploy gateway. The gateway needs a rule
+# { repo: ultrastable/practical-solutions, refs: [refs/heads/main], script: tenant-ps-llm, ai: true } (core/deploygate); without it the call is a 403 and nothing changes.
+name: deploy-llm
+on:
+  push: { branches: [main], paths: ['worker-llm/**', 'worker/src/ensemble-config.js', 'ps/oidc.js', 'ps/llm.js', '.github/workflows/deploy-llm.yml'] }
+  workflow_dispatch: {}
+concurrency: { group: deploy-llm, cancel-in-progress: false }
+permissions: { contents: read, id-token: write }
+env:
+  GATEWAY: https://ultrastable-deploy-gateway.ultrastable.workers.dev
+jobs:
+  deploy:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test
+      - name: build
+        run: npx --yes esbuild worker-llm/src/index.js --bundle --format=esm --platform=neutral --minify --outfile=.build-llm.js
+      - name: deploy via gateway
+        run: |
+          tok=$(curl -fsS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$GATEWAY" | jq -r .value)
+          curl -sS -X POST "$GATEWAY/deploy" -H "Authorization: Bearer $tok" -F script=tenant-ps-llm -F worker.js=@.build-llm.js -o out.json -w '%{http_code}\n' | tee code.txt
+          cat out.json; echo; [ "$(cat code.txt)" = 200 ]
+      - name: live check (the worker answers and is bound to Workers AI)
+        run: |
+          for try in 1 2 3 4 5 6; do
+            out=$(curl -s https://tenant-ps-llm.ultrastable.workers.dev/health); echo "$out"; echo "$out" | grep -q '"ai":true' && exit 0; sleep 8
+          done
+          exit 1
