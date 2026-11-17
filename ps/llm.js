@@ -75,7 +75,7 @@ export async function askModel({ fetch: f = globalThis.fetch, secrets = {}, spec
       const tok = secrets.GITHUB_MODELS_TOKEN || secrets.GITHUB_TOKEN; if (!tok) return { ok: false, error: 'no token' };
       const r = await f('https://models.github.ai/inference/chat/completions', { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/vnd.github+json', 'x-github-api-version': '2022-11-28', authorization: `Bearer ${tok}` },
         body: JSON.stringify({ model: spec.model, messages: [{ role: 'user', content: prompt }], max_tokens: maxTokens, temperature: 0 }) });
-      if (!r.ok) return { ok: false, error: `HTTP ${r.status}` };
+      if (!r.ok) return { ok: false, error: `HTTP ${r.status} ${String(await r.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 90)}`.trim() };
       const j = await r.json(), text = String(j.choices?.[0]?.message?.content || '').trim();
       return text ? { ok: true, text, model: spec.model } : { ok: false, error: 'empty' };
     }
