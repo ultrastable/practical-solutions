@@ -5,6 +5,7 @@
 import * as ui from './kit/index.js';
 import { LABELS, DESIGN, RULE, openQuestions, search, searchIndex } from './catalog.js';
 import { bcaBlock } from './bca.js';
+import { unknownsBlock } from './unknowns.js';
 import { FOOTER } from './publish.js';
 import { AUDIENCES, audience } from './audiences.js';
 import { domainMeta } from './domains-meta.js';
@@ -28,7 +29,7 @@ export const SHELL = {
     columns: [
       { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'Problems', href: '/problems' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }] },
       { title: 'Who it is for', links: AUDIENCES.map(a => ({ label: a.name, href: '/for/' + a.id })) },
-      { title: 'Trust', links: [{ label: 'Method', href: '/method' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
+      { title: 'Trust', links: [{ label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
       { title: 'Ultrastable family', links: [{ label: 'Ultrastable for good (.org)', href: 'https://ultrastable.org/' }, { label: 'Platform and product (.io)', href: 'https://ultrastable.io/' }, { label: 'How it is built', href: 'https://ultrastable.io/how' }, { label: 'Live proof', href: 'https://ultrastable.io/proof' }, { label: 'Contact', href: 'https://ultrastable.io/contact' }] },
       { title: 'Data', links: [{ label: 'Data and API', href: '/api' }, { label: 'index.json', href: '/index.json' }, { label: 'solutions.csv', href: '/solutions.csv' }, { label: 'Feed', href: '/feed.xml' }, { label: 'llms.txt', href: '/llms.txt' }] },
     ],
@@ -73,6 +74,7 @@ registerSection('solution', { id: 'takes', title: 'What it takes', order: 20, re
 registerSection('solution', { id: 'first-test', title: 'Cheapest first test', order: 30, render: s => `<p>${esc(s.first_test)}</p>` });
 registerSection('solution', { id: 'implementable', title: 'Can it be implemented?', order: 40, render: s => implBlock(s) });
 registerSection('solution', { id: 'bca', title: 'Benefit and cost, in WELLBYs', order: 45, render: s => bcaBlock(s.bca) });
+registerSection('solution', { id: 'unknowns', title: 'What we do not know, and the red team', order: 55, render: (s, c) => unknownsBlock(s.id, c) });
 registerSection('solution', { id: 'evidence', title: 'Evidence and sources', order: 50, render: (s, c) => {
   const dz = DESIGN[s.design];
   return `<p>${esc(dz.name)}: ${esc(dz.note)}</p><ul class="list">${s.links.map(l => `<li><b>${esc(l.cite)}</b><br>${esc(l.finding)}<br>${l.direct.map(d => `<a href="${esc(d.url)}">${esc(d.label)}</a> `).join('')}<a href="${esc(l.search)}">Find this paper on Europe PMC</a></li>`).join('')}</ul>
@@ -92,6 +94,7 @@ registerSection('problem', { id: 'leads', title: 'Leads found by the loop', orde
   return ui.callout({ tone: 'warn', body: '<b>Lead, not finding.</b> Everything in this section was found automatically and checked only mechanically. It is a place to look.' }) + (out.join('') || '<p class="m">Nothing found yet.</p>'); } });
 registerSection('problem', { id: 'questions', title: 'Open questions', order: 40, render: (p, c) => ui.list(openQuestions(p, c).map(esc)) });
 registerSection('problem', { id: 'related', title: 'Related problems', order: 70, render: (p, c) => { const r = c.probs.filter(x => x.domain === p.domain && x.id !== p.id); return r.length ? ui.cardGrid(r.map(x => probCard(x, c))) : ''; } });
+registerSection('problem', { id: 'unknowns', title: 'What we do not know', order: 80, render: (p, c) => unknownsBlock(p.id, c) });
 registerSection('problem', { id: 'use', title: 'Use and cite this entry', order: 90, render: (p, c, o) => `${ui.cite(citation(p.title, pUrl(p), o))}<p><a href="${esc(pUrl(p))}.json">This entry as JSON</a> · <a href="${esc(correctionHref(p.title, pUrl(p)))}">Report an error or suggest a correction</a></p>` });
 
 // One template for every entity type: breadcrumbs, title, key messages, an aside of facts, sections in order, a table of contents.
