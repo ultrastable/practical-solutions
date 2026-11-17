@@ -11,6 +11,7 @@ import { SOLUTIONS } from './solutions.js';
 import { buildCatalog } from './catalog.js';
 import { route, notFoundResponse } from './site.js';
 import { recordView, summary } from './reach.js';
+import { ignoranceTick, ignView } from './unknowns.js';
 import * as PV from '../../ps/provenance.js';  // PROVENANCE-1
 
 // Behind the ultrastable.org edge the request arrives on the workers.dev host with x-forwarded-host set; links and canonicals use the public host.
@@ -27,7 +28,8 @@ export default {
   // through a service binding (CORE). The backend has no public route, so only this call reaches /internal/tick.
   async scheduled(_e, env, ctx) {
     if (env.CORE) ctx.waitUntil(env.CORE.fetch('https://core.internal/internal/tick', { method: 'POST', headers: { 'x-ps-internal': '1' } }).catch(() => {}));
-    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems }); await PV.recordChanges(env.STATE, r.changes, r.at); })());
+    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems }); await PV.recordChanges(env.STATE, r.changes, r.at);
+      try { await ignoranceTick({ store: env.STATE, cat: await catalog(env) }); await env.STATE.delete('ignorance:error'); } catch (e) { await env.STATE.put('ignorance:error', String(e.message || e)); } })());
   },
   async fetch(r, env, ctx) {
     const u = new URL(r.url);
@@ -61,7 +63,7 @@ export default {
       return u.pathname === '/feed.xml' ? new Response(toRss({ ...meta, items }), { headers: { 'content-type': 'application/rss+xml; charset=utf-8' } })
         : Response.json(toJsonFeed({ ...meta, feedUrl: origin + '/feed.json', items }));
     }
-    const cat = await catalog(env); cat.reach = u.pathname === '/impact' ? await summary(env.STATE) : null;
+    const cat = await catalog(env); cat.ign = await ignView(env.STATE).catch(() => null); cat.reach = u.pathname === '/impact' ? await summary(env.STATE) : null;
     const site = route(new URL(u.pathname + u.search, origin), cat);
     if (site) return site;
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
