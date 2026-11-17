@@ -1,0 +1,25 @@
+# Daily IndexNow ping from GitHub Actions. The Worker's own pings get HTTP 429 from Cloudflare's shared egress,
+# so this second route submits every URL in the live sitemap from a different network. Honours vars.HALT.
+name: indexnow
+on:
+  schedule: [{ cron: '17 6 * * *' }]
+  workflow_dispatch: {}
+permissions: { contents: read }
+concurrency: { group: indexnow, cancel-in-progress: false }
+jobs:
+  ping:
+    if: vars.HALT != '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Submit sitemap URLs
+        run: |
+          set -euo pipefail
+          host=ultrastable.org
+          key=$(printf 'indexnow:practical-solutions' | sha256sum | cut -c1-32)
+          curl -fsS "https://$host/$key.txt" | grep -qx "$key"
+          urls=$(curl -fsS "https://$host/sitemap.xml" | grep -o '<loc>[^<]*</loc>' | sed 's#</\?loc>##g' | head -10000 | jq -R . | jq -sc .)
+          echo "submitting $(echo "$urls" | jq length) urls"
+          code=$(curl -sS -o out.txt -w '%{http_code}' -X POST https://api.indexnow.org/indexnow -H 'content-type: application/json' \
+            -d "{\"host\":\"$host\",\"key\":\"$key\",\"keyLocation\":\"https://$host/$key.txt\",\"urlList\":$urls}")
+          cat out.txt; echo "HTTP $code"; [ "$code" = 200 ] || [ "$code" = 202 ]
