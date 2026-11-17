@@ -77,7 +77,7 @@ test('with identity but no transport, gated messages are auto-approved by delega
 
 test('a failing contact page is recorded, not thrown', async () => {
   const { db } = await fixture({});
-  const r = await discover(db, { fetch: async () => { throw new Error('boom'); }, nowIso: 'x' });
+  const r = await discover(db, { fetch: async () => { throw new Error('boom'); }, nowIso: '2026-11-17 12:00:00' });
   assert.ok(r.every(x => x.ok === false));
 });
 
@@ -143,4 +143,38 @@ test('the tenant schedule also runs the backend tick through the CORE service bi
   await tenant.scheduled({}, env, { waitUntil: p => waits.push(p) });
   await Promise.allSettled(waits);
   assert.deepEqual(calls, [['https://core.internal/internal/tick', 'POST', '1']]);
+});
+
+import targetsFile from '../org/targets.json' with { type: 'json' };
+import { interleave } from '../ps/outreach.js';
+
+test('targets cover NGOs, researchers, media and communities; organisations only, with role addresses read at run time', () => {
+  const T = targetsFile.targets;
+  for (const a of ['ngo_foundation', 'researcher', 'media', 'community']) assert.ok(T.some(t => t.audience === a), a);
+  assert.ok(T.every(t => t.domain && t.contact_page.includes(t.domain) && !/@/.test(JSON.stringify(t))), 'no typed contact addresses');
+});
+
+test('a page that yields nothing never starves the targets behind it: each is tried once, then retried after a week', async () => {
+  const { db } = await fixture({});
+  const seen = [];
+  const f = async url => { seen.push(url); return { ok: false, status: 404, text: async () => '' }; };
+  const ids = new Set();
+  for (let i = 0; i < 20; i++) for (const r of await discover(db, { fetch: f, nowIso: '2026-11-17 12:00:00', max: 3 })) ids.add(r.agency);
+  assert.ok(ids.size > 20, 'every target gets an attempt in the same week, not only the first three');
+  const again = await discover(db, { fetch: f, nowIso: '2026-11-17 13:00:00' });
+  assert.equal(again.length, 0, 'nothing is retried within the week');
+  assert.ok((await discover(db, { fetch: f, nowIso: '2026-11-25 13:00:00' })).length > 0, 'retried after the week');
+});
+
+test('targets with a known address are planned first and each audience gets its own framing', () => {
+  const T = [...A, ...targetsFile.targets];
+  const contacts = { 'gh-moh': ['info@moh.gov.gh'] };
+  const p = plan({ solutions: SOLUTIONS, agencies: T, contacts, targeting, origin: 'https://t.example' });
+  assert.ok(p.some(x => x.agency_id === 'gh-moh' && x.to), 'the agency with an address is no longer crowded out');
+  const aud = id => T.find(t => t.id === id).audience;
+  assert.ok(new Set(p.map(x => aud(x.agency_id))).size >= 4, 'several audiences are planned');
+  const media = p.find(x => aud(x.agency_id) === 'media');
+  assert.match(media.body, /not a pitch for coverage/);
+  const first5 = interleave(p, T).slice(0, 5).map(x => aud(x.agency_id));
+  assert.ok(new Set(first5).size >= 4, 'a daily cap spreads across audiences');
 });

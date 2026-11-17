@@ -1,0 +1,377 @@
+{
+ "_note": "Organisations only; never individuals. Domains are the organisation's own; contact_page is a guess that the discovery step falls back from (ps/outreach.js contactPages) and every address is read from the organisation's own public page at run time, kept only if it is a role address on that domain. Individual researchers, practitioners and journalists are reached by pull channels (feed, social, citations), not cold email.",
+ "targets": [
+  {
+   "id": "givewell",
+   "name": "GiveWell",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "givewell.org",
+   "contact_page": "https://givewell.org/contact",
+   "remit": "funds",
+   "audience": "ngo_foundation"
+  },
+  {
+   "id": "openphil",
+   "name": "Open Philanthropy",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "openphilanthropy.org",
+   "contact_page": "https://openphilanthropy.org/contact",
+   "remit": "funds",
+   "audience": "ngo_foundation"
+  },
+  {
+   "id": "gates",
+   "name": "Gates Foundation",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "gatesfoundation.org",
+   "contact_page": "https://gatesfoundation.org/contact",
+   "remit": "funds",
+   "audience": "ngo_foundation"
+  },
+  {
+   "id": "wellcome",
+   "name": "Wellcome",
+   "country": "GB",
+   "sectors": [
+    "health"
+   ],
+   "level": "organisation",
+   "domain": "wellcome.org",
+   "contact_page": "https://wellcome.org/contact",
+   "remit": "funds",
+   "audience": "ngo_foundation"
+  },
+  {
+   "id": "founders-pledge",
+   "name": "Founders Pledge",
+   "country": "GB",
+   "sectors": [
+    "health",
+    "nutrition",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "founderspledge.com",
+   "contact_page": "https://founderspledge.com/contact",
+   "remit": "funds",
+   "audience": "ngo_foundation"
+  },
+  {
+   "id": "evidence-action",
+   "name": "Evidence Action",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash"
+   ],
+   "level": "organisation",
+   "domain": "evidenceaction.org",
+   "contact_page": "https://evidenceaction.org/contact",
+   "remit": "implements",
+   "audience": "ngo_foundation"
+  },
+  {
+   "id": "path",
+   "name": "PATH",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash"
+   ],
+   "level": "organisation",
+   "domain": "path.org",
+   "contact_page": "https://path.org/contact",
+   "remit": "implements",
+   "audience": "ngo_foundation"
+  },
+  {
+   "id": "pih",
+   "name": "Partners In Health",
+   "country": "US",
+   "sectors": [
+    "health"
+   ],
+   "level": "organisation",
+   "domain": "pih.org",
+   "contact_page": "https://pih.org/contact",
+   "remit": "implements",
+   "audience": "ngo_foundation"
+  },
+  {
+   "id": "living-goods",
+   "name": "Living Goods",
+   "country": "US",
+   "sectors": [
+    "health"
+   ],
+   "level": "organisation",
+   "domain": "livinggoods.org",
+   "contact_page": "https://livinggoods.org/contact",
+   "remit": "implements",
+   "audience": "ngo_foundation"
+  },
+  {
+   "id": "jpal",
+   "name": "J-PAL",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "povertyactionlab.org",
+   "contact_page": "https://povertyactionlab.org/contact",
+   "remit": "researches",
+   "audience": "researcher"
+  },
+  {
+   "id": "ipa",
+   "name": "Innovations for Poverty Action",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "poverty-action.org",
+   "contact_page": "https://poverty-action.org/contact",
+   "remit": "researches",
+   "audience": "researcher"
+  },
+  {
+   "id": "cgd",
+   "name": "Center for Global Development",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "cgdev.org",
+   "contact_page": "https://cgdev.org/contact",
+   "remit": "researches",
+   "audience": "researcher"
+  },
+  {
+   "id": "3ie",
+   "name": "3ie International Initiative for Impact Evaluation",
+   "country": "IN",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "3ieimpact.org",
+   "contact_page": "https://3ieimpact.org/contact",
+   "remit": "researches",
+   "audience": "researcher"
+  },
+  {
+   "id": "cochrane",
+   "name": "Cochrane",
+   "country": "GB",
+   "sectors": [
+    "health"
+   ],
+   "level": "organisation",
+   "domain": "cochrane.org",
+   "contact_page": "https://cochrane.org/contact",
+   "remit": "researches",
+   "audience": "researcher"
+  },
+  {
+   "id": "owid",
+   "name": "Our World in Data",
+   "country": "GB",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "ourworldindata.org",
+   "contact_page": "https://ourworldindata.org/contact",
+   "remit": "reports",
+   "audience": "media"
+  },
+  {
+   "id": "devex",
+   "name": "Devex",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "devex.com",
+   "contact_page": "https://devex.com/contact",
+   "remit": "reports",
+   "audience": "media"
+  },
+  {
+   "id": "new-humanitarian",
+   "name": "The New Humanitarian",
+   "country": "CH",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "thenewhumanitarian.org",
+   "contact_page": "https://thenewhumanitarian.org/contact",
+   "remit": "reports",
+   "audience": "media"
+  },
+  {
+   "id": "stat",
+   "name": "STAT",
+   "country": "US",
+   "sectors": [
+    "health"
+   ],
+   "level": "organisation",
+   "domain": "statnews.com",
+   "contact_page": "https://statnews.com/contact",
+   "remit": "reports",
+   "audience": "media"
+  },
+  {
+   "id": "rest-of-world",
+   "name": "Rest of World",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "restofworld.org",
+   "contact_page": "https://restofworld.org/contact",
+   "remit": "reports",
+   "audience": "media"
+  },
+  {
+   "id": "ssir",
+   "name": "Stanford Social Innovation Review",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "ssir.org",
+   "contact_page": "https://ssir.org/contact",
+   "remit": "reports",
+   "audience": "media"
+  },
+  {
+   "id": "asterisk",
+   "name": "Asterisk",
+   "country": "US",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "asteriskmag.com",
+   "contact_page": "https://asteriskmag.com/contact",
+   "remit": "convenes",
+   "audience": "community"
+  },
+  {
+   "id": "wip",
+   "name": "Works in Progress",
+   "country": "GB",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "worksinprogress.co",
+   "contact_page": "https://worksinprogress.co/contact",
+   "remit": "convenes",
+   "audience": "community"
+  },
+  {
+   "id": "gwwc",
+   "name": "Giving What We Can",
+   "country": "GB",
+   "sectors": [
+    "health",
+    "nutrition",
+    "social-protection"
+   ],
+   "level": "organisation",
+   "domain": "givingwhatwecan.org",
+   "contact_page": "https://givingwhatwecan.org/contact",
+   "remit": "convenes",
+   "audience": "community"
+  },
+  {
+   "id": "80k",
+   "name": "80,000 Hours",
+   "country": "GB",
+   "sectors": [
+    "health"
+   ],
+   "level": "organisation",
+   "domain": "80000hours.org",
+   "contact_page": "https://80000hours.org/contact",
+   "remit": "convenes",
+   "audience": "community"
+  }
+ ]
+}
