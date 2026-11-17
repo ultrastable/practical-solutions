@@ -72,3 +72,14 @@ test('country, level and lookup pages render with data, pass the accessibility a
   assert.equal((await get('/levels/low.json').json()).ranking.ranked[0].id, 'water');
   assert.ok((await get('/sitemap.xml').text()).includes('/country/GHA'));
 });
+
+test('a group series that fails keeps its previous figures, target baseline included', async () => {
+  const { refresh } = await import('../tools/refresh_context.mjs');
+  const ok = b => ({ ok: true, json: async () => b, text: async () => b });
+  const prevRow = { rank: 1, id: 'tb', title: 'Tuberculosis', value: 200, year: 2021, target: 40, shortfall: 0.8 };
+  const prev = { countries: {}, sources: {}, levels: { low: { ranked: [prevRow], unranked: [] } } };
+  const f = async u => (u.includes('/country?') ? ok(wb) : u.includes('SH.TBS.INCD') ? { ok: false, status: 502 } : ok([{}, []]));
+  const d = await refresh({ fetch: f, prev, now: () => 'T' });
+  const tb = d.levels.low.ranked.find(x => x.id === 'tb');
+  assert.match(d.sources['levels.tb'], /^failed/); assert.equal(tb.value, 200); assert.ok(Math.abs(tb.target - 40) < 1e-9);
+});
