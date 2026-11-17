@@ -27,7 +27,7 @@ test('in the deployed schema a card asking the owner for access that exists is c
   assert.equal(db.raw.prepare('SELECT COUNT(*) AS n FROM access_blocked_asks').get().n, 1);
 });
 
-test('askOwner for a granted Cloudflare account files nothing; for a proven-missing one it files with every route tried', async () => {
+test('askOwner for a granted Cloudflare account files nothing; a proven-missing one with no one-click flow becomes a staff item', async () => {
   const db = mkDb();
   const world = list => async () => ({ status: 200, json: async () => ({ result: list }) });
   const base = { db, now: () => T0, env: { CLOUDFLARE_API_TOKEN: 'x' }, config: access };
@@ -35,7 +35,10 @@ test('askOwner for a granted Cloudflare account files nothing; for a proven-miss
   const granted = await askOwner({ ...base, fetch: world([{ id: ACCT, name: 'ultrastable' }]) }, ask);
   assert.equal(granted.asked, false); assert.equal(granted.reason, 'already_granted');
   assert.equal(db.raw.prepare('SELECT COUNT(*) AS n FROM gate_cards').get().n, 0);
+  // OWNERLINK-1: a proven-missing account still reaches the owner only with a one-click flow; there is none for a Cloudflare account,
+  // so the ask is refused and becomes a staff item that builds the flow or acquires the access by code.
   const missing = await askOwner({ ...base, fetch: world([]) }, { ...ask, id: 'ask2' });
-  assert.equal(missing.asked, true);
-  assert.match(db.raw.prepare("SELECT why_gated FROM gate_cards WHERE id='ask2'").get().why_gated, /accounts_list: absent/);
+  assert.equal(missing.asked, false); assert.equal(missing.reason, 'no_owner_link');
+  assert.equal(db.raw.prepare("SELECT COUNT(*) AS n FROM gate_cards").get().n, 0);
+  assert.equal(db.raw.prepare("SELECT status FROM items WHERE id='OWNERLINK-ask2'").get().status, 'blocked');
 });
