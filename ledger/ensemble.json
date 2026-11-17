@@ -24,6 +24,18 @@
   "friendship-bench": {
    "at": "2026-11-17T18:01:45.400Z",
    "outcome": "pending"
+  },
+  "graduation": {
+   "at": "2026-11-17T19:04:41.635Z",
+   "outcome": "no change proposed: None of the sources provide information that contradicts or updates the entry."
+  },
+  "helmets": {
+   "at": "2026-11-17T19:04:41.635Z",
+   "outcome": "rejected"
+  },
+  "hypertension": {
+   "at": "2026-11-17T19:04:41.635Z",
+   "outcome": "no change proposed: The entry already agrees with the sources, which describe various health studies and outcomes within the Kaiser Permanente Northern California system, but do not provide information that contradicts o"
   }
  },
  "proposals": [
@@ -132,6 +144,34 @@
    "status": "pending",
    "reason": "only 0 usable verifiers from distinct vendors; 2 are needed",
    "at": "2026-11-17T18:01:45.400Z"
+  },
+  {
+   "id": "84a60c334487",
+   "entry": "helmets",
+   "field": "limits",
+   "old": "The review pools observational studies, not randomised trials; benefit depends on helmet quality and on actual wearing, not just a law.",
+   "new": "The review pools observational studies, not randomised trials; benefit depends on helmet quality, actual wearing, and enforcement, as poor-quality helmets are widely available in some areas due to a lack of standards and weak regulations.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42966954",
+    "title": "Accessing quality motorcycle helmets in Ghana: a qualitative inquiry."
+   },
+   "quote": "The analysis highlighted four interconnected system gaps and potential enablers: limited knowledge and awareness of helmet quality, limited availability of quality helmets, economic constraints, and the absence of regulations and enforcement.",
+   "why": "Source [1] highlights the importance of helmet quality and regulation, which is not fully captured in the original limits field.",
+   "proposer": {
+    "id": "llama-3.3-70b",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-17T19:04:41.635Z"
   }
  ],
  "health": {
@@ -168,6 +208,49 @@
    "calls": 3,
    "errors": 3,
    "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  },
+  "mistral-small-3.1": {
+   "calls": 1,
+   "errors": 0
+  },
+  "gemma-4": {
+   "calls": 1,
+   "errors": 1,
+   "last": "empty"
+  },
+  "qwen3-30b": {
+   "calls": 2,
+   "errors": 2,
+   "last": "empty"
+  },
+  "glm-5.3-flash": {
+   "calls": 2,
+   "errors": 2,
+   "last": "worker-ai HTTP 500"
+  },
+  "kimi-k2.6": {
+   "calls": 2,
+   "errors": 2,
+   "last": "worker-ai HTTP 500"
+  },
+  "deepseek-v4-flash": {
+   "calls": 2,
+   "errors": 2,
+   "last": "worker-ai HTTP 500"
+  },
+  "nemotron-3": {
+   "calls": 2,
+   "errors": 2,
+   "last": "empty"
+  },
+  "gpt-oss-120b": {
+   "calls": 2,
+   "errors": 2,
+   "last": "empty"
+  },
+  "llama-3.3-70b": {
+   "calls": 2,
+   "errors": 0
   }
  },
  "benched": {},
@@ -215,11 +298,37 @@
     "grok-3-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
     "command-a: Unexpected token 'O', \"OK\r\n\" is not valid JSON"
    ]
+  },
+  {
+   "at": "2026-11-17T19:04:41.635Z",
+   "examined": 3,
+   "proposed": 1,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 1,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": [
+    "gemma-4: empty",
+    "qwen3-30b: empty",
+    "glm-5.3-flash: worker-ai HTTP 500",
+    "kimi-k2.6: worker-ai HTTP 500",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty",
+    "gpt-oss-120b: empty",
+    "qwen3-30b: empty",
+    "glm-5.3-flash: worker-ai HTTP 500",
+    "kimi-k2.6: worker-ai HTTP 500",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty",
+    "gpt-oss-120b: empty"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-17T18:01:45.400Z"
+ "at": "2026-11-17T19:04:41.635Z"
 }
