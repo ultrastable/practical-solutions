@@ -10,10 +10,13 @@ import { parseGroupSeries, rankLevels } from '../worker/src/levels.js';
 
 const WB = 'https://api.worldbank.org/v2', OUT = 'data/context.json';
 const HDR = ['https://hdr.undp.org/sites/default/files/2025_HDR/HDR25_Composite_indices_complete_time_series.csv', 'https://hdr.undp.org/sites/default/files/2024-09/HDR25_Composite_indices_complete_time_series.csv', 'https://hdr.undp.org/sites/default/files/2023-24_HDR/HDR23-24_Composite_indices_complete_time_series.csv'];
+// every request has a 30 s deadline: an upstream that accepts the connection and never answers must not hang the run
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+const DEADLINE = Date.now() + 7 * 60 * 1000;  // past this, remaining requests fail at once so the snapshot is still written with what was loaded
 async function get(f, url, kind = 'json') {
   let last;
-  for (let a = 0; a < 4; a++) { try { const r = await f(url); if (r.ok) return kind === 'json' ? await r.json() : await r.text(); last = `HTTP ${r.status}`; } catch (e) { last = String(e.message || e); } await sleep(500 * (a + 1)); }
+  if (Date.now() > DEADLINE) throw new Error(`${url}: run deadline reached`);
+  for (let a = 0; a < 3; a++) { try { const r = await f(url, { signal: AbortSignal.timeout(30000) }); if (r.ok) return kind === 'json' ? await r.json() : await r.text(); last = `HTTP ${r.status}`; } catch (e) { last = String(e.message || e); } await sleep(500 * (a + 1)); }
   throw new Error(`${url}: ${last}`);
 }
 
@@ -46,6 +49,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop()
   const { ok, ...data } = await refresh({ prev });
   writeFileSync(OUT, JSON.stringify(data) + '\n');
   const bad = Object.entries(data.sources).filter(([, v]) => !String(v).startsWith('ok'));
+  console.error(new Date().toISOString(), 'refresh done');
   console.log(JSON.stringify({ countries: Object.keys(data.countries).length, hdi: Object.values(data.countries).filter(c => c.hdi).length, levels: Object.keys(data.levels).length, failed: bad.length, sources: Object.fromEntries(bad) }));
   if (!ok || !Object.keys(data.countries).length) process.exit(1);
 }
