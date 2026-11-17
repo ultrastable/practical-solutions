@@ -3,8 +3,7 @@
 # The gateway must hold an ALLOW rule for this repo, script tenant-ps-core and refs/heads/main; until it does the gateway answers 403 and this job fails visibly.
 name: deploy-backend
 on:
-  push: { branches: [main], paths: ['worker/src/index.js', 'worker/src/solutions.js', 'worker/src/publish.js', 'ps/**', 'org/**', 'vendor/ultrastable/core/outreach/**', '.github/workflows/deploy-backend.yml'] }
-  workflow_dispatch: {}
+  workflow_dispatch: {}  # enable the push trigger once the gateway rule exists (needs ALLOW for tenant-ps-core, nodejs_compat, send_email kept)
 concurrency: { group: deploy-backend, cancel-in-progress: false }
 permissions: { contents: read, id-token: write }
 env:
@@ -17,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm test
-      - run: npx --yes esbuild worker/src/index.js --bundle --format=esm --platform=neutral --minify --outfile=.build-backend.js
+      - run: npx --yes esbuild worker/src/index.js --bundle --format=esm --platform=neutral --external:node:* --minify --outfile=.build-backend.js
       - name: deploy via gateway
         run: |
           tok=$(curl -fsS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$GATEWAY" | jq -r .value)
