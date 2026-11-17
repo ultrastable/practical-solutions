@@ -78,7 +78,7 @@ export function applyEdits(edits, root, fs = { read: p => readFileSync(p, 'utf8'
 
 const sh = (cmd, args, o = {}) => execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...o });
 const gh = (...a) => sh('gh', a);
-const note = (n, text) => { try { gh('issue', 'comment', String(n), '--body', text + '\n\n_Free code agent run, GitHub Models route._'); } catch (e) { console.error('comment failed', e.message); } };
+const note = (n, text) => { try { gh('issue', 'comment', String(n), '--body', text + '\n\n_Free code agent run (GitHub Models, then Workers AI through the tenant model Worker)._'); } catch (e) { console.error('comment failed', e.message); } };
 
 export async function run({ issueNo, dry = false, root = process.cwd(), env = process.env } = {}) {
   const issues = JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/issues?state=open&labels=${LABEL}&per_page=50`));
@@ -91,7 +91,7 @@ export async function run({ issueNo, dry = false, root = process.cwd(), env = pr
   const { paths } = parseTask(issue.body);
   const files = paths.filter(allowed).filter(p => existsSync(resolve(root, p))).map(p => ({ path: p, text: readFileSync(resolve(root, p), 'utf8') }));
   const prompt = buildPrompt(issue, files);
-  const res = await complete({ secrets: { GITHUB_MODELS_TOKEN: env.GITHUB_TOKEN, ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY }, prompt, maxTokens: 6000 });
+  const res = await complete({ secrets: { GITHUB_MODELS_TOKEN: env.GITHUB_TOKEN, PS_LLM_URL: env.PS_LLM_URL, ACTIONS_ID_TOKEN_REQUEST_URL: env.ACTIONS_ID_TOKEN_REQUEST_URL, ACTIONS_ID_TOKEN_REQUEST_TOKEN: env.ACTIONS_ID_TOKEN_REQUEST_TOKEN, ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY }, prompt, maxTokens: 6000 });
   const fail = (why) => { console.log(JSON.stringify({ issue: issue.number, ok: false, why })); if (!dry) { try { gh('issue', 'edit', String(issue.number), '--add-label', 'agent-failed'); } catch (e) { console.error(e.message); } note(issue.number, `Attempt failed, main unchanged: ${why}. Remove the \`agent-failed\` label to retry.`); } return { issue: issue.number, ok: false, why }; };
   if (!res.ok) return fail(`no model route answered (${(res.tried || []).join('; ') || 'none configured'})`);
   let plan, changed;

@@ -11,10 +11,12 @@ on:
   workflow_run: { workflows: [deploy-tenant], types: [completed] }
   workflow_dispatch: { inputs: { issue: { description: 'issue number (default: lowest open agent-task)', required: false } } }
 concurrency: { group: agent, cancel-in-progress: false }
-permissions: { contents: write, issues: write, pull-requests: write, actions: write, models: read }
+permissions: { contents: write, issues: write, pull-requests: write, actions: write, models: read, id-token: write }
 env:
   GH_TOKEN: ${{ github.token }}
   GITHUB_TOKEN: ${{ github.token }}
+  # second free route: Workers AI behind the tenant's model Worker, reached with this run's OIDC token (GitHub Models may be off for the org)
+  PS_LLM_URL: https://ps-llm.q08.workers.dev/ps/llm
 jobs:
   work:
     # issues: only an issue labelled idea or agent-task starts a run (a label added by the built-in token starts no workflow, so intake happens in the first step)
