@@ -22,6 +22,9 @@ for (const r of results) console.log(r.ok ? 'ok  ' : 'FAIL', r.id, ...r.failures
 const idx = JSON.parse((await get('/index.json')).text);
 const pages = ['/', '/for', '/solutions', '/problems', '/domains', '/method', '/api', '/compare', ...idx.solutions.map(s => '/solutions/' + s.id), ...idx.problems.map(p => '/problems/' + p.id), ...idx.domains.map(d => '/domains/' + d.slug)];
 const bad = [];
-for (const p of pages) { const r = await get(p); if (r.status !== 200) bad.push(`${p} ${r.status}`); for (const v of auditHtml(r.text)) bad.push(`${p}: ${v.rule}: ${v.detail}`); }
+const got = new Map(); for (const p of pages) got.set(p, await get(p));
+// A page still throttled at the edge after a minute of retries is fetched again after a cool-down before it is judged.
+const throttled = pages.filter(p => [429, 502, 503].includes(got.get(p).status)); if (throttled.length) { console.log(`edge-throttled, retrying after cool-down: ${throttled.join(' ')}`); await sleep(90000); for (const p of throttled) got.set(p, await get(p)); }
+for (const p of pages) { const r = got.get(p); if (r.status !== 200) bad.push(`${p} ${r.status}`); for (const v of auditHtml(r.text)) bad.push(`${p}: ${v.rule}: ${v.detail}`); }
 console.log(`audited ${pages.length} pages, ${bad.length} violations`); for (const b of bad) console.log('  ' + b);
 process.exit(results.some(r => !r.ok) || bad.length ? 1 : 0);
