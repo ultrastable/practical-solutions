@@ -12,10 +12,11 @@ if (!base) { console.error('usage: live_ux.mjs <base url>'); process.exit(2); }
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 const get = async path => {
   let r;
-  for (let i = 0; i < 5; i++) { r = await fetch(base + path, { redirect: 'follow' }); if (![429, 502, 503].includes(r.status)) break; await r.text(); await sleep(500 * 2 ** i); }
+  for (let i = 0; i < 5; i++) { r = await fetch(base + path, { redirect: 'follow' }); if (![429, 502, 503].includes(r.status) || i === 4) break; await r.text(); await sleep(500 * 2 ** i); }
   return { status: r.status, type: r.headers.get('content-type') || '', text: await r.text() };
 };
 
+// the stories visit the new routes too, so a 5xx on them fails the deploy with the path and status in the log
 const results = await runAll(STORIES, get);
 for (const r of results) console.log(r.ok ? 'ok  ' : 'FAIL', r.id, ...r.failures);
 const idx = JSON.parse((await get('/index.json')).text);
