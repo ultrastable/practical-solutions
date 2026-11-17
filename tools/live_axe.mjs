@@ -19,7 +19,7 @@ for (const scheme of ['light', 'dark']) for (const [name, viewport] of [['deskto
   const page = await (await browser.newContext({ viewport, colorScheme: scheme })).newPage(); const errors = []; let skipErrors = false; page.on('console', m => m.type() === 'error' && !skipErrors && errors.push(m.text())); page.on('pageerror', e => errors.push(String(e)));
   for (const p of paths) {
     skipErrors = p === '/solutions/nope'; // the 404 page is expected to log its own status
-    const resp = await page.goto(base + p, { waitUntil: 'load' }); await page.evaluate(axeSrc);
+    let resp; for (let i = 0; i < 5; i++) { const n = errors.length; resp = await page.goto(base + p, { waitUntil: 'load' }); if (![429, 502, 503].includes(resp.status())) break; errors.length = n; await page.waitForTimeout(500 * 2 ** i); } await page.evaluate(axeSrc); // retry: the edge throttles a fast crawl before the Worker runs
     const r = await page.evaluate(() => axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] } }));
     for (const v of r.violations) bad.push(`${scheme} ${name} ${p}: ${v.id} (${v.impact}) ${v.nodes[0].html.slice(0, 100)}`);
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) bad.push(`${scheme} ${name} ${p}: horizontal overflow`);
