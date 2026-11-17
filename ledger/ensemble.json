@@ -48,6 +48,18 @@
   "kmc": {
    "at": "2026-11-17T19:19:50.543Z",
    "outcome": "uncertain"
+  },
+  "mobile-money": {
+   "at": "2026-11-17T19:30:56.255Z",
+   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, with no discrepancies or outdated information found."
+  },
+  "ors-zinc": {
+   "at": "2026-11-17T19:30:56.255Z",
+   "outcome": "no change proposed: The provided sources do not contain information that contradicts or refines the details of the ORS plus zinc treatment entry."
+  },
+  "rural-electrification": {
+   "at": "2026-11-17T19:30:56.255Z",
+   "outcome": "no change proposed: None of the sources relate to grid connection subsidies in rural Kenya or challenge the entry's claims, limits, works_where, takes, or first_test fields."
   }
  },
  "proposals": [
@@ -263,16 +275,16 @@
    "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "mistral-small-3.1": {
-   "calls": 3,
+   "calls": 4,
    "errors": 0
   },
   "gemma-4": {
-   "calls": 2,
+   "calls": 3,
    "errors": 2,
    "last": "empty"
   },
   "qwen3-30b": {
-   "calls": 4,
+   "calls": 5,
    "errors": 4,
    "last": "empty"
   },
@@ -411,11 +423,23 @@
     "deepseek-v4-flash: worker-ai HTTP 500",
     "nemotron-3: empty"
    ]
+  },
+  {
+   "at": "2026-11-17T19:30:56.255Z",
+   "examined": 3,
+   "proposed": 0,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 0,
+   "none": 3,
+   "panel_failures": 0,
+   "failures": []
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-17T19:19:50.543Z"
+ "at": "2026-11-17T19:30:56.255Z"
 }
