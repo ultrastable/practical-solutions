@@ -105,3 +105,16 @@ test('health gate pauses on a bounce rate above the limit once the sample is lar
   assert.equal(health(ev, targeting).paused, true);
   assert.equal(health(ev.slice(0, 21), targeting).paused, false);
 });
+
+import { handleInbound } from '../ps/outreach_step.js';
+test('inbound mail is stored and acted on: opt-out suppresses, bounce counts, reply is recorded', async () => {
+  const env = { OPERATOR_NAME: 'Op', OPERATOR_POSTAL: '1 Example St' };
+  const { db, step, ctx } = await fixture(env);
+  for (let i = 0; i < 4; i++) await step.run(db, ctx);
+  const to = (await db.prepare('SELECT to_addr FROM outreach_intents LIMIT 1').first()).to_addr;
+  assert.equal(await handleInbound(db, { from: `Desk <${to}>`, subject: 'Re: evidence', text: 'Please stop contacting us' }, ctx.nowIso), 'optout');
+  assert.ok(await db.prepare('SELECT 1 x FROM outreach_suppressed WHERE addr=?').bind(to).first());
+  assert.equal(await handleInbound(db, { from: 'mailer-daemon@x.org', subject: 'Undelivered Mail Returned', text: '' }, ctx.nowIso), 'bounce');
+  assert.equal(await handleInbound(db, { from: 'someone@x.org', subject: 'Interesting', text: 'We would like to pilot this' }, ctx.nowIso), 'reply');
+  assert.equal((await db.prepare("SELECT COUNT(*) n FROM ps_outreach_inbox").first()).n, 3);
+});

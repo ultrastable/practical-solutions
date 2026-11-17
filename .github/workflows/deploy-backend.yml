@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Deploys the tenant backend Worker (tenant-ps-core: tick, outreach, inbound mail handler) through the deploy gateway with a GitHub OIDC token.
+# The gateway must hold an ALLOW rule for this repo, script tenant-ps-core and refs/heads/main; until it does the gateway answers 403 and this job fails visibly.
+name: deploy-backend
+on:
+  workflow_dispatch: {}  # enable the push trigger once the gateway rule exists (needs ALLOW for tenant-ps-core, nodejs_compat, send_email kept)
+concurrency: { group: deploy-backend, cancel-in-progress: false }
+permissions: { contents: read, id-token: write }
+env:
+  GATEWAY: https://ultrastable-deploy-gateway.ultrastable.workers.dev
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test
+      - run: npx --yes esbuild worker/src/index.js --bundle --format=esm --platform=neutral --external:node:* --minify --outfile=.build-backend.js
+      - name: deploy via gateway
+        run: |
+          tok=$(curl -fsS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$GATEWAY" | jq -r .value)
+          curl -sS -X POST "$GATEWAY/deploy" -H "Authorization: Bearer $tok" -F script=tenant-ps-core -F worker.js=@.build-backend.js -o out.json -w '%{http_code}\n' | tee code.txt
+          cat out.json; echo; [ "$(cat code.txt)" = 200 ]

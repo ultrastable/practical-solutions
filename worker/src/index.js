@@ -8,7 +8,7 @@ import { PAGE } from './ui.js';
 import { SOLUTIONS } from './solutions.js';
 import { rankProblems } from './problems.js';
 import { FOOTER } from './publish.js';
-import { recordEvent, metrics, queue, approveIntent, suppressAddr, agenciesGraph } from '../../ps/outreach_step.js';
+import { handleInbound, recordEvent, metrics, queue, approveIntent, suppressAddr, agenciesGraph } from '../../ps/outreach_step.js';
 
 
 const ORIGIN = 'https://tenant-ps-web.ultrastable.workers.dev';
@@ -17,6 +17,12 @@ const authed = (request, env) => Boolean(env.PS_TICK_TOKEN) && request.headers.g
 
 export default {
   async scheduled(_event, env, ctx) { ctx.waitUntil(ps(env).tick()); },
+  // Mail to the monitored reply address: stored, classified, and acted on automatically (opt-outs suppress, bounces count toward the health gate).
+  async email(message, env) {
+    const raw = await new Response(message.raw).text();
+    const body = raw.split(/\r?\n\r?\n/).slice(1).join('\n');
+    await handleInbound(env.DB, { from: message.from, subject: message.headers.get('subject') || '', text: body }, new Date().toISOString().replace('T', ' ').slice(0, 19));
+  },
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
     if (pathname === '/' || pathname === '/index.html') return new Response(PAGE, { headers: { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' } });

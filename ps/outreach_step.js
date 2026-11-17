@@ -8,8 +8,10 @@ import { submit, approve, suppress, stats, dispatch } from '../vendor/ultrastabl
 
 const AGENCIES = agenciesFile.agencies;
 const all = async (db, sql, ...a) => (await db.prepare(sql).bind(...a).all()).results || [];
-export const hasIdentity = env => Boolean(env.OPERATOR_NAME && env.OPERATOR_POSTAL && env.OPERATOR_REPLY_TO);
-const coreCtx = (db, env, now, footer) => ({ db, now: () => now, config: { sender: { name: env.OPERATOR_NAME, postal: env.OPERATOR_POSTAL, reply_to: env.OPERATOR_REPLY_TO }, footer } });
+const replyTo = env => env.OPERATOR_REPLY_TO || targeting.sender.reply_to;
+const fromAddr = env => env.OPERATOR_FROM || targeting.sender.from;
+export const hasIdentity = env => Boolean(env.OPERATOR_NAME && env.OPERATOR_POSTAL && replyTo(env));
+const coreCtx = (db, env, now, footer) => ({ db, now: () => now, config: { sender: { name: env.OPERATOR_NAME, postal: env.OPERATOR_POSTAL, reply_to: replyTo(env) }, footer } });
 
 export async function contactsMap(db) {
   const m = {};
@@ -61,7 +63,7 @@ export function outreachStep({ solutions, fetch: f, env, footer, origin }) {
       if (hasIdentity(env) && !h.paused) {
         const c = coreCtx(db, env, ctx.now, footer);
         for (const r of await all(db, `SELECT id FROM outreach_intents WHERE status='pending_approval' AND tenant='ps'`)) await approve(c, r.id, targeting.approver);
-        const transport = env.EMAIL?.send ? async m => env.EMAIL.send({ to: m.to, from: env.OPERATOR_REPLY_TO, replyTo: m.reply_to, subject: m.subject, text: m.text }) : undefined;
+        const transport = env.EMAIL?.send ? async m => env.EMAIL.send({ to: m.to, from: fromAddr(env), replyTo: m.reply_to, subject: m.subject, text: m.text }) : undefined;
         const out = await dispatch(c, { transport, limits: { perDay: targeting.gates.per_day, perRecipient: targeting.gates.per_recipient } });
         for (const o of out.filter(x => x.result === 'sent')) { sentNow++; await db.prepare(`INSERT INTO ps_outreach_events (intent_id, kind, at) VALUES (?, 'sent', ?)`).bind(o.id, ctx.nowIso).run(); }
       }
@@ -85,3 +87,17 @@ export async function queue(db, env, now, footer) {
 export const approveIntent = (db, env, now, footer, id, by) => approve(coreCtx(db, env, now, footer), id, by);
 export const suppressAddr = (db, env, now, footer, addr, why) => suppress(coreCtx(db, env, now, footer), addr, why);
 export const agenciesGraph = solutions => graphView({ solutions, agencies: AGENCIES, targeting });
+
+const STOP = /\b(stop|unsubscribe|remove me|do not contact|opt.?out)\b/i;
+/** Classify an inbound message to the monitored reply address and act on it automatically. Returns the kind recorded. */
+export async function handleInbound(db, { from, subject = '', text = '' }, nowIso) {
+  const addr = String(from || '').toLowerCase().replace(/^.*<|>.*$/g, '').trim();
+  const intent = await db.prepare(`SELECT id FROM outreach_intents WHERE to_addr=? ORDER BY created_at DESC LIMIT 1`).bind(addr).first();
+  const bounce = /^(mailer-daemon|postmaster)@/.test(addr) || /undeliver|delivery status|returned mail|failure notice/i.test(subject);
+  const kind = bounce ? 'bounce' : STOP.test(`${subject}\n${text.slice(0, 500)}`) ? 'optout' : 'reply';
+  await db.prepare(`INSERT INTO ps_outreach_inbox (from_addr, subject, text, kind, intent_id, at) VALUES (?,?,?,?,?,?)`).bind(addr, subject.slice(0, 300), text.slice(0, 4000), kind, intent?.id || null, nowIso).run();
+  if (kind === 'optout') { await db.prepare(`INSERT OR REPLACE INTO outreach_suppressed (addr, why, at) VALUES (?,?,?)`).bind(addr, 'opt-out reply', nowIso).run(); await db.prepare(`UPDATE outreach_intents SET status='blocked_suppressed' WHERE to_addr=? AND status IN ('pending_approval','approved')`).bind(addr).run(); }
+  else if (kind === 'bounce' && intent) await recordEvent(db, 'bounce', intent.id, subject.slice(0, 200), nowIso);
+  else if (kind === 'reply') await db.prepare(`INSERT INTO ps_outreach_events (intent_id, kind, detail, at) VALUES (?, 'reply', ?, ?)`).bind(intent?.id || null, subject.slice(0, 200), nowIso).run();
+  return kind;
+}
