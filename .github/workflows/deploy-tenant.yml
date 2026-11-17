@@ -26,7 +26,7 @@ jobs:
           cat out.json; echo; [ "$(cat code.txt)" = 200 ]
       - name: live check
         run: |
-          for p in / /method /problems/tb /solutions/kmc /domains /search?q=water /impact /metrics.json /index.json /sitemap.xml /feed.xml /brightspots.json; do
+          for p in / /method /problems/tb /solutions/kmc /domains /search?q=water /impact /metrics.json /graph.json /questions.json /index.json /sitemap.xml /feed.xml /brightspots.json; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "https://tenant-ps-web.ultrastable.workers.dev$p"); echo "$p $code"; [ "$code" = 200 ] || exit 1
           done
       - name: user stories and structural audit against the live site

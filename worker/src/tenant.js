@@ -39,6 +39,8 @@ export default {
       return Response.json({ solutions: sols });
     }
     if (u.pathname === '/problems.json') return Response.json(await j(env, 'problems', null) || await rankProblems());
+    if (u.pathname === '/graph.json') return Response.json(await j(env, 'graph', { nodes: [], edges: [], stats: {} }), { headers: { 'cache-control': 'public, max-age=300' } });
+    if (u.pathname === '/questions.json') return Response.json(await j(env, 'questions', { questions: [] }), { headers: { 'cache-control': 'public, max-age=300' } });
     if (u.pathname === '/drafts.json') { const d = await j(env, 'drafts', {}); return Response.json({ drafts: Object.values(d).filter(x => x.status === 'reviewed') }); }
     if (u.pathname === '/brightspots.json') return Response.json(await j(env, 'brightspots', {}));
     if (u.pathname === '/candidates.json') return Response.json(await j(env, 'candidates', {}));
