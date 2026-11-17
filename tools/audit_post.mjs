@@ -22,7 +22,7 @@ async function postOnce(event, { fetchImpl, env }) {
   const t = await fetchImpl(`${env.ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}`, { headers: { authorization: 'Bearer ' + env.ACTIONS_ID_TOKEN_REQUEST_TOKEN } });
   if (!t.ok) throw new Error('could not mint an OIDC token: ' + t.status);
   const r = await fetchImpl(URL_BASE + '/audit/event', { method: 'POST', headers: { authorization: 'Bearer ' + (await t.json()).value, 'content-type': 'application/json' }, body: JSON.stringify(event) });
-  if (!r.ok) throw new Error('audit endpoint answered ' + r.status);
+  if (!r.ok) throw new Error('audit endpoint answered ' + r.status + ': ' + (await r.text()).slice(0, 160));
   return r.json();
 }
 if (import.meta.url === `file://${process.argv[1]}`) {

@@ -27,5 +27,5 @@ test('the workflow tool builds an event from the run and posts with an OIDC toke
   const e = buildEvent(parseArgs(['--kind', 'deploy', '--subject', 'tenant-ps-web']), env); assert.equal(e.kind, 'deploy'); assert.equal(e.ref, 'sha:' + 'a'.repeat(12)); assert.equal(e.actor, 'workflow:deploy-tenant');
   const calls = []; const f = async (u, o) => { calls.push([u, o]); return u.startsWith('https://t/') ? { ok: true, json: async () => ({ value: 'jwt' }) } : { ok: true, json: async () => ({ seq: 4 }) }; };
   assert.equal((await post(e, { fetchImpl: f, env })).seq, 4); assert.match(calls[0][0], /audience=practical-solutions-audit/); assert.equal(calls[1][1].headers.authorization, 'Bearer jwt');
-  await assert.rejects(post(e, { fetchImpl: async () => ({ ok: false, status: 403 }), env, tries: 2, waitMs: 1 }));
+  await assert.rejects(post(e, { fetchImpl: async () => ({ ok: false, status: 403, text: async () => 'no' }), env, tries: 2, waitMs: 1 }));
 });
