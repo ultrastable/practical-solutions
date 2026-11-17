@@ -11,6 +11,7 @@ import { SOLUTIONS } from './solutions.js';
 import { buildCatalog } from './catalog.js';
 import { route, notFoundResponse } from './site.js';
 import { recordView, summary } from './reach.js';
+import * as PV from '../../ps/provenance.js';  // PROVENANCE-1
 
 // Behind the ultrastable.org edge the request arrives on the workers.dev host with x-forwarded-host set; links and canonicals use the public host.
 const PUBLIC_HOSTS = new Set(['ultrastable.org', 'solutions.ultrastable.org']);
@@ -26,7 +27,7 @@ export default {
   // through a service binding (CORE). The backend has no public route, so only this call reaches /internal/tick.
   async scheduled(_e, env, ctx) {
     if (env.CORE) ctx.waitUntil(env.CORE.fetch('https://core.internal/internal/tick', { method: 'POST', headers: { 'x-ps-internal': '1' } }).catch(() => {}));
-    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); await tick({ store: env.STATE, rank: rankProblems }); })());
+    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems }); await PV.recordChanges(env.STATE, r.changes, r.at); })());
   },
   async fetch(r, env, ctx) {
     const u = new URL(r.url);
@@ -42,6 +43,16 @@ export default {
     if (u.pathname === '/drafts.json') { const d = await j(env, 'drafts', {}); return Response.json({ drafts: Object.values(d).filter(x => x.status === 'reviewed') }); }
     if (u.pathname === '/brightspots.json') return Response.json(await j(env, 'brightspots', {}));
     if (u.pathname === '/candidates.json') return Response.json(await j(env, 'candidates', {}));
+    // PROVENANCE-1: public changelog (public rows only, redacted); visitor suggestions are stored private; the owner and loops write with a token (PS_PROVENANCE_TOKEN).
+    if (u.pathname === '/changelog') return new Response(PV.changelogHtml(await PV.publicView(env.STATE)), { headers });
+    if (u.pathname === '/changelog.json') return Response.json(await PV.publicView(env.STATE), { headers: { 'cache-control': 'public, max-age=300' } });
+    if (u.pathname === '/api/suggest' && r.method === 'POST') { let b = {}; try { b = await r.json(); } catch { } const x = await PV.suggest(env.STATE, b); return Response.json(x.body, { status: x.status }); }
+    if (u.pathname.startsWith('/api/provenance')) {
+      if (!env.PS_PROVENANCE_TOKEN || r.headers.get('authorization') !== 'Bearer ' + env.PS_PROVENANCE_TOKEN) return new Response('forbidden\n', { status: 403 });
+      if (r.method === 'GET') return Response.json({ entries: await PV.full(env.STATE) });
+      let b = {}; try { b = await r.json(); } catch { return Response.json({ error: 'body must be JSON' }, { status: 400 }); }
+      try { return Response.json(b.settle ? { ok: await PV.settle(env.STATE, b.settle, b.effect, b.note) } : { ok: true, row: await PV.add(env.STATE, b) }); } catch (x) { return Response.json({ error: String(x.message || x) }, { status: 400 }); }
+    }
     if (u.pathname === '/changes.json') return Response.json({ changes: await j(env, 'changes', []), last_tick: await j(env, 'last_tick', null) });
     const origin = canonicalOrigin(r, u);
     if (['/feed.xml', '/feed.json'].includes(u.pathname)) {
