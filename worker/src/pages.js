@@ -11,7 +11,7 @@ import { STORIES, storiesFor } from '../../ux/stories.js';
 
 const { esc } = ui;
 export const SITE = 'Practical Solutions';
-export const CORRECTIONS_URL = 'https://github.com/QNFO/practical-solutions/issues/new';
+export const CORRECTIONS_URL = 'https://github.com/ultrastable/practical-solutions/issues/new';
 const PAGE_SIZE = 12;
 
 export const SHELL = {
