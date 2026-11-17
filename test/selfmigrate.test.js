@@ -18,15 +18,15 @@ test('a database missing the access triggers gets them from the allow-listed mig
   for (const t of ['access_permit_guard', 'access_ask_guard']) db.raw.exec(`DROP TRIGGER IF EXISTS ${t}`);
   const has = () => db.raw.prepare("SELECT name FROM sqlite_master WHERE type='trigger' AND name LIKE 'access_%'").all().length;
   assert.equal(has(), 0);
-  const r = await applyPending(db, FILES, ALLOW, '2026-11-17 14:00:00');
+  const r = await applyPending(db, FILES, ALLOW, '2026-11-17 14:00:00', 'ps_applied_migrations');
   assert.deepEqual(r.map(x => x.ok), ALLOW.map(() => true));
   assert.equal(has(), 2);
-  assert.deepEqual(await applyPending(db, FILES, ALLOW, '2026-11-17 14:10:00'), []);
+  assert.deepEqual(await applyPending(db, FILES, ALLOW, '2026-11-17 14:10:00', 'ps_applied_migrations'), []);
 });
 
 test('a migration that fails is reported, not thrown, and not recorded', async () => {
   const db = openDb();
-  const r = await applyPending(db, { 'x.sql': 'CREATE TABLE a (' }, ['x.sql'], 'now');
+  const r = await applyPending(db, { 'x.sql': 'CREATE TABLE a (' }, ['x.sql'], 'now', 'ps_applied_migrations');
   assert.equal(r[0].ok, false);
   assert.equal((await db.prepare('SELECT COUNT(*) n FROM ps_applied_migrations').first()).n, 0);
 });

@@ -4,7 +4,7 @@
 // The graph generates work: a problem with no solution, and a solution with no confirmed implementer, each become a question the loop works on.
 // Agency nodes and solution -> agency edges come from the outreach interface (/agencies.json). They are matches, so they are loaded as proposed
 // edges (leads); only a recorded implementation signal may confirm one. Core is tenant-agnostic; every PS-specific word lives in this file.
-import { createGraph } from '../../vendor/ultrastable/kgraph/index.js';
+import { createGraph } from '../../vendor/ultrastable/core/kgraph/index.js';
 import { PROBLEMS } from './problems.js';
 
 import { LEVELS, fitFor } from './context.js';

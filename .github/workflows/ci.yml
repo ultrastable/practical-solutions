@@ -12,6 +12,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
+      - name: core is the only source of generic code (TENANT-SYNC-1)
+        uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python3 vendor/ultrastable/tools/tenant_sync.py check --tenant .
       - run: npm test
       - run: npm run test:vendor
       - run: node tools/build_migrations.mjs --check
