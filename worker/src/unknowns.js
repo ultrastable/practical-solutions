@@ -3,7 +3,7 @@
 // What this site does not know, in public. The generic engine is core/ignorance (vendored); this file maps the catalogue into the
 // engine's subjects, runs it from the improvement tick, and renders known unknowns and red-team findings on every entry, on /unknowns
 // and in /method. Findings are challenges shown beside an entry; they never change the entry's own claims.
-import { createRegistry, run, minersFor, publicView, KINDS, UIA } from '../../vendor/ultrastable/core/ignorance/index.js';
+import { createRegistry, run, minersFor, publicView, KINDS, UIA, findingToGap, sanitizeModel } from '../../vendor/ultrastable/core/ignorance/index.js';
 import { modelFor } from '../../vendor/ultrastable/core/ignorance/org.js';
 import * as ui from './kit/index.js';
 import { esc } from './catalog.js';
@@ -31,9 +31,17 @@ export const registryFor = (store, now) => createRegistry({ store, key: KEY, now
 // One bounded run from the improvement tick: mine, challenge the stalest entries, close what is no longer true, derive the frontier.
 // The red team's model is Workers AI through the AI binding when it is bound (a different family from the entries' author); without it the rule-based red team runs.
 export const MODEL_CONFIG = { ignorance: { model_alias: 'red', author_family: 'anthropic', models: { red: { endpoint: 'workers_ai', model: '@cf/meta/llama-3.1-8b-instruct', family: 'meta' } } } };
-export async function ignoranceTick({ store, cat, env = {}, now = () => Date.now(), model = null, author_family = null, budget = 4 }) {
+export const REDTEAM_URL = 'https://raw.githubusercontent.com/ultrastable/practical-solutions/main/ledger/redteam.json';
+export async function ignoranceTick({ store, cat, env = {}, now = () => Date.now(), model = null, author_family = null, budget = 4, fetchFn = null }) {
   if (!model) ({ model, author_family } = modelFor({ config: MODEL_CONFIG, env }));
   const registry = registryFor(store, now);
+  // model challenges written by the Actions red team (GitHub Models), re-validated here: they are untrusted input
+  if (fetchFn) try {
+    const res = await fetchFn(REDTEAM_URL);
+    if (res.ok) { const rt = await res.json(), ids = new Set(cat.sols.map(s => s.id)), gaps = [];
+      for (const [id, v] of Object.entries(rt.bySubject || {})) if (ids.has(id)) gaps.push(...sanitizeModel({ family: v.family, findings: v.findings || [] }, { author_family: MODEL_CONFIG.ignorance.author_family }).map(f => findingToGap(id, f)));
+      if (gaps.length) await registry.upsert(gaps); }
+  } catch { /* the rule floor still runs */ }
   const r = await run({ registry, subjects: subjectsFrom(cat), miners: minersFor(), model, author_family, budget, now });
   await store.put(LAST, JSON.stringify({ at: r.at, metrics: r.metrics, frontier: r.frontier, errors: r.errors }));
   return r;
