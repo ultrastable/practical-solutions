@@ -17,7 +17,11 @@ const get = async path => {
 };
 
 // the stories visit the new routes too, so a 5xx on them fails the deploy with the path and status in the log
-const results = await runAll(STORIES, get);
+let results = await runAll(STORIES, get);
+// a story that failed only on edge throttling (status 429/502/503) runs again after a cool-down before it is judged
+const throttledStory = r => !r.ok && r.failures.some(f => /status (429|502|503)\b/.test(f));
+const again = STORIES.filter(s => throttledStory(results.find(r => r.id === s.id) || { ok: true, failures: [] }));
+if (again.length) { console.log(`edge-throttled stories, retrying after cool-down: ${again.map(s => s.id).join(' ')}`); await sleep(90000); const re = await runAll(again, get); results = results.map(r => re.find(x => x.id === r.id) || r); }
 for (const r of results) console.log(r.ok ? 'ok  ' : 'FAIL', r.id, ...r.failures);
 const idx = JSON.parse((await get('/index.json')).text);
 const pages = ['/', '/for', '/solutions', '/problems', '/domains', '/method', '/api', '/compare', ...idx.solutions.map(s => '/solutions/' + s.id), ...idx.problems.map(p => '/problems/' + p.id), ...idx.domains.map(d => '/domains/' + d.slug)];
