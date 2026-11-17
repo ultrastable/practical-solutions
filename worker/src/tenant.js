@@ -9,7 +9,7 @@ import { toRss, toJsonFeed, itemsFrom } from '../../vendor/ultrastable/core/feed
 import { describeChange } from './publish.js';
 import { SOLUTIONS } from './solutions.js';
 import { buildCatalog } from './catalog.js';
-import { route } from './site.js';
+import { route, notFoundResponse } from './site.js';
 import { recordView, summary } from './reach.js';
 
 const BACKEND = 'https://ps-practical-solutions.q08.workers.dev';
@@ -46,6 +46,6 @@ export default {
     const site = route(u, cat);
     if (site) return site;
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
-    return new Response('not found', { status: 404 });
+    return notFoundResponse(cat, u);
   },
 };

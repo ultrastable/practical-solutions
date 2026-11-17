@@ -29,3 +29,10 @@ jobs:
           for p in / /method /problems/tb /solutions/kmc /domains /search?q=water /impact /metrics.json /index.json /sitemap.xml /feed.xml /brightspots.json; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "https://tenant-ps-web.ultrastable.workers.dev$p"); echo "$p $code"; [ "$code" = 200 ] || exit 1
           done
+      - name: user stories and structural audit against the live site
+        run: node tools/live_ux.mjs https://tenant-ps-web.ultrastable.workers.dev
+      - name: real-browser accessibility check (axe, light and dark, desktop and phone)
+        run: |
+          npm i --no-save --no-audit --no-fund playwright@1.49.1 axe-core@4.10.2
+          npx playwright install --with-deps chromium
+          node tools/live_axe.mjs https://tenant-ps-web.ultrastable.workers.dev
