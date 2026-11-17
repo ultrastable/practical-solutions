@@ -29,11 +29,13 @@ export function parseTask(body = '') {
 }
 
 // Trusted: the author association says so, or (with the built-in token the API reports a private org member as CONTRIBUTOR) the author has write access.
+// A failed issue is retried, never dropped: an explicit --issue takes it at once, and a scheduled run with no fresh issue takes the oldest failed one.
 export function pickIssue(issues, { only, writers = new Set() } = {}) {
-  const ok = issues.filter(i => !i.pull_request && (i.labels || []).some(l => (l.name || l) === LABEL) && (TRUSTED.includes(i.author_association) || writers.has(i.user && i.user.login))
-    && !(i.labels || []).some(l => ['agent-failed', 'agent-working'].includes(l.name || l)));
+  const has = (i, n) => (i.labels || []).some(l => (l.name || l) === n);
+  const ok = issues.filter(i => !i.pull_request && has(i, LABEL) && (TRUSTED.includes(i.author_association) || writers.has(i.user && i.user.login)) && !has(i, 'agent-working'))
+    .sort((a, b) => a.number - b.number);
   if (only) return ok.find(i => i.number === Number(only)) || null;
-  return ok.sort((a, b) => a.number - b.number)[0] || null;
+  return ok.find(i => !has(i, 'agent-failed')) || ok[0] || null;
 }
 
 const clip = (s, n) => (s.length > n ? s.slice(0, n) + '\n/* ...truncated... */' : s);
@@ -107,7 +109,7 @@ export async function run({ issueNo, dry = false, root = process.cwd(), env = pr
   const files = paths.filter(allowed).filter(p => existsSync(resolve(root, p))).map(p => ({ path: p, text: readFileSync(resolve(root, p), 'utf8') }));
   const prompt = buildPrompt(issue, files);
   const res = await complete({ secrets: { GITHUB_MODELS_TOKEN: env.GITHUB_TOKEN, PS_LLM_URL: env.PS_LLM_URL, ACTIONS_ID_TOKEN_REQUEST_URL: env.ACTIONS_ID_TOKEN_REQUEST_URL, ACTIONS_ID_TOKEN_REQUEST_TOKEN: env.ACTIONS_ID_TOKEN_REQUEST_TOKEN, ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY }, prompt, maxTokens: 4000 });
-  const fail = (why) => { console.log(JSON.stringify({ issue: issue.number, ok: false, why })); if (!dry) { try { gh('issue', 'edit', String(issue.number), '--add-label', 'agent-failed'); } catch (e) { console.error(e.message); } note(issue.number, `Attempt failed, main unchanged: ${why}. Remove the \`agent-failed\` label to retry.`); } return { issue: issue.number, ok: false, why }; };
+  const fail = (why) => { console.log(JSON.stringify({ issue: issue.number, ok: false, why })); if (!dry) { try { gh('issue', 'edit', String(issue.number), '--add-label', 'agent-failed'); } catch (e) { console.error(e.message); } note(issue.number, `Attempt failed, main unchanged: ${why}. The scheduled run retries it when no fresh issue waits.`); } return { issue: issue.number, ok: false, why }; };
   if (!res.ok) return fail(`no model route answered (${(res.tried || []).join('; ') || 'none configured'})`);
   let plan, changed;
   try { plan = parseEdits(res.text); changed = applyEdits(plan.edits, root); } catch (e) { return fail(String(e.message)); }

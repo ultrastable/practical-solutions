@@ -17,11 +17,13 @@ test('issue task lines parse and only an allowlisted probe is kept', () => {
   assert.equal(parseTask('probe: rm -rf /').probe, 'npm test');
 });
 
-test('only trusted authors drive the agent, lowest issue first, failed ones are skipped', () => {
+test('only trusted authors drive the agent, lowest issue first, failed ones retry when nothing fresh waits', () => {
   const L = n => [{ name: n }];
   const issues = [{ number: 5, labels: L('agent-task'), author_association: 'NONE' }, { number: 4, labels: L('agent-task'), author_association: 'OWNER' }, { number: 3, labels: [{ name: 'agent-task' }, { name: 'agent-failed' }], author_association: 'OWNER' }, { number: 2, labels: L('agent-task'), author_association: 'MEMBER', pull_request: {} }, { number: 6, labels: L('agent-task'), author_association: 'MEMBER' }];
   assert.equal(pickIssue(issues).number, 4);
   assert.equal(pickIssue(issues, { only: 5 }), null);
+  assert.equal(pickIssue(issues, { only: 3 }).number, 3);
+  assert.equal(pickIssue(issues.filter(i => i.number === 3)).number, 3);
   issues[0].user = { login: 'rw' }; assert.equal(pickIssue(issues, { only: 5, writers: new Set(['rw']) }).number, 5);
 });
 
