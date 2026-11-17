@@ -5,7 +5,7 @@
 // Only the cost side is adjusted (price level). No sourced per-group WELLBY value exists, so wellbeing values are not adjusted by group.
 export const ADJUST_SERIES = {
   // not published for income-group aggregates, so the group figure is the median of its member countries' latest values
-  price_level: { code: 'PA.NUS.PPPC.RF', perCountry: true, label: 'Price level ratio of PPP conversion factor (GDP) to market exchange rate', cite: 'World Bank, World Development Indicators, PA.NUS.PPPC.RF (International Comparison Program), median of member countries' },
+  price_level: { code: 'PA.NUS.PPPC.RF', perCountry: true, label: 'Price level ratio of PPP conversion factor (GDP) to market exchange rate', cite: 'World Bank, World Development Indicators, PA.NUS.PPPC.RF (International Comparison Program), or where that series has no figure PA.NUS.PPP divided by PA.NUS.FCRF for the same year; median of member countries' },
   gni_pc: { code: 'NY.GNP.PCAP.CD', label: 'GNI per capita, Atlas method (current US$)', cite: 'World Bank, World Development Indicators, NY.GNP.PCAP.CD' },
 };
 const LEVEL = { LIC: 'low', LMC: 'lower-middle', UMC: 'upper-middle', HIC: 'high' };
@@ -26,6 +26,12 @@ export function latestByCountry(wbJson) {
   const m = {};
   for (const r of (Array.isArray(wbJson) && wbJson[1]) || []) if (r.value != null && r.countryiso3code && !(m[r.countryiso3code] && m[r.countryiso3code].year > +r.date)) m[r.countryiso3code] = { v: Number(r.value), year: +r.date };
   return m;
+}
+// price level = PPP conversion factor / official exchange rate (both LCU per unit), same year per country
+export function ratioByCountry(ppp, fx) {
+  const out = {};
+  for (const [c, a] of Object.entries(ppp)) { const b = fx[c]; if (b && b.year === a.year && b.v > 0 && a.v > 0) out[c] = { v: a.v / b.v, year: a.year }; }
+  return out;
 }
 const CODE = { low: 'LIC', 'lower-middle': 'LMC', 'upper-middle': 'UMC', high: 'HIC' };
 export function groupMedian(byCountry, countries) {

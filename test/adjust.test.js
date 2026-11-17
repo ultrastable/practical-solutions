@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildAdjust, costMultiplier, ADJUST_SERIES, groupMedian } from '../worker/src/adjust.js';
+import { ratioByCountry, buildAdjust, costMultiplier, ADJUST_SERIES, groupMedian } from '../worker/src/adjust.js';
 import { originOf, adjustedContext } from '../worker/src/bca.js';
 import { refresh } from '../tools/refresh_context.mjs';
 
@@ -48,4 +48,12 @@ test('a group price level is the median of its member countries', () => {
   assert.deepEqual(m.LIC, [{ value: 0.3, year: 2023, n: 3 }]);
   assert.deepEqual(m.HIC, [{ value: 0.9, year: 2023, n: 1 }]);
   assert.equal(m.UMC, undefined);
+});
+
+test('price level falls back to PPP divided by exchange rate when the ratio series has no figure', async () => {
+  const rows = (a, b) => ({ ok: true, json: async () => [{}, [{ countryiso3code: 'AAA', date: '2023', value: a }, { countryiso3code: 'BBB', date: '2023', value: b }]] });
+  const f = async url => url.includes('PA.NUS.PPPC.RF') ? { ok: true, json: async () => [{}, []] } : url.includes('PA.NUS.PPP?') ? rows(30, 40) : url.includes('PA.NUS.FCRF') ? rows(100, 100) : { ok: false, status: 500 };
+  const out = await refresh({ fetch: f, prev: { countries: { AAA: { iso3: 'AAA', level: 'low' }, BBB: { iso3: 'BBB', level: 'low' } }, levels: {}, adjust: {} } });
+  assert.ok(Math.abs(out.adjust.low.price_level.value - 0.35) < 1e-9);
+  assert.deepEqual(ratioByCountry({ A: { v: 3, year: 1 } }, { A: { v: 2, year: 2 } }), {});
 });

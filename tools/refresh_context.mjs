@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { PROBLEMS } from '../worker/src/problems.js';
 import { INFRA, parseCountries, parseIndicator, parseHdr, build } from '../worker/src/countries.js';
 import { parseGroupSeries, rankLevels } from '../worker/src/levels.js';
-import { ADJUST_SERIES, buildAdjust, groupMedian, latestByCountry } from '../worker/src/adjust.js';
+import { ADJUST_SERIES, buildAdjust, groupMedian, latestByCountry, ratioByCountry } from '../worker/src/adjust.js';
 
 const WB = 'https://api.worldbank.org/v2', OUT = 'data/context.json';
 const HDR = ['https://hdr.undp.org/sites/default/files/2025_HDR/HDR25_Composite_indices_complete_time_series.csv', 'https://hdr.undp.org/sites/default/files/2024-09/HDR25_Composite_indices_complete_time_series.csv', 'https://hdr.undp.org/sites/default/files/2023-24_HDR/HDR23-24_Composite_indices_complete_time_series.csv'];
@@ -55,8 +55,12 @@ export async function refresh({ fetch: f = globalThis.fetch, prev = { countries:
   const adj = {};
   for (const [k, v] of Object.entries(ADJUST_SERIES)) {
     try {
-      adj[k] = v.perCountry ? groupMedian(latestByCountry(await get(f, `${WB}/country/all/indicator/${v.code}?format=json&per_page=20000&date=2015:2025&mrnev=1`)), countries)
-        : parseGroupSeries(await get(f, `${WB}/country/LIC;LMC;UMC;HIC/indicator/${v.code}?format=json&per_page=500&date=2010:2025`));
+      const perCountry = async code => latestByCountry(await get(f, `${WB}/country/all/indicator/${code}?format=json&per_page=20000&date=2010:2025`));
+      if (v.perCountry) {
+        let m = await perCountry(v.code);
+        if (!Object.keys(groupMedian(m, countries)).length) m = ratioByCountry(await perCountry('PA.NUS.PPP'), await perCountry('PA.NUS.FCRF'));
+        adj[k] = groupMedian(m, countries);
+      } else adj[k] = parseGroupSeries(await get(f, `${WB}/country/LIC;LMC;UMC;HIC/indicator/${v.code}?format=json&per_page=500&date=2010:2025`));
       sources['adjust.' + k] = Object.keys(adj[k]).length ? 'ok' : 'failed: no group figure';
     }
     catch (e) { sources['adjust.' + k] = 'failed: ' + e.message; }
