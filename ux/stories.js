@@ -13,6 +13,8 @@ export const STORIES = [
     steps: [v('/solutions'), x({ form: '/solutions' }), v('/solutions?cost=low'), x({ text: 'low', no_text: 'Nothing matches', link: '^/solutions/' })] },
   { id: 'IMP-6', who: 'implementers', want: 'see only solutions that suit my country\'s income level', so: 'I do not shortlist something my country has already solved or cannot yet deliver', covers: ['contextPage', 'solutionsIndex', 'facets', 'solutionPage'],
     steps: [v('/context'), x({ heading: 'Solutions by country income level' }), { follow: { href: '^/solutions\\?level=high$' } }, x({ form: '/solutions' })] },
+  { id: 'IMP-7', who: 'implementers', want: 'look up my country and see which problems and solutions fit its income group, HDI tier and infrastructure', so: 'I shortlist what suits where I work, not what suits a richer or poorer country', covers: ['countryIndex', 'levelPage', 'facets'],
+    steps: [v('/country'), x({ heading: 'Find what fits a country', form: '/country', link: '^/levels/low$' }), { follow: { href: '^/levels/low$' } }, x({ heading: 'Problems ranked for low income countries', link: '^/solutions\\?level=low$' })] },
   { id: 'IMP-3', who: 'implementers', want: 'read what it takes, who delivers it and the cheapest first test', so: 'I can plan a small pilot', covers: ['solutionPage', 'summaryList', 'keyMessages', 'section'],
     steps: [v('/solutions/kmc'), x({ heading: 'Cheapest first test', text: 'Start with' }), x({ heading: 'Can it be implemented', text: 'Delivery channel' }), x({ heading: 'What it takes', text: 'Who can act' })] },
   { id: 'IMP-4', who: 'implementers', want: 'compare two or three solutions side by side', so: 'I can justify my choice to my director', covers: ['comparePage', 'table'],
@@ -78,5 +80,5 @@ export const STORIES = [
 ];
 export const storiesFor = who => STORIES.filter(s => s.who === who);
 // Every template, route and component a story may claim to cover. A story that names something else fails the traceability test.
-export const TEMPLATES = ['home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage'];
+export const TEMPLATES = ['home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
 export const ROUTES = ['json-entity', 'csv', 'llms', 'sitemap'];

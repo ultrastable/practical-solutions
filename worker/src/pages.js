@@ -22,7 +22,7 @@ export const SHELL = {
   // FAMILY-1: the .org home of the Ultrastable family (public-benefit demos); accent colours come from https://ultrastable.io/family.json tokens.
   theme: { light: { accent: '#b83800' }, dark: { accent: '#ff7f4d' } },
   family: { label: 'Ultrastable for good: public-benefit demos built on Ultrastable', links: [{ label: 'About this project', href: 'https://ultrastable.io/showcase/practical-solutions' }, { label: 'ultrastable.io', href: 'https://ultrastable.io/' }] },
-  nav: [{ label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ },
+  nav: [{ label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ }, { label: 'By country', href: '/country', match: /^\/(country|levels|context)/ },
     { label: 'For you', href: '/for', match: /^\/for/ }, { label: 'Method', href: '/method', match: /^\/method/ }, { label: 'Data', href: '/api', match: /^\/api/ }],
   search: { action: '/search', name: 'q', label: 'Search solutions and problems', placeholder: 'Search, for example water' },
   feeds: [{ type: 'application/rss+xml', href: '/feed.xml', title: 'What changed' }],
@@ -129,9 +129,9 @@ export function problemPage(p, c, o) {
 }
 
 export function contextPage(c, o) {
-  const rows = LEVELS.map(l => { const n = c.sols.filter(s => s.fit.levels.includes(l.id)); return [`<a href="/solutions?level=${l.id}">${esc(l.name)}</a>`, String(n.length), esc(l.note)]; });
+  const rows = LEVELS.map(l => { const n = c.sols.filter(s => s.fit.levels.includes(l.id)); return [`<a href="/solutions?level=${l.id}">${esc(l.name)}</a> <span class="m"><a href="/levels/${l.id}">ranked problems</a></span>`, String(n.length), esc(l.note)]; });
   const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'By income level' }])}<h1>Solutions by country income level</h1><p class="lede">Countries differ in income, infrastructure and institutions, so a solution that suits one stage of development may be unnecessary or out of reach at another. Each solution lists the income levels where it is most relevant and why.</p>
-${ui.table({ caption: 'Solutions by World Bank income group', head: ['Income group', 'Solutions relevant', 'Definition'], rows })}<p>The level is a judgement from what each solution takes (infrastructure, institutions, cost). The loop keeps asking which solutions are missing at each level, including high-income countries. See <a href="/method">the method</a>.</p>`;
+${ui.table({ caption: 'Solutions by World Bank income group', head: ['Income group', 'Solutions relevant', 'Definition'], rows })}<p><a href="/country">Look up a country by name</a> to see its income group, HDI tier and infrastructure. The level is a judgement from what each solution takes (infrastructure, institutions, cost). The loop keeps asking which solutions are missing at each level, including high-income countries. See <a href="/method">the method</a>.</p>`;
   return render('/context', o, { title: `By income level | ${SITE}`, description: 'Solutions by country income level.', body });
 }
 
