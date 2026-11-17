@@ -63,7 +63,7 @@ ${ui.section({ id: 'reported', title: 'Implementations reported', body: '<p>None
 }
 
 function methodPage(c, o) {
-  const repo = 'https://github.com/QNFO/practical-solutions/blob/main/worker/src/';
+  const repo = 'https://github.com/ultrastable/practical-solutions/blob/main/worker/src/';
   const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Method' }])}<h1>Method</h1><p class="lede">This page describes exactly how the site is made. Nothing here is hidden behind a model: where a model is used it is named, and today the loop uses none.</p>
 ${ui.section({ id: 'problems', title: '1. How problems are chosen', body: `<p>A problem is on the list when a public global indicator (World Bank open data, world aggregate) sits away from an international target (SDG, WHO, World Bank). The score is the shortfall to target, between 0 and 1; the ranking is computed by code on every refresh, not edited by hand. The list of indicators is code in <a href="${repo}problems.js">problems.js</a>; adding one is a pull request. Limits: it ranks gap, not deaths or years of life lost, and ignores how solvable a problem is. A problem whose indicator has no usable data is still shown, marked as unranked.</p>` })}
 ${ui.section({ id: 'solutions', title: '2. How solutions get in', body: `<p>An entry is added only with a citation to a study, the study's own figures, where it was tested, what it takes, who can act, a cheapest first test, and its limits. Entries are written in <a href="${repo}solutions.js">code</a>, so every addition is reviewed and recorded in version history. The automated loop proposes leads; it does not promote a lead to an entry on its own.</p>` })}

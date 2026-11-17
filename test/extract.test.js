@@ -48,9 +48,9 @@ function mint(claims, kid = 'k1') {
   const sig = createSign('RSA-SHA256').update(`${h}.${p}`).sign(privateKey).toString('base64url');
   return { token: `${h}.${p}.${sig}`, jwks: [{ ...publicKey.export({ format: 'jwk' }), kid }] };
 }
-const good = { iss: ISSUER, aud: 'practical-solutions-llm', repository: 'QNFO/practical-solutions', exp: Math.floor(Date.now() / 1000) + 300 };
+const good = { iss: ISSUER, aud: 'practical-solutions-llm', repository: 'ultrastable/practical-solutions', exp: Math.floor(Date.now() / 1000) + 300 };
 test('oidc: a valid run token passes; wrong repository, audience, expiry or key fail', async () => {
-  const a = mint(good); const opt = { audience: 'practical-solutions-llm', repository: 'QNFO/practical-solutions', jwks: a.jwks };
+  const a = mint(good); const opt = { audience: 'practical-solutions-llm', repository: 'ultrastable/practical-solutions', jwks: a.jwks };
   assert.equal((await verifyOidc(a.token, opt)).ok, true);
   assert.equal((await verifyOidc(a.token, { ...opt, repository: 'x/y' })).reason, 'repository');
   assert.equal((await verifyOidc(a.token, { ...opt, audience: 'other' })).reason, 'audience');
