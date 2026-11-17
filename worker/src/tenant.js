@@ -5,6 +5,7 @@
 import { PAGE } from './ui.js';
 import { rankProblems } from './problems.js';
 import { tick, verifiedText } from './improve.js';
+import { indexnowKey } from '../../vendor/ultrastable/core/promote/index.js';
 import { toRss, toJsonFeed, itemsFrom } from '../../vendor/ultrastable/core/feed/index.js';
 import { describeChange } from './publish.js';
 import { SOLUTIONS } from './solutions.js';
@@ -60,6 +61,7 @@ export default {
       try { return Response.json(b.settle ? { ok: await PV.settle(env.STATE, b.settle, b.effect, b.note) } : { ok: true, row: await PV.add(env.STATE, b) }); } catch (x) { return Response.json({ error: String(x.message || x) }, { status: 400 }); }
     }
     if (u.pathname === '/changes.json') return Response.json({ changes: await j(env, 'changes', []), last_tick: await j(env, 'last_tick', null) });
+    if (/^\/[a-f0-9]{32}\.txt$/.test(u.pathname) && u.pathname === '/' + await indexnowKey('practical-solutions') + '.txt') return new Response(u.pathname.slice(1, 33), { headers: { 'content-type': 'text/plain' } });
     const origin = canonicalOrigin(r, u);
     if (['/feed.xml', '/feed.json'].includes(u.pathname)) {
       const meta = { title: 'Practical Solutions: what changed', link: origin, description: 'Every automatic change the improvement loop made: re-rankings, evidence checks, new candidate evidence.' };

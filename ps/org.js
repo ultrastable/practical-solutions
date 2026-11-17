@@ -11,6 +11,7 @@ import { evaluate } from './criticality.js';
 import { renderBrief } from './brief.js';
 import { psMetrics } from './metrics.js';
 import { outreachStep } from './outreach_step.js';
+import { promoteStep } from './promote_step.js';
 import { selfMigrateStep } from './selfmigrate.js';
 
 const presence = env => Object.fromEntries(Object.entries(env || {}).filter(([, v]) => typeof v === 'string' && v).map(([k]) => [k, true]));
@@ -19,7 +20,7 @@ export function createPs({ db, env = {}, secrets = env, fetch: f = globalThis.fe
   const cfg = config || buildConfig();
   const org = createOrg({ db, env, config: cfg, fetch: f, now, metrics: psMetrics });
   const steps = psSteps({ fetch: f, secrets, config: cfg, sourceFor: spec => makeSource(spec, { fetch: f }) });
-  const tick = (e = env) => runTick(db, { config: cfg, env: presence(e), now: now(), extraSteps: [...(selfMigrate ? [selfMigrateStep(selfMigrate)] : []), ...org.extraSteps(e), ...steps, ...(solutions.length ? [outreachStep({ solutions, fetch: f, env: e, footer, origin })] : [])], metrics: psMetrics });
+  const tick = (e = env) => runTick(db, { config: cfg, env: presence(e), now: now(), extraSteps: [...(selfMigrate ? [selfMigrateStep(selfMigrate)] : []), ...org.extraSteps(e), ...steps, ...(solutions.length && origin ? [promoteStep({ solutions, fetch: f, env: e, origin })] : []), ...(solutions.length ? [outreachStep({ solutions, fetch: f, env: e, footer, origin })] : [])], metrics: psMetrics });
 
   async function handle(request) {
     const url = new URL(request.url);
