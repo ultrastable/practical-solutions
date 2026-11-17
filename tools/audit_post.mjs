@@ -13,7 +13,12 @@ export function buildEvent(a, env = process.env) {
   return { actor: a.actor || ('workflow:' + (env.GITHUB_WORKFLOW || 'manual')).slice(0, 60), kind: a.kind, subject: a.subject || '', summary: a.summary || `${a.kind} (${env.GITHUB_WORKFLOW || 'manual'}, ${sha})`, ref: sha ? `sha:${sha}` : (run ? `run:${run}` : ''),
     payload: { run, sha, workflow: env.GITHUB_WORKFLOW || '', file: a['payload-file'] ? readFileSync(a['payload-file'], 'utf8') : undefined } };
 }
-export async function post(event, { fetchImpl = fetch, env = process.env } = {}) {
+export async function post(event, { fetchImpl = fetch, env = process.env, tries = 4, waitMs = 6000 } = {}) {
+  // A Worker deployed seconds ago can still answer 404 for a short while, so a refusal is retried before it is reported.
+  let last; for (let i = 0; i < tries; i++) { try { return await postOnce(event, { fetchImpl, env }); } catch (e) { last = e; if (i < tries - 1) await new Promise(r => setTimeout(r, waitMs)); } }
+  throw last;
+}
+async function postOnce(event, { fetchImpl, env }) {
   const t = await fetchImpl(`${env.ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}`, { headers: { authorization: 'Bearer ' + env.ACTIONS_ID_TOKEN_REQUEST_TOKEN } });
   if (!t.ok) throw new Error('could not mint an OIDC token: ' + t.status);
   const r = await fetchImpl(URL_BASE + '/audit/event', { method: 'POST', headers: { authorization: 'Bearer ' + (await t.json()).value, 'content-type': 'application/json' }, body: JSON.stringify(event) });
