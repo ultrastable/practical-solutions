@@ -11,7 +11,10 @@ const base = (process.argv[2] || process.env.BASE || '').replace(/\/$/, '');
 if (!base) { console.error('usage: live_axe.mjs <base url>'); process.exit(2); }
 const { chromium } = require('playwright');
 const axeSrc = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
-const idx = await (await fetch(base + '/index.json')).json();
+// The edge throttles a fast crawl with 429/502/503 before the Worker runs, so retry those with backoff (same rule as live_ux.mjs).
+const THROTTLED = [429, 502, 503], sleep = ms => new Promise(r => setTimeout(r, ms));
+async function getJson(path) { let r; for (let i = 0; i < 5; i++) { r = await fetch(base + path); if (!THROTTLED.includes(r.status)) break; await r.text(); await sleep(500 * 2 ** i); } if (!r.ok) throw new Error(path + ' status ' + r.status); return r.json(); }
+const idx = await getJson('/index.json');
 const paths = ['/', '/for', '/for/implementers', '/solutions', '/problems', '/domains', '/compare?ids=' + idx.solutions.slice(0, 2).map(s => s.id).join('&ids='), '/search?q=water', '/method', '/api', '/about', '/impact',
   ...idx.solutions.slice(0, 4).map(s => '/solutions/' + s.id), '/problems/' + idx.problems[0].id, '/domains/' + idx.domains[0].slug, '/solutions/nope'];
 const browser = await chromium.launch(); const bad = [];
@@ -19,7 +22,8 @@ for (const scheme of ['light', 'dark']) for (const [name, viewport] of [['deskto
   const page = await (await browser.newContext({ viewport, colorScheme: scheme })).newPage(); const errors = []; let skipErrors = false; page.on('console', m => m.type() === 'error' && !skipErrors && errors.push(m.text())); page.on('pageerror', e => errors.push(String(e)));
   for (const p of paths) {
     skipErrors = p === '/solutions/nope'; // the 404 page is expected to log its own status
-    const resp = await page.goto(base + p, { waitUntil: 'load' }); await page.evaluate(axeSrc);
+    let resp; for (let i = 0; i < 5; i++) { const n = errors.length; resp = await page.goto(base + p, { waitUntil: 'load' }); if (!THROTTLED.includes(resp.status())) break; errors.length = n; await sleep(500 * 2 ** i); }
+    await page.evaluate(axeSrc);
     const r = await page.evaluate(() => axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] } }));
     for (const v of r.violations) bad.push(`${scheme} ${name} ${p}: ${v.id} (${v.impact}) ${v.nodes[0].html.slice(0, 100)}`);
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) bad.push(`${scheme} ${name} ${p}: horizontal overflow`);
