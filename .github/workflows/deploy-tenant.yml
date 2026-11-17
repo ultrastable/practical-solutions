@@ -27,7 +27,10 @@ jobs:
       - name: live check
         run: |
           for p in / /method /problems/tb /solutions/kmc /domains /search?q=water /impact /metrics.json /graph.json /questions.json /index.json /sitemap.xml /feed.xml /brightspots.json; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "https://tenant-ps-web.ultrastable.workers.dev$p"); echo "$p $code"; [ "$code" = 200 ] || exit 1
+            for try in 1 2 3 4 5; do   # a new version takes a few seconds to reach every location
+              code=$(curl -s -o /dev/null -w '%{http_code}' "https://tenant-ps-web.ultrastable.workers.dev$p"); [ "$code" = 200 ] && break; sleep 6
+            done
+            echo "$p $code"; [ "$code" = 200 ] || exit 1
           done
       - name: user stories and structural audit against the live site
         run: node tools/live_ux.mjs https://tenant-ps-web.ultrastable.workers.dev

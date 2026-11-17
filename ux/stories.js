@@ -7,10 +7,12 @@
 const v = path => ({ visit: path });
 const x = e => ({ expect: e });
 export const STORIES = [
-  { id: 'IMP-1', who: 'implementers', want: 'see which solutions are ready to implement', so: 'I can shortlist one my team could deliver', covers: ['home', 'forPage', 'solutionsIndex', 'card', 'badge'],
+  { id: 'IMP-1', who: 'implementers', want: 'see which solutions are ready to implement', so: 'I can shortlist one my team could deliver', covers: ['home', 'forPage', 'contextPage', 'solutionsIndex', 'card', 'badge'],
     steps: [v('/'), { follow: { href: '^/for/implementers$' } }, x({ heading: 'Ready to implement' }), { follow: { href: '^/solutions\\?ready=ready' } }, x({ text: 'ready to implement', link: '^/solutions/[a-z0-9-]+$' })] },
   { id: 'IMP-2', who: 'implementers', want: 'filter solutions by cost and domain', so: 'I only see what fits my budget and my field', covers: ['solutionsIndex', 'facets', 'pagination'],
     steps: [v('/solutions'), x({ form: '/solutions' }), v('/solutions?cost=low'), x({ text: 'low', no_text: 'Nothing matches', link: '^/solutions/' })] },
+  { id: 'IMP-6', who: 'implementers', want: 'see only solutions that suit my country\'s income level', so: 'I do not shortlist something my country has already solved or cannot yet deliver', covers: ['contextPage', 'solutionsIndex', 'facets', 'solutionPage'],
+    steps: [v('/context'), x({ heading: 'Solutions by country income level' }), { follow: { href: '^/solutions\\?level=high$' } }, x({ form: '/solutions' })] },
   { id: 'IMP-3', who: 'implementers', want: 'read what it takes, who delivers it and the cheapest first test', so: 'I can plan a small pilot', covers: ['solutionPage', 'summaryList', 'keyMessages', 'section'],
     steps: [v('/solutions/kmc'), x({ heading: 'Cheapest first test', text: 'Start with' }), x({ heading: 'Can it be implemented', text: 'Delivery channel' }), x({ heading: 'What it takes', text: 'Who can act' })] },
   { id: 'IMP-4', who: 'implementers', want: 'compare two or three solutions side by side', so: 'I can justify my choice to my director', covers: ['comparePage', 'table'],
@@ -59,7 +61,7 @@ export const STORIES = [
     steps: [v('/api'), x({ heading: 'Data and API', text: ['Endpoints', 'Keep the labels'] })] },
   { id: 'DEV-4', who: 'developers', want: 'fetch one problem with its linked solutions', so: 'I do not download everything', covers: ['json-entity'],
     steps: [v('/problems/tb.json'), x({ type: 'json', json: { path: 'id', equals: 'tb' } })] },
-  { id: 'EXP-1', who: 'experts', want: 'see the entries with the weakest evidence', so: 'I review where I add most value', covers: ['forPage', 'solutionsIndex'],
+  { id: 'EXP-1', who: 'experts', want: 'see the entries with the weakest evidence', so: 'I review where I add most value', covers: ['forPage', 'contextPage', 'solutionsIndex'],
     steps: [v('/for/experts'), { follow: { href: '^/solutions\\?label=' } }, x({ text: 'cited, weaker design', link: '^/solutions/' })] },
   { id: 'EXP-2', who: 'experts', want: 'report an error with the page already filled in', so: 'a correction costs me one minute', covers: ['solutionPage', 'cite'],
     steps: [v('/solutions/kmc'), x({ link: 'issues/new\\?title=Correction', text: 'Report an error' })] },
@@ -76,5 +78,5 @@ export const STORIES = [
 ];
 export const storiesFor = who => STORIES.filter(s => s.who === who);
 // Every template, route and component a story may claim to cover. A story that names something else fails the traceability test.
-export const TEMPLATES = ['home', 'forIndex', 'forPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage'];
+export const TEMPLATES = ['home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage'];
 export const ROUTES = ['json-entity', 'csv', 'llms', 'sitemap'];

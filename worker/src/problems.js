@@ -25,6 +25,7 @@ export const PROBLEMS = [
   { id: 'women-power', title: 'Women missing from national parliaments', domain: 'Governance and gender', ind: 'SG.GEN.PARL.ZS', unit: '% of parliamentary seats held by women', lower: false, target: 50, target_src: 'SDG 5.5 / parity: 50%' },
   { id: 'finance', title: 'Adults without a financial account', domain: 'Poverty', ind: 'FX.OWN.TOTL.ZS', unit: '% of adults with an account', lower: false, target: 100, target_src: 'World Bank / G20: universal financial access' },
   { id: 'birthreg', title: 'Children whose birth is never registered', domain: 'Governance and gender', ind: 'SP.REG.BRTH.ZS', unit: '% of children under 5 registered', lower: false, target: 100, target_src: 'SDG 16.9: universal' },
+  { id: 'tobacco', title: 'Adults who smoke tobacco', domain: 'Chronic disease', ind: 'SH.PRV.SMOK', unit: '% of adults who smoke', lower: true, target_from: 2010, factor: 0.7, target_src: 'WHO global target: 30% lower than 2010' },
 ];
 
 

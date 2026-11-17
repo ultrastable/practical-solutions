@@ -7,6 +7,7 @@ import { SOLUTIONS } from './solutions.js';
 import { verifiedText } from './improve.js';
 import { implementability } from './implementability.js';
 import { bcaFor } from './bca.js';
+import { fitFor } from './context.js';
 
 // strongest cited design and the overall reading for the older entries; newer entries carry these fields themselves
 const ANNOT = {
@@ -54,8 +55,8 @@ export function buildCatalog({ problems, solutions, verif = {}, cands = {}, draf
     const a = ANNOT[s.id];
     const full = { ...s, design: s.design || (a && a[0]) || 'guidance', verdict: s.verdict || (a && a[1]) || 'limited' };
     const v = verif[s.id];
-    const impl = implementability(s.id), bca = bcaFor(s.id, bcaState);
-    return { ...full, impl, bca, label: labelOf(full), verified: verifiedText(v) || s.verified, ver: v || null, links: sourceLinks(s, v), checkable: !!(checks && checks.length),
+    const impl = implementability(s.id), bca = bcaFor(s.id, bcaState), fit = fitFor(s.id);
+    return { ...full, impl, bca, fit, label: labelOf(full), verified: verifiedText(v) || s.verified, ver: v || null, links: sourceLinks(s, v), checkable: !!(checks && checks.length),
       domains: [...new Set((s.problem_ids || []).map(id => (PROBLEMS.find(p => p.id === id) || {}).domain).filter(Boolean))] };
   });
   const byProblem = Object.fromEntries(probs.map(p => [p.id, sols.filter(s => (s.problem_ids || []).includes(p.id))]));
