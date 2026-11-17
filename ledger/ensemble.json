@@ -12,6 +12,18 @@
   "clean-cooking": {
    "at": "2026-11-17T17:48:56.425Z",
    "outcome": "no change proposed: The entry already agrees with the sources, which discuss the relationship between household air pollution and health outcomes, but do not provide information that contradicts or updates the entry."
+  },
+  "deworming": {
+   "at": "2026-11-17T18:01:45.400Z",
+   "outcome": "rejected"
+  },
+  "emissions-market": {
+   "at": "2026-11-17T18:01:45.400Z",
+   "outcome": "no change proposed: The provided sources do not contain information relevant to the catalogue entry about a regulated pollution market with continuous monitoring."
+  },
+  "friendship-bench": {
+   "at": "2026-11-17T18:01:45.400Z",
+   "outcome": "pending"
   }
  },
  "proposals": [
@@ -66,36 +78,96 @@
    "status": "pending",
    "reason": "only 0 usable verifiers from distinct vendors; 2 are needed",
    "at": "2026-11-17T17:48:56.425Z"
+  },
+  {
+   "id": "f4b95b39079b",
+   "entry": "deworming",
+   "field": "claim",
+   "old": "An influential trial found that treating schoolchildren for worms raised school attendance, but a later Cochrane review found little effect on growth, school performance or survival for mass treatment.",
+   "new": "An influential trial found that treating schoolchildren for worms raised school attendance, and a study also found that deworming before age five leads to improvements in morbidity and lifespan decades later, but a later Cochrane review found little effect on growth, school performance or survival for mass treatment.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/40857314",
+    "title": "Early-life infectious disease exposure, the \"hygiene hypothesis,\" and lifespan: Evidence from hookworm disease."
+   },
+   "quote": "Findings show deworming before age five leads to 2.5 additional months of life in a large sample of adult death records.",
+   "why": "The new text incorporates the findings from source 1, which provides additional evidence of the benefits of deworming.",
+   "proposer": {
+    "id": "llama-3.3-fp8",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-17T18:01:45.400Z"
+  },
+  {
+   "id": "149be85936ab",
+   "entry": "friendship-bench",
+   "field": "works_where",
+   "old": "Harare clinics, Zimbabwe; adapted in other countries.",
+   "new": "Zimbabwe; adapted in Botswana and Palestine",
+   "source": {
+    "url": "https://europepmc.org/article/MED/41653177",
+    "title": "Piloting a Near-Peer Lay Counselor Based Problem Solving Therapy Intervention for Youth With and Without HIV in Botswana: An Adaptation of the Friendship Bench."
+   },
+   "quote": "The Safe Haven intervention, adapted from Zimbabwe's Friendship Bench, addresses this gap by leveraging near-peer youth lay counselors trained in Problem-Solving Therapy",
+   "why": "The quote shows that the Friendship Bench intervention has been adapted in Botswana, in addition to its original location in Zimbabwe, and also in Palestine as seen in source 4.",
+   "proposer": {
+    "id": "llama-3.3-fp8",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [],
+   "status": "pending",
+   "reason": "only 0 usable verifiers from distinct vendors; 2 are needed",
+   "at": "2026-11-17T18:01:45.400Z"
   }
  ],
  "health": {
   "mistral-small": {
-   "calls": 3,
-   "errors": 3
+   "calls": 5,
+   "errors": 5,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "deepseek-v3": {
-   "calls": 4,
-   "errors": 4
+   "calls": 7,
+   "errors": 7,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "phi-4": {
-   "calls": 5,
-   "errors": 5
+   "calls": 9,
+   "errors": 9,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "grok-3-mini": {
-   "calls": 5,
-   "errors": 5
+   "calls": 9,
+   "errors": 9,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "command-a": {
-   "calls": 5,
-   "errors": 5
+   "calls": 9,
+   "errors": 9,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "gemma-3": {
-   "calls": 5,
+   "calls": 9,
    "errors": 0
   },
   "gpt-4.1-mini": {
-   "calls": 2,
-   "errors": 2
+   "calls": 3,
+   "errors": 3,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   }
  },
  "benched": {},
@@ -111,11 +183,43 @@
    "pending": 2,
    "none": 1,
    "panel_failures": 0
+  },
+  {
+   "at": "2026-11-17T18:01:45.400Z",
+   "examined": 3,
+   "proposed": 2,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 1,
+   "pending": 1,
+   "none": 1,
+   "panel_failures": 0,
+   "failures": [
+    "mistral-small: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "deepseek-v3: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "phi-4: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "grok-3-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "command-a: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "deepseek-v3: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "phi-4: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "grok-3-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "command-a: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "phi-4: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "grok-3-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "command-a: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "gemma-3: substituted by llama-3.3-fp8",
+    "gpt-4.1-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "mistral-small: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "deepseek-v3: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "phi-4: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "grok-3-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "command-a: Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-17T17:48:56.425Z"
+ "at": "2026-11-17T18:01:45.400Z"
 }
