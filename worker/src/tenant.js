@@ -12,6 +12,7 @@ import { buildCatalog } from './catalog.js';
 import { route } from './site.js';
 import { recordView, summary } from './reach.js';
 
+const PUBLIC_HOST = 'solutions.ultrastable.org';
 const BACKEND = 'https://ps-practical-solutions.q08.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
 const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' };
@@ -22,6 +23,8 @@ export default {
   async scheduled(_e, env, ctx) { ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); await tick({ store: env.STATE, rank: rankProblems }); })()); },
   async fetch(r, env, ctx) {
     const u = new URL(r.url);
+    // behind the edge forwarder the public host is solutions.ultrastable.org; only that one host is accepted, so canonical links and the sitemap name it
+    if (r.headers.get('x-forwarded-host') === PUBLIC_HOST) { u.protocol = 'https:'; u.host = PUBLIC_HOST; }
     if (ctx && ctx.waitUntil) ctx.waitUntil(recordView(env.STATE, r).catch(() => {}));
     if (u.pathname === '/metrics.json') return Response.json(await summary(env.STATE), { headers: { 'cache-control': 'public, max-age=300' } });
     if (u.pathname === '/live') return new Response(PAGE, { headers });

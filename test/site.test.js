@@ -111,3 +111,18 @@ test('reach counters are aggregate, count page views only, and keep no visitor d
   assert.equal(s.views, 2); assert.equal(s.referrers['who.int'], 1); assert.equal(s.kinds.agents_and_bots, 1);
   assert.ok(!JSON.stringify([...m.values()]).includes('Mozilla'));
 });
+
+import fwd, { ORIGIN } from '../edge/forwarder.js';
+test('behind the edge forwarder canonical links name the public host, and only that host', async () => {
+  const m = new Map(); const env = { STATE: { get: async k => m.get(k) ?? null, put: async (k, v) => { m.set(k, v); } } };
+  const ok = await (await w.fetch(new Request('https://tenant-ps-web.ultrastable.workers.dev/sitemap.xml', { headers: { 'x-forwarded-host': 'solutions.ultrastable.org' } }), env)).text();
+  assert.ok(ok.includes('<loc>https://solutions.ultrastable.org/solutions/kmc</loc>'));
+  const evil = await (await w.fetch(new Request('https://tenant-ps-web.ultrastable.workers.dev/sitemap.xml', { headers: { 'x-forwarded-host': 'evil.example' } }), env)).text();
+  assert.ok(!evil.includes('evil.example'));
+});
+test('the forwarder sends the path and query to the tenant and marks the public host', async () => {
+  let seen; const real = globalThis.fetch; globalThis.fetch = async r => { seen = r; return new Response('x'); };
+  try { await fwd.fetch(new Request('https://solutions.ultrastable.org/search?q=tb')); } finally { globalThis.fetch = real; }
+  assert.equal(seen.url, ORIGIN + '/search?q=tb');
+  assert.equal(seen.headers.get('x-forwarded-host'), 'solutions.ultrastable.org');
+});

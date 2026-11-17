@@ -3,7 +3,7 @@
 # No repo secrets: the run proves its identity to the ultrastable deploy gateway with a GitHub OIDC token.
 name: deploy-tenant
 on:
-  push: { branches: [main], paths: ['worker/src/**', 'vendor/ultrastable/core/feed/**', 'tools/deploy_tenant.mjs', '.github/workflows/deploy-tenant.yml'] }
+  push: { branches: [main], paths: ['worker/src/**', 'vendor/ultrastable/core/feed/**', 'tools/deploy_tenant.mjs', 'edge/**', '.github/workflows/deploy-tenant.yml'] }
   workflow_dispatch: {}
 concurrency: { group: deploy-tenant, cancel-in-progress: false }
 permissions: { contents: read, id-token: write }
@@ -29,3 +29,10 @@ jobs:
           for p in / /method /problems/tb /solutions/kmc /domains /search?q=water /impact /metrics.json /index.json /sitemap.xml /feed.xml /brightspots.json; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "https://tenant-ps-web.ultrastable.workers.dev$p"); echo "$p $code"; [ "$code" = 200 ] || exit 1
           done
+      - name: live check on the public domain
+        run: |
+          for p in / /method /sitemap.xml; do
+            for i in 1 2 3 4 5 6; do code=$(curl -s -o /dev/null -w '%{http_code}' "https://solutions.ultrastable.org$p"); [ "$code" = 200 ] && break; sleep 10; done
+            echo "$p $code"; [ "$code" = 200 ] || exit 1
+          done
+          curl -s https://solutions.ultrastable.org/sitemap.xml | grep -q 'https://solutions.ultrastable.org/solutions/kmc'
