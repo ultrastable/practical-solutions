@@ -1,5 +1,5 @@
 {
- "commit": "ceadfd2e6a22165f5d5750555ff86982a7f078fc",
+ "commit": "28db544727e90ec8f3795a9ec968df2ff7e51e7c",
  "files": {
   ".claude/settings.json": "db2a7917aac18605c5ba25c2bb717aacf61ddae27873766a7c0a51856b9dec43",
   ".cursor/rules/ultrastable.mdc": "5b85ce4a068a628916dac979af4bf4da49015fc4183bc4ce06a6ccbf9d22c479",
@@ -424,9 +424,9 @@
   "core/principles/principles.test.js": "9bb76c154b075c7200ecbed0832ec87c99b94dfdaa8bf62106496c4fc0e8bf07",
   "core/principles/render.js": "40b783e0d0510841f92f643e01238787e1623cbfd95c71000558d553ea50fcc5",
   "core/promote/README.md": "13da7de4491f15f6d88dae11e87029ccfc32493ccee94706dea7aa5d65a26b14",
-  "core/promote/index.js": "3bb6bb174438f969f8dc90d3b4dd8a5b1a0d722d14c78a6d796b43883f3aef76",
+  "core/promote/index.js": "3c0da844708bbb7de8ae96e987c48091347d613b7cae94df2e926e6cc0c8f41d",
   "core/promote/migrations/0001_promote.sql": "34803099b0e5f46ece968075e29bee573ad0586b7f12370d88ce86be2ce340f7",
-  "core/promote/promote.test.js": "7aab13de4a345e5f66ea4f06fbad7336597449ac22283e8ac90bf7b123e83c57",
+  "core/promote/promote.test.js": "f8d56b7c898e1b3454b031cdb1dbb9cc76dc0b960dd13ab9469f30342e52f8d8",
   "core/remediation/README.md": "c96a6c76627045d3ec5e6c988e504c18e7c4af5728242bef42a58fed907e8858",
   "core/remediation/index.js": "2e07ea93b4d317dd22a7b50bf52a70586437950d9de0756842bd8fc9ccd4f977",
   "core/remediation/migrations/0001_remediation.sql": "4a4c4228dd0e9d3b65e23b5449707440aa63318519b68fc6b3bbaa99aebdd58c",
