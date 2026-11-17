@@ -11,7 +11,11 @@ export const WORKERS_AI_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 export const ANTHROPIC_MODEL = 'claude-sonnet-5-5';
 
 // Workers AI returns `response` already parsed (an object) when the model's answer is JSON; String() of that is "[object Object]" (the cause of run 9's rejected answers).
-export const textOf = out => { const r = out && (out.response ?? out.result); return (r && typeof r === 'object' ? JSON.stringify(r) : String(r ?? '')).trim(); };
+// Workers AI models answer in several shapes: { response }, { result }, or OpenAI-style { choices: [{ message: { content } }] } (gpt-oss, qwen3 and
+// other reasoning models), sometimes with the text in output[].content[].text. Read every shape so a model is never scored "empty" for its format.
+const choice = out => out?.choices?.[0]?.message?.content ?? out?.choices?.[0]?.text;
+const outputText = out => Array.isArray(out?.output) ? out.output.flatMap(o => Array.isArray(o?.content) ? o.content : []).map(c => c?.text || '').join('') : '';
+export const textOf = out => { const r = out && (out.response ?? out.result ?? choice(out) ?? (outputText(out) || undefined)); return (r && typeof r === 'object' ? (choice(r) ?? JSON.stringify(r)) : String(r ?? '')).trim(); };
 
 // Bump when a route's behaviour changes: skipped extractions are retried when the route fingerprint differs.
 export const ROUTES_VERSION = 'r3';
