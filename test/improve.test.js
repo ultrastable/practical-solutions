@@ -90,3 +90,20 @@ test('extraction handles Cochrane headings without colons and curly apostrophes,
   assert.equal((await reviewDraft(epmcFake([{ abstractText: abs }]), d)).pass, true);
   assert.equal(extractDraft({ pmid: '6', abstract_full: 'Objectives This is a protocol for a Cochrane Review. Main results 5%. Authors\u2019 conclusions x.' }), null);
 });
+
+test('economics entries are checked against OpenAlex abstracts rebuilt from the inverted index', async () => {
+  const { oaAbstract } = await import('../worker/src/improve.js');
+  assert.equal(oaAbstract({ lifted: [0], '194,000': [1], households: [2] }), 'lifted 194,000 households');
+  let url = '';
+  const oa = rows => async u => { url = u; return { ok: true, json: async () => ({ results: rows }) }; };
+  const sol = { id: 'e', checks: [{ source: 'openalex', title: 'Women as Policy Makers', year: 2004, numbers: ['West Bengal'] }] };
+  assert.equal((await verifySolution(oa([{ title: 'Women as Policy Makers', abstract_inverted_index: { 'West': [0], 'Bengal': [1] } }]), sol)).status, 'verified');
+  assert.match(url, /api\.openalex\.org\/works\?search=Women.*publication_year:2004/);
+  assert.equal((await verifySolution(oa([{ title: 'x', abstract_inverted_index: { India: [0] } }]), sol)).status, 'mismatch');
+  for (const id of ['tarl', 'rural-electrification', 'mobile-money', 'women-leaders', 'graduation', 'emissions-market']) {
+    const { SOLUTIONS: all } = await import('../worker/src/solutions.js');
+    const { MORE } = await import('../worker/src/more-solutions.js').catch(() => ({}));
+    const s = [...all, ...(MORE || [])].find(x => x.id === id);
+    assert.ok(s && (s.checks || []).length, id + ' has a check');
+  }
+});
