@@ -1,0 +1,99 @@
+{
+ "problem_sectors": {
+  "neonatal": [
+   "health"
+  ],
+  "under5": [
+   "health",
+   "nutrition",
+   "wash"
+  ],
+  "water": [
+   "wash"
+  ],
+  "hunger": [
+   "nutrition",
+   "social-protection"
+  ],
+  "poverty": [
+   "social-protection"
+  ],
+  "education": [
+   "education"
+  ],
+  "suicide": [
+   "health"
+  ],
+  "malaria": [
+   "health"
+  ],
+  "hypertension": [
+   "health"
+  ]
+ },
+ "min_match": 1,
+ "per_solution_max": 4,
+ "per_tick_max": 6,
+ "require_verified": true,
+ "cold_email_blocked_countries": [
+  "DE",
+  "AT",
+  "FR",
+  "IT",
+  "ES",
+  "NL",
+  "BE",
+  "PT",
+  "SE",
+  "DK",
+  "FI",
+  "IE",
+  "PL",
+  "CZ",
+  "HU",
+  "GR",
+  "RO",
+  "BG",
+  "HR",
+  "SK",
+  "SI",
+  "LT",
+  "LV",
+  "EE",
+  "LU",
+  "MT",
+  "CY"
+ ],
+ "role_local_parts": [
+  "info",
+  "contact",
+  "contactus",
+  "enquiries",
+  "inquiries",
+  "communications",
+  "press",
+  "media",
+  "pr",
+  "secretariat",
+  "registry",
+  "feedback",
+  "hello",
+  "office",
+  "admin",
+  "webmaster"
+ ],
+ "remit_weight": {
+  "implements": 3,
+  "funds": 3,
+  "regulates": 2,
+  "advises": 1
+ },
+ "gates": {
+  "per_day": 5,
+  "per_recipient": 1,
+  "pause_bounce_rate": 0.05,
+  "min_sample": 10,
+  "pause_on_complaint": true
+ },
+ "approver": "owner-delegation:Rowan:2026-11-17"
+}
