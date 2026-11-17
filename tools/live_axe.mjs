@@ -13,13 +13,13 @@ const { chromium } = require('playwright');
 const axeSrc = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const idx = await (await fetch(base + '/index.json')).json();
 const paths = ['/', '/for', '/for/implementers', '/solutions', '/problems', '/domains', '/compare?ids=' + idx.solutions.slice(0, 2).map(s => s.id).join('&ids='), '/search?q=water', '/method', '/api', '/about', '/impact',
-  ...idx.solutions.slice(0, 4).map(s => '/solutions/' + s.id), '/problems/' + idx.problems[0].id, '/domains/' + idx.domains[0].slug, '/solutions/nope'];
+  ...idx.solutions.slice(0, 4).map(s => '/solutions/' + s.id), '/problems/' + idx.problems[0].id, '/domains/' + idx.domains[0].slug, '/solutions/nope', '/country', '/levels/low'];
 const browser = await chromium.launch(); const bad = [];
 for (const scheme of ['light', 'dark']) for (const [name, viewport] of [['desktop', { width: 1280, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
   const page = await (await browser.newContext({ viewport, colorScheme: scheme })).newPage(); const errors = []; let skipErrors = false; page.on('console', m => m.type() === 'error' && !skipErrors && errors.push(m.text())); page.on('pageerror', e => errors.push(String(e)));
   for (const p of paths) {
     skipErrors = p === '/solutions/nope'; // the 404 page is expected to log its own status
-    let resp; await page.waitForTimeout(150); for (let i = 0; i < 8; i++) { const n = errors.length; resp = await page.goto(base + p, { waitUntil: 'load' }); if (![429, 502, 503].includes(resp.status())) break; errors.length = n; await page.waitForTimeout(Math.min(15000, 1000 * 2 ** i)); } await page.evaluate(axeSrc); // retry for about a minute: the edge throttles a fast crawl before the Worker runs (deploys from several threads crawl at once)
+    let resp; await page.waitForTimeout(150); for (let i = 0; i < 8; i++) { const n = errors.length; try { resp = await page.goto(base + p, { waitUntil: 'load', timeout: 30000 }); } catch (e) { resp = null; if (i === 7) throw e; } if (resp && ![429, 502, 503].includes(resp.status())) break; errors.length = n; await page.waitForTimeout(Math.min(15000, 1000 * 2 ** i)); } await page.evaluate(axeSrc); // retry for about a minute: the edge throttles a fast crawl before the Worker runs (deploys from several threads crawl at once)
     const r = await page.evaluate(() => axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] } }));
     for (const v of r.violations) bad.push(`${scheme} ${name} ${p}: ${v.id} (${v.impact}) ${v.nodes[0].html.slice(0, 100)}`);
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) bad.push(`${scheme} ${name} ${p}: horizontal overflow`);
