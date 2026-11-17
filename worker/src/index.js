@@ -7,12 +7,13 @@ import { ledgerExport } from '../../ps/ledger.js';
 import { PAGE } from './ui.js';
 import { SOLUTIONS } from './solutions.js';
 import { rankProblems } from './problems.js';
+import { ALLOW, FILES } from './selfmigrate.gen.js';
 import { FOOTER } from './publish.js';
 import { handleInbound, recordEvent, metrics, queue, approveIntent, suppressAddr, agenciesGraph } from '../../ps/outreach_step.js';
 
 
 const ORIGIN = 'https://tenant-ps-web.ultrastable.workers.dev';
-const ps = env => createPs({ db: env.DB, env, secrets: env, solutions: SOLUTIONS, footer: FOOTER, origin: env.PS_ORIGIN || ORIGIN });
+const ps = env => createPs({ db: env.DB, env, secrets: env, selfMigrate: { files: FILES, allow: ALLOW }, solutions: SOLUTIONS, footer: FOOTER, origin: env.PS_ORIGIN || ORIGIN });
 const authed = (request, env) => Boolean(env.PS_TICK_TOKEN) && request.headers.get('x-ps-token') === env.PS_TICK_TOKEN;
 
 export default {
