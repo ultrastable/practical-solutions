@@ -19,6 +19,22 @@ jobs:
         run: node --no-warnings bin/ps.mjs simulate --days 150 | tee simulate.txt || true
       - uses: actions/upload-artifact@v4
         with: { name: simulate, path: simulate.txt }
+  access:
+    # The access preflight (core/access): probes the real state of every capability this tenant depends on, fails when a required one is
+    # not present, and fails when any file asks a person for a capability the probe shows present or unproven missing.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: { contents: read, actions: read }
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node --no-warnings vendor/ultrastable/core/access/cli.mjs --config ps/access.mjs --out access-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: access-report, path: access-report.json }
   reference-python:
     runs-on: ubuntu-latest
     timeout-minutes: 15

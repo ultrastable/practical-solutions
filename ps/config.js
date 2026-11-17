@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 // Instance configuration. Secrets appear only as binding names. The model ladder follows the monthly budget.
+import access from './access.mjs';
 import policy from '../vendor/ultrastable/autonomy/policy.json' with { type: 'json' };
 
 const surface = (max, start) => ({ max_permission: max, start_rung: start });
@@ -16,6 +17,7 @@ export function buildConfig(over = {}) {
       },
     },
     ps: { max_per_tick: 8, perms: 500, criticality: {} },
+    access, // core/access: the preflight that every ask of the owner must pass; see ps/access.mjs
     ...over,
   };
 }
