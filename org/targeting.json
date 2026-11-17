@@ -95,5 +95,9 @@
   "min_sample": 10,
   "pause_on_complaint": true
  },
- "approver": "owner-delegation:Rowan:2026-11-17"
+ "approver": "owner-delegation:Rowan:2026-11-17",
+ "sender": {
+  "reply_to": "replies@ultrastable.org",
+  "from": "practical-solutions@outreach.ultrastable.org"
+ }
 }
