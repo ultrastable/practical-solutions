@@ -11,7 +11,8 @@ import { subjectsFrom } from '../worker/src/unknowns.js';
 import { redTeam } from '../vendor/ultrastable/core/ignorance/index.js';
 import { modelFor } from '../vendor/ultrastable/core/ignorance/org.js';
 
-export const CONFIG = { ignorance: { model_alias: 'red', author_family: 'anthropic', token_env: 'GITHUB_TOKEN', models: { red: { endpoint: 'github_models', model: 'openai/gpt-4.1-mini', family: 'openai' } } } };
+import { CONFIG } from '../worker/src/redteam-config.js';
+export { CONFIG };
 
 export async function runRedTeam({ prev = { bySubject: {} }, env = process.env, fetch: f = globalThis.fetch, now = () => Date.now(), budget = 4 } = {}) {
   const { model, author_family } = modelFor({ config: CONFIG, env, fetch: f });

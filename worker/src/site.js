@@ -5,6 +5,8 @@
 import * as ui from './kit/index.js';
 import { LABELS, DESIGN, RULE, search, searchIndex } from './catalog.js';
 import { methodSection } from './bca.js';
+import { statement, region, live, describe } from '../../vendor/ultrastable/core/statements/index.js';
+import { STATEMENTS, CTX } from './method-claims.js';
 import * as U from './unknowns.js';
 import { SECURITY_HEADERS } from './kit/index.js';
 import * as P from './pages.js';
@@ -64,19 +66,21 @@ ${ui.section({ id: 'reported', title: 'Implementations reported', body: '<p>None
   return page('/impact', o, 'Impact and reach', 'How many people read this, who links to it, and how much of it is implementable.', body);
 }
 
+const METHOD_SECTIONS = [['problems', '1. How problems are chosen'], ['solutions', '2. How solutions get in'], ['labels', '3. Labels and evidence grading'], ['checks', '4. How sources are checked'], ['unknowns', '5b. What we do not know'], ['impl', '5. How implementable is it'], ['bca', 'Benefit and cost: one metric for everything'], ['loop', '6. How the loop iterates'], ['not', '7. What it will not do'], ['a11y', '8. Accessibility and speed']];
+// /method is built only from the claims registry (method-claims.js): every sentence is a statement bound to a probe of the real behaviour;
+// tables and counts are live blocks read from the code. core/statements audits this page in CI and in GET /claims.json.
+function methodLive(sec, c) {
+  const e = ui.esc, g = c.ign && c.ign.summary;
+  if (sec === 'labels') return `<ul class="list">${Object.entries(DESIGN).map(([, v]) => `<li><b>${e(v.name)}</b>: ${e(v.note)}</li>`).join('')}</ul>${P.legend()}`;
+  if (sec === 'unknowns') return `<p>${g ? `${g.open} gaps are open and ${g.closed} are closed with a reason.` : 'The first run has not happened yet.'} <a href="/unknowns">Live numbers and the audit questions</a>.</p>`;
+  if (sec === 'bca') return methodSection();
+  return '';
+}
 function methodPage(c, o) {
-  const repo = 'https://github.com/ultrastable/practical-solutions/blob/main/worker/src/';
-  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Method' }])}<h1>Method</h1><p class="lede">This page describes exactly how the site is made. Nothing here is hidden behind a model: where a model is used it is named, and today the loop uses none.</p>
-${ui.section({ id: 'problems', title: '1. How problems are chosen', body: `<p>A problem is on the list when a public global indicator (World Bank open data, world aggregate) sits away from an international target (SDG, WHO, World Bank). The score is the shortfall to target, between 0 and 1; the ranking is computed by code on every refresh, not edited by hand. The list of indicators is code in <a href="${repo}problems.js">problems.js</a>; adding one is a pull request. Limits: it ranks gap, not deaths or years of life lost, and ignores how solvable a problem is. A problem whose indicator has no usable data is still shown, marked as unranked.</p>` })}
-${ui.section({ id: 'solutions', title: '2. How solutions get in', body: `<p>An entry is added only with a citation to a study, the study's own figures, where it was tested, what it takes, who can act, a cheapest first test, and its limits. Entries are written in <a href="${repo}solutions.js">code</a>, so every addition is reviewed and recorded in version history. The automated loop proposes leads; it does not promote a lead to an entry on its own.</p>` })}
-${ui.section({ id: 'labels', title: '3. Labels and evidence grading', body: `<ul class="list">${Object.entries(DESIGN).map(([, v]) => `<li><b>${esc(v.name)}</b>: ${esc(v.note)}</li>`).join('')}</ul>${P.legend()}<p>The label comes from the strongest design the entry cites and from whether its sources agree. It is a transparent rule, not a judgement of quality: a trial can still be small, and one setting may not transfer.</p>` })}
-${ui.section({ id: 'checks', title: '4. How sources are checked', body: `<p>Every day the loop searches Europe PMC for the cited paper and confirms that the quoted numbers appear in its abstract. When it finds the paper it records the DOI and PubMed ID, and the entry links to them. Results are shown on the entry as verified, mismatch or not found; a mismatch is shown, never hidden.</p>` })}
-${ui.section({ id: 'unknowns', title: '5b. What we do not know', body: U.methodSection(c) })}
-${ui.section({ id: 'impl', title: '5. How implementable is it', body: `<p>Information is only useful once somebody acts on it, so every solution is also scored for implementability from four facts shown on its page. ${esc(RULE)} Facts and scoring are in <a href="${repo}implementability.js">code</a>.</p>` })}
-${ui.section({ id: 'bca', title: 'Benefit and cost: one metric for everything', body: methodSection() })}
-${ui.section({ id: 'loop', title: '6. How the loop iterates', body: '<ol><li>Refresh the problem ranking from World Bank data (every 6 hours).</li><li>Re-check the stalest solution citations.</li><li>For each problem without a solution, and for the top-ranked problems, search for recent Cochrane systematic reviews on mortality and survival.</li><li>Find bright spots: countries doing better than their income predicts in two separate periods. Leads only.</li><li>Quote results sentences from reviews, unchanged, and have a separate step confirm every quote and number against the abstract.</li><li>Record every change in the public <a href="/changes">changelog</a> and <a href="/feed.xml">feed</a>.</li></ol>' })}
-${ui.section({ id: 'not', title: '7. What it will not do', body: `<p>It does not present a lead as a finding, paraphrase a result into a stronger claim, or hide a failed check. Corrections: every entry has a <b>Report an error</b> link.</p>` })}
-${ui.section({ id: 'a11y', title: '8. Accessibility and speed', body: '<p>The site works without JavaScript, targets WCAG 2.2 AA, and is tested for contrast, structure, links and size on every change. Report anything that does not work for you using the correction link on the page.</p>' })}`;
+  const S = id => statement(STATEMENTS, id, CTX), by = sec => STATEMENTS.filter(s => s.section === sec).map(s => `<p>${S(s.id)}</p>`).join('');
+  const lede = `<p class="lede">${S('model-use')}</p>`;
+  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Method' }])}${region(`<h1>Method</h1>${lede}${METHOD_SECTIONS.map(([id, title]) => ui.section({ id, title, body: by(id) + live(methodLive(id, c)) })).join('')}`)}
+<p class="m">Every sentence above is a statement in code with a test that runs the behaviour it describes (<a href="/claims.json">${STATEMENTS.length} statements, as JSON</a>).</p>`;
   return page('/method', o, 'Method', 'How problems are chosen, how solutions are found and graded, and how the loop runs.', body);
 }
 
@@ -90,6 +94,7 @@ export function route(u, c) {
     '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o), '/method': () => methodPage(c, o), '/unknowns': () => page('/unknowns', o, 'What we do not know', 'Known unknowns, red-team findings and the new questions generated from them.', U.unknownsBody(c)), '/api': () => P.apiPage(c, o), '/about': () => P.aboutPage(c, o), '/search': () => P.searchPage(c, u, o) };
   if (table[p]) return h(table[p]());
   if (p === '/search.json') return json({ q: u.searchParams.get('q') || '', results: search(searchIndex(c), u.searchParams.get('q')) });
+  if (p === '/claims.json') return json({ statements: describe(STATEMENTS, CTX) });
   if (p === '/unknowns.json') return json(U.unknownsData(c));
   if (p === '/index.json') return json(indexJson(c, o));
   if (p === '/solutions.csv') return new Response(solutionsCsv(c, o), { headers: { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'inline; filename="solutions.csv"', 'cache-control': 'public, max-age=300' } });

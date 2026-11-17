@@ -4,6 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { MODELS } from '../worker/src/bca-models.js';
 import { bcaFor, bcaBlock, methodSection, coverage, bcaTick, extractCost, loadState, KEY } from '../worker/src/bca.js';
+import { CTX } from '../worker/src/method-claims.js';
 import { validate } from '../vendor/ultrastable/core/benefitcost/index.js';
 
 test('every model is valid, sourced and reproducible', () => {
@@ -58,7 +59,7 @@ test('each estimate is shown per income group: applies or not with a reason, mea
   assert.equal(by.high.r.applicable, false); assert.match(by.high.r.reason, /piped/);
   assert.equal(by.low.measured, true); assert.equal(by['upper-middle'].measured, false);
   const h = bcaBlock(b, 'chlorine'); assert.match(h, /Does not apply/); assert.match(h, /Transferred from another setting/);
-  assert.match(methodSection(), /income group/);
+  assert.match(JSON.stringify(CTX.CONTEXTS), /Low income/);
 });
 test('cash transfers carry the cited WELLBY figure with spillover and price effects', () => {
   const b = bcaFor('cash'); assert.ok(b.wellby_per_1000_usd.p50 > 4 && b.wellby_per_1000_usd.p50 < 9); assert.ok(b.unintended_per_1000_usd.p50 < 0);
