@@ -13,11 +13,13 @@ const WB = 'https://api.worldbank.org/v2', OUT = 'data/context.json';
 const HDR = ['https://hdr.undp.org/sites/default/files/2025_HDR/HDR25_Composite_indices_complete_time_series.csv', 'https://hdr.undp.org/sites/default/files/2024-09/HDR25_Composite_indices_complete_time_series.csv', 'https://hdr.undp.org/sites/default/files/2023-24_HDR/HDR23-24_Composite_indices_complete_time_series.csv'];
 // every request has a 30 s deadline: an upstream that accepts the connection and never answers must not hang the run
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+// the World Bank answers 502 in bursts; back off up to 8 s between 5 tries (no wait under node --test, whose fakes fail on purpose)
+const BACKOFF = process.env.NODE_TEST_CONTEXT ? 0 : 1;
 const DEADLINE = Date.now() + 7 * 60 * 1000;  // past this, remaining requests fail at once so the snapshot is still written with what was loaded
 async function get(f, url, kind = 'json') {
   let last;
   if (Date.now() > DEADLINE) throw new Error(`${url}: run deadline reached`);
-  for (let a = 0; a < 3; a++) { try { const r = await f(url, { signal: AbortSignal.timeout(30000) }); if (r.ok) return kind === 'json' ? await r.json() : await r.text(); last = `HTTP ${r.status}`; } catch (e) { last = String(e.message || e); } await sleep(500 * (a + 1)); }
+  for (let a = 0; a < 5; a++) { try { const r = await f(url, { signal: AbortSignal.timeout(30000) }); if (r.ok) return kind === 'json' ? await r.json() : await r.text(); last = `HTTP ${r.status}`; } catch (e) { last = String(e.message || e); } await sleep(BACKOFF * Math.min(8000, 1000 * 2 ** a)); }
   throw new Error(`${url}: ${last}`);
 }
 
