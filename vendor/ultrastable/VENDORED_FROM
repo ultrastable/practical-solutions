@@ -1,8 +1,5 @@
 {
- "added": {
-  "core/kgraph": "ultrastable/workers 9733c97 (#217), unmodified"
- },
- "commit": "2b91abee4d01841079c0728753f6932e1687b388",
+ "commit": "ceadfd2e6a22165f5d5750555ff86982a7f078fc",
  "files": {
   ".claude/settings.json": "db2a7917aac18605c5ba25c2bb717aacf61ddae27873766a7c0a51856b9dec43",
   ".cursor/rules/ultrastable.mdc": "5b85ce4a068a628916dac979af4bf4da49015fc4183bc4ce06a6ccbf9d22c479",
@@ -193,7 +190,7 @@
   "bootstrap/cases.py": "2275f819524e2fed883da271e4824a159149c9b109404ef9a8b564666a86fb8e",
   "bootstrap/ladder.py": "ed4e49a7e0d37ed25208129486627567ab1b5fb3224e08999e31a8f285105cbe",
   "bootstrap/ownerdoc.py": "c4ef40bc9af59ff6056f569a2505d79023d970e9590ae5633d312b64ac506faf",
-  "core/README.md": "da8d5606288b148033f8adae49bbea2dbe234c9920ecbcab960ef35b85ba5c0f",
+  "core/README.md": "ad7832f2bb51fc737e9f5c95770272f79abbd513050ad23368155adbf63cf098",
   "core/_shared/testdb.js": "2a935dab4be1126b948579b3c533a56fea4e61dfc68a168319372d605de1118d",
   "core/access/README.md": "e154db98d2856daee136f1785ebc279a4656255e0963039a68b0881263d8e0dd",
   "core/access/access.test.js": "77b3402cf0b30cea0f10e56931361b32196bf21a257593098e0a39adcb64922d",
@@ -261,7 +258,7 @@
   "core/deploy/review.js": "887f83d50f510a4d7b8f848ae0854a6234ccf3d6df875114aa1a81418feed1ac",
   "core/deploy/review.test.js": "f4429ddcb4a51b484cead4d5184b3124bef4cb6adc7003d05943e1a2775c8ab1",
   "core/deploygate/README.md": "359f53262198267c83bc91c35852a101b350983eb249b862e59b48982e185680",
-  "core/deploygate/index.js": "9538867b0b137df2513a8aa54cd095f02549e461de6bf143cd9f56b7e54c322e",
+  "core/deploygate/index.js": "5448c27be00b4910c64ddf84635bc5e2538ab53c11a8cd2869b2ec77dfd55158",
   "core/deploygate/index.test.js": "82d051f429fbaecc3ab101f20dd073e9eafa66bb5773dff3cad79a8e68e9f047",
   "core/deploygate/worker.js": "612490e4cffdea46c9e98a9819077948d4cbd2fb3deed1a09f03347dd348bb9e",
   "core/describe/README.md": "17e31dd6f5b4d267d4e09203a92f69d7b1b7bbe74553535e7c9a723e35b0a75e",
@@ -329,7 +326,7 @@
   "core/ignorance/ignorance.test.js": "c9bcd0b52fcc08c304656c7d0ebf7c2aaa6396369a1f56da82886e5187152ff1",
   "core/ignorance/index.js": "cd758038af04e11762c7de6f036f7b2c24b5cbd7e7885f03d65d3615514e7a97",
   "core/ignorance/migrations/0001_ignorance.sql": "8cb5571355f41acc7fcb5298eba7b46ee9d95050bd931b50b04b12d35fc03b26",
-  "core/ignorance/models.js": "0761c8ec77f97c9192a2a167c68e2b791a998978a16c5c86f3abccf8a98728dc",
+  "core/ignorance/models.js": "5776b80e405b1a0a371304a1f8664b7e7569137f9e4970165e92d90f4dcc64c4",
   "core/ignorance/org.js": "b266796e2b1360667487cabde07474f167e33ed2397fbad465a20169145a911a",
   "core/ignorance/org.test.js": "06757551fca7cb055c64bf2f4d9d435d5557554388a673697549294e53183131",
   "core/ignorance/store.js": "801fe9a0be7f601e754d589b8a3a3903f16ba3b1f67450e3842dda1c1d4e2b45",
