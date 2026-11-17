@@ -28,8 +28,9 @@ export function parseTask(body = '') {
   return { paths, probe: PROBES.includes(probe) ? probe : 'npm test' };
 }
 
-export function pickIssue(issues, { only } = {}) {
-  const ok = issues.filter(i => !i.pull_request && (i.labels || []).some(l => (l.name || l) === LABEL) && TRUSTED.includes(i.author_association)
+// Trusted: the author association says so, or (with the built-in token the API reports a private org member as CONTRIBUTOR) the author has write access.
+export function pickIssue(issues, { only, writers = new Set() } = {}) {
+  const ok = issues.filter(i => !i.pull_request && (i.labels || []).some(l => (l.name || l) === LABEL) && (TRUSTED.includes(i.author_association) || writers.has(i.user && i.user.login))
     && !(i.labels || []).some(l => ['agent-failed', 'agent-working'].includes(l.name || l)));
   if (only) return ok.find(i => i.number === Number(only)) || null;
   return ok.sort((a, b) => a.number - b.number)[0] || null;
@@ -81,7 +82,11 @@ const note = (n, text) => { try { gh('issue', 'comment', String(n), '--body', te
 
 export async function run({ issueNo, dry = false, root = process.cwd(), env = process.env } = {}) {
   const issues = JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/issues?state=open&labels=${LABEL}&per_page=50`));
-  const issue = pickIssue(issues, { only: issueNo });
+  const writers = new Set();
+  for (const login of new Set(issues.map(i => i.user && i.user.login).filter(Boolean))) {
+    try { if (['admin', 'maintain', 'write'].includes(JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/collaborators/${login}/permission`)).permission)) writers.add(login); } catch { /* no read access to permissions: association alone decides */ }
+  }
+  const issue = pickIssue(issues, { only: issueNo, writers });
   if (!issue) { console.log(JSON.stringify({ picked: null })); return { picked: null }; }
   const { paths } = parseTask(issue.body);
   const files = paths.filter(allowed).filter(p => existsSync(resolve(root, p))).map(p => ({ path: p, text: readFileSync(resolve(root, p), 'utf8') }));
