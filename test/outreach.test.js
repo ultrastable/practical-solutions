@@ -107,7 +107,6 @@ test('health gate pauses on a bounce rate above the limit once the sample is lar
 });
 
 import { handleInbound } from '../ps/outreach_step.js';
-import tenant from '../worker/src/tenant.js';
 test('inbound mail is stored and acted on: opt-out suppresses, bounce counts, reply is recorded', async () => {
   const env = { OPERATOR_NAME: 'Op', OPERATOR_POSTAL: '1 Example St' };
   const { db, step, ctx } = await fixture(env);
@@ -120,6 +119,23 @@ test('inbound mail is stored and acted on: opt-out suppresses, bounce counts, re
   assert.equal((await db.prepare("SELECT COUNT(*) n FROM ps_outreach_inbox").first()).n, 3);
 });
 
+import relay from '../worker-mail/relay.js';
+import backend from '../worker/src/index.js';
+test('mail relay: inbound is forwarded authenticated; /send needs the token; the backend accepts only the token', async () => {
+  const seen = []; const sent = [];
+  const env = { MAIL_TOKEN: 't', BACKEND_URL: 'https://b.example', EMAIL: { send: async m => { sent.push(m); } } };
+  const real = globalThis.fetch; globalThis.fetch = async (u, i) => { seen.push([u, i.headers['x-ps-token'], JSON.parse(i.body).subject]); return new Response('{}'); };
+  try {
+    await relay.email({ from: 'a@x.org', headers: new Headers({ subject: 'Re: hi' }), raw: new Response('Subject: Re: hi\r\n\r\nstop please').body }, env);
+  } finally { globalThis.fetch = real; }
+  assert.deepEqual(seen, [['https://b.example/internal/mail', 't', 'Re: hi']]);
+  const send = (tok) => relay.fetch(new Request('https://r.example/send', { method: 'POST', headers: { 'x-ps-token': tok }, body: JSON.stringify({ to: 'a@x.org', from: 'p@o.example', subject: 's', text: 't' }) }), env);
+  assert.equal((await send('bad')).status, 403);
+  assert.equal((await send('t')).status, 200); assert.equal(sent.length, 1);
+  assert.equal((await backend.fetch(new Request('https://b.example/internal/mail', { method: 'POST', body: '{}' }), { MAIL_TOKEN: 't' })).status, 403);
+});
+
+import tenant from '../worker/src/tenant.js';
 test('the tenant schedule also runs the backend tick through the CORE service binding', async () => {
   const calls = [];
   const env = { STATE: { get: async () => null, put: async () => {} }, CORE: { fetch: async (u, init) => { calls.push([u, init.method, init.headers['x-ps-internal']]); return new Response('{}'); } } };

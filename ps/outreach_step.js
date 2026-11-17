@@ -63,7 +63,8 @@ export function outreachStep({ solutions, fetch: f, env, footer, origin }) {
       if (hasIdentity(env) && !h.paused) {
         const c = coreCtx(db, env, ctx.now, footer);
         for (const r of await all(db, `SELECT id FROM outreach_intents WHERE status='pending_approval' AND tenant='ps'`)) await approve(c, r.id, targeting.approver);
-        const transport = env.EMAIL?.send ? async m => env.EMAIL.send({ to: m.to, from: fromAddr(env), replyTo: m.reply_to, subject: m.subject, text: m.text }) : undefined;
+        const relay = env.MAIL_RELAY_URL && env.MAIL_TOKEN ? async m => { const r = await (env.fetchImpl || fetch)(env.MAIL_RELAY_URL + '/send', { method: 'POST', headers: { 'x-ps-token': env.MAIL_TOKEN, 'content-type': 'application/json' }, body: JSON.stringify({ to: m.to, from: fromAddr(env), reply_to: m.reply_to, subject: m.subject, text: m.text }) }); if (!r.ok) throw new Error('mail relay refused: ' + r.status); } : null;
+        const transport = relay || (env.EMAIL?.send ? async m => env.EMAIL.send({ to: m.to, from: fromAddr(env), replyTo: m.reply_to, subject: m.subject, text: m.text }) : undefined);
         const out = await dispatch(c, { transport, limits: { perDay: targeting.gates.per_day, perRecipient: targeting.gates.per_recipient } });
         for (const o of out.filter(x => x.result === 'sent')) { sentNow++; await db.prepare(`INSERT INTO ps_outreach_events (intent_id, kind, at) VALUES (?, 'sent', ?)`).bind(o.id, ctx.nowIso).run(); }
       }
