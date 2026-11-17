@@ -29,6 +29,11 @@ export default {
     if (pathname === '/' || pathname === '/index.html') return new Response(PAGE, { headers: { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' } });
     if (pathname === '/problems.json') return Response.json(await rankProblems(), { headers: { 'cache-control': 'public, max-age=21600' } });
     if (pathname === '/solutions.json') return Response.json({ solutions: SOLUTIONS });
+    if (pathname === '/internal/mail' && request.method === 'POST') {
+      if (!env.MAIL_TOKEN || request.headers.get('x-ps-token') !== env.MAIL_TOKEN) return new Response('forbidden\n', { status: 403 });
+      const m = await request.json();
+      return Response.json({ kind: await handleInbound(env.DB, { from: m.from, subject: m.subject, text: m.text }, new Date().toISOString().replace('T', ' ').slice(0, 19)) });
+    }
     if (pathname === '/internal/tick' && request.method === 'POST' && request.headers.get('x-ps-internal') === '1') return Response.json({ report: (await ps(env).tick()).report });
     if (pathname === '/agencies.json') return Response.json(agenciesGraph(SOLUTIONS));
     if (pathname.startsWith('/ps/outreach/')) {
