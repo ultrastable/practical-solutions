@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 // Practical Solutions' templates, built only from core/ui components. A new domain or topic is data (problems.js, solutions.js) and
 // appears everywhere with no template change. A new kind of content plugs in with registerSection(); a new page with a route in site.js.
+import { LEVELS } from './context.js';
 import * as ui from './kit/index.js';
 import { LABELS, DESIGN, RULE, openQuestions, search, searchIndex } from './catalog.js';
 import { bcaBlock } from './bca.js';
@@ -70,6 +71,7 @@ const correctionHref = (what, path) => `${CORRECTIONS_URL}?title=${encodeURIComp
 
 // ---------------------------------------------------------------- entity pages
 registerSection('solution', { id: 'works', title: 'Where it works', order: 10, render: s => `<p>${esc(s.works_where)}</p>` });
+registerSection('solution', { id: 'fits', title: 'Where it fits by income level', order: 15, render: s => `<p>${esc(s.fit.why)}</p>${ui.list(LEVELS.map(l => s.fit.levels.includes(l.id) ? `<a href="/solutions?level=${l.id}">${esc(l.name)}</a>: relevant` : `${esc(l.name)}: less relevant`))}` });
 registerSection('solution', { id: 'takes', title: 'What it takes', order: 20, render: s => `<p>${esc(s.takes)}</p><p><b>Who can act:</b> ${esc(s.who)}</p>` });
 registerSection('solution', { id: 'first-test', title: 'Cheapest first test', order: 30, render: s => `<p>${esc(s.first_test)}</p>` });
 registerSection('solution', { id: 'implementable', title: 'Can it be implemented?', order: 40, render: s => implBlock(s) });
@@ -126,12 +128,19 @@ export function problemPage(p, c, o) {
     jsonld: { '@context': 'https://schema.org', '@type': 'Article', headline: p.title, url: o + pUrl(p), isPartOf: { '@type': 'WebSite', name: SITE, url: o } } });
 }
 
+export function contextPage(c, o) {
+  const rows = LEVELS.map(l => { const n = c.sols.filter(s => s.fit.levels.includes(l.id)); return [`<a href="/solutions?level=${l.id}">${esc(l.name)}</a>`, String(n.length), esc(l.note)]; });
+  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'By income level' }])}<h1>Solutions by country income level</h1><p class="lede">Countries differ in income, infrastructure and institutions, so a solution that suits one stage of development may be unnecessary or out of reach at another. Each solution lists the income levels where it is most relevant and why.</p>
+${ui.table({ caption: 'Solutions by World Bank income group', head: ['Income group', 'Solutions relevant', 'Definition'], rows })}<p>The level is a judgement from what each solution takes (infrastructure, institutions, cost). The loop keeps asking which solutions are missing at each level, including high-income countries. See <a href="/method">the method</a>.</p>`;
+  return render('/context', o, { title: `By income level | ${SITE}`, description: 'Solutions by country income level.', body });
+}
+
 // ---------------------------------------------------------------- listings
 const opt = (value, label) => ({ value, label });
 export function filterSolutions(c, q) {
-  const get = k => q.get(k) || '';
+  const get = k => q.get(k) || '', level = get('level');
   const ready = get('ready'), cost = get('cost'), label = get('label'), dom = get('domain'), sort = get('sort') || 'impl', term = get('q').toLowerCase();
-  let list = c.sols.filter(s => (!label || s.label === label) && (!dom || s.domains.some(d => domainOf(c, d).slug === dom)) && (!cost || (s.impl && s.impl.cost === cost))
+  let list = c.sols.filter(s => (!level || s.fit.levels.includes(level)) && (!label || s.label === label) && (!dom || s.domains.some(d => domainOf(c, d).slug === dom)) && (!cost || (s.impl && s.impl.cost === cost))
     && (!ready || (ready === 'ready' ? s.impl && s.impl.score >= 7 : ready === 'effort' ? s.impl && s.impl.score >= 5 && s.impl.score < 7 : s.impl && !s.impl.practical))
     && (!term || (s.title + ' ' + s.claim).toLowerCase().includes(term)));
   const ev = s => ({ 'evidence-backed': 3, 'mixed evidence': 2, 'cited, weaker design': 1 }[s.label] || 0);
@@ -146,7 +155,7 @@ export function solutionsIndex(c, u, o) {
   const g = (name, label, options) => ({ name, label, options: [opt('', 'Any'), ...options], value: q.get(name) });
   const facets = ui.facets({ action: '/solutions', reset: '/solutions', groups: [
     g('domain', 'Domain', c.domains.map(d => opt(d.slug, d.name))), g('label', 'Evidence', Object.keys(LABELS).filter(k => k !== 'lead').map(k => opt(k, k))),
-    g('ready', 'Readiness', [opt('ready', 'Ready to implement'), opt('effort', 'Implementable with effort'), opt('held', 'Not yet practical')]), g('cost', 'Cost to start', [opt('low', 'Low'), opt('medium', 'Medium'), opt('high', 'High')]),
+    g('level', 'Country income level', LEVELS.map(l => opt(l.id, l.name))), g('ready', 'Readiness', [opt('ready', 'Ready to implement'), opt('effort', 'Implementable with effort'), opt('held', 'Not yet practical')]), g('cost', 'Cost to start', [opt('low', 'Low'), opt('medium', 'Medium'), opt('high', 'High')]),
     { name: 'sort', label: 'Sort by', options: [opt('impl', 'Implementability'), opt('evidence', 'Strength of evidence'), opt('benefit', 'Benefit per cost (WELLBYs)'), opt('title', 'Title A to Z')], value: q.get('sort') || 'impl' }] });
   const cards = items.map(s => ui.card({ title: s.title, href: sUrl(s), body: s.claim, meta: s.domains.join(' · '), hue: domainHue(c, s.domains[0]), badges: [labelBadge(s.label), implBadge(s.impl)],
     foot: `<label class="s"><input type="checkbox" name="ids" value="${esc(s.id)}"> Compare <span class="vh">${esc(s.title)}</span></label>` }));

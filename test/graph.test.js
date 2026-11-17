@@ -21,7 +21,7 @@ test('every graph fact carries provenance and agency edges stay proposed leads',
   const qs = await questionsFor(g);
   assert.ok(qs.some(q => q.id === 'unsolved:problem:tb'));
   assert.ok(qs.some(q => q.id === 'unadopted:solution:kmc'));
-  assert.equal(RULES.length, 2);
+  assert.equal(RULES.length, 3);
 });
 
 test('a tick stores the graph and its questions, and a problem with no solution joins the search rotation', async () => {
@@ -35,4 +35,15 @@ test('a tick stores the graph and its questions, and a problem with no solution 
   assert.ok(q.questions.some(x => x.subject === 'problem:tb'));
   assert.ok(JSON.parse(await store.get('graph')).nodes.some(n => n.id === 'agency:gh-moh'));
   assert.ok(JSON.parse(await store.get('candidates')).tb, 'TB was searched although it ranks outside the top');
+});
+
+test('income-level context: every solution has a fit, the graph links solutions to levels, and the level filter narrows the list', async () => {
+  const { fitFor, LEVELS } = await import('../worker/src/context.js');
+  const { SOLUTIONS } = await import('../worker/src/solutions.js');
+  for (const s of SOLUTIONS) assert.ok(fitFor(s.id).levels.length && fitFor(s.id).why, s.id);
+  assert.ok(!fitFor('vita').levels.includes('high'));
+  const g = await buildGraph({ solutions: SOLUTIONS });
+  const qs = await questionsFor(g);
+  assert.ok(!qs.some(q => /countries, whose needs/.test(JSON.stringify(q))), 'all four levels have a solution');
+  assert.equal(LEVELS.length, 4);
 });

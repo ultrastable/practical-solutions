@@ -13,6 +13,7 @@ const HOUR = 3600e3;
 const BACKEND_URL = 'https://ps-practical-solutions.q08.workers.dev';
 
 export const SEARCH = {
+  tobacco: 'tobacco smoking cessation',
   under5: 'child mortality', neonatal: 'neonatal mortality newborn', maternal: 'maternal mortality', ncd: 'hypertension cardiovascular mortality',
   suicide: 'suicide prevention depression', tb: 'tuberculosis treatment', poverty: 'cash transfer poverty', hunger: 'malnutrition food insecurity',
   water: 'drinking water treatment diarrhoea', cooking: 'cookstove household air pollution', education: 'learning outcomes primary school',
