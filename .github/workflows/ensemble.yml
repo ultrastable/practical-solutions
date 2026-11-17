@@ -30,5 +30,8 @@ jobs:
       - name: propose, verify, apply
         id: run
         run: node --no-warnings tools/ensemble.mjs run | tee ensemble.json
+      - name: record in the audit log
+        if: success()
+        run: node tools/audit_post.mjs --kind model_vote --subject ensemble --summary "ensemble run, with proposals and votes in ensemble.json" --payload-file ensemble.json
       - name: deploy what changed (a push by the built-in token does not start workflows)
         run: grep -q '"deploy":true' ensemble.json && gh workflow run deploy-tenant.yml -R "$GITHUB_REPOSITORY" --ref main || echo "nothing to deploy"

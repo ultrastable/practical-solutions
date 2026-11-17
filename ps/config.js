@@ -17,6 +17,7 @@ export function buildConfig(over = {}) {
       },
     },
     ps: { max_per_tick: 8, perms: 500, criticality: {} },
+    audit: { enabled: true, tenant: 'practical-solutions' }, // core/audit (AUDIT-1): hash-chained action log with daily roll-up
     access, // core/access: the preflight that every ask of the owner must pass; see ps/access.mjs
     ...over,
   };

@@ -36,3 +36,6 @@ jobs:
             out=$(curl -s https://tenant-ps-llm.ultrastable.workers.dev/health); echo "$out"; echo "$out" | grep -q '"ai":true' && exit 0; sleep 8
           done
           exit 1
+      - name: record in the audit log
+        if: success()
+        run: node tools/audit_post.mjs --kind deploy --subject tenant-ps-llm --summary "model service deployed through the gateway and answered the live check"

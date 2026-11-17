@@ -38,6 +38,8 @@ export default {
     const u = new URL(r.url);
     if (ctx && ctx.waitUntil) ctx.waitUntil(recordView(env.STATE, r).catch(() => {}));
     if (u.pathname === '/metrics.json') return Response.json(await summary(env.STATE), { headers: { 'cache-control': 'public, max-age=300' } });
+    // AUDIT-1: the public half of the audit log (counts, chain head, verification, Merkle proofs) is read from the backend through the service binding.
+    if (env.CORE && (u.pathname === '/audit/summary.json' || u.pathname === '/audit/verify' || u.pathname === '/audit/proof') && r.method === 'GET') return env.CORE.fetch('https://core.internal' + u.pathname + u.search);
     if (u.pathname === '/live') return new Response(PAGE, { headers });
     if (u.pathname === '/solutions.json') {
       const verif = await j(env, 'verif', {});

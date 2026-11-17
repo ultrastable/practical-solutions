@@ -9,6 +9,7 @@ import { SOLUTIONS } from './solutions.js';
 import { rankProblems } from './problems.js';
 import { ALLOW, FILES } from './selfmigrate.gen.js';
 import { FOOTER } from './publish.js';
+import { authorizer } from '../../ps/audit.js';
 import { handleInbound, recordEvent, metrics, queue, approveIntent, suppressAddr, agenciesGraph } from '../../ps/outreach_step.js';
 
 
@@ -34,6 +35,8 @@ export default {
       const m = await request.json();
       return Response.json({ kind: await handleInbound(env.DB, { from: m.from, subject: m.subject, text: m.text }, new Date().toISOString().replace('T', ' ').slice(0, 19)) });
     }
+    // AUDIT-1: public summary, verify and proof; events and writes need the tick token or this repository's Actions OIDC token.
+    if (pathname === '/audit' || pathname.startsWith('/audit/')) { const r = await ps(env).org.audit.handle(request, { authorize: authorizer(env) }); if (r) return r; }
     if (pathname === '/internal/tick' && request.method === 'POST' && request.headers.get('x-ps-internal') === '1') return Response.json({ report: (await ps(env).tick()).report });
     if (pathname === '/agencies.json') return Response.json(agenciesGraph(SOLUTIONS));
     if (pathname.startsWith('/ps/outreach/')) {
