@@ -22,6 +22,7 @@ test('only trusted authors drive the agent, lowest issue first, failed ones are 
   const issues = [{ number: 5, labels: L('agent-task'), author_association: 'NONE' }, { number: 4, labels: L('agent-task'), author_association: 'OWNER' }, { number: 3, labels: [{ name: 'agent-task' }, { name: 'agent-failed' }], author_association: 'OWNER' }, { number: 2, labels: L('agent-task'), author_association: 'MEMBER', pull_request: {} }, { number: 6, labels: L('agent-task'), author_association: 'MEMBER' }];
   assert.equal(pickIssue(issues).number, 4);
   assert.equal(pickIssue(issues, { only: 5 }), null);
+  issues[0].user = { login: 'rw' }; assert.equal(pickIssue(issues, { only: 5, writers: new Set(['rw']) }).number, 5);
 });
 
 test('edits apply atomically: a bad edit writes nothing, a good one replaces exactly once', () => {
