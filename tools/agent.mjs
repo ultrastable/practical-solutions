@@ -11,15 +11,13 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { complete } from '../ps/llm.js';
+import { crossReview } from '../ps/review.js';
+import { SCOPE, DENY, allowed } from '../ps/scope.js';
 
 export const LABEL = 'agent-task';
 export const TRUSTED = ['OWNER', 'MEMBER', 'COLLABORATOR'];
 export const PROBES = ['npm test'];  // the only commands an issue may name as its closing probe
-// Where the agent may write. Rules, workflows, vendored core, deploy tooling and this file are protected: a change there needs a person.
-export const SCOPE = ['worker/src/*', 'worker/src/**/*', 'ps/*', 'test/*', 'org/*', 'ux/*'];
-export const DENY = ['vendor/*', '.github/*', 'AGENTS.md', 'CLAUDE.md', 'package.json', 'tenancy.json', 'tools/*', 'LICENSE', 'worker/migrations/*', 'ps/access.mjs'];
-const glob = g => new RegExp('^' + g.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*\*/g, '\u0000').replace(/\*/g, '[^/]*').replace(/\u0000/g, '.*') + '$');
-export const allowed = p => !isAbsolute(p) && !p.split('/').includes('..') && SCOPE.some(g => glob(g).test(p)) && !DENY.some(g => glob(g).test(p));
+export { SCOPE, DENY, allowed };
 
 export function parseTask(body = '') {
   const line = k => { const m = new RegExp('^' + k + ':\\s*(.+)$', 'mi').exec(body); return m ? m[1].trim() : ''; };
@@ -93,9 +91,9 @@ export function applyEdits(edits, root, fs = { read: p => readFileSync(p, 'utf8'
   return [...next.keys()].map(a => relative(root, a));
 }
 
-const sh = (cmd, args, o = {}) => execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...o });
-const gh = (...a) => sh('gh', a);
-const note = (n, text) => { try { gh('issue', 'comment', String(n), '--body', text + '\n\n_Free code agent run (GitHub Models, then Workers AI through the tenant model Worker)._'); } catch (e) { console.error('comment failed', e.message); } };
+export const sh = (cmd, args, o = {}) => execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...o });
+export const gh = (...a) => sh('gh', a);
+export const note = (n, text) => { try { gh('issue', 'comment', String(n), '--body', text + '\n\n_Free code agent run (GitHub Models, then Workers AI through the tenant model Worker)._'); } catch (e) { console.error('comment failed', e.message); } };
 
 export async function run({ issueNo, dry = false, root = process.cwd(), env = process.env } = {}) {
   const issues = JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/issues?state=open&labels=${LABEL}&per_page=50`));
@@ -115,6 +113,10 @@ export async function run({ issueNo, dry = false, root = process.cwd(), env = pr
   try { plan = parseEdits(res.text); changed = applyEdits(plan.edits, root); } catch (e) { return fail(String(e.message)); }
   try { sh('npm', ['test'], { cwd: root, maxBuffer: 1 << 26 }); } catch (e) { sh('git', ['checkout', '--', '.'], { cwd: root }); sh('git', ['clean', '-fdq', 'worker', 'ps', 'test', 'org', 'ux'], { cwd: root }); return fail('tests failed after the change: ' + String(e.stdout || e.message).split('\n').filter(l => /not ok|fail|Error/i.test(l)).slice(0, 4).join(' | ')); }
   if (dry) { console.log(JSON.stringify({ issue: issue.number, ok: true, dry: true, changed })); return { issue: issue.number, ok: true, changed }; }
+  // a second vendor reads the diff before it merges (ps/review.js); a blocked change is reverted in the working tree and the issue is retried later
+  const review = await crossReview({ title: issue.title, diff: sh('git', ['diff'], { cwd: root, maxBuffer: 1 << 26 }), authorModel: res.model, secrets: { GITHUB_TOKEN: env.GITHUB_TOKEN, PS_LLM_URL: env.PS_LLM_URL, ACTIONS_ID_TOKEN_REQUEST_URL: env.ACTIONS_ID_TOKEN_REQUEST_URL, ACTIONS_ID_TOKEN_REQUEST_TOKEN: env.ACTIONS_ID_TOKEN_REQUEST_TOKEN } });
+  const reviewLine = `${review.votes.map(v => `${v.vendor} ${v.verdict}`).join(', ') || 'no reviewer answered'} (${review.why})`;
+  if (!review.merge) { sh('git', ['checkout', '--', '.'], { cwd: root }); sh('git', ['clean', '-fdq', 'worker', 'ps', 'test', 'org', 'ux'], { cwd: root }); return fail(`cross-model review blocked the change: ${review.votes.filter(v => v.verdict === 'reject').map(v => `${v.vendor}: ${v.reason}`).join('; ')}`); }
   const branch = `agent/${issue.number}-${issue.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30).replace(/-$/, '')}`;
   sh('git', ['config', 'user.name', 'practical-solutions-agent']); sh('git', ['config', 'user.email', 'agent@users.noreply.github.com']);
   sh('git', ['checkout', '-b', branch]); sh('git', ['add', ...changed]);
@@ -122,7 +124,7 @@ export async function run({ issueNo, dry = false, root = process.cwd(), env = pr
   let how = 'merged via pull request';
   try {
     sh('git', ['push', '-u', 'origin', branch]);
-    const url = gh('pr', 'create', '--base', 'main', '--head', branch, '--title', `Agent: ${issue.title}`, '--body', `Item: #${issue.number}\nAuthor: free code agent (${res.model})\nReviewer: \`npm test\` before the push, the live check after deploy.\nEvidence: ${plan.summary}`).trim();
+    const url = gh('pr', 'create', '--base', 'main', '--head', branch, '--title', `Agent: ${issue.title}`, '--body', `Item: #${issue.number}\nAuthor: free code agent (${res.model})\nReviewer: \`npm test\` before the push, cross-vendor review (${reviewLine}), the live check after deploy.\nEvidence: ${plan.summary}`).trim();
     gh('pr', 'merge', url, '--squash', '--delete-branch');
   } catch (e) {
     how = 'merged by direct push (pull requests are not allowed for this token)';

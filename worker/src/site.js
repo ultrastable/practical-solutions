@@ -5,6 +5,7 @@
 import * as ui from './kit/index.js';
 import { LABELS, DESIGN, RULE, search, searchIndex } from './catalog.js';
 import { methodSection } from './bca.js';
+import { ENSEMBLE_LEDGER } from './ensemble-ledger.gen.js';
 import { statement, region, live, describe } from '../../vendor/ultrastable/core/statements/index.js';
 import { STATEMENTS, CTX } from './method-claims.js';
 import * as U from './unknowns.js';
@@ -68,7 +69,7 @@ ${ui.section({ id: 'reported', title: 'Implementations reported', body: '<p>None
   return page('/impact', o, 'Impact and reach', 'How many people read this, who links to it, and how much of it is implementable.', body);
 }
 
-const METHOD_SECTIONS = [['problems', '1. How problems are chosen'], ['solutions', '2. How solutions get in'], ['labels', '3. Labels and evidence grading'], ['checks', '4. How sources are checked'], ['unknowns', '5b. What we do not know'], ['impl', '5. How implementable is it'], ['bca', 'Benefit and cost: one metric for everything'], ['loop', '6. How the loop iterates'], ['not', '7. What it will not do'], ['a11y', '8. Accessibility and speed']];
+const METHOD_SECTIONS = [['problems', '1. How problems are chosen'], ['solutions', '2. How solutions get in'], ['labels', '3. Labels and evidence grading'], ['checks', '4. How sources are checked'], ['unknowns', '5b. What we do not know'], ['models', '5c. Models, updates and disagreement'], ['impl', '5. How implementable is it'], ['bca', 'Benefit and cost: one metric for everything'], ['loop', '6. How the loop iterates'], ['not', '7. What it will not do'], ['a11y', '8. Accessibility and speed']];
 // /method is built only from the claims registry (method-claims.js): every sentence is a statement bound to a probe of the real behaviour;
 // tables and counts are live blocks read from the code. core/statements audits this page in CI and in GET /claims.json.
 function methodLive(sec, c) {
@@ -97,6 +98,7 @@ export function route(u, c) {
   if (table[p]) return h(table[p]());
   if (p === '/search.json') return json({ q: u.searchParams.get('q') || '', results: search(searchIndex(c), u.searchParams.get('q')) });
   if (p === '/claims.json') return json({ statements: describe(STATEMENTS, CTX) });
+  if (p === '/ensemble.json') return json(ENSEMBLE_LEDGER);
   if (p === '/unknowns.json') return json(U.unknownsData(c));
   if (p === '/index.json') return json(indexJson(c, o));
   if (p === '/solutions.csv') return new Response(solutionsCsv(c, o), { headers: { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'inline; filename="solutions.csv"', 'cache-control': 'public, max-age=300' } });

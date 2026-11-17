@@ -11,11 +11,11 @@ import { subjectsFrom } from '../worker/src/unknowns.js';
 import { redTeam } from '../vendor/ultrastable/core/ignorance/index.js';
 import { modelFor } from '../vendor/ultrastable/core/ignorance/org.js';
 
-import { CONFIG } from '../worker/src/redteam-config.js';
+import { CONFIG, configFor } from '../worker/src/redteam-config.js';
 export { CONFIG };
 
-export async function runRedTeam({ prev = { bySubject: {} }, env = process.env, fetch: f = globalThis.fetch, now = () => Date.now(), budget = 4 } = {}) {
-  const { model, author_family } = modelFor({ config: CONFIG, env, fetch: f });
+export async function runRedTeam({ prev = { bySubject: {} }, env = process.env, fetch: f = globalThis.fetch, now = () => Date.now(), budget = 4, offset = 0 } = {}) {
+  const cfg = configFor(Math.floor(now() / 864e5) + offset), { model, author_family } = modelFor({ config: cfg, env, fetch: f });
   const at = new Date(now()).toISOString();
   if (!model) return { ...prev, at, error: 'no model route (GITHUB_TOKEN with models: read is needed)' };
   const subjects = subjectsFrom(buildCatalog({ problems: null, solutions: SOLUTIONS })).filter(s => s.type === 'solution');
@@ -25,9 +25,11 @@ export async function runRedTeam({ prev = { bySubject: {} }, env = process.env, 
     const r = await redTeam(s, { model, author_family });
     const found = r.findings.filter(x => x.source === 'model');
     if (r.model_error) errors.push({ subject: s.id, error: r.model_error });
-    else bySubject[s.id] = { at, family: (found[0] || {}).family || 'openai', findings: found };
+    else bySubject[s.id] = { at, family: (found[0] || {}).family || cfg.ignorance.models.red.family, findings: found };
   }
-  return { schema: 'ps-redteam/1', at, model: CONFIG.ignorance.models.red.model, bySubject, errors };
+  // a model that is not served today (or errors on every entry) is replaced by the next pool member, up to three tries, so one vendor's outage never stops the pass
+  if (errors.length && errors.length >= targets.length && offset < 2) return runRedTeam({ prev, env, fetch: f, now, budget, offset: offset + 1 });
+  return { schema: 'ps-redteam/1', at, model: cfg.ignorance.models.red.model, bySubject, errors };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

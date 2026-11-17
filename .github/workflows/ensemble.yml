@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: about 3 minutes a day (public repository: Actions minutes are free); at most 3 entries and a few dozen free model calls per run.
+# trigger: daily, so every entry is cross-checked about once every few weeks; no faster, free model quotas are shared.
+# free-alternative: none needed; GitHub Models on the run's own GITHUB_TOKEN and Workers AI behind the tenant model Worker on the run's OIDC token. No key a person mints.
+# The model ensemble: models propose updates to entries from real abstracts, other-vendor models vote, code checks the evidence, and a unanimous
+# evidence-backed change merges through the code agent's path and deploys; disagreement is recorded and shown as uncertainty (tools/ensemble.mjs).
+name: ensemble
+on:
+  schedule: [{ cron: '17 5 * * *' }]
+  workflow_dispatch:
+permissions: { contents: write, issues: write, pull-requests: write, actions: write, models: read, id-token: write }
+concurrency: { group: ensemble, cancel-in-progress: false }
+env:
+  GH_TOKEN: ${{ github.token }}
+  GITHUB_TOKEN: ${{ github.token }}
+  PS_LLM_URL: https://ps-llm.q08.workers.dev/ps/llm
+jobs:
+  ensemble:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: ensure the label
+        run: gh label create ensemble -R "$GITHUB_REPOSITORY" --color 0e8a16 || true
+      - name: propose, verify, apply
+        id: run
+        run: node --no-warnings tools/ensemble.mjs run | tee ensemble.json
+      - name: deploy what changed (a push by the built-in token does not start workflows)
+        run: grep -q '"deploy":true' ensemble.json && gh workflow run deploy-tenant.yml -R "$GITHUB_REPOSITORY" --ref main || echo "nothing to deploy"

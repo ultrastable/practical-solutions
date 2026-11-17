@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { allowed, parseTask, pickIssue, parseEdits, applyEdits, buildPrompt } from '../tools/agent.mjs';
 
 test('the agent may write product code and tests, never rules, workflows, vendor or its own tool', () => {
-  for (const p of ['worker/src/pages.js', 'ps/llm.js', 'test/x.test.js', 'org/problems.json']) assert.ok(allowed(p), p);
+  for (const p of ['worker/src/pages.js', 'ps/brief.js', 'test/x.test.js', 'org/problems.json']) assert.ok(allowed(p), p);
   for (const p of ['.github/workflows/ci.yml', 'vendor/ultrastable/core/x.js', 'AGENTS.md', 'tools/agent.mjs', 'package.json', '../etc/passwd', '/etc/passwd', 'worker/migrations/1.sql']) assert.ok(!allowed(p), p);
 });
 
