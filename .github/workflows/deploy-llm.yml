@@ -7,7 +7,7 @@
 # { repo: ultrastable/practical-solutions, refs: [refs/heads/main], script: tenant-ps-llm, ai: true } (core/deploygate); without it the call is a 403 and nothing changes.
 name: deploy-llm
 on:
-  push: { branches: [main], paths: ['worker-llm/**', 'worker/src/ensemble-config.js', 'ps/oidc.js', 'ps/llm.js', '.github/workflows/deploy-llm.yml'] }
+  push: { branches: [main], paths: ['worker-llm/**', 'worker/src/ensemble-config.js', 'ps/oidc.js', 'ps/llm.js', 'vendor/ultrastable/core/modelservice/**', 'vendor/ultrastable/core/auth/**', '.github/workflows/deploy-llm.yml'] }
   workflow_dispatch: {}
 concurrency: { group: deploy-llm, cancel-in-progress: false }
 permissions: { contents: read, id-token: write }
