@@ -40,7 +40,17 @@ const clip = (s, n) => (s.length > n ? s.slice(0, n) + '\n/* ...truncated... */'
 export function buildPrompt(issue, files) {
   const task = parseTask(issue.body);
   return `You are a careful JavaScript engineer changing a small Cloudflare Worker repository (ES modules, node:test). Implement the issue below.
-Answer with ONE JSON object and nothing else: {"summary": "...", "edits": [ {"path": "...", "find": "exact unique text to replace", "replace": "new text"} , {"path": "new/file.js", "content": "entire new file"} ]}.
+Answer in plain blocks, no JSON and no escaping. First a line \`SUMMARY: <one line>\`. Then one block per edit:
+<<<EDIT path/to/file.js
+<<<FIND
+exact unique text to replace
+<<<REPLACE
+new text
+>>>END
+or, for a new or rewritten file:
+<<<FILE path/to/new.js
+entire file
+>>>END
 Rules: only write paths under worker/src, ps, test, org or ux. Every "find" must occur exactly once in the current file. Every source file starts with the two SPDX header lines. Add or update a test in test/ that runs under \`node --test\`. Do not invent facts or numbers: data comes from cited sources or live APIs, and a missing source is reported as missing.
 
 ISSUE #${issue.number}: ${issue.title}
@@ -51,8 +61,13 @@ ${files.map(f => `--- ${f.path}\n${clip(f.text, Math.floor(30000 / Math.max(1, f
 }
 
 export function parseEdits(text) {
-  const m = /\{[\s\S]*\}/.exec(String(text).replace(/^```(?:json)?|```$/gm, ''));
-  if (!m) throw new Error('no JSON in model answer');
+  const t = String(text);
+  const edits = [];
+  for (const m of t.matchAll(/<<<EDIT ([^\n]+)\n<<<FIND\n([\s\S]*?)\n<<<REPLACE\n([\s\S]*?)\n?>>>END/g)) edits.push({ path: m[1].trim(), find: m[2], replace: m[3] });
+  for (const m of t.matchAll(/<<<FILE ([^\n]+)\n([\s\S]*?)>>>END/g)) edits.push({ path: m[1].trim(), content: m[2] });
+  if (edits.length) return { summary: (/SUMMARY:\s*(.+)/.exec(t) || [, ''])[1].trim(), edits };
+  const m = /\{[\s\S]*\}/.exec(t.replace(/^```(?:json)?|```$/gm, ''));
+  if (!m) throw new Error('no edit blocks or JSON in model answer');
   const j = JSON.parse(m[0]);
   if (!Array.isArray(j.edits) || !j.edits.length) throw new Error('no edits');
   return { summary: String(j.summary || ''), edits: j.edits };
