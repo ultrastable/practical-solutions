@@ -14,7 +14,7 @@ concurrency: { group: ensemble, cancel-in-progress: false }
 env:
   GH_TOKEN: ${{ github.token }}
   GITHUB_TOKEN: ${{ github.token }}
-  PS_LLM_URL: https://ps-llm.q08.workers.dev/ps/llm
+  PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
 jobs:
   ensemble:
     if: ${{ vars.HALT != '1' }}

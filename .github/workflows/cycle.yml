@@ -20,7 +20,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      PS_LLM_URL: https://ps-llm.q08.workers.dev/ps/llm
+      PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
       GITHUB_MODELS_TOKEN: ${{ github.token }}  # the model route that needs no key a person mints: GitHub Models on the run's own token
     steps:
       - uses: actions/checkout@v4
