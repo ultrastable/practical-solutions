@@ -4,6 +4,7 @@
 // engine's subjects, runs it from the improvement tick, and renders known unknowns and red-team findings on every entry, on /unknowns
 // and in /method. Findings are challenges shown beside an entry; they never change the entry's own claims.
 import { createRegistry, run, minersFor, publicView, KINDS, UIA } from '../../vendor/ultrastable/core/ignorance/index.js';
+import { modelFor } from '../../vendor/ultrastable/core/ignorance/org.js';
 import * as ui from './kit/index.js';
 import { esc } from './catalog.js';
 
@@ -28,7 +29,10 @@ export function subjectsFrom(c) {
 export const registryFor = (store, now) => createRegistry({ store, key: KEY, now });
 
 // One bounded run from the improvement tick: mine, challenge the stalest entries, close what is no longer true, derive the frontier.
-export async function ignoranceTick({ store, cat, now = () => Date.now(), model = null, author_family = null, budget = 4 }) {
+// The red team's model is Workers AI through the AI binding when it is bound (a different family from the entries' author); without it the rule-based red team runs.
+export const MODEL_CONFIG = { ignorance: { model_alias: 'red', author_family: 'anthropic', models: { red: { endpoint: 'workers_ai', model: '@cf/meta/llama-3.1-8b-instruct', family: 'meta' } } } };
+export async function ignoranceTick({ store, cat, env = {}, now = () => Date.now(), model = null, author_family = null, budget = 4 }) {
+  if (!model) ({ model, author_family } = modelFor({ config: MODEL_CONFIG, env }));
   const registry = registryFor(store, now);
   const r = await run({ registry, subjects: subjectsFrom(cat), miners: minersFor(), model, author_family, budget, now });
   await store.put(LAST, JSON.stringify({ at: r.at, metrics: r.metrics, frontier: r.frontier, errors: r.errors }));

@@ -44,3 +44,14 @@ test('every run is bounded, advances to entries not yet challenged, and findings
   assert.ok(!b.metrics.targets.some(x => a.metrics.targets.includes(x)));
   assert.deepEqual(c.sols.map(s => s.claim), claims);
 });
+
+test('with an AI binding the red team uses Workers AI (family meta, apart from the author) and tags its findings; without one the rules run alone', async () => {
+  const c = base(), t = { v: Date.UTC(2026, 10, 17) };
+  const ai = { run: async (model, { messages }) => ({ response: '{"findings":[{"pass":"red_team","q":9,"challenge":"Who is displaced if this succeeds, and is that cost counted anywhere?","falsifier":"a measured displacement effect","severity":3}]}' }) };
+  const store = mem(); const r = await ignoranceTick({ store, cat: c, env: { AI: ai }, now: () => t.v, budget: 2 });
+  assert.equal(r.errors.length, 0);
+  const v = await ignView(store, () => t.v); const all = Object.values(v.bySubject).flatMap(x => x.open);
+  assert.ok(all.some(g => g.source === 'model')); assert.ok(all.some(g => g.source === 'rule'));
+  const store2 = mem(); await ignoranceTick({ store: store2, cat: c, env: {}, now: () => t.v, budget: 2 });
+  assert.ok(!Object.values((await ignView(store2, () => t.v)).bySubject).flatMap(x => x.open).some(g => g.source === 'model'));
+});
