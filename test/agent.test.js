@@ -37,6 +37,9 @@ test('edits apply atomically: a bad edit writes nothing, a good one replaces exa
 
 test('model answers in fences parse; prompts carry the issue and files', () => {
   assert.equal(parseEdits('```json\n{"summary":"s","edits":[{"path":"ps/a.js","content":"x"}]}\n```').edits.length, 1);
-  assert.throws(() => parseEdits('no'), /no JSON/);
+  assert.throws(() => parseEdits('no'), /no edit blocks/);
+  const b = parseEdits('SUMMARY: fix "it"\n<<<EDIT ps/a.js\n<<<FIND\nconst a = "x\\n";\n<<<REPLACE\nconst a = 1;\n>>>END\n<<<FILE test/n.test.js\nok {"x"}\n>>>END');
+  assert.equal(b.summary, 'fix "it"');
+  assert.deepEqual(b.edits, [{ path: 'ps/a.js', find: 'const a = "x\\n";', replace: 'const a = 1;' }, { path: 'test/n.test.js', content: 'ok {"x"}\n' }]);
   assert.match(buildPrompt({ number: 9, title: 'T', body: 'B' }, [{ path: 'ps/a.js', text: 'code' }]), /ISSUE #9: T[\s\S]*--- ps\/a\.js\ncode/);
 });
