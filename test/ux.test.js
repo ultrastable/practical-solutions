@@ -37,7 +37,7 @@ test('colour tokens meet WCAG 2.2 AA in light and dark', () => {
   assert.ok(kit.contrast('#ffffff', '#000000') > 20 && kit.contrast('#777777', '#ffffff') < 4.5);
 });
 
-const paths = () => ['/', '/for', '/api', '/method', '/impact', '/leads', '/changes', '/domains', '/problems', '/solutions', '/solutions?page=2', '/compare', '/compare?ids=kmc&ids=cash', '/search?q=water', '/search?q=zzzzqq', '/search',
+const paths = () => ['/', '/about', '/for', '/api', '/method', '/impact', '/leads', '/changes', '/domains', '/problems', '/solutions', '/solutions?page=2', '/compare', '/compare?ids=kmc&ids=cash', '/search?q=water', '/search?q=zzzzqq', '/search',
   '/solutions?ready=ready', '/solutions?label=mixed+evidence', '/problems?coverage=none', '/solutions/nope',
   ...AUDIENCES.map(a => '/for/' + a.id), ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug)];
 
@@ -67,6 +67,12 @@ test('pages are fast by construction: no scripts, no external requests, one inli
   for (const p of paths().slice(0, 40)) { const t = (await get(p)).text; sizes.push([p, new TextEncoder().encode(t).length]); assert.ok(!/<script(?![^>]*ld\+json)/i.test(t), p); assert.ok(!/(src|href)="https?:\/\/(?!(data\.worldbank|pubmed|europepmc|doi\.org|github|ultrastable\.(io|org)))/.test(t.replace(/<link rel="(canonical|alternate)"[^>]*>/g, '').replace(/<meta[^>]*>/g, '')), p); }
   assert.ok(Math.max(...sizes.map(s => s[1])) < 70000, JSON.stringify(sizes.sort((a, b) => b[1] - a[1])[0]));
   assert.ok(kit.css().length < 14000, 'stylesheet ' + kit.css().length);
+});
+
+test('a verified entry with DOI and PubMed links still passes the audit and keeps its links apart', async () => {
+  const cv = buildCatalog({ problems: null, solutions: SOLUTIONS, verif: { kmc: { status: 'verified', at: '2026-11-17T00:00:00Z', detail: [{ ok: true, doi: '10.1/x', pmid: '123' }] } } });
+  const t = await route(new URL('https://x/solutions/kmc'), cv).text();
+  assert.ok(t.includes('class="links"') && t.includes('doi.org/10.1/x')); assert.deepEqual(kit.auditHtml(t), []);
 });
 
 test('the same content is also available as data an agent can use', async () => {
