@@ -784,8 +784,14 @@
   "tools/us.test.mjs": "4e43660633ebdb48716f978fae17eebc3092bdabd3c01eaa2f6ae4c86d288440",
   "tools/vendor.py": "8f24928e26f7af9b575f45abfe1daa2676f7a9a67466678026c6558225cfdfee",
   "tools/workflow_lint.py": "63fac081b45370889a728a8aa224bfb73c3137aa321af7e0d06d496268981525",
-  "ultrastable.json": "f9628959be16abde77d2fb0d0c1102df88491a7c1da350e95bac29903c272195"
+  "ultrastable.json": "f9628959be16abde77d2fb0d0c1102df88491a7c1da350e95bac29903c272195",
+  "core/kgraph/README.md": "8651c52e514f51fe1efd5f0e4e3e72677d6ae85b2ad661cd826a829165da9559",
+  "core/kgraph/kgraph.test.js": "8db852a6e951c55047057a8614667005da09c38248eb32ad057dd84cb049e1ac",
+  "core/kgraph/index.js": "912e791c5ffbeb7fe1bac0196c27bd94e0e6750f496df7fa54eb7f99250c6bc7"
  },
  "schema": "vendored-from/1",
- "source": "ultrastable/workers"
+ "source": "ultrastable/workers",
+ "added": {
+  "core/kgraph": "ultrastable/workers 9733c97 (#217), unmodified"
+ }
 }

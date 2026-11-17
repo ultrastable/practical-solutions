@@ -7,8 +7,10 @@
 //   4. append every change to a capped changelog
 // Self-contained and injectable: `store` has get/put (a KV namespace fits), `fetchFn` is fetch. No model calls, no core bindings.
 import { findSpots } from './brightspots.js';
+import { buildGraph, questionsFor, unsolvedProblemIds } from './graph.js';
 const EPMC = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search';
 const HOUR = 3600e3;
+const BACKEND_URL = 'https://ps-practical-solutions.q08.workers.dev';
 
 export const SEARCH = {
   under5: 'child mortality', neonatal: 'neonatal mortality newborn', maternal: 'maternal mortality', ncd: 'hypertension cardiovascular mortality',
@@ -83,8 +85,8 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
   const cand = await getJson(store, 'candidates', {});
   const top = problems.problems.slice(0, 5);
   // a problem with no solution in the catalogue always joins the search rotation, so gaps like TB are worked on until they are filled
-  const covered = new Set(sols.flatMap(s => s.problem_ids || []));
-  const pool = [...new Map([...problems.problems.filter(p => !covered.has(p.id)), ...top].map(p => [p.id, p])).values()];
+  const open = new Set(await unsolvedProblemIds(sols));
+  const pool = [...new Map([...problems.problems.filter(p => open.has(p.id)), ...top].map(p => [p.id, p])).values()];
   if (top.length) {
     const p = [...pool].sort((a, b) => Date.parse((cand[a.id] || { at: 0 }).at) - Date.parse((cand[b.id] || { at: 0 }).at))[0];
     try {
@@ -112,6 +114,14 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
   }
   // 3b. extract and independently review drafts from candidate evidence
   changes.push(...await draftStep({ store, fetchFn, at }));
+  // 3c. knowledge graph: rebuild from the catalogue and the outreach interface's agency nodes; its gaps are the questions the loop works on next
+  try {
+    let agencies = await getJson(store, 'agencies_view', null);
+    if (BACKEND_URL && fetchFn) { try { const r = await fetchFn(BACKEND_URL + '/agencies.json'); if (r.ok) { const v = await r.json(); if (v && Array.isArray(v.nodes)) { agencies = v; await putJson(store, 'agencies_view', v); } } } catch { /* keep the last copy */ } }
+    const g = await buildGraph({ solutions: sols, agencies });
+    await putJson(store, 'questions', { at, questions: await questionsFor(g) });
+    await putJson(store, 'graph', { at, stats: await g.stats(), ...(await g.export()) });
+  } catch (e) { changes.push({ kind: 'graph_error', error: String(e.message || e) }); }
   // 4. changelog
   const log = await getJson(store, 'changes', []);
   const next = [...changes.map(c => ({ at, ...c })), ...log].slice(0, 200);
