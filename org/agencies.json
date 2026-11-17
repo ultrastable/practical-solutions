@@ -1,0 +1,168 @@
+{
+ "_note": "Public institutions only, from official government or intergovernmental sites. Each entry holds the official domain and the public contact page; contact addresses are never typed here, they are read from that page at run time and only role addresses on the agency's own domain are kept (ps/outreach.js).",
+ "agencies": [
+  {
+   "id": "gh-moh",
+   "name": "Ministry of Health, Ghana",
+   "country": "GH",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash"
+   ],
+   "level": "national",
+   "domain": "moh.gov.gh",
+   "contact_page": "https://www.moh.gov.gh/contact-us/",
+   "remit": "implements"
+  },
+  {
+   "id": "mw-moh",
+   "name": "Ministry of Health, Malawi",
+   "country": "MW",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash"
+   ],
+   "level": "national",
+   "domain": "health.gov.mw",
+   "contact_page": "https://www.health.gov.mw/contact/",
+   "remit": "implements"
+  },
+  {
+   "id": "tz-moh",
+   "name": "Ministry of Health, Tanzania",
+   "country": "TZ",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash"
+   ],
+   "level": "national",
+   "domain": "moh.go.tz",
+   "contact_page": "https://www.moh.go.tz/en/contact-us",
+   "remit": "implements"
+  },
+  {
+   "id": "ng-fmoh",
+   "name": "Federal Ministry of Health and Social Welfare, Nigeria",
+   "country": "NG",
+   "sectors": [
+    "health",
+    "nutrition",
+    "social-protection"
+   ],
+   "level": "national",
+   "domain": "health.gov.ng",
+   "contact_page": "https://www.health.gov.ng/contact",
+   "remit": "implements"
+  },
+  {
+   "id": "in-mohfw",
+   "name": "Ministry of Health and Family Welfare, India",
+   "country": "IN",
+   "sectors": [
+    "health",
+    "nutrition"
+   ],
+   "level": "national",
+   "domain": "mohfw.gov.in",
+   "contact_page": "https://mohfw.gov.in/?q=contact-us",
+   "remit": "implements"
+  },
+  {
+   "id": "ke-moh",
+   "name": "Ministry of Health, Kenya",
+   "country": "KE",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash"
+   ],
+   "level": "national",
+   "domain": "health.go.ke",
+   "contact_page": "https://www.health.go.ke/contact-us/",
+   "remit": "implements"
+  },
+  {
+   "id": "ug-moh",
+   "name": "Ministry of Health, Uganda",
+   "country": "UG",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash"
+   ],
+   "level": "national",
+   "domain": "health.go.ug",
+   "contact_page": "https://www.health.go.ug/contact-us/",
+   "remit": "implements"
+  },
+  {
+   "id": "ke-moe",
+   "name": "Ministry of Education, Kenya",
+   "country": "KE",
+   "sectors": [
+    "education"
+   ],
+   "level": "national",
+   "domain": "education.go.ke",
+   "contact_page": "https://www.education.go.ke/contact-us",
+   "remit": "implements"
+  },
+  {
+   "id": "gh-moe",
+   "name": "Ministry of Education, Ghana",
+   "country": "GH",
+   "sectors": [
+    "education"
+   ],
+   "level": "national",
+   "domain": "moe.gov.gh",
+   "contact_page": "https://moe.gov.gh/contact-us/",
+   "remit": "implements"
+  },
+  {
+   "id": "who-afro",
+   "name": "WHO Regional Office for Africa",
+   "country": "INT",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash"
+   ],
+   "level": "regional",
+   "domain": "who.int",
+   "contact_page": "https://www.afro.who.int/contact-us",
+   "remit": "advises"
+  },
+  {
+   "id": "gf",
+   "name": "The Global Fund",
+   "country": "INT",
+   "sectors": [
+    "health"
+   ],
+   "level": "funder",
+   "domain": "theglobalfund.org",
+   "contact_page": "https://www.theglobalfund.org/en/contact-us/",
+   "remit": "funds"
+  },
+  {
+   "id": "unicef-esaro",
+   "name": "UNICEF Eastern and Southern Africa Regional Office",
+   "country": "INT",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "regional",
+   "domain": "unicef.org",
+   "contact_page": "https://www.unicef.org/esa/contact-us",
+   "remit": "implements"
+  }
+ ]
+}

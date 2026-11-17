@@ -7,9 +7,12 @@ import { ledgerExport } from '../../ps/ledger.js';
 import { PAGE } from './ui.js';
 import { SOLUTIONS } from './solutions.js';
 import { rankProblems } from './problems.js';
+import { FOOTER } from './publish.js';
+import { recordEvent, metrics, queue, approveIntent, suppressAddr, agenciesGraph } from '../../ps/outreach_step.js';
 
 
-const ps = env => createPs({ db: env.DB, env, secrets: env });
+const ORIGIN = 'https://tenant-ps-web.ultrastable.workers.dev';
+const ps = env => createPs({ db: env.DB, env, secrets: env, solutions: SOLUTIONS, footer: FOOTER, origin: env.PS_ORIGIN || ORIGIN });
 const authed = (request, env) => Boolean(env.PS_TICK_TOKEN) && request.headers.get('x-ps-token') === env.PS_TICK_TOKEN;
 
 export default {
@@ -19,6 +22,16 @@ export default {
     if (pathname === '/' || pathname === '/index.html') return new Response(PAGE, { headers: { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' } });
     if (pathname === '/problems.json') return Response.json(await rankProblems(), { headers: { 'cache-control': 'public, max-age=21600' } });
     if (pathname === '/solutions.json') return Response.json({ solutions: SOLUTIONS });
+    if (pathname === '/agencies.json') return Response.json(agenciesGraph(SOLUTIONS));
+    if (pathname.startsWith('/ps/outreach/')) {
+      if (!authed(request, env)) return new Response('forbidden\n', { status: 403 });
+      const u = new URL(request.url), now = Date.now();
+      if (pathname === '/ps/outreach/queue') return Response.json(await queue(env.DB, env, now, FOOTER));
+      if (request.method !== 'POST') return new Response('POST only\n', { status: 405 });
+      if (pathname === '/ps/outreach/event') { await recordEvent(env.DB, u.searchParams.get('kind'), u.searchParams.get('id'), u.searchParams.get('detail'), new Date(now).toISOString().replace('T', ' ').slice(0, 19)); return Response.json({ ok: true }); }
+      if (pathname === '/ps/outreach/approve') return Response.json({ approved: await approveIntent(env.DB, env, now, FOOTER, u.searchParams.get('id'), u.searchParams.get('by')) });
+      if (pathname === '/ps/outreach/suppress') { await suppressAddr(env.DB, env, now, FOOTER, u.searchParams.get('addr'), 'opt-out'); return Response.json({ suppressed: true }); }
+    }
     if (pathname === '/ps/tick' || pathname === '/ps/ledger') {
       if (!authed(request, env)) return new Response('forbidden\n', { status: 403 });
       if (pathname === '/ps/tick') return request.method === 'POST' ? Response.json({ report: (await ps(env).tick()).report }) : new Response('POST only\n', { status: 405 });
