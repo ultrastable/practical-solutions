@@ -12,8 +12,8 @@ if (!base) { console.error('usage: live_axe.mjs <base url>'); process.exit(2); }
 const { chromium } = require('playwright');
 const axeSrc = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const idx = await (await fetch(base + '/index.json')).json();
-const paths = ['/', '/for', '/for/implementers', '/solutions', '/problems', '/domains', '/compare?ids=' + idx.solutions.slice(0, 2).map(s => s.id).join('&ids='), '/search?q=water', '/method', '/api', '/impact',
-  '/solutions/' + idx.solutions[0].id, '/problems/' + idx.problems[0].id, '/domains/' + idx.domains[0].slug, '/solutions/nope'];
+const paths = ['/', '/for', '/for/implementers', '/solutions', '/problems', '/domains', '/compare?ids=' + idx.solutions.slice(0, 2).map(s => s.id).join('&ids='), '/search?q=water', '/method', '/api', '/about', '/impact',
+  ...idx.solutions.slice(0, 4).map(s => '/solutions/' + s.id), '/problems/' + idx.problems[0].id, '/domains/' + idx.domains[0].slug, '/solutions/nope'];
 const browser = await chromium.launch(); const bad = [];
 for (const scheme of ['light', 'dark']) for (const [name, viewport] of [['desktop', { width: 1280, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
   const page = await (await browser.newContext({ viewport, colorScheme: scheme })).newPage(); const errors = []; let skipErrors = false; page.on('console', m => m.type() === 'error' && !skipErrors && errors.push(m.text())); page.on('pageerror', e => errors.push(String(e)));

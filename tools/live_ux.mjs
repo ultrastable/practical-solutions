@@ -8,7 +8,13 @@ import { auditHtml } from '../worker/src/kit/audit.js';
 
 const base = (process.argv[2] || process.env.BASE || '').replace(/\/$/, '');
 if (!base) { console.error('usage: live_ux.mjs <base url>'); process.exit(2); }
-const get = async path => { const r = await fetch(base + path, { redirect: 'follow' }); return { status: r.status, type: r.headers.get('content-type') || '', text: await r.text() }; };
+// The edge throttles a fast crawl with 429/502/503 before the Worker runs (no Worker event is logged), so retry those with backoff.
+const sleep = ms => new Promise(res => setTimeout(res, ms));
+const get = async path => {
+  let r;
+  for (let i = 0; i < 5; i++) { r = await fetch(base + path, { redirect: 'follow' }); if (![429, 502, 503].includes(r.status)) break; await r.text(); await sleep(500 * 2 ** i); }
+  return { status: r.status, type: r.headers.get('content-type') || '', text: await r.text() };
+};
 
 const results = await runAll(STORIES, get);
 for (const r of results) console.log(r.ok ? 'ok  ' : 'FAIL', r.id, ...r.failures);

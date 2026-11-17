@@ -3,6 +3,7 @@
 // Where a solution fits. Countries differ in income, infrastructure and institutions, so a solution that suits one stage of
 // development may be irrelevant or already universal at another. Levels follow the World Bank income groups; `fits` is each
 // solution's own judgement from what it takes (see its "takes" and "who" fields), with a one-line reason shown to readers.
+import { APPLIES } from './bca-models.js';
 export const LEVELS = [
   { id: 'low', name: 'Low income', note: 'World Bank low-income economies' },
   { id: 'lower-middle', name: 'Lower-middle income', note: 'World Bank lower-middle-income economies' },
@@ -31,6 +32,7 @@ export const FITS = {
   'clean-cooking': [LOW, 'Relevant where households still cook with solid fuels.'],
   'emissions-market': [MID.concat('high'), 'Needs continuous monitors and a regulator able to enforce a cap; tested in a lower-middle income setting.'],
 };
-export const fitFor = id => { const f = FITS[id]; return f ? { levels: f[0], why: f[1] } : { levels: ALL, why: 'Not yet assessed by income level.' }; };
+// The benefit-cost model's APPLIES table is the stricter source: a level it rules out is removed here, so the two never disagree.
+export const fitFor = id => { const f = FITS[id], a = APPLIES[id] || {}; const levels = (f ? f[0] : ALL).filter(l => !(a[l] && a[l].applies === false)); return { levels, why: f ? f[1] : 'Not yet assessed by income level.' }; };
 export const levelName = id => (LEVELS.find(l => l.id === id) || {}).name || '';
 export const solutionsForLevel = (sols, level) => level ? sols.filter(s => (s.fit ? s.fit.levels : ALL).includes(level)) : sols;

@@ -30,7 +30,7 @@ export const SHELL = {
     columns: [
       { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'Problems', href: '/problems' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }] },
       { title: 'Who it is for', links: AUDIENCES.map(a => ({ label: a.name, href: '/for/' + a.id })) },
-      { title: 'Trust', links: [{ label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
+      { title: 'Trust', links: [{ label: 'About', href: '/about' }, { label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
       { title: 'Ultrastable family', links: [{ label: 'Ultrastable for good (.org)', href: 'https://ultrastable.org/' }, { label: 'Platform and product (.io)', href: 'https://ultrastable.io/' }, { label: 'How it is built', href: 'https://ultrastable.io/how' }, { label: 'Live proof', href: 'https://ultrastable.io/proof' }, { label: 'Contact', href: 'https://ultrastable.io/contact' }] },
       { title: 'Data', links: [{ label: 'Data and API', href: '/api' }, { label: 'index.json', href: '/index.json' }, { label: 'solutions.csv', href: '/solutions.csv' }, { label: 'Feed', href: '/feed.xml' }, { label: 'llms.txt', href: '/llms.txt' }] },
     ],
@@ -75,11 +75,11 @@ registerSection('solution', { id: 'fits', title: 'Where it fits by income level'
 registerSection('solution', { id: 'takes', title: 'What it takes', order: 20, render: s => `<p>${esc(s.takes)}</p><p><b>Who can act:</b> ${esc(s.who)}</p>` });
 registerSection('solution', { id: 'first-test', title: 'Cheapest first test', order: 30, render: s => `<p>${esc(s.first_test)}</p>` });
 registerSection('solution', { id: 'implementable', title: 'Can it be implemented?', order: 40, render: s => implBlock(s) });
-registerSection('solution', { id: 'bca', title: 'Benefit and cost, in WELLBYs', order: 45, render: s => bcaBlock(s.bca) });
+registerSection('solution', { id: 'bca', title: 'Benefit and cost, in WELLBYs', order: 45, render: s => bcaBlock(s.bca, s.id) });
 registerSection('solution', { id: 'unknowns', title: 'What we do not know, and the red team', order: 55, render: (s, c) => unknownsBlock(s.id, c) });
 registerSection('solution', { id: 'evidence', title: 'Evidence and sources', order: 50, render: (s, c) => {
   const dz = DESIGN[s.design];
-  return `<p>${esc(dz.name)}: ${esc(dz.note)}</p><ul class="list">${s.links.map(l => `<li><b>${esc(l.cite)}</b><br>${esc(l.finding)}<br>${l.direct.map(d => `<a href="${esc(d.url)}">${esc(d.label)}</a> `).join('')}<a href="${esc(l.search)}">Find this paper on Europe PMC</a></li>`).join('')}</ul>
+  return `<p>${esc(dz.name)}: ${esc(dz.note)}</p><ul class="list">${s.links.map(l => `<li><b>${esc(l.cite)}</b><br>${esc(l.finding)}<span class="links">${l.direct.map(d => `<a href="${esc(d.url)}">${esc(d.label)}</a>`).join('')}<a href="${esc(l.search)}">Find this paper on Europe PMC</a></span></li>`).join('')}</ul>
 <p class="m">Verification: ${esc(s.verified)}${s.checkable ? ' The loop re-checks the quoted numbers against the paper abstract every day.' : ' No automatic check is defined for this entry yet, so the figures are the source\'s own, unconfirmed here.'}</p>`; } });
 registerSection('solution', { id: 'limits', title: 'Limits', order: 60, render: s => `<p>${esc(s.limits)}</p>` });
 registerSection('solution', { id: 'related', title: 'See also', order: 70, render: (s, c) => { const r = c.related(s); return r.length ? ui.cardGrid(r.map(x => solCard(x, c))) : ''; } });
@@ -257,6 +257,15 @@ ${hits.length ? ui.list(hits.map(h => `<a href="${esc(h.url)}">${esc(h.title)}</
 export function notFound(c, o, path = '') {
   const body = `<h1>Page not found</h1><p class="lede">There is no page at <code>${esc(path)}</code>.</p>${ui.hero({ title: 'Try a search', lede: 'Or start from the home page.', search: SHELL.search }).replace('<h1 id="hero-t">Try a search</h1>', '<h2 id="hero-t">Try a search</h2>')}<p><a href="/">Home</a> · <a href="/solutions">Solutions</a> · <a href="/problems">Problems</a> · <a href="/domains">Domains</a></p>`;
   return render('/404', o, { title: `Page not found | ${SITE}`, description: 'This page does not exist.', body, noindex: true, hideSearch: true });
+}
+
+export function aboutPage(c, o) {
+  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'About' }])}<h1>About</h1><p class="lede">${SITE} is a free public reference of what works against pressing problems, and how to do it. It is one of the public-benefit projects built on Ultrastable.</p>
+${ui.section({ id: 'why', title: 'Why it exists', body: '<p>Good evidence often stays in papers. This site turns it into entries a ministry, a city office, an organisation or a funder can act on: what works, where, at what cost, who can deliver it, and the cheapest way to try it. It takes no money from the solutions it lists.</p>' })}
+${ui.section({ id: 'how', title: 'How it is made', body: '<p>An automated loop ranks problems from public data, checks every cited source, looks for new evidence and records each change in public. Nothing is presented as stronger than its source. <a href="/method">Read the method</a> or <a href="/changes">see every change</a>.</p>' })}
+${ui.section({ id: 'family', title: 'The Ultrastable family', body: '<p>Ultrastable.org is the public-benefit home of the Ultrastable platform: projects that put autonomous software to work on data for good. Each shares the same design, the same openness about method and the same rule that every claim carries its source. <a href="https://ultrastable.org/">ultrastable.org</a> · <a href="https://ultrastable.io/">ultrastable.io</a></p>' })}
+${ui.section({ id: 'who', title: 'Who it is for', body: ui.list(AUDIENCES.map(a => `<a href="/for/${esc(a.id)}">${esc(a.name)}</a> <span class="m">${esc(a.goal)}</span>`)) })}`;
+  return render('/about', o, { title: `About | ${SITE}`, description: 'What this site is, why it exists and the family of public-benefit projects it belongs to.', body });
 }
 
 export function apiPage(c, o) {

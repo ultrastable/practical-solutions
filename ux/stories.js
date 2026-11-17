@@ -23,6 +23,8 @@ export const STORIES = [
     steps: [v('/for/funders'), x({ heading: 'Low cost, proven at scale' }), { follow: { href: '^/solutions/[a-z0-9-]+$' } }, x({ text: 'Evidence label' })] },
   { id: 'FUN-2', who: 'funders', want: 'find problems with no practical solution listed yet', so: 'I know where research or pilots are needed before funding delivery', covers: ['problemsIndex', 'facets', 'badge'],
     steps: [v('/problems?coverage=none'), x({ text: '0 solution|Nothing matches', no_text: 'Internal error' })] },
+  { id: 'FUN-BCA', who: 'funders', want: 'see benefit per dollar in one unit that is not money, with its range and what it rests on', so: 'I can compare a water programme with a cash transfer', covers: ['solutionPage', 'section', 'table'],
+    steps: [v('/solutions/chlorine'), x({ heading: 'Benefit and cost, in WELLBYs', text: ['WELLBYs per USD 1,000', 'Does not apply', 'Causal chain'] }), v('/solutions?sort=benefit'), x({ link: '^/solutions/' }), v('/method'), x({ text: ['neutral_point', 'income group'] })] },
   { id: 'FUN-3', who: 'funders', want: 'sort solutions by strength of evidence', so: 'I back claims that rest on reviews and trials', covers: ['solutionsIndex', 'facets'],
     steps: [v('/solutions?sort=evidence'), x({ text: 'evidence-backed', link: '^/solutions/' })] },
   { id: 'RES-1', who: 'researchers', want: 'trace a claim to the paper it rests on', so: 'I can check it myself', covers: ['solutionPage', 'section'],
@@ -65,6 +67,8 @@ export const STORIES = [
     steps: [v('/solutions/kmc'), x({ link: 'issues/new\\?title=Correction', text: 'Report an error' })] },
   { id: 'EXP-3', who: 'experts', want: 'see whether the numbers were machine-checked', so: 'I know what still needs a human', covers: ['solutionPage'],
     steps: [v('/solutions/kmc'), x({ text: 'Verification:' })] },
+  { id: 'PUB-5', who: 'public', want: 'learn who is behind this and why', so: 'I can decide whether to trust it', covers: ['aboutPage', 'familyBar', 'siteFooter'],
+    steps: [v('/'), { follow: { href: '^/about$' } }, x({ heading: 'Why it exists', text: ['Ultrastable', 'takes no money'], link: '^/method$' })] },
   { id: 'ALL-1', who: 'everyone', want: 'skip straight to the content with the keyboard', so: 'I do not tab through navigation every page', covers: ['skipLink', 'siteHeader'],
     steps: [v('/'), x({ link: '^#main$', text: 'Skip to main content' }), v('/solutions/kmc'), x({ link: '^#main$' })] },
   { id: 'ALL-2', who: 'everyone', want: 'read on a phone and in print', so: 'the site works wherever I am', covers: ['siteFooter', 'toc'],
@@ -74,5 +78,5 @@ export const STORIES = [
 ];
 export const storiesFor = who => STORIES.filter(s => s.who === who);
 // Every template, route and component a story may claim to cover. A story that names something else fails the traceability test.
-export const TEMPLATES = ['home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage'];
+export const TEMPLATES = ['home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage'];
 export const ROUTES = ['json-entity', 'csv', 'llms', 'sitemap'];
