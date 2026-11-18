@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; about 5 minutes a run, at most 2 proposals and 4 free model calls.
+# trigger: twice a week; each proposal must pass a red team and a source check, and free model quotas are shared, so faster adds cost and no information.
+# free-alternative: none needed; GitHub Models on the run's GITHUB_TOKEN and Workers AI behind the tenant model Worker on the run's OIDC token.
+# SYNTHESES-1 discovery loop: a model proposes new transfers or combinations, a second call red-teams them, tools/synth.mjs then verifies every
+# paper in Crossref and rebuilds the generated module so only verified entries appear. Models propose; code decides what is published.
+name: discover
+on:
+  schedule: [{ cron: '23 4 * * 2,5' }]
+  workflow_dispatch: {}
+concurrency: { group: discover, cancel-in-progress: false }
+permissions: { contents: write, actions: write, models: read, id-token: write }
+jobs:
+  discover:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
+      PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: propose and red-team
+        run: node --no-warnings tools/discover.mjs --max 2 | tee discover.json
+      - name: verify every source and build
+        run: node --no-warnings tools/synth.mjs | tee synth.json
+      - run: npm test
+      - name: commit and deploy
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/synth-discovered.json ledger/syntheses-verified.json worker/src/syntheses.gen.js
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "syntheses: discovery run, verification record and generated module"
+          for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+          gh workflow run deploy-tenant.yml --ref main
