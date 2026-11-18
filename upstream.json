@@ -24,7 +24,8 @@
     "worker/src/domains-meta.js": "tenant domain list",
     "worker/src/kit/tokens.js": "tenant design tokens (accent and type pair), the permitted variation",
     "worker/src/redteam-config.js": "tenant red-team pool config",
-    "worker/src/freshness.js": "reports this tenant's own generated bundles (ensemble ledger age, bca and selfmigrate), so it names tenant files and is not generic"
+    "worker/src/freshness.js": "reports this tenant's own generated bundles (ensemble ledger age, bca and selfmigrate), so it names tenant files and is not generic",
+    ".github/workflows/synth.yml": "tenant's own synthesis loop over its own entries"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",
