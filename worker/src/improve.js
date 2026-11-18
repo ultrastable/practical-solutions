@@ -41,11 +41,39 @@ export function oaAbstract(inv) {
   return words.filter(w => w !== undefined).join(' ');
 }
 
-async function openalex(fetchFn, c, mailto) {
+const S2 = 'https://api.semanticscholar.org/graph/v1/paper/search';
+const CROSSREF = 'https://api.crossref.org/works';
+async function openalexOnly(fetchFn, c, mailto) {
   const u = `${OPENALEX}?search=${encodeURIComponent(c.title || c.q)}&filter=publication_year:${c.year}&per-page=10${mailto ? '&mailto=' + encodeURIComponent(mailto) : ''}`;
   const r = await fetchFn(u);
   if (!r.ok) throw new Error(`OpenAlex HTTP ${r.status}`);
   return ((await r.json()).results || []).map(x => ({ title: x.title || x.display_name, doi: x.doi || null, pmid: null, abstractText: oaAbstract(x.abstract_inverted_index) }));
+}
+async function semanticScholar(fetchFn, c) {
+  const r = await fetchFn(`${S2}?query=${encodeURIComponent(c.title || c.q)}&year=${c.year}&limit=10&fields=title,year,abstract,externalIds`);
+  if (!r.ok) throw new Error(`Semantic Scholar HTTP ${r.status}`);
+  return ((await r.json()).data || []).map(x => ({ title: x.title, doi: (x.externalIds || {}).DOI || null, pmid: null, abstractText: x.abstract || '' }));
+}
+async function crossref(fetchFn, c, mailto) {
+  const r = await fetchFn(`${CROSSREF}?query.bibliographic=${encodeURIComponent(c.title || c.q)}&filter=from-pub-date:${c.year},until-pub-date:${c.year}&rows=10&select=title,DOI,abstract${mailto ? '&mailto=' + encodeURIComponent(mailto) : ''}`);
+  if (!r.ok) throw new Error(`Crossref HTTP ${r.status}`);
+  return (((await r.json()).message || {}).items || []).map(x => ({ title: (x.title || [])[0], doi: x.DOI || null, pmid: null, abstractText: x.abstract || '' }));
+}
+// SOURCE-LADDER-1: OpenAlex answers 429 to shared Worker egress even with a contact address. Economics papers are checked against OpenAlex, then Semantic
+// Scholar, then Crossref; a rung that fails (HTTP error) or has no abstract containing the quoted numbers hands over to the next, and the last error is thrown
+// only when every rung failed. Never a key from a person: all three are open APIs.
+export async function openalex(fetchFn, c, mailto) {
+  const rungs = [() => openalexOnly(fetchFn, c, mailto), () => semanticScholar(fetchFn, c), () => crossref(fetchFn, c, mailto)];
+  let rows = [], lastErr = null, answered = 0;
+  for (const rung of rungs) {
+    try {
+      const got = await rung(); answered++;
+      if (got.some(x => c.numbers.every(n => strip(x.abstractText).includes(n)))) return got;
+      if (got.length > rows.length) rows = got;
+    } catch (e) { lastErr = e; }
+  }
+  if (!answered) throw lastErr;
+  return rows;
 }
 
 export async function verifySolution(fetchFn, sol, { mailto } = {}) {
