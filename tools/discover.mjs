@@ -1,0 +1,76 @@
+// SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+// Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+// SYNTHESES-1 discovery loop. A model proposes new transfers and combinations of catalogue interventions, a second call red-teams each one,
+// and the proposals that survive are written to ledger/synth-discovered.json. Nothing a model writes is published by this step: the entry
+// still has to pass tools/synth.mjs (every paper found in Crossref, every quoted figure in its abstract) before it appears on the site.
+// Models only propose and challenge; code decides. Model-proposed benefit-cost links are forced to grade D and labelled assumptions.
+//   node tools/discover.mjs [--max 2]
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { SOLUTIONS } from '../worker/src/solutions.js';
+import { PROBLEMS } from '../worker/src/problems.js';
+import { validate } from '../vendor/ultrastable/core/benefitcost/index.js';
+import { complete } from '../ps/llm.js';
+import { SYNTHESES } from '../worker/src/syntheses-data.js';
+import { DISCOVERED, loadDiscovered } from './synth.mjs';
+
+const REQUIRED = ['id', 'title', 'headline', 'domain', 'problem', 'transfer', 'components', 'mechanism', 'citations', 'novelty', 'who', 'takes', 'first_test', 'cost_note', 'limits', 'risks', 'model'];
+const KINDS = ['direct', 'multiplier', 'spillover', 'unintended'], UNITS = ['daly', 'death_averted', 'wellby', 'consumption_doubling_year'];
+const catalogIds = new Set(SOLUTIONS.map(s => s.id));
+
+// Structural check: everything the page needs, every citation checkable, a first test that can fail, a model the engine accepts.
+export function validateCandidate(c) {
+  const errs = [], need = (cond, msg) => { if (!cond) errs.push(msg); };
+  for (const k of REQUIRED) need(c && c[k] != null && c[k] !== '', 'missing ' + k);
+  if (errs.length) return errs;
+  need(/^[a-z0-9-]{4,60}$/.test(c.id), 'id must be kebab-case');
+  need(Array.isArray(c.components) && c.components.length >= 1 && c.components.every(x => catalogIds.has(x)), 'components must be catalogue ids');
+  need(Array.isArray(c.citations) && c.citations.length >= 3 && c.citations.every(x => x.id && x.q && Number.isInteger(x.year) && x.cite && x.supports && x.role), 'at least three citations, each with id, exact title (q), year, cite, supports and role');
+  need(c.citations.every(x => !x.numbers || x.numbers.length === 0), 'discovered entries may not quote figures (numbers must be empty); only hand-checked entries do');
+  need(c.novelty && c.novelty.statement && Array.isArray(c.novelty.queries) && c.novelty.queries.length >= 1 && c.novelty.queries.every(q => q.label && q.q && Array.isArray(q.must) && q.must.length), 'novelty needs a statement and queries with must-words');
+  need(Array.isArray(c.risks) && c.risks.length >= 2, 'at least two risks');
+  need(/stop|fail|not at least|if .*(below|under|less)/i.test(c.first_test), 'first test must state when it fails');
+  need(c.transfer && c.transfer.from && c.transfer.to, 'transfer needs from and to');
+  const m = c.model; need(m && m.cost && m.cost.upfront > 0 && Array.isArray(m.nodes) && m.nodes.length >= 1, 'model needs a cost and nodes');
+  if (m && Array.isArray(m.nodes)) { need(m.nodes.every(n => KINDS.includes(n.kind) && UNITS.includes(n.unit)), 'node kind or unit not allowed'); need(m.nodes.some(n => n.kind === 'direct'), 'a direct node is required'); }
+  need(!SYNTHESES.some(s => s.id === c.id) && !loadDiscovered().some(s => s.id === c.id), 'id already exists');
+  return errs;
+}
+// Model-proposed links are assumptions: grade D, source says so, whatever the model claimed.
+export function sanitize(c) { const m = { ...c.model, nodes: c.model.nodes.map(n => ({ ...n, grade: 'D', source: 'assumption proposed by a model: ' + String(n.source || n.label).slice(0, 160) })) }; return { ...c, model: m, discovered: true }; }
+export function modelAccepted(c) { const errs = validate({ id: c.id, title: c.title, ...c.model, contexts: {} }); return errs; }
+
+const json = t => { const m = /[\[{][\s\S]*[\]}]/.exec(String(t || '')); if (!m) return null; try { return JSON.parse(m[0]); } catch { return null; } };
+export const proposePrompt = (max, existing) => `You propose NEW practical solutions made by transferring or combining interventions that published studies support, to a context or combination that no published trial has tested. Do not invent papers: every citation must be a real, published paper whose exact title and year you are sure of. Do not quote figures (leave "numbers" as an empty list). If you are not sure a paper exists, leave that idea out.
+
+Catalogue entries you may build on (use their ids in "components"):
+${SOLUTIONS.slice(0, 30).map(s => `- ${s.id}: ${s.title}`).join('\n')}
+
+Pressing problems with a measured gap to target: ${PROBLEMS.map(p => p.title).join('; ')}.
+Already proposed (do not repeat): ${existing.join(', ')}.
+
+Return a JSON array of at most ${max} objects, nothing else. Each object has exactly these fields: id (kebab-case), title, headline (one sentence an implementer can act on), domain, problem, transfer {from, to}, components (catalogue ids), mechanism (why the parts should combine), citations (3 to 5 of {id, role, cite, q (exact paper title), year (integer), numbers: [], supports (what the paper shows)}), novelty {statement, queries: [{label, q, must: [words that would appear in the title of a paper that already tested this]}]}, who, takes, first_test (a cheap randomised pilot that states a stop rule: when it counts as failed), cost_note, limits, risks (at least 2), model {cost: {upfront: USD, years: 1}, nodes: [{id, label, kind: "direct"|"multiplier"|"spillover"|"unintended", parent (for non-direct), amount: {kind: "ci90", low, high, shape: "lognormal"}, unit: "daly"|"death_averted"|"wellby"|"consumption_doubling_year", years, source: "assumption: show the arithmetic"}]}.`;
+export const redTeamPrompt = c => `You are a hostile reviewer. A proposal says: "${c.title}": ${c.headline} It combines: ${c.transfer.from} -> ${c.transfer.to}. Cited papers: ${c.citations.map(x => `${x.q} (${x.year})`).join('; ')}.
+Say whether it is fatally flawed: (a) a published trial of exactly this combination already exists, (b) a cited paper does not exist or does not support what is claimed, (c) it is likely to cause harm, or (d) it is a rewording of a standard programme. Reply with one JSON object only: {"fatal": true|false, "reasons": ["..."], "closest_existing_work": "title or none"}.`;
+
+export async function discover({ ask, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString() }) {
+  const existing = [...SYNTHESES.map(s => s.id), ...prev.entries.map(s => s.id)], log = [...prev.log], entries = [...prev.entries];
+  const out = await ask(proposePrompt(max, existing)), list = json(out);
+  if (!Array.isArray(list)) { log.push({ at: now(), event: 'no usable proposal', detail: String(out || '').slice(0, 120) }); return { schema: 'ps-synth-discovered/1', at: now(), entries, log: log.slice(-100) }; }
+  for (const raw of list.slice(0, max)) {
+    const errs = validateCandidate(raw); if (errs.length) { log.push({ at: now(), id: raw && raw.id, event: 'rejected: structure', detail: errs.slice(0, 5) }); continue; }
+    const c = sanitize(raw), merr = modelAccepted(c); if (merr.length) { log.push({ at: now(), id: c.id, event: 'rejected: model', detail: merr }); continue; }
+    const rt = json(await ask(redTeamPrompt(c))) || {};
+    if (rt.fatal !== false) { log.push({ at: now(), id: c.id, event: rt.fatal === true ? 'rejected: red team' : 'rejected: red team gave no verdict', detail: rt.reasons || [] }); continue; }
+    entries.push({ ...c, red_team: { at: now(), reasons: rt.reasons || [], closest_existing_work: rt.closest_existing_work || null } }); log.push({ at: now(), id: c.id, event: 'accepted for verification' });
+  }
+  return { schema: 'ps-synth-discovered/1', at: now(), entries, log: log.slice(-100) };
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const i = process.argv.indexOf('--max'), max = i > 0 ? Number(process.argv[i + 1]) : 2;
+  const ask = async prompt => { const r = await complete({ secrets: process.env, prompt: 'Reply with JSON only.\n\n' + prompt, maxTokens: 6000 }); return r.ok ? r.text : ''; };
+  const prev = existsSync(DISCOVERED) ? JSON.parse(readFileSync(DISCOVERED, 'utf8')) : { entries: [], log: [] };
+  const r = await discover({ ask, max, prev });
+  writeFileSync(DISCOVERED, JSON.stringify(r, null, 1) + '\n');
+  console.log(JSON.stringify({ entries: r.entries.length, last: r.log.slice(-3) }));
+}

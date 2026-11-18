@@ -23,13 +23,13 @@ export const SHELL = {
   // FAMILY-1: the .org home of the Ultrastable family (public-benefit demos); accent colours come from https://ultrastable.io/family.json tokens.
   theme: { light: { accent: '#b83800' }, dark: { accent: '#ff7f4d' } },
   family: { label: 'Ultrastable for good: public-benefit demos built on Ultrastable', links: [{ label: 'About this project', href: 'https://ultrastable.io/showcase/practical-solutions' }, { label: 'ultrastable.io', href: 'https://ultrastable.io/' }] },
-  nav: [{ label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ }, { label: 'By country', href: '/country', match: /^\/(country|levels|context)/ },
+  nav: [{ label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'New solutions', href: '/syntheses', match: /^\/syntheses/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ }, { label: 'By country', href: '/country', match: /^\/(country|levels|context)/ },
     { label: 'For you', href: '/for', match: /^\/for/ }, { label: 'Method', href: '/method', match: /^\/method/ }, { label: 'Data', href: '/api', match: /^\/api/ }],
   search: { action: '/search', name: 'q', label: 'Search solutions and problems', placeholder: 'Search, for example water' },
   feeds: [{ type: 'application/rss+xml', href: '/feed.xml', title: 'What changed' }],
   footer: {
     columns: [
-      { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'Problems', href: '/problems' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }] },
+      { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'New solutions', href: '/syntheses' }, { label: 'Problems', href: '/problems' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }] },
       { title: 'Who it is for', links: AUDIENCES.map(a => ({ label: a.name, href: '/for/' + a.id })) },
       { title: 'Trust', links: [{ label: 'About', href: '/about' }, { label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
       { title: 'Ultrastable family', links: [{ label: 'Ultrastable for good (.org)', href: 'https://ultrastable.org/' }, { label: 'Platform and product (.io)', href: 'https://ultrastable.io/' }, { label: 'How it is built', href: 'https://ultrastable.io/how' }, { label: 'Live proof', href: 'https://ultrastable.io/proof' }, { label: 'Contact', href: 'https://ultrastable.io/contact' }] },

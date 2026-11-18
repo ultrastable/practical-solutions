@@ -14,11 +14,12 @@ import * as P from './pages.js';
 import { AUDIENCES, audience } from './audiences.js';
 import * as CP from './country-pages.js';
 import { LEVELS } from './context.js';
+import * as SY from './syntheses-pages.js';
 
 const { esc } = ui;
 export const HEADERS = { ...SECURITY_HEADERS, 'cache-control': 'public, max-age=300' };
 export const legend = P.legend;
-const SITE_PATHS = ['/', '/problems', '/solutions', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/api', '/about'];
+const SITE_PATHS = ['/', '/problems', '/solutions', '/syntheses', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/api', '/about'];
 
 const solutionJson = (s, c, o) => ({ id: s.id, title: s.title, claim: s.claim, label: s.label, implementability: s.impl, design: s.design, verdict: s.verdict, problems: s.problem_ids, domains: s.domains, verified: s.verified,
   works_where: s.works_where, takes: s.takes, who: s.who, first_test: s.first_test, limits: s.limits, sources: s.links.map(l => ({ cite: l.cite, finding: l.finding, links: [...l.direct.map(d => d.url), l.search] })), url: o + '/solutions/' + s.id, cite: P.citation(s.title, '/solutions/' + s.id, o) });
@@ -26,7 +27,7 @@ const problemJson = (p, c, o) => ({ id: p.id, title: p.title, domain: p.domain, 
   solutions: (c.byProblem[p.id] || []).map(s => s.id), url: o + '/problems/' + p.id });
 
 export function sitemap(c, origin) {
-  const urls = [...SITE_PATHS, ...AUDIENCES.map(a => '/for/' + a.id), ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug), ...LEVELS.map(l => '/levels/' + l.id), ...Object.keys((c.context || {}).countries || {}).map(i => '/country/' + i)];
+  const urls = [...SITE_PATHS, ...SY.published().map(x => '/syntheses/' + x.id), ...AUDIENCES.map(a => '/for/' + a.id), ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug), ...LEVELS.map(l => '/levels/' + l.id), ...Object.keys((c.context || {}).countries || {}).map(i => '/country/' + i)];
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(u => `<url><loc>${esc(origin + u)}</loc></url>`).join('')}</urlset>`;
 }
 
@@ -95,6 +96,9 @@ export function route(u, c) {
   const o = u.origin, p = u.pathname.replace(/\/$/, '') || '/';
   const table = { '/': () => P.home(c, o), '/problems': () => P.problemsIndex(c, u, o), '/solutions': () => P.solutionsIndex(c, u, o), '/domains': () => P.domainsIndex(c, o), '/for': () => P.forIndex(c, o), '/context': () => P.contextPage(c, o), '/country': () => CP.countryIndex(c, u, o), '/compare': () => P.comparePage(c, u, o),
     '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o), '/method': () => methodPage(c, o), '/unknowns': () => page('/unknowns', o, 'What we do not know', 'Known unknowns, red-team findings and the new questions generated from them.', U.unknownsBody(c)), '/api': () => P.apiPage(c, o), '/about': () => P.aboutPage(c, o), '/search': () => P.searchPage(c, u, o) };
+  if (p === '/syntheses') return h(SY.synthesesIndex(o, page));
+  if (p === '/syntheses.json') return json(SY.indexJson(o));
+  { const sm = /^\/syntheses\/([a-z0-9-]+)(\.json)?$/.exec(p); if (sm) { const x = SY.find(sm[1]); return sm[2] ? (x ? json(SY.synthesisJson(x, o)) : json({ error: 'not found' }, 404)) : x ? h(SY.synthesisPage(x, o, page)) : h(P.notFound(c, o, p), 404); } }
   if (table[p]) return h(table[p]());
   if (p === '/search.json') return json({ q: u.searchParams.get('q') || '', results: search(searchIndex(c), u.searchParams.get('q')) });
   if (p === '/claims.json') return json({ statements: describe(STATEMENTS, CTX) });
