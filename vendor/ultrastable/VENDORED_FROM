@@ -1,5 +1,5 @@
 {
- "commit": "be6cf2b5ca61cb467d41ec39e4d8e4a23a6c892c",
+ "commit": "ab158b1861cfa784f51e61d8cc4e16266e5e2ff7",
  "files": {
   ".claude/settings.json": "db2a7917aac18605c5ba25c2bb717aacf61ddae27873766a7c0a51856b9dec43",
   ".cursor/rules/ultrastable.mdc": "5b85ce4a068a628916dac979af4bf4da49015fc4183bc4ce06a6ccbf9d22c479",
@@ -815,7 +815,7 @@
   "tools/fleet_graph.mjs": "f009133e71ccd99daf2be9317ca867bfa2c400002fb90b627a206f4e16408aa4",
   "tools/github_settings.py": "da16d3ee4f6b40b7bcd9ac7de27be832de778f3abf153f324ddbce8927be3a27",
   "tools/hostsync.mjs": "2b8d942be5f76e6890eab478df9ede9f094aee9f61f1bec5f9104ff0842cd739",
-  "tools/hostsync_commit.sh": "89d95823e7d00534f81946f681fff38e94577df0291c7618cb609551ad362698",
+  "tools/hostsync_commit.sh": "05d2fedf685801977ee906275cb9177d5d2c0ee1a551a6b035bedce9fe381aac",
   "tools/install.mjs": "1e90f42ab2bf1257085fc76780578b40cbef6c08dd631961acd8b52d7c6e5a93",
   "tools/install.test.mjs": "1a4b39ae225ddc0401b63a758cdf896c001d94ae7ff0bad6d72c56350eda4c98",
   "tools/instance_config.mjs": "728f7cff20ce4390778150356a5b3c97b3bad7c9e8874dd94732e7edef5e9290",
