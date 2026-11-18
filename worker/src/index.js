@@ -9,6 +9,7 @@ import { SOLUTIONS } from './solutions.js';
 import { rankProblems } from './problems.js';
 import { ALLOW, FILES } from './selfmigrate.gen.js';
 import { FOOTER } from './publish.js';
+import { freshnessResponse } from './freshness.js';
 import { authorizer } from '../../ps/audit.js';
 import { handleInbound, recordEvent, metrics, queue, approveIntent, suppressAddr, agenciesGraph } from '../../ps/outreach_step.js';
 
@@ -28,6 +29,7 @@ export default {
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
     if (pathname === '/' || pathname === '/index.html') return new Response(PAGE, { headers: { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' } });
+    if (pathname === '/api/freshness') return freshnessResponse();
     if (pathname === '/problems.json') return Response.json(await rankProblems(), { headers: { 'cache-control': 'public, max-age=21600' } });
     if (pathname === '/solutions.json') return Response.json({ solutions: SOLUTIONS });
     if (pathname === '/internal/mail' && request.method === 'POST') {
