@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-18T15:20:09.139Z",
+ "at": "2026-11-18T19:43:24.624Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-18T15:19:10.262Z"
+   "checked_at": "2026-11-18T19:43:08.495Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -173,9 +173,84 @@
      "reason": "matched"
     }
    },
-   "novelty": [],
-   "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-18T15:19:57.209Z"
+   "novelty": [
+    {
+     "label": "nocebo framing and antihypertensive adherence",
+     "total": 18,
+     "closest": [
+      {
+       "title": "Psychological aspects of hypertension treatment - Beliefs, placebo and nocebo effects",
+       "year": 2017,
+       "url": "https://doi.org/10.17192/z2017.0407",
+       "hit": true
+      },
+      {
+       "title": "Perceived barriers and facilitators to exercise adherence in osteoarthritis: A thematic synthesis of qualitative studies",
+       "year": 2025,
+       "url": "https://doi.org/10.1016/j.ocarto.2025.100584",
+       "hit": false
+      },
+      {
+       "title": "Effectiveness and reliability of hypnosis in stereotaxy: a randomized study",
+       "year": 2024,
+       "url": "https://doi.org/10.1007/s00701-024-05943-0",
+       "hit": false
+      },
+      {
+       "title": "Health care professional barriers and facilitators to discontinuing antidepressant use: A systematic review and thematic synthesis",
+       "year": 2024,
+       "url": "https://doi.org/10.1016/j.jad.2024.04.060",
+       "hit": false
+      },
+      {
+       "title": "Getting the Benefit of the Doubt: The Effect of Randomization Ratio on the Placebo Response",
+       "year": 2019,
+       "url": "https://openalex.org/W2989759371",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": true
+    },
+    {
+     "label": "side-effect counselling script and hypertension in Africa",
+     "total": 1606,
+     "closest": [
+      {
+       "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
+       "year": 2023,
+       "url": "https://doi.org/10.1016/s0140-6736(23)01573-8",
+       "hit": false
+      },
+      {
+       "title": "Assessing implementation outcomes from studies addressing medication adherence for hypertension management in Sub-Saharan Africa: a systematic review",
+       "year": 2025,
+       "url": "https://doi.org/10.1186/s12889-025-24438-w",
+       "hit": false
+      },
+      {
+       "title": "Factors associated with poor adherence to medication among hypertensive patients in twelve low and middle income Sub-Saharan countries",
+       "year": 2019,
+       "url": "https://doi.org/10.1371/journal.pone.0219266",
+       "hit": false
+      },
+      {
+       "title": "Process evaluation of a brief messaging intervention to improve diabetes treatment adherence in sub-Saharan Africa",
+       "year": 2021,
+       "url": "https://doi.org/10.1186/s12889-021-11552-8",
+       "hit": false
+      },
+      {
+       "title": "Nurse-led interventions for hypertension management in Sub-Saharan Africa: A scoping review",
+       "year": 2026,
+       "url": "https://doi.org/10.1016/j.ijnsa.2026.100656",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-18T19:43:11.286Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -303,7 +378,143 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-18T15:20:09.139Z"
+   "checked_at": "2026-11-18T19:43:16.347Z"
+  },
+  "kmc-ors-zinc": {
+   "status": "failed",
+   "citations": {
+    "1": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "2": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "3": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "4": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "5": {
+     "found": false,
+     "reason": "no Crossref title match"
+    }
+   },
+   "novelty": [
+    {
+     "label": "Existing studies",
+     "total": 7,
+     "closest": [
+      {
+       "title": "Pediatric emergency care capacity in a low-resource setting: An assessment of district hospitals in Rwanda",
+       "year": 2017,
+       "url": "https://doi.org/10.1371/journal.pone.0173233",
+       "hit": false
+      },
+      {
+       "title": "Caregiver Behavior Change for Child Survival and Development in Low- and Middle-Income Countries: An Examination of the Evidence",
+       "year": 2014,
+       "url": "https://doi.org/10.1080/10810730.2014.940477",
+       "hit": false
+      },
+      {
+       "title": "Methodological considerations and cost to measure coverage of multisectoral nutrition interventions: protocol for the One Nutrition Coverage Survey in Bangladesh",
+       "year": 2025,
+       "url": "https://doi.org/10.1136/bmjopen-2025-099314",
+       "hit": false
+      },
+      {
+       "title": "Learning From History About Reducing Infant Mortality: Contrasting the Centrality of Structural Interventions to Early 20th‐Century Successes in the United States to Their Neglect in Current Global Initiatives",
+       "year": 2019,
+       "url": "https://doi.org/10.1111/1468-0009.12376",
+       "hit": false
+      },
+      {
+       "title": "Effectiveness of Culturally Based HIV Education on Adolescents' Knowledge, Attitudes, and Intentions: A Systematic Review",
+       "year": 2026,
+       "url": "https://doi.org/10.56338/mppki.v9i11.11325",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-18T19:43:20.639Z"
+  },
+  "itn-tarl": {
+   "status": "failed",
+   "citations": {
+    "1": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "2": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "3": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "4": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "5": {
+     "found": false,
+     "doi": "10.31219/osf.io/wbu6e",
+     "title": "Teaching at the Right Level",
+     "year": 2023,
+     "similarity": 0.63,
+     "reason": "year 2023 is not 2020"
+    }
+   },
+   "novelty": [
+    {
+     "label": "Existing studies",
+     "total": 399,
+     "closest": [
+      {
+       "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
+       "year": 2026,
+       "url": "https://doi.org/10.3390/tropicalmed11050137",
+       "hit": false
+      },
+      {
+       "title": "Cost-effectiveness of intermittent preventive therapy and insecticide-treated bed nets for malaria prevention among pregnant women in Jos North, Plateau State, Nigeria",
+       "year": 2025,
+       "url": "https://doi.org/10.1186/s12936-025-05607-z",
+       "hit": true
+      },
+      {
+       "title": "Assessment of the Willingness to Buy and the Use of Insecticide Treated Nets (ITN) among Caregivers of Under-Five Children Attending Immunization Clinics in a Private Tertiary Hospital in Plateau State, Nigeria",
+       "year": 2020,
+       "url": "https://doi.org/10.4236/aid.2020.102008",
+       "hit": false
+      },
+      {
+       "title": "A decline in the coverage and utilization of long-lasting insecticidal nets in Southern Ethiopia: A repeated cross-sectional study",
+       "year": 2025,
+       "url": "https://doi.org/10.1371/journal.pone.0322342",
+       "hit": false
+      },
+      {
+       "title": "“In starvation, a bone can also be meat”: a mixed methods evaluation of factors associated with discarding of long-lasting insecticidal nets in Bagamoyo, Tanzania",
+       "year": 2022,
+       "url": "https://doi.org/10.1186/s12936-022-04126-5",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": true
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-18T19:43:24.624Z"
   }
  },
  "errors": []
