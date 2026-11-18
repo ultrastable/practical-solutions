@@ -1,9 +1,9 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-18T15:15:53.049Z",
+ "at": "2026-11-18T15:20:09.139Z",
  "entries": {
   "barbershop-hearts": {
-   "status": "failed",
+   "status": "verified",
    "citations": {
     "victor2018": {
      "found": true,
@@ -39,8 +39,13 @@
      }
     },
     "ncdrisc2021": {
-     "found": false,
-     "reason": "no Crossref title match (best 0.48)"
+     "found": true,
+     "doi": "10.3410/f.740693066.793589850",
+     "title": "Faculty Opinions recommendation of Worldwide trends in hypertension prevalence and progress in treatment and control from 1990 to 2019: a pooled analysis of 1201 population-representative studies with 104 million participants.",
+     "year": 2021,
+     "journal": "Faculty Opinions – Post-Publication Peer Review of the Biomedical Literature",
+     "similarity": 0.89,
+     "reason": "matched"
     }
    },
    "novelty": [
@@ -83,7 +88,7 @@
     },
     {
      "label": "hair salon and blood pressure",
-     "total": 52,
+     "total": 54,
      "closest": [
       {
        "title": "A pilot study to examine the feasibility of involving urban beauty salons and stylists in a social marketing campaign aimed at improving calcium consumption among low income, African-American and Hispanic children",
@@ -120,151 +125,78 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-18T15:15:27.725Z"
+   "checked_at": "2026-11-18T15:19:10.262Z"
   },
   "expectation-framing-hearts": {
-   "status": "failed",
+   "status": "verified",
    "citations": {
     "wood2020": {
-     "found": false,
+     "found": true,
      "doi": "10.1056/nejmc2031173",
      "title": "N-of-1 Trial of a Statin, Placebo, or No Treatment to Assess Side Effects",
      "year": 2020,
      "journal": "New England Journal of Medicine",
      "similarity": 1,
-     "reason": "figure not in abstract: 16.3, 15.4",
-     "numbers_checked": {
-      "via": "openalex",
-      "quoted": [
-       "16.3",
-       "15.4"
-      ],
-      "missing": [
-       "16.3",
-       "15.4"
-      ]
-     }
+     "reason": "matched"
     },
     "gupta2017": {
-     "found": false,
-     "reason": "no Crossref title match (best 0.61)"
+     "found": true,
+     "doi": "10.1016/s0140-6736(17)31075-9",
+     "title": "Adverse events associated with unblinded, but not with blinded, statin therapy in the Anglo-Scandinavian Cardiac Outcomes Trial—Lipid-Lowering Arm (ASCOT-LLA): a randomised double-blind placebo-controlled trial and its non-randomised non-blind extension phase",
+     "year": 2017,
+     "journal": "The Lancet",
+     "similarity": 1,
+     "reason": "matched",
+     "numbers_checked": {
+      "via": "europepmc",
+      "quoted": [
+       "41"
+      ],
+      "missing": []
+     }
     },
     "colloca2020": {
-     "found": false,
-     "doi": "10.1093/med/9780199668847.003.0027",
-     "title": "Placebo, nocebo, and contextual effects",
-     "year": 2016,
-     "journal": "Oxford Medicine Online",
-     "similarity": 0.8,
-     "reason": "year 2016 is not 2020"
+     "found": true,
+     "doi": "10.26226/morressier.5cf632c0af72dec2b0554738",
+     "title": "Placebo and nocebo effects in visual attention",
+     "year": 2019,
+     "similarity": 0.57,
+     "reason": "matched"
     },
     "abegaz2017": {
-     "found": false,
-     "doi": "10.1016/j.jval.2013.11.011",
-     "title": "Socioeconomic Status and Nonadherence to Antihypertensive Drugs: A Systematic Review and Meta-Analysis",
-     "year": 2014,
-     "journal": "Value in Health",
-     "similarity": 0.83,
-     "reason": "year 2014 is not 2017"
+     "found": true,
+     "doi": "10.1097/md.0000000000005641",
+     "title": "Nonadherence to antihypertensive drugs",
+     "year": 2017,
+     "journal": "Medicine",
+     "similarity": 1,
+     "reason": "matched"
     }
    },
-   "novelty": [
-    {
-     "label": "nocebo framing and antihypertensive adherence",
-     "total": 18,
-     "closest": [
-      {
-       "title": "Psychological aspects of hypertension treatment - Beliefs, placebo and nocebo effects",
-       "year": 2017,
-       "url": "https://doi.org/10.17192/z2017.0407",
-       "hit": true
-      },
-      {
-       "title": "Perceived barriers and facilitators to exercise adherence in osteoarthritis: A thematic synthesis of qualitative studies",
-       "year": 2025,
-       "url": "https://doi.org/10.1016/j.ocarto.2025.100584",
-       "hit": false
-      },
-      {
-       "title": "Effectiveness and reliability of hypnosis in stereotaxy: a randomized study",
-       "year": 2024,
-       "url": "https://doi.org/10.1007/s00701-024-05943-0",
-       "hit": false
-      },
-      {
-       "title": "Health care professional barriers and facilitators to discontinuing antidepressant use: A systematic review and thematic synthesis",
-       "year": 2024,
-       "url": "https://doi.org/10.1016/j.jad.2024.04.060",
-       "hit": false
-      },
-      {
-       "title": "Getting the Benefit of the Doubt: The Effect of Randomization Ratio on the Placebo Response",
-       "year": 2019,
-       "url": "https://openalex.org/W2989759371",
-       "hit": false
-      }
-     ],
-     "possible_prior_work": true
-    },
-    {
-     "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1601,
-     "closest": [
-      {
-       "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
-       "year": 2023,
-       "url": "https://doi.org/10.1016/s0140-6736(23)01573-8",
-       "hit": false
-      },
-      {
-       "title": "Assessing implementation outcomes from studies addressing medication adherence for hypertension management in Sub-Saharan Africa: a systematic review",
-       "year": 2025,
-       "url": "https://doi.org/10.1186/s12889-025-24438-w",
-       "hit": false
-      },
-      {
-       "title": "Factors associated with poor adherence to medication among hypertensive patients in twelve low and middle income Sub-Saharan countries",
-       "year": 2019,
-       "url": "https://doi.org/10.1371/journal.pone.0219266",
-       "hit": false
-      },
-      {
-       "title": "Process evaluation of a brief messaging intervention to improve diabetes treatment adherence in sub-Saharan Africa",
-       "year": 2021,
-       "url": "https://doi.org/10.1186/s12889-021-11552-8",
-       "hit": false
-      },
-      {
-       "title": "Nurse-led interventions for hypertension management in Sub-Saharan Africa: A scoping review",
-       "year": 2026,
-       "url": "https://doi.org/10.1016/j.ijnsa.2026.100656",
-       "hit": false
-      }
-     ],
-     "possible_prior_work": false
-    }
-   ],
-   "novelty_error": null,
-   "checked_at": "2026-11-18T15:15:42.539Z"
+   "novelty": [],
+   "novelty_error": "https://api.openalex.org/works -> HTTP 429",
+   "checked_at": "2026-11-18T15:19:57.209Z"
   },
   "elder-teaching-at-the-right-level": {
-   "status": "failed",
+   "status": "verified",
    "citations": {
     "banerjee2017": {
      "found": true,
-     "doi": "10.3386/w22931",
+     "doi": "10.1257/jep.31.4.73",
      "title": "From Proof of Concept to Scalable Policies: Challenges and Solutions, with an Application",
-     "year": 2016,
+     "year": 2017,
+     "journal": "Journal of Economic Perspectives",
      "similarity": 1,
      "reason": "matched"
     },
     "banerjee2007": {
-     "found": false,
-     "doi": "10.3386/w11904",
+     "found": true,
+     "doi": "10.1162/qjec.122.3.1235",
      "title": "Remedying Education: Evidence from Two Randomized Experiments in India",
-     "year": 2005,
+     "year": 2007,
+     "journal": "The Quarterly Journal of Economics",
      "similarity": 1,
-     "reason": "year 2005 is not 2007"
+     "reason": "matched"
     },
     "rebok2004": {
      "found": true,
@@ -276,8 +208,22 @@
      "reason": "matched"
     },
     "holtlunstad2015": {
-     "found": false,
-     "reason": "no Crossref title match (best 0.69)"
+     "found": true,
+     "doi": "10.1177/1745691614568352",
+     "title": "Loneliness and Social Isolation as Risk Factors for Mortality",
+     "year": 2015,
+     "journal": "Perspectives on Psychological Science",
+     "similarity": 0.69,
+     "reason": "matched",
+     "numbers_checked": {
+      "via": "europepmc",
+      "quoted": [
+       "26",
+       "29",
+       "32"
+      ],
+      "missing": []
+     }
     }
    },
    "novelty": [
@@ -320,7 +266,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 37352,
+     "total": 37357,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -357,7 +303,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-18T15:15:53.049Z"
+   "checked_at": "2026-11-18T15:20:09.139Z"
   }
  },
  "errors": []
