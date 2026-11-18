@@ -14,7 +14,11 @@ export const LEDGER = 'ledger/syntheses-verified.json', DISCOVERED = 'ledger/syn
 const UA = { 'user-agent': 'practical-solutions-verifier (+https://ultrastable.org/method)' };
 const norm = s => String(s || '').toLowerCase().replace(/&amp;|&/g, ' and ').replace(/<[^>]+>/g, ' ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
 export const similarity = (a, b) => { const A = new Set(norm(a).split(' ')), B = new Set(norm(b).split(' ')); const i = [...A].filter(x => B.has(x)).length; return i / (new Set([...A, ...B]).size || 1); };
-const getJson = async (f, url) => { const r = await f(url, { headers: UA }); if (!r.ok) throw new Error(`${url.split('?')[0]} -> HTTP ${r.status}`); return r.json(); };
+const getJson = async (f, url) => {
+  let last;
+  for (let i = 0; i < 4; i++) { const r = await f(url, { headers: UA }); if (r.ok) return r.json(); last = r.status; if (![429, 500, 502, 503, 504].includes(r.status)) break; await new Promise(res => setTimeout(res, 1500 * (i + 1))); }
+  throw new Error(`${url.split('?')[0]} -> HTTP ${last}`);
+};
 
 export async function findPaper(f, c) {
   const j = await getJson(f, `https://api.crossref.org/works?query.bibliographic=${encodeURIComponent(c.q)}&rows=5&select=DOI,title,issued,container-title`);
@@ -40,7 +44,7 @@ export async function abstractOf(f, doi) {
 export async function noveltyCheck(f, n) {
   const out = [];
   for (const q of n.queries) {
-    const j = await getJson(f, `https://api.openalex.org/works?search=${encodeURIComponent(q.q)}&per-page=5&select=id,title,publication_year,doi,type`);
+    const j = await getJson(f, `https://api.openalex.org/works?mailto=verifier@ultrastable.org&search=${encodeURIComponent(q.q)}&per-page=5&select=id,title,publication_year,doi,type`);
     const closest = (j.results || []).map(w => ({ title: w.title, year: w.publication_year, url: w.doi || w.id, hit: q.must.some(m => norm(w.title).includes(norm(m))) }));
     out.push({ label: q.label, total: (j.meta && j.meta.count) ?? null, closest, possible_prior_work: closest.some(c => c.hit) });
   }
@@ -58,8 +62,9 @@ export async function verifyEntry(f, s) {
     }
     citations[c.id] = r; if (!r.found) ok = false;
   }
-  const novelty = await noveltyCheck(f, s.novelty);
-  return { status: ok ? 'verified' : 'failed', citations, novelty, checked_at: new Date().toISOString() };
+  let novelty = [], novelty_error = null;
+  try { novelty = await noveltyCheck(f, s.novelty); } catch (e) { novelty_error = String(e.message || e); }
+  return { status: ok ? 'verified' : 'failed', citations, novelty, novelty_error, checked_at: new Date().toISOString() };
 }
 
 export const loadDiscovered = () => existsSync(DISCOVERED) ? (JSON.parse(readFileSync(DISCOVERED, 'utf8')).entries || []) : [];
