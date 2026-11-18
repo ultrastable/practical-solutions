@@ -113,3 +113,16 @@ test('economics entries are checked against OpenAlex abstracts rebuilt from the 
     assert.ok(s && (s.checks || []).length, id + ' has a check');
   }
 });
+
+test('SOURCE-LADDER-1: OpenAlex 429 falls through to Semantic Scholar then Crossref; only a full failure is an error', async () => {
+  const sol = { id: 'e', checks: [{ source: 'openalex', title: 'Women as Policy Makers', year: 2004, numbers: ['West Bengal'] }] };
+  const seen = [];
+  const ladder = (okHost, body) => async u => { seen.push(new URL(u).host); return u.includes(okHost) ? { ok: true, json: async () => body } : { ok: false, status: 429 }; };
+  const s2 = { data: [{ title: 'Women as Policy Makers', year: 2004, abstract: 'in West Bengal and Rajasthan', externalIds: { DOI: '10.1/x' } }] };
+  const r1 = await verifySolution(ladder('semanticscholar', s2), sol);
+  assert.equal(r1.status, 'verified'); assert.equal(r1.detail[0].doi, '10.1/x');
+  assert.deepEqual(seen, ['api.openalex.org', 'api.semanticscholar.org']);
+  const cr = { message: { items: [{ title: ['Women as Policy Makers'], DOI: '10.2/y', abstract: '<jats:p>West Bengal villages</jats:p>' }] } };
+  assert.equal((await verifySolution(ladder('crossref', cr), sol)).status, 'verified');
+  await assert.rejects(() => verifySolution(async () => ({ ok: false, status: 429 }), sol), /HTTP 429/);
+});
