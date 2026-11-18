@@ -51,3 +51,4 @@
 {"at":"2026-11-18T15:09:11.193Z","kind":"host-redeploy","host":"cloudflare-gateway","subject":"tenant-ps-core","summary":"redeploy requested","data":{"fields":["sha256"]}}
 {"at":"2026-11-18T15:09:11.826Z","kind":"host-state","host":"cloudflare-gateway","subject":"ops/hosting/state.json","summary":"runtime state written back to the repository","data":{"scripts":3,"at":"2026-11-18T15:09:11.826Z"}}
 {"at":"2026-11-18T15:09:34.011Z","kind":"host-expect","subject":"tenant-ps-web","summary":"deploy recorded as expected","data":{"sha256":"7ce1533d0e8997842c41f17c7dc497c010c32895a75716519563b6c6d41379fd"}}
+{"at":"2026-11-18T15:10:15.343Z","kind":"host-expect","subject":"tenant-ps-core","summary":"deploy recorded as expected","data":{"sha256":"f0fa14b709ff08e1ed247a4b96039e88178ab4ff1542d5154e7a98a530e29a2f"}}
