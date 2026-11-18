@@ -61,3 +61,10 @@ test('discovery: red team can veto, a surviving proposal is recorded for verific
   assert.equal(r2.entries.length, 0); assert.match(r2.log.at(-1).event, /red team/);
   const none = await discover({ ask: async () => 'sorry', prev: { entries: [], log: [] } }); assert.equal(none.entries.length, 0);
 });
+
+import { titleMatch } from '../tools/synth.mjs';
+test('title matching tolerates a dropped subtitle but not an unrelated title that merely contains the words', () => {
+  assert.ok(titleMatch('Nonadherence to antihypertensive drugs', 'Nonadherence to antihypertensive drugs: A systematic review and meta-analysis'));
+  assert.ok(titleMatch('Placebo and Nocebo Effects', 'Placebo & nocebo effects'));
+  assert.ok(!titleMatch('Placebo and Nocebo Effects', 'Cultural influences on placebo and nocebo effects'));
+});
