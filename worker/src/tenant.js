@@ -71,9 +71,13 @@ export default {
       return u.pathname === '/feed.xml' ? new Response(toRss({ ...meta, items }), { headers: { 'content-type': 'application/rss+xml; charset=utf-8' } })
         : Response.json(toJsonFeed({ ...meta, feedUrl: origin + '/feed.json', items }));
     }
+    // CPU-LIMIT-1: a cold isolate pays for compiling and rendering a page on its first request, which can pass the free plan's 10 ms. Rendered pages are
+    // therefore cached at the edge (Cache API, keyed by the public URL) for the max-age they already declare, so only the first request per URL per location renders.
+    const edge = typeof caches !== 'undefined' && r.method === 'GET' ? caches.default : null, ckey = edge && new Request(origin + u.pathname + u.search);
+    if (edge) { const hit = await edge.match(ckey); if (hit) return hit; }
     const cat = await catalog(env); cat.ign = await ignView(env.STATE).catch(() => null); cat.reach = u.pathname === '/impact' ? await summary(env.STATE) : null;
     const site = route(new URL(u.pathname + u.search, origin), cat);
-    if (site) return site;
+    if (site) { if (edge && site.status === 200 && ctx && ctx.waitUntil) ctx.waitUntil(edge.put(ckey, site.clone()).catch(() => {})); return site; }
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
     return notFoundResponse(cat, new URL(u.pathname + u.search, origin));
   },
