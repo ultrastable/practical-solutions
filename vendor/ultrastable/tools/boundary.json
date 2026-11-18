@@ -101,6 +101,10 @@
       "class": "core",
       "role": "Deploy gate: hash read-back of the stored module before a deploy counts as verified"
     },
+    "core/hostsync": {
+      "class": "core",
+      "role": "Repository and host runtime state reconcile: names and hashes written back to the repo, drift redeployed"
+    },
     "core/describe": {
       "class": "core",
       "role": "self-description and the claims registry"
@@ -188,6 +192,10 @@
     "core/modelport": {
       "class": "core",
       "role": "the Models port and the Role runtime port"
+    },
+    "core/airouter": {
+      "class": "core",
+      "role": "AI cost router: cache and dedupe, free models first, reply gate, paid escalation only inside a hard monthly cap, every call recorded and learned from; tenant-agnostic (AI-ROUTER-1)"
     },
     "core/modelservice": {
       "class": "core",

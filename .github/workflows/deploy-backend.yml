@@ -6,7 +6,7 @@ on:
   push: { branches: [main], paths: ['worker/src/index.js', 'worker/src/solutions.js', 'worker/src/publish.js', 'worker/src/selfmigrate.gen.js', 'worker/self-migrate.json', 'ps/**', 'org/**', 'vendor/**', '.github/workflows/deploy-backend.yml'] }
   workflow_dispatch: {}
 concurrency: { group: deploy-backend, cancel-in-progress: false }
-permissions: { contents: read, id-token: write }
+permissions: { contents: write, id-token: write }  # HOSTSYNC-1: the record step commits ops/hosting
 env:
   GATEWAY: https://ultrastable-deploy-gateway.ultrastable.workers.dev
 jobs:
@@ -26,3 +26,8 @@ jobs:
       - name: record in the audit log
         if: success()
         run: node tools/audit_post.mjs --kind deploy --subject tenant-ps-core --summary "backend deployed through the gateway from main"
+      - name: record the deployed module as expected (HOSTSYNC-1)
+        if: success()
+        run: |
+          node vendor/ultrastable/tools/hostsync.mjs expect --script tenant-ps-core --sha256 "$(jq -r .sha256 out.json)"
+          bash vendor/ultrastable/tools/hostsync_commit.sh "host-sync - record deployed tenant-ps-core"

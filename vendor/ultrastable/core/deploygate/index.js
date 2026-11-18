@@ -29,16 +29,56 @@ const hex = async t => [...new Uint8Array(await crypto.subtle.digest('SHA-256', 
 // The stored script comes back as multipart: take the first part's body.
 export function modulePart(body) { const i = body.indexOf('\r\n\r\n'), j = body.lastIndexOf('\r\n--'); return i < 0 ? body : body.slice(i + 4, j > i ? j : undefined); }
 
+// Names only: a binding's value, a secret's value and a variable's text never leave the host through this read.
+export async function readState(fetch, config, script, rule = {}) {
+  const base = `https://api.cloudflare.com/client/v4/accounts/${config.accountId}/workers/scripts/${script}`;
+  const auth = { authorization: `Bearer ${config.token}` };
+  const errors = [], get = async (path, as = 'json') => {
+    try { const r = await fetch(base + path, { headers: auth }); if (!r.ok) { errors.push(`${path} ${r.status}`); return null; } return as === 'json' ? (await r.json()).result : await r.text(); }
+    catch (e) { errors.push(`${path} ${String(e.message || e)}`); return null; }
+  };
+  const [settings, sched, sub, dep, body] = await Promise.all([get('/settings'), get('/schedules'), get('/subdomain'), get('/deployments'), get('/content/v2', 'text')]);
+  // Account-level custom domains and, where the rule names zones, zone routes; D1 migration names where the rule names databases (HOSTSYNC-1).
+  const acct = `https://api.cloudflare.com/client/v4/accounts/${config.accountId}`;
+  const call = async (u, init = {}) => { try { const r = await fetch(u, { ...init, headers: { ...auth, ...(init.headers || {}) } }); if (!r.ok) { errors.push(`${u.replace(/^.*\/client\/v4/, '')} ${r.status}`); return null; } return (await r.json()).result; } catch (e) { errors.push(String(e.message || e)); return null; } };
+  const doms = await call(`${acct}/workers/domains?service=${encodeURIComponent(script)}`);
+  const routes = [];
+  for (const z of rule.zones || []) for (const r of (await call(`https://api.cloudflare.com/client/v4/zones/${z}/workers/routes`)) || []) if (r.script === script) routes.push(r.pattern);
+  const migrations = {};
+  for (const db of rule.d1 || []) { const q = await call(`${acct}/d1/database/${db}/query`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sql: 'SELECT file FROM _migrations ORDER BY file' }) }); if (q) migrations[db] = ((q[0] && q[0].results) || []).map(x => x.file); }
+  const d0 = ((dep && dep.deployments) || [])[0];
+  return {
+    script, found: !!(settings || body),
+    sha256: body == null ? null : await hex(modulePart(body)),
+    bindings: ((settings && settings.bindings) || []).map(b => ({ type: b.type, name: b.name })).sort((a, b) => (a.name + a.type).localeCompare(b.name + b.type)),
+    crons: ((sched && sched.schedules) || []).map(x => x.cron).sort(),
+    workers_dev: sub ? !!sub.enabled : null,
+    domains: (doms || []).map(d => d.hostname).sort(), routes: routes.sort(), migrations,
+    compat_date: (settings && settings.compatibility_date) || null,
+    compat_flags: ((settings && settings.compatibility_flags) || []).slice().sort(),
+    deployment: d0 ? { id: d0.id, created_on: d0.created_on } : null,
+    read_errors: errors,
+  };
+}
+
 export function createGate({ fetch = globalThis.fetch, now = Date.now, config }) {
   const issuer = config.issuer || ISSUER;
   async function handle(req) {
     const url = new URL(req.url);
     if (url.pathname === '/health') return json({ ok: true });
-    if (req.method !== 'POST' || url.pathname !== '/deploy') return json({ error: 'not found' }, 404);
+    const isState = req.method === 'GET' && url.pathname === '/state';
+    if (!isState && (req.method !== 'POST' || url.pathname !== '/deploy')) return json({ error: 'not found' }, 404);
     const m = /^Bearer (.+)$/.exec(req.headers.get('authorization') || '');
     if (!m) return json({ error: 'missing token' }, 401);
     let claims;
     try { claims = await verifyToken(m[1], { audience: url.origin, fetch, now, issuer }); } catch (e) { return json({ error: String(e.message) }, 401); }
+    // HOSTSYNC-1: read-only runtime state of a script the caller's repo may deploy (same rule match, same OIDC proof, no stored secret).
+    if (isState) {
+      const script = url.searchParams.get('script') || '';
+      if (!(config.rules || []).find(r => r.repo === claims.repository && r.script === script && (r.refs || []).includes(claims.ref))) return json({ error: 'not allowed', repository: claims.repository, ref: claims.ref, script }, 403);
+      const rule = (config.rules || []).find(r => r.repo === claims.repository && r.script === script && (r.refs || []).includes(claims.ref));
+      return json(await readState(fetch, config, script, rule));
+    }
     const form = await req.formData();
     const script = String(form.get('script') || '');
     const rule = (config.rules || []).find(r => r.repo === claims.repository && r.script === script && (r.refs || []).includes(claims.ref));

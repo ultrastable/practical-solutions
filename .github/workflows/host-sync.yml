@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# HOSTSYNC-1: repository <-> host reconciliation for this tenant, through core/hostsync. The run proves itself to the gateway with its GitHub OIDC token; no secret is stored.
+name: host-sync
+on:
+  workflow_run: { workflows: [deploy-tenant, deploy-backend, deploy-llm], types: [completed] }
+  repository_dispatch: { types: [host-changed] }
+  schedule: [{ cron: "37 5 * * *" }]
+  workflow_dispatch: {}
+concurrency: { group: host-sync, cancel-in-progress: false }
+permissions: { contents: write, id-token: write, actions: write }
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: reconcile the host with the repository
+        env: { GITHUB_TOKEN: "${{ github.token }}" }
+        run: node vendor/ultrastable/tools/hostsync.mjs run --declared hosting.json
+      - name: write the runtime state back to the repository
+        run: bash vendor/ultrastable/tools/hostsync_commit.sh 'host-sync - runtime state of the host (HOSTSYNC-1)'
