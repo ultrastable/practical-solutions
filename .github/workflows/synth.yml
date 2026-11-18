@@ -34,4 +34,4 @@ jobs:
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git commit -m "syntheses: verification record and generated module"
           for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
-          gh workflow run deploy-tenant.yml --ref main
+          bash tools/dispatch_deploy.sh
