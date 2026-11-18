@@ -4,7 +4,7 @@
 // Bindings: STATE (tenant-ps-kv) only. Core is never called; the loop backend is reached by plain HTTP (BACKEND var).
 import { PAGE } from './ui.js';
 import { rankProblems } from './problems.js';
-import { tick, verifiedText } from './improve.js';
+import { tick, verifiedText, recordErrors } from './improve.js';
 import { indexnowKey } from '../../vendor/ultrastable/core/promote/index.js';
 import { toRss, toJsonFeed, itemsFrom } from '../../vendor/ultrastable/core/feed/index.js';
 import { describeChange } from './publish.js';
@@ -30,8 +30,8 @@ export default {
   // through a service binding (CORE). The backend has no public route, so only this call reaches /internal/tick.
   async scheduled(_e, env, ctx) {
     if (env.CORE) ctx.waitUntil(env.CORE.fetch('https://core.internal/internal/tick', { method: 'POST', headers: { 'x-ps-internal': '1' } }).catch(() => {}));
-    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems }); await PV.recordChanges(env.STATE, r.changes, r.at);
-      try { const b = await bcaTick({ store: env.STATE }); if (b.changes.length) { await PV.recordChanges(env.STATE, b.changes, b.at); await env.STATE.put('changes', JSON.stringify([...b.changes.map(c => ({ at: b.at, ...c })), ...(await j(env, 'changes', []))].slice(0, 200))); } } catch (e) { await env.STATE.put('bca:error', String(e.message || e)); }
+    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems, mailto: env.OPENALEX_MAILTO }); await PV.recordChanges(env.STATE, [...r.changes, ...r.errors], r.at);
+      try { const b = await bcaTick({ store: env.STATE }); const be = b.changes.filter(c => /_error$/.test(c.kind)), bc = b.changes.filter(c => !/_error$/.test(c.kind)); await recordErrors(env.STATE, be, b.at); if (b.changes.length) { await PV.recordChanges(env.STATE, b.changes, b.at); if (bc.length) await env.STATE.put('changes', JSON.stringify([...bc.map(c => ({ at: b.at, ...c })), ...(await j(env, 'changes', []))].slice(0, 200))); } } catch (e) { await env.STATE.put('bca:error', String(e.message || e)); }
       try { await ignoranceTick({ store: env.STATE, env, cat: await catalog(env), fetchFn: (u) => fetch(u) }); await env.STATE.delete('ignorance:error'); } catch (e) { await env.STATE.put('ignorance:error', String(e.message || e)); } })());
   },
   async fetch(r, env, ctx) {

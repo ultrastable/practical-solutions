@@ -35,7 +35,13 @@ test('a failing source is recorded, not thrown', async () => {
   await store.put('solutions', JSON.stringify(SOLUTIONS));
   const bad = async () => ({ ok: false, status: 503, json: async () => ({}) });
   const r = await tick({ store, fetchFn: bad, rank, now: Date.now() });
-  assert.ok(r.changes.some(c => c.kind === 'verification_error'));
+  assert.ok(!r.changes.some(c => /_error$/.test(c.kind)), 'errors stay out of the changes feed');
+  assert.ok(r.errors.some(c => c.kind === 'verification_error'));
+  assert.ok(!JSON.parse(await store.get('changes')).some(c => /_error$/.test(c.kind)));
+  await tick({ store, fetchFn: bad, rank, now: Date.now() + 60000 });
+  assert.equal((JSON.parse(await store.get('verif'))[SOLUTIONS.find(x => (x.checks || []).length).id] || {}).attempts, 1, 'a failed check is not retried before its backoff');
+  const first = SOLUTIONS.find(x => (x.checks || []).length).id;
+  assert.equal(JSON.parse(await store.get('errors')).find(e => e.kind === 'verification_error' && e.id === first).count, 1, 'the same failure is one row');
 });
 
 test('the tenant Worker serves data from its own store and never touches core', async () => {
