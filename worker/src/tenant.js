@@ -15,6 +15,7 @@ import { recordView, summary } from './reach.js';
 import { ignoranceTick, ignView } from './unknowns.js';
 import { bcaTick, KEY as BCA_KEY } from './bca.js';
 import * as PV from '../../ps/provenance.js';  // PROVENANCE-1
+import { goalsTick, knob } from './goals.js';  // GOALS-1
 
 // Behind the ultrastable.org edge the request arrives on the workers.dev host with x-forwarded-host set; links and canonicals use the public host.
 const PUBLIC_HOSTS = new Set(['ultrastable.org', 'solutions.ultrastable.org']);
@@ -30,8 +31,9 @@ export default {
   // through a service binding (CORE). The backend has no public route, so only this call reaches /internal/tick.
   async scheduled(_e, env, ctx) {
     if (env.CORE) ctx.waitUntil(env.CORE.fetch('https://core.internal/internal/tick', { method: 'POST', headers: { 'x-ps-internal': '1' } }).catch(() => {}));
-    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems, mailto: env.OPENALEX_MAILTO }); await PV.recordChanges(env.STATE, [...r.changes, ...r.errors], r.at);
+    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems, mailto: env.OPENALEX_MAILTO, maxVerify: knob(await j(env, 'goals:knobs', {}), 'ps.verify.per_tick', undefined) });  // GOALS-1: core's knob value, the default when unset await PV.recordChanges(env.STATE, [...r.changes, ...r.errors], r.at);
       try { const b = await bcaTick({ store: env.STATE }); const be = b.changes.filter(c => /_error$/.test(c.kind)), bc = b.changes.filter(c => !/_error$/.test(c.kind)); await recordErrors(env.STATE, be, b.at); if (b.changes.length) { await PV.recordChanges(env.STATE, b.changes, b.at); if (bc.length) await env.STATE.put('changes', JSON.stringify([...bc.map(c => ({ at: b.at, ...c })), ...(await j(env, 'changes', []))].slice(0, 200))); } } catch (e) { await env.STATE.put('bca:error', String(e.message || e)); }
+      try { let backend = null; try { if (env.CORE) { const b = await env.CORE.fetch('https://core.internal/internal/goals', { headers: { 'x-ps-internal': '1' } }); if (b.ok) backend = await b.json(); } } catch { } await goalsTick({ store: env.STATE, cat: await catalog(env), reach: await summary(env.STATE), backend }); } catch (e) { await env.STATE.put('goals:error', String(e.message || e)); }  // GOALS-1
       try { await ignoranceTick({ store: env.STATE, env, cat: await catalog(env), fetchFn: (u) => fetch(u) }); await env.STATE.delete('ignorance:error'); } catch (e) { await env.STATE.put('ignorance:error', String(e.message || e)); } })());
   },
   async fetch(r, env, ctx) {
@@ -40,6 +42,7 @@ export default {
     if (u.pathname === '/metrics.json') return Response.json(await summary(env.STATE), { headers: { 'cache-control': 'public, max-age=300' } });
     // AUDIT-1: the public half of the audit log (counts, chain head, verification, Merkle proofs) is read from the backend through the service binding.
     if (env.CORE && (u.pathname === '/audit/summary.json' || u.pathname === '/audit/verify' || u.pathname === '/audit/proof') && r.method === 'GET') return env.CORE.fetch('https://core.internal' + u.pathname + u.search);
+    if (u.pathname === '/goals.json') return Response.json(await j(env, 'goals:feed', { tenant: 'ps', goals: [], knobs: [], readings: {} }), { headers: { 'cache-control': 'public, max-age=300', 'access-control-allow-origin': '*' } });  // GOALS-1: the public feed core reads
     if (u.pathname === '/live') return new Response(PAGE, { headers });
     if (u.pathname === '/solutions.json') {
       const verif = await j(env, 'verif', {});
