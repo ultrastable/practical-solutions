@@ -102,7 +102,8 @@ export async function askModel({ fetch: f = globalThis.fetch, secrets = {}, spec
       if (!t.ok) return { ok: false, error: `oidc HTTP ${t.status}` };
       const { value } = await t.json();
       const r = await f(secrets.PS_LLM_URL, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${value}` }, body: JSON.stringify({ prompt, max_tokens: maxTokens, model: spec.model }) });
-      if (!r.ok) return { ok: false, error: `worker-ai HTTP ${r.status}` };
+      // the model service returns the platform's own error text (never a secret); keep it so the ledger records why a model fails
+      if (!r.ok) { const d = await r.json().catch(() => null); return { ok: false, error: `worker-ai HTTP ${r.status} ${String((d && (d.detail || d.error)) || '').replace(/\s+/g, ' ').slice(0, 90)}`.trim() }; }
       const j = await r.json();
       return j.text ? { ok: true, text: j.text, model: j.model || WORKERS_AI_MODEL } : { ok: false, error: 'empty' };
     }
