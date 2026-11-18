@@ -1,3 +1,5 @@
+> **License: free for non-commercial use; commercial use requires a license and shares revenue with the Licensor.** See [LICENSE](LICENSE) (Ultrastable License v1.0, USL-1.0, source-available, not open source) and [COMMERCIAL-TERMS.md](COMMERCIAL-TERMS.md).
+
 # Practical Solutions
 
 An autonomous bright-spot finder that runs on Ultrastable. It finds units (countries, regions, clinics) doing far better than their context predicts, checks each one with an independent method, publishes a brief, registers a dated prediction, scores itself, and repeats, with no person in the loop.
