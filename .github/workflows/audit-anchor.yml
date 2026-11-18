@@ -1,0 +1,28 @@
+# AUDIT-ANCHOR-1: publishes the audit chain head to git, outside the database, and fails if history changed.
+# budget: one job of about a minute a day (under 35 minutes a month).
+# trigger: daily, because the chain head only needs one outside copy per day; never faster than daily.
+# free-alternative: a Cloudflare cron worker pushing to the ops repo; this route needs no credential beyond the built-in token.
+name: audit-anchor
+on:
+  schedule: [{ cron: '41 7 * * *' }]
+  workflow_dispatch: {}
+permissions: { contents: write }
+concurrency: { group: audit-anchor, cancel-in-progress: false }
+jobs:
+  anchor:
+    if: vars.HALT != '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Anchor the head
+        run: node tools/audit_anchor.mjs
+      - name: Commit the anchor
+        run: |
+          set -euo pipefail
+          git add ledger/audit-anchors.jsonl
+          git diff --cached --quiet && exit 0
+          git -c user.name=ultrastable-bot -c user.email=bot@users.noreply.github.com commit -m "audit anchor"
+          git push origin HEAD:main
