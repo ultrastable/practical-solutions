@@ -33,9 +33,9 @@ test('the gate passes an entry only when every paper is found and every quoted f
   assert.ok(similarity('Placebo and Nocebo Effects', 'placebo & nocebo effects') > 0.8);
 });
 test('an unverified synthesis is never in the generated module and a verified one is, with its benefit-cost result', () => {
-  const none = JSON.parse(genModule({ entries: {} }).split('SYNTHESES_PUBLISHED = ')[1].replace(/;\s*$/, ''));
+  const none = JSON.parse(genModule({ entries: {} }, SYNTHESES).split('SYNTHESES_PUBLISHED = ')[1].replace(/;\s*$/, ''));
   assert.equal(none.published.length, 0); assert.equal(none.pending.length, SYNTHESES.length);
-  const one = SYNTHESES[0].id, ok = JSON.parse(genModule({ at: 't', entries: { [one]: { status: 'verified', citations: {}, novelty: [], checked_at: 't' } } }).split('SYNTHESES_PUBLISHED = ')[1].replace(/;\s*$/, ''));
+  const one = SYNTHESES[0].id, ok = JSON.parse(genModule({ at: 't', entries: { [one]: { status: 'verified', citations: {}, novelty: [], checked_at: 't' } } }, SYNTHESES).split('SYNTHESES_PUBLISHED = ')[1].replace(/;\s*$/, ''));
   assert.deepEqual(ok.published.map(s => s.id), [one]); assert.ok(ok.published[0].bca.wellby_per_1000_usd);
 });
 test('the committed generated module matches the committed verification record', () => {

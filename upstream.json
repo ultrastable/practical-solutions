@@ -7,6 +7,7 @@
     ".github/workflows/bootstrap.yml": "boots the tenant's own organisation",
     ".github/workflows/ci.yml": "tenant CI; runs the sync check",
     ".github/workflows/host-sync.yml": "tenant's own trigger for core/hostsync; names this tenant's deploy workflows",
+    "tools/dispatch_deploy.sh": "names this tenant's own deploy-tenant workflow; nothing generic to lift",
     "bin/issues.mjs": "applies the tenant's issue plan with gh",
     "ps/brief.js": "renders a bright-spot brief",
     "ps/detect.js": "the bright-spot detector is the product's domain method",

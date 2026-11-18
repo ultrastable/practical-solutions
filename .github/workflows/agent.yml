@@ -45,7 +45,7 @@ jobs:
         run: node tools/audit_post.mjs --kind entry_change --subject agent --summary "code agent worked one agent-task issue" --payload-file agent.json
       - name: deploy what the agent merged (a push by the built-in token does not start workflows)
         if: ${{ always() }}
-        run: grep -q '"ok":true' agent.json && gh workflow run deploy-tenant.yml -R "$GITHUB_REPOSITORY" --ref main || echo "nothing merged"
+        run: grep -q '"ok":true' agent.json && bash tools/dispatch_deploy.sh || echo "nothing merged"
   settle:
     # The live check is the merge gate: when the deploy of an agent change fails, the change is reverted and its issue reopened.
     if: ${{ vars.HALT != '1' && github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main' }}
