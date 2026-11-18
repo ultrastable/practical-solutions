@@ -24,11 +24,13 @@ const again = STORIES.filter(s => throttledStory(results.find(r => r.id === s.id
 if (again.length) { console.log(`edge-throttled stories, retrying after cool-down: ${again.map(s => s.id).join(' ')}`); await sleep(90000); const re = await runAll(again, get); results = results.map(r => re.find(x => x.id === r.id) || r); }
 for (const r of results) console.log(r.ok ? 'ok  ' : 'FAIL', r.id, ...r.failures);
 const idx = JSON.parse((await get('/index.json')).text);
-const pages = ['/', '/for', '/solutions', '/problems', '/domains', '/method', '/api', '/compare', ...idx.solutions.map(s => '/solutions/' + s.id), ...idx.problems.map(p => '/problems/' + p.id), ...idx.domains.map(d => '/domains/' + d.slug)];
+const pages = ['/', '/for', '/solutions', '/problems', '/domains', '/method', '/api', '/compare', '/impact', '/changes', '/leads', '/unknowns', '/context', '/country', '/about', '/changelog', '/index.json', '/llms.txt', ...idx.solutions.map(s => '/solutions/' + s.id), ...idx.problems.map(p => '/problems/' + p.id), ...idx.domains.map(d => '/domains/' + d.slug)];
 const bad = [];
 const got = new Map(); for (const p of pages) got.set(p, await get(p));
 // A page still throttled at the edge after a minute of retries is fetched again after a cool-down before it is judged.
-const throttled = pages.filter(p => [429, 502, 503].includes(got.get(p).status)); if (throttled.length) { console.log(`edge-throttled, retrying after cool-down: ${throttled.join(' ')}`); await sleep(90000); for (const p of throttled) got.set(p, await get(p)); }
-for (const p of pages) { const r = got.get(p); if (r.status !== 200) bad.push(`${p} ${r.status}`); for (const v of auditHtml(r.text)) bad.push(`${p}: ${v.rule}: ${v.detail}`); }
+const throttled = pages.filter(p => [429, 502, 503].includes(got.get(p).status) && !/1102|resource limits/i.test(got.get(p).text)); if (throttled.length) { console.log(`edge-throttled, retrying after cool-down: ${throttled.join(' ')}`); await sleep(90000); for (const p of throttled) got.set(p, await get(p)); }
+// CPU-LIMIT-1: Cloudflare error 1102 (Worker exceeded resource limits) is a hard failure named as such, never retried as throttling.
+const limit = t => /error code:?\s*1102|exceeded resource limits/i.test(t);
+for (const p of pages) { const r = got.get(p); if (limit(r.text)) bad.push(`${p}: CPU-LIMIT-1: Worker exceeded resource limits (1102)`); else if (r.status !== 200) bad.push(`${p} ${r.status}`); for (const v of auditHtml(r.text)) bad.push(`${p}: ${v.rule}: ${v.detail}`); }
 console.log(`audited ${pages.length} pages, ${bad.length} violations`); for (const b of bad) console.log('  ' + b);
 process.exit(results.some(r => !r.ok) || bad.length ? 1 : 0);

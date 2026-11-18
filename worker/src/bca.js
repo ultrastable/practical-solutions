@@ -7,6 +7,7 @@ import { esc } from './catalog.js';
 import { costMultiplier } from './adjust.js';
 import SNAPSHOT from '../../data/context.json' with { type: 'json' };
 import { complete } from '../../ps/llm.js';
+import { PRECOMPUTED } from './bca-precomputed.gen.js';
 
 // The group a model's figures were measured in: the first group the entry is marked as applying to. Other groups get a cost multiplier
 // from the cited price-level series; with no origin or no figure the cost is left as measured.
@@ -23,18 +24,31 @@ export function modelFor(id, state) {
   const ctx = { ...(APPLIES[id] || {}) }; for (const [k, v] of Object.entries(m.contexts || {})) ctx[k] = { ...(ctx[k] || {}), ...v };
   return { ...m, contexts: ctx };
 }
+function compute(id, m, state) {
+  const errs = validate(m); let r;
+    if (errs.length) r = { error: errs.join('; ') };
+  else { r = score(m, { draws: ENGINE.draws, seed: ENGINE.seed }); r.contexts = CONTEXTS.map(c => ({ ...c, measured: !!(APPLIES[id] && APPLIES[id][c.id] && APPLIES[id][c.id].applies !== false) || !!(m.contexts[c.id] && m.contexts[c.id].nodes), r: scoreAcross(m, [adjustedContext(id, c)], { draws: ENGINE.contextDraws, seed: ENGINE.seed })[c.id], cost_note: adjustedContext(id, c).cost_note || null }));
+    r.evidence = m.evidence || []; r.draft = !!m.draft && r.evidence.length < 2; if (r.draft) delete r.rank_key; r.looked = (state && state.looked && state.looked[id]) || null; }
+  return r;
+}
+export const computeSeed = id => compute(id, modelFor(id, null), null);
 export function bcaFor(id, state) {
   const m = modelFor(id, state); if (!m) return null;
   const k = id + ':' + ((m.evidence || []).length) + ':' + (((state && state.looked && state.looked[id]) || {}).at || '');
+  // CPU-LIMIT-1: the free plan allows ~10 ms of CPU per request and one Monte Carlo run costs ~40 ms. Results are never computed on the request path
+  // when they can be read instead: the seed models come from the generated file (tools/bca_precompute.mjs, kept in step by test/cpu_budget.test.js),
+  // and refined models from the results the cron stored in KV next to the state (state.results, written by storeResults).
   if (!cache.has(k)) {
-    const errs = validate(m); let r;
-    if (errs.length) r = { error: errs.join('; ') };
-    else { r = score(m, { draws: ENGINE.draws, seed: ENGINE.seed }); r.contexts = CONTEXTS.map(c => ({ ...c, measured: !!(APPLIES[id] && APPLIES[id][c.id] && APPLIES[id][c.id].applies !== false) || !!(m.contexts[c.id] && m.contexts[c.id].nodes), r: scoreAcross(m, [adjustedContext(id, c)], { draws: ENGINE.contextDraws, seed: ENGINE.seed })[c.id], cost_note: adjustedContext(id, c).cost_note || null }));
-      r.evidence = m.evidence || []; r.draft = !!m.draft && r.evidence.length < 2; if (r.draft) delete r.rank_key; r.looked = (state && state.looked && state.looked[id]) || null; }
+    const seedModel = !(state && state.models && state.models[id]) && PRECOMPUTED[id];
+    const stored = state && state.results && state.results[k];
+    if (seedModel || stored) { const r = structuredClone(seedModel || stored); r.looked = (state && state.looked && state.looked[id]) || null; cache.set(k, r); return r; }
+    const r = compute(id, m, state);
     cache.set(k, r);
   }
   return cache.get(k);
 }
+// The cron stores every estimate it can compute (it has the time budget the request path lacks) so pages only read them.
+export function storeResults(state) { const out = {}; for (const id of Object.keys((state && state.models) || {})) { const m = modelFor(id, state); if (!m) continue; const k = id + ':' + ((m.evidence || []).length) + ':' + (((state && state.looked && state.looked[id]) || {}).at || ''); const r = bcaFor(id, { ...state, results: undefined }); if (r) out[k] = r; } return out; }
 export const coverage = (ids, state) => ({ modelled: ids.filter(i => MODELS[i]).length, drafted: ids.filter(i => !MODELS[i] && state && state.models && state.models[i]).length, total: ids.length, searching: ids.filter(i => QUEUE[i] && !(state && state.models && state.models[i])), gaps: ids.filter(i => GAPS[i] && !QUEUE[i]) });
 
 // --- the evidence finder: Europe PMC abstracts that quote a cost per DALY or per death averted for this intervention -------------------------
@@ -122,6 +136,7 @@ export async function bcaTick({ store, fetchFn = fetch, now = Date.now(), secret
     }
   } catch (e) { error = String(e.message || e); changes.push({ kind: 'estimate_error', id, error }); }
   state.looked[id] = { at, found, error }; state.at = at;
+  try { state.results = storeResults(state); } catch (e) { state.results = {}; }
   await store.put(KEY, JSON.stringify(state));
   return { at, id, found, changes };
 }
