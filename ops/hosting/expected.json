@@ -1,7 +1,7 @@
 {
  "tenant-ps-core": {
   "sha256": "7693371268ba0d4b72482aad9bbe39fab41581eb89b3997ca9ad8281e857b057",
-  "sha": "20ecc72a8fea4cf6794f0f1ee14ac4ba62053833"
+  "sha": "177fc58d1bdd7e92a5917fb4b533d15ce6ad6f7a"
  },
  "tenant-ps-llm": {
   "sha256": "fb2bd5d0f563d2b082017734e7e56714b430fed576f00f41c8f7da01852d1c9e",
