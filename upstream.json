@@ -23,6 +23,7 @@
     "worker/src/redteam-config.js": "tenant red-team pool config"
   },
   "lifted": {
+    "ps/ensemble.js": "core/ensemble/index.js",
     "ps/linalg.js": "core/_shared/linalg.js",
     "ps/oidc.js": "core/auth/actions-oidc.js",
     "ps/selfmigrate.js": "core/migrations/selfmigrate.js",

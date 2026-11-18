@@ -104,3 +104,15 @@ test('the red team falls back to Workers AI through the tenant model Worker when
   assert.equal(r.model, 'workers-ai (tenant model Worker)');
   assert.equal(Object.keys(r.bySubject).length, 1);
 });
+
+test('a 200 with a non-JSON body ("OK") is retried once and then reported plainly, never as a JSON parse error', async () => {
+  const { askModel } = await import('../ps/llm.js');
+  let n = 0;
+  const f = async () => (++n, { ok: true, status: 200, text: async () => 'OK\r\n' });
+  const r = await askModel({ fetch: f, secrets: { GITHUB_TOKEN: 't' }, spec: { route: 'github-models', model: 'm' }, prompt: 'p' });
+  assert.equal(r.ok, false); assert.equal(n, 2); assert.match(r.error, /non-JSON body \(OK\)/);
+  let k = 0;
+  const g = async () => (++k === 1 ? { ok: true, status: 200, text: async () => 'OK' } : { ok: true, status: 200, text: async () => JSON.stringify({ choices: [{ message: { content: 'hi' } }] }) });
+  const r2 = await askModel({ fetch: g, secrets: { GITHUB_TOKEN: 't' }, spec: { route: 'github-models', model: 'm' }, prompt: 'p' });
+  assert.equal(r2.ok, true); assert.equal(r2.text, 'hi');
+});

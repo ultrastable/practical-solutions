@@ -19,6 +19,19 @@ export const textOf = out => { const r = out && (out.response ?? out.result ?? c
 
 // Bump when a route's behaviour changes: skipped extractions are retried when the route fingerprint differs.
 export const ROUTES_VERSION = 'r3';
+
+// A route that answers 200 with a non-JSON body (a gateway's "OK") is a transient fault, not a model verdict: one retry, then a plain error.
+async function readJson(f, url, init, label) {
+  let last = '';
+  for (let i = 0; i < 2; i++) {
+    const r = await f(url, init);
+    if (!r.ok) return { r, j: null };
+    const t = await r.text();
+    try { return { r, j: JSON.parse(t) }; } catch { last = t.replace(/\s+/g, ' ').trim().slice(0, 40); }
+  }
+  throw new Error(`${label} returned a non-JSON body (${last || 'empty'})`);
+}
+
 export const fingerprint = secrets => `${ROUTES_VERSION}:${routesFor(secrets).join(',')}`;
 
 export function routesFor(secrets = {}) {
@@ -77,10 +90,10 @@ export async function askModel({ fetch: f = globalThis.fetch, secrets = {}, spec
   try {
     if (spec.route === 'github-models') {
       const tok = secrets.GITHUB_MODELS_TOKEN || secrets.GITHUB_TOKEN; if (!tok) return { ok: false, error: 'no token' };
-      const r = await f('https://models.github.ai/inference/chat/completions', { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/vnd.github+json', 'x-github-api-version': '2022-11-28', authorization: `Bearer ${tok}` },
-        body: JSON.stringify({ model: spec.model, messages: [{ role: 'user', content: prompt }], max_tokens: maxTokens, temperature: 0 }) });
+      const { r, j } = await readJson(f, 'https://models.github.ai/inference/chat/completions', { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/vnd.github+json', 'x-github-api-version': '2022-11-28', authorization: `Bearer ${tok}` },
+        body: JSON.stringify({ model: spec.model, messages: [{ role: 'user', content: prompt }], max_tokens: maxTokens, temperature: 0 }) }, 'github-models');
       if (!r.ok) return { ok: false, error: `HTTP ${r.status} ${String(await r.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 90)}`.trim() };
-      const j = await r.json(), text = String(j.choices?.[0]?.message?.content || '').trim();
+      const text = String(j.choices?.[0]?.message?.content || '').trim();
       return text ? { ok: true, text, model: spec.model } : { ok: false, error: 'empty' };
     }
     if (spec.route === 'workers-ai') {
