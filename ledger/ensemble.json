@@ -2,16 +2,16 @@
  "schema": "ps-ensemble/1",
  "examined": {
   "cash": {
-   "at": "2026-11-17T17:48:56.425Z",
-   "outcome": "pending"
+   "at": "2026-11-18T11:24:54.426Z",
+   "outcome": "no change proposed: The entry describes a specific study (likely the GiveDirectly Kenya study) that is not directly covered by the provided sources, but its general claims are consistent with the findings in the sources."
   },
   "chlorine": {
-   "at": "2026-11-17T17:48:56.425Z",
-   "outcome": "pending"
+   "at": "2026-11-18T11:24:54.426Z",
+   "outcome": "no change proposed: The entry agrees with the sources."
   },
   "clean-cooking": {
-   "at": "2026-11-17T17:48:56.425Z",
-   "outcome": "no change proposed: The entry already agrees with the sources, which discuss the relationship between household air pollution and health outcomes, but do not provide information that contradicts or updates the entry."
+   "at": "2026-11-18T11:24:54.426Z",
+   "outcome": "rejected"
   },
   "deworming": {
    "at": "2026-11-17T18:01:45.400Z",
@@ -249,6 +249,34 @@
    "status": "uncertain",
    "reason": "models disagree: 0 supports, 2 contradicts, 0 unclear",
    "at": "2026-11-17T19:19:50.543Z"
+  },
+  {
+   "id": "35957041ce2f",
+   "entry": "clean-cooking",
+   "field": "claim",
+   "old": "A large multi-country trial that gave households LPG stoves and fuel did not find a significant reduction in severe infant pneumonia, so health benefits are less certain than often assumed.",
+   "new": "The HAPIN trial, a large multi‑country LPG stove and fuel intervention, reported a modest increase in hemoglobin among pregnant women but did not assess severe infant pneumonia.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42270650",
+    "title": "Effects of cooking with liquefied petroleum gas versus biomass on hemoglobin concentrations in pregnant women: a pre-specified exploratory analysis of the HAPIN trial."
+   },
+   "quote": "We identify a significant increase in hemoglobin in the intervention group (0.074 g/dL, 95% CI: 0.002, 0.145) compared to the control group.",
+   "why": "The source describes hemoglobin outcomes, not pneumonia, so the original claim about no pneumonia benefit is unsupported.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-18T11:24:54.426Z"
   }
  ],
  "health": {
@@ -291,37 +319,37 @@
    "errors": 0
   },
   "gemma-4": {
-   "calls": 4,
+   "calls": 5,
    "errors": 2,
    "last": "empty"
   },
   "qwen3-30b": {
-   "calls": 6,
+   "calls": 7,
    "errors": 4,
    "last": "empty"
   },
   "glm-5.3-flash": {
-   "calls": 5,
-   "errors": 5,
-   "last": "worker-ai HTTP 502"
-  },
-  "kimi-k2.6": {
-   "calls": 5,
-   "errors": 5,
-   "last": "worker-ai HTTP 502"
-  },
-  "deepseek-v4-flash": {
    "calls": 6,
    "errors": 6,
-   "last": "worker-ai HTTP 502"
+   "last": "worker-ai HTTP 502 5035: Model @cf/zai-org/glm-5.3-flash is not available on the Workers Free plan. Upgrade t"
+  },
+  "kimi-k2.6": {
+   "calls": 6,
+   "errors": 6,
+   "last": "worker-ai HTTP 502 5035: Model @cf/moonshotai/kimi-k2.6 is not available on the Workers Free plan. Upgrade to"
+  },
+  "deepseek-v4-flash": {
+   "calls": 7,
+   "errors": 7,
+   "last": "worker-ai HTTP 502 5035: Model @cf/deepseek-ai/deepseek-v4-flash-0731 is not available on the Workers Free pl"
   },
   "nemotron-3": {
-   "calls": 6,
-   "errors": 5,
-   "last": "empty"
+   "calls": 7,
+   "errors": 6,
+   "last": "unparseable"
   },
   "gpt-oss-120b": {
-   "calls": 4,
+   "calls": 5,
    "errors": 2,
    "last": "empty"
   },
@@ -463,11 +491,28 @@
     "kimi-k2.6: worker-ai HTTP 502",
     "deepseek-v4-flash: worker-ai HTTP 502"
    ]
+  },
+  {
+   "at": "2026-11-18T11:24:54.426Z",
+   "examined": 3,
+   "proposed": 1,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 1,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": [
+    "glm-5.3-flash: worker-ai HTTP 502 5035: Model @cf/zai-org/glm-5.3-flash is not available on the Workers Free plan. Upgrade t",
+    "kimi-k2.6: worker-ai HTTP 502 5035: Model @cf/moonshotai/kimi-k2.6 is not available on the Workers Free plan. Upgrade to",
+    "deepseek-v4-flash: worker-ai HTTP 502 5035: Model @cf/deepseek-ai/deepseek-v4-flash-0731 is not available on the Workers Free pl",
+    "nemotron-3: unparseable"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-18T11:14:33.506Z"
+ "at": "2026-11-18T11:24:54.426Z"
 }
