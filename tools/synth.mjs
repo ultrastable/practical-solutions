@@ -13,7 +13,10 @@ import { score, validate } from '../vendor/ultrastable/core/benefitcost/index.js
 export const LEDGER = 'ledger/syntheses-verified.json', DISCOVERED = 'ledger/synth-discovered.json', GEN = 'worker/src/syntheses.gen.js', SEED = 20261118;
 const UA = { 'user-agent': 'practical-solutions-verifier (+https://ultrastable.org/method)' };
 const norm = s => String(s || '').toLowerCase().replace(/&amp;|&/g, ' and ').replace(/<[^>]+>/g, ' ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
-export const similarity = (a, b) => { const A = new Set(norm(a).split(' ')), B = new Set(norm(b).split(' ')); const i = [...A].filter(x => B.has(x)).length; return i / (new Set([...A, ...B]).size || 1); };
+const words = s => new Set(norm(s).split(' ').filter(Boolean));
+export const similarity = (a, b) => { const A = words(a), B = words(b); const i = [...A].filter(x => B.has(x)).length; return i / (new Set([...A, ...B]).size || 1); };
+// a registry title may drop or add a subtitle: accept a Jaccard match, or a title wholly contained in the other when the overlap is still at least half
+export const titleMatch = (a, b) => { const x = norm(a), y = norm(b), [short, long] = x.length <= y.length ? [x, y] : [y, x]; return similarity(a, b) >= 0.8 || (short.split(' ').length >= 3 && long.startsWith(short + ' ')); };
 const getJson = async (f, url) => {
   let last;
   for (let i = 0; i < 4; i++) { const r = await f(url, { headers: UA }); if (r.ok) return r.json(); last = r.status; if (![429, 500, 502, 503, 504].includes(r.status)) break; await new Promise(res => setTimeout(res, 1500 * (i + 1))); }
@@ -23,10 +26,12 @@ const getJson = async (f, url) => {
 export async function findPaper(f, c) {
   const j = await getJson(f, `https://api.crossref.org/works?query.bibliographic=${encodeURIComponent(c.q)}&rows=5&select=DOI,title,issued,container-title`);
   const items = (j.message && j.message.items) || [];
-  const scored = items.map(it => ({ it, sim: similarity((it.title || [])[0], c.q), year: it.issued && it.issued['date-parts'] && it.issued['date-parts'][0] && it.issued['date-parts'][0][0] })).sort((a, b) => b.sim - a.sim);
-  const best = scored[0];
-  if (!best || best.sim < 0.8) return { found: false, reason: `no Crossref title match (best ${best ? best.sim.toFixed(2) : 'none'})` };
-  const yearOk = best.year != null && Math.abs(best.year - c.year) <= 1;
+  const cands = items.map(it => ({ it, sim: similarity((it.title || [])[0], c.q), ok: titleMatch((it.title || [])[0], c.q), year: it.issued && it.issued['date-parts'] && it.issued['date-parts'][0] && it.issued['date-parts'][0][0] })).filter(x => x.ok);
+  // among title matches prefer the one published in the cited year, then within a year, then the closest title
+  const rank = x => (x.year === c.year ? 0 : Math.abs((x.year ?? 0) - c.year) <= 1 ? 1 : 2);
+  const best = cands.sort((a, b) => rank(a) - rank(b) || b.sim - a.sim)[0];
+  if (!best) return { found: false, reason: 'no Crossref title match' };
+  const yearOk = rank(best) < 2;
   return { found: yearOk, doi: best.it.DOI, title: (best.it.title || [])[0], year: best.year, journal: (best.it['container-title'] || [])[0], similarity: Number(best.sim.toFixed(2)), reason: yearOk ? 'matched' : `year ${best.year} is not ${c.year}` };
 }
 
