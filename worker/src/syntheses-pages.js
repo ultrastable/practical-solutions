@@ -23,6 +23,7 @@ function evidenceTable(s) {
     return [`${esc(c.cite)} ${doiLink(v)}`, esc(c.supports), esc(c.role), v.found ? `title and year found${v.numbers_checked ? `; quoted figure${v.numbers_checked.quoted.length > 1 ? 's' : ''} ${esc(v.numbers_checked.quoted.join(', '))} found in the abstract` : ''}` : 'not verified']; }) });
 }
 function priorWork(s) {
+  if (!s.verification.novelty.length) return `<p>${esc(s.novelty.statement)}</p><p><b>The prior-work search was unavailable at the last check, so nothing is claimed about whether this has been tried.</b> It reruns daily.</p>`;
   const any = s.verification.novelty.some(n => n.possible_prior_work);
   return `<p>${esc(s.novelty.statement)}</p><p><b>${any ? 'A search result may describe closely related work: read it before relying on this entry.' : 'No search result has a title naming this combination.'}</b> A search is not proof that nothing exists.</p>` +
     s.verification.novelty.map(n => `<h3>${esc(n.label)}</h3>${ui.list(n.closest.map(c => `${c.hit ? '<b>possible match:</b> ' : ''}<a href="${esc(c.url)}">${esc(c.title)}</a> <span class="m">${esc(c.year)}</span>`))}`).join('');
