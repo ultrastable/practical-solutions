@@ -178,3 +178,8 @@ test('targets with a known address are planned first and each audience gets its 
   const first5 = interleave(p, T).slice(0, 5).map(x => aud(x.agency_id));
   assert.ok(new Set(first5).size >= 4, 'a daily cap spreads across audiences');
 });
+
+test('media and research targets are addressed by their published work, not a mandate', () => {
+  const T = targetsFile.targets, m = match(kmc, T, targeting).filter(x => ['media', 'researcher', 'community'].includes(x.agency.audience));
+  assert.ok(m.length && m.every(x => x.reason.startsWith('your published work covers')));
+});
