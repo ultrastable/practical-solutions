@@ -74,8 +74,8 @@
     "nodejs_compat"
    ],
    "deployment": {
-    "id": "ce6b3d77-1b1e-4a2c-ba4c-543aa40087a7",
-    "created_on": "2026-11-18T01:11:39.770476Z"
+    "id": "ced10124-dca4-40cd-b02b-249389289fcd",
+    "created_on": "2026-11-18T01:20:47.73013Z"
    },
    "read_errors": []
   },
@@ -97,8 +97,8 @@
    "compat_date": "2026-10-01",
    "compat_flags": [],
    "deployment": {
-    "id": "ce0c768e-6f64-4c60-a3a9-7a2325965247",
-    "created_on": "2026-11-18T01:11:36.043404Z"
+    "id": "5d442fd3-8940-474d-b360-9317e4a879b1",
+    "created_on": "2026-11-18T01:20:48.271871Z"
    },
    "read_errors": []
   }
