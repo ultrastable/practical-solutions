@@ -1,4 +1,106 @@
 {
  "host": "cloudflare-gateway",
- "scripts": {}
+ "scripts": {
+  "tenant-ps-web": {
+   "script": "tenant-ps-web",
+   "found": true,
+   "sha256": "c26e664364d0281db845c5085179e17668e77ed87729bbf00cac42ac12dda3db",
+   "bindings": [
+    {
+     "type": "service",
+     "name": "CORE"
+    },
+    {
+     "type": "kv_namespace",
+     "name": "STATE"
+    },
+    {
+     "type": "secret_text",
+     "name": "TICK_TOKEN"
+    }
+   ],
+   "crons": [
+    "*/30 * * * *"
+   ],
+   "workers_dev": true,
+   "domains": [],
+   "routes": [],
+   "migrations": {},
+   "compat_date": "2026-10-01",
+   "compat_flags": [],
+   "deployment": {
+    "id": "ca3ebbf5-e860-4213-9e2c-d251451d385e",
+    "created_on": "2026-11-18T01:11:32.472406Z"
+   },
+   "read_errors": []
+  },
+  "tenant-ps-core": {
+   "script": "tenant-ps-core",
+   "found": true,
+   "sha256": "7693371268ba0d4b72482aad9bbe39fab41581eb89b3997ca9ad8281e857b057",
+   "bindings": [
+    {
+     "type": "d1",
+     "name": "DB"
+    },
+    {
+     "type": "plain_text",
+     "name": "MAIL_RELAY_URL"
+    },
+    {
+     "type": "secret_text",
+     "name": "MAIL_TOKEN"
+    },
+    {
+     "type": "plain_text",
+     "name": "OPERATOR_NAME"
+    },
+    {
+     "type": "plain_text",
+     "name": "OPERATOR_POSTAL"
+    },
+    {
+     "type": "secret_text",
+     "name": "PS_TICK_TOKEN"
+    }
+   ],
+   "crons": [],
+   "workers_dev": true,
+   "domains": [],
+   "routes": [],
+   "migrations": {},
+   "compat_date": "2026-10-01",
+   "compat_flags": [
+    "nodejs_compat"
+   ],
+   "deployment": {
+    "id": "ce6b3d77-1b1e-4a2c-ba4c-543aa40087a7",
+    "created_on": "2026-11-18T01:11:39.770476Z"
+   },
+   "read_errors": []
+  },
+  "tenant-ps-llm": {
+   "script": "tenant-ps-llm",
+   "found": true,
+   "sha256": "f530609ceb5ae6b826da57f27611c84a907feebc5566a9455e3be8afaa4cbb15",
+   "bindings": [
+    {
+     "type": "ai",
+     "name": "AI"
+    }
+   ],
+   "crons": [],
+   "workers_dev": true,
+   "domains": [],
+   "routes": [],
+   "migrations": {},
+   "compat_date": "2026-10-01",
+   "compat_flags": [],
+   "deployment": {
+    "id": "ce0c768e-6f64-4c60-a3a9-7a2325965247",
+    "created_on": "2026-11-18T01:11:36.043404Z"
+   },
+   "read_errors": []
+  }
+ }
 }
