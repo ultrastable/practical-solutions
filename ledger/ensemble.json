@@ -60,6 +60,18 @@
   "rural-electrification": {
    "at": "2026-11-17T19:30:56.255Z",
    "outcome": "no change proposed: None of the sources relate to grid connection subsidies in rural Kenya or challenge the entry's claims, limits, works_where, takes, or first_test fields."
+  },
+  "tarl": {
+   "at": "2026-11-18T11:14:33.506Z",
+   "outcome": "no change proposed: The provided sources are unrelated to the 'Teaching at the Right Level' program and do not provide information to verify or correct the entry."
+  },
+  "vita": {
+   "at": "2026-11-18T11:14:33.506Z",
+   "outcome": "no change proposed: The entry's claim about Vitamin A supplementation reducing mortality is not contradicted by the sources, which focus on Vitamin D, clinical deficiency prevalence, and nutrition service gaps, but do no"
+  },
+  "women-leaders": {
+   "at": "2026-11-18T11:14:33.506Z",
+   "outcome": "no change proposed: None of the provided sources discuss village‑council seat reservations for women in India, so there is no evidence to correct any field."
   }
  },
  "proposals": [
@@ -279,32 +291,32 @@
    "errors": 0
   },
   "gemma-4": {
-   "calls": 3,
+   "calls": 4,
    "errors": 2,
    "last": "empty"
   },
   "qwen3-30b": {
-   "calls": 5,
+   "calls": 6,
    "errors": 4,
    "last": "empty"
   },
   "glm-5.3-flash": {
-   "calls": 4,
-   "errors": 4,
-   "last": "worker-ai HTTP 500"
-  },
-  "kimi-k2.6": {
-   "calls": 4,
-   "errors": 4,
-   "last": "worker-ai HTTP 500"
-  },
-  "deepseek-v4-flash": {
    "calls": 5,
    "errors": 5,
-   "last": "worker-ai HTTP 500"
+   "last": "worker-ai HTTP 502"
+  },
+  "kimi-k2.6": {
+   "calls": 5,
+   "errors": 5,
+   "last": "worker-ai HTTP 502"
+  },
+  "deepseek-v4-flash": {
+   "calls": 6,
+   "errors": 6,
+   "last": "worker-ai HTTP 502"
   },
   "nemotron-3": {
-   "calls": 5,
+   "calls": 6,
    "errors": 5,
    "last": "empty"
   },
@@ -435,11 +447,27 @@
    "none": 3,
    "panel_failures": 0,
    "failures": []
+  },
+  {
+   "at": "2026-11-18T11:14:33.506Z",
+   "examined": 3,
+   "proposed": 0,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 0,
+   "none": 3,
+   "panel_failures": 0,
+   "failures": [
+    "glm-5.3-flash: worker-ai HTTP 502",
+    "kimi-k2.6: worker-ai HTTP 502",
+    "deepseek-v4-flash: worker-ai HTTP 502"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-17T19:30:56.255Z"
+ "at": "2026-11-18T11:14:33.506Z"
 }
