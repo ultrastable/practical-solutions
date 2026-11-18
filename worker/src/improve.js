@@ -41,19 +41,19 @@ export function oaAbstract(inv) {
   return words.filter(w => w !== undefined).join(' ');
 }
 
-async function openalex(fetchFn, c) {
-  const u = `${OPENALEX}?search=${encodeURIComponent(c.title || c.q)}&filter=publication_year:${c.year}&per-page=10`;
+async function openalex(fetchFn, c, mailto) {
+  const u = `${OPENALEX}?search=${encodeURIComponent(c.title || c.q)}&filter=publication_year:${c.year}&per-page=10${mailto ? '&mailto=' + encodeURIComponent(mailto) : ''}`;
   const r = await fetchFn(u);
   if (!r.ok) throw new Error(`OpenAlex HTTP ${r.status}`);
   return ((await r.json()).results || []).map(x => ({ title: x.title || x.display_name, doi: x.doi || null, pmid: null, abstractText: oaAbstract(x.abstract_inverted_index) }));
 }
 
-export async function verifySolution(fetchFn, sol) {
+export async function verifySolution(fetchFn, sol, { mailto } = {}) {
   const checks = sol.checks || [];
   if (!checks.length) return { status: 'no_check', detail: 'no automated check defined' };
   const out = [];
   for (const c of checks) {
-    const rows = c.source === 'openalex' ? await openalex(fetchFn, c) : await epmc(fetchFn, c.title ? `TITLE:"${c.title}" AND PUB_YEAR:${c.year}` : `${c.q} AND PUB_YEAR:${c.year}`, 10, false);
+    const rows = c.source === 'openalex' ? await openalex(fetchFn, c, mailto) : await epmc(fetchFn, c.title ? `TITLE:"${c.title}" AND PUB_YEAR:${c.year}` : `${c.q} AND PUB_YEAR:${c.year}`, 10, false);
     const hit = rows.find(x => c.numbers.every(n => strip(x.abstractText).includes(n)));
     out.push(hit ? { ok: true, title: hit.title, pmid: hit.pmid || null, doi: hit.doi || null } : { ok: false, found: rows.length });
   }
@@ -72,7 +72,21 @@ export function verifiedText(v, today) {
 async function getJson(store, k, d) { const v = await store.get(k); return v ? JSON.parse(v) : d; }
 const putJson = (store, k, v) => store.put(k, JSON.stringify(v));
 
-export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), maxVerify = CADENCE.maxVerify }) {
+// A failed source call is an operational fact, not a change to the catalogue: it goes to the 'errors' log (deduplicated, with a count), never to the public changes feed.
+const isError = c => /_error$/.test(c.kind || '');
+const retryAfterHours = attempts => Math.min(CADENCE.checkHours, 2 ** Math.max(0, attempts - 1));
+export async function recordErrors(store, errors, at) {
+  if (!errors.length) return;
+  const log = await getJson(store, 'errors', []);
+  for (const e of errors) {
+    const key = [e.kind, e.id || e.problem || '', e.error].join('|');
+    const hit = log.find(x => x.key === key);
+    if (hit) { hit.count += 1; hit.last = at; } else log.unshift({ key, kind: e.kind, id: e.id || e.problem || null, error: e.error, first: at, last: at, count: 1 });
+  }
+  await putJson(store, 'errors', log.slice(0, 100));
+}
+
+export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), maxVerify = CADENCE.maxVerify, mailto }) {
   const at = new Date(now).toISOString();
   const changes = [];
   // 1. problems
@@ -91,14 +105,20 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
   // 2. verification of the stalest solutions
   const sols = await getJson(store, 'solutions', []);
   const verif = await getJson(store, 'verif', {});
-  const due = sols.filter(s => (s.checks || []).length && (!verif[s.id] || now - Date.parse(verif[s.id].at) > CADENCE.checkHours * HOUR))
+  const dueAt = v => v.retry_at ? Date.parse(v.retry_at) : Date.parse(v.at) + CADENCE.checkHours * HOUR;
+  const due = sols.filter(s => (s.checks || []).length && (!verif[s.id] || now >= dueAt(verif[s.id])))
     .sort((a, b) => Date.parse((verif[a.id] || { at: 0 }).at) - Date.parse((verif[b.id] || { at: 0 }).at)).slice(0, maxVerify);
   for (const s of due) {
     try {
-      const v = await verifySolution(fetchFn, s);
+      const v = await verifySolution(fetchFn, s, { mailto });
       if (!verif[s.id] || verif[s.id].status !== v.status) changes.push({ kind: 'verification', id: s.id, status: v.status });
       verif[s.id] = { ...v, at };
-    } catch (e) { changes.push({ kind: 'verification_error', id: s.id, error: String(e.message || e) }); }
+    } catch (e) {
+      // keep the last good result; retry with backoff (1 h, 2 h, 4 h ... up to the check interval) instead of on every tick
+      const prev = verif[s.id] || {}, attempts = (prev.attempts || 0) + 1, error = String(e.message || e);
+      verif[s.id] = { ...prev, at: prev.at || at, attempts, last_error: { at, error }, retry_at: new Date(now + retryAfterHours(attempts) * HOUR).toISOString() };
+      changes.push({ kind: 'verification_error', id: s.id, error });
+    }
   }
   await putJson(store, 'verif', verif);
   // 3. candidate evidence for one top problem per tick, rotating
@@ -143,11 +163,12 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
     await putJson(store, 'graph', { at, stats: await g.stats(), ...(await g.export()) });
   } catch (e) { changes.push({ kind: 'graph_error', error: String(e.message || e) }); }
   // 4. changelog
-  const log = await getJson(store, 'changes', []);
-  const next = [...changes.map(c => ({ at, ...c })), ...log].slice(0, 200);
+  await recordErrors(store, changes.filter(isError), at);
+  const log = (await getJson(store, 'changes', [])).filter(c => !isError(c));
+  const next = [...changes.filter(c => !isError(c)).map(c => ({ at, ...c })), ...log].slice(0, 200);
   await putJson(store, 'changes', next);
   await putJson(store, 'last_tick', { at, changes: changes.length });
-  return { at, changes };
+  return { at, changes: changes.filter(c => !isError(c)), errors: changes.filter(isError) };
 }
 
 // ---- extraction and independent review -------------------------------------------------------------------------------
