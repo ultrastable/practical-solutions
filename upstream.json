@@ -18,6 +18,7 @@
     "ps/promote_step.js": "tenant promotion step over its own entries",
     "ps/synth.js": "synthetic world for the detector tests",
     "ps/verify.js": "verifies bright-spot briefs",
+    "tools/bca_precompute.mjs": "precomputes the tenant's own benefit-cost seed models (CPU-LIMIT-1)",
     "tools/live_ux.mjs": "probes the tenant's own live pages",
     "worker/src/audiences.js": "tenant audiences",
     "worker/src/domains-meta.js": "tenant domain list",
