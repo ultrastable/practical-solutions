@@ -1,0 +1,19 @@
+{
+ "schema": "ps-syntheses-verified/1",
+ "at": "2026-11-18T15:08:36.186Z",
+ "entries": {},
+ "errors": [
+  {
+   "id": "barbershop-hearts",
+   "error": "https://api.openalex.org/works -> HTTP 503"
+  },
+  {
+   "id": "expectation-framing-hearts",
+   "error": "https://api.openalex.org/works -> HTTP 503"
+  },
+  {
+   "id": "elder-teaching-at-the-right-level",
+   "error": "https://api.openalex.org/works -> HTTP 503"
+  }
+ ]
+}
