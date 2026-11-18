@@ -4,8 +4,8 @@
   "sha": "20ecc72a8fea4cf6794f0f1ee14ac4ba62053833"
  },
  "tenant-ps-llm": {
-  "sha256": "fb2bd5d0f563d2b082017734e7e56714b430fed576f00f41c8f7da01852d1c9e",
-  "sha": "7fae4bc4081ef2841901ac724d8ef43b975a5264"
+  "sha256": "1dd3093f7caa305eee53736f3b2f8184677b5df57019ec2ab0b241f4056959bb",
+  "sha": "95ee83156cc80609be61e93692ed31f49f0e911e"
  },
  "tenant-ps-web": {
   "sha256": "a1f3d2d195a869c111f7f7ed1136d5422a8b743fbfdd3e8f782926fab27caf05",
