@@ -1,0 +1,16 @@
+{
+  "_doc": "HOSTSYNC-1: what this tenant declares about the hosts that run it. Reconciled against the live host by vendor/ultrastable/tools/hostsync.mjs (core/hostsync) through the deploy gateway's /state route; names and hashes only. Expected module hashes are recorded in ops/hosting/expected.json by each deploy workflow.",
+  "repo": "ultrastable/practical-solutions",
+  "ref": "main",
+  "gateway": "https://ultrastable-deploy-gateway.ultrastable.workers.dev",
+  "redeploy": {
+    "tenant-ps-web": "deploy-tenant.yml",
+    "tenant-ps-core": "deploy-backend.yml",
+    "tenant-ps-llm": "deploy-llm.yml"
+  },
+  "scripts": {
+    "tenant-ps-web": { "workers_dev": true },
+    "tenant-ps-core": { "workers_dev": true },
+    "tenant-ps-llm": { "workers_dev": true }
+  }
+}

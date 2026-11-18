@@ -6,6 +6,7 @@
   "keep": {
     ".github/workflows/bootstrap.yml": "boots the tenant's own organisation",
     ".github/workflows/ci.yml": "tenant CI; runs the sync check",
+    ".github/workflows/host-sync.yml": "tenant's own trigger for core/hostsync; names this tenant's deploy workflows",
     "ps/brief.js": "renders a bright-spot brief",
     "ps/detect.js": "the bright-spot detector is the product's domain method",
     "ps/ledger.js": "exports the tenant ledger",

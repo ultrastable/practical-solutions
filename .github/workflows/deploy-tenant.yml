@@ -6,7 +6,7 @@ on:
   push: { branches: [main], paths: ['worker/src/**', 'data/**', 'vendor/ultrastable/core/feed/**', 'tools/deploy_tenant.mjs', '.github/workflows/deploy-tenant.yml'] }
   workflow_dispatch: {}
 concurrency: { group: deploy-tenant, cancel-in-progress: false }
-permissions: { contents: read, id-token: write }
+permissions: { contents: write, id-token: write }  # HOSTSYNC-1: the record step commits ops/hosting
 env:
   GATEWAY: https://ultrastable-deploy-gateway.ultrastable.workers.dev
 jobs:
@@ -36,6 +36,11 @@ jobs:
       - name: record in the audit log
         if: success()
         run: node tools/audit_post.mjs --kind deploy --subject tenant-ps-web --summary "tenant web worker deployed through the gateway and passed the live check"
+      - name: record the deployed module as expected (HOSTSYNC-1)
+        if: success()
+        run: |
+          node vendor/ultrastable/tools/hostsync.mjs expect --script tenant-ps-web --sha256 "$(jq -r .sha256 out.json)"
+          bash vendor/ultrastable/tools/hostsync_commit.sh "host-sync - record deployed tenant-ps-web"
       - name: user stories and structural audit against the live site
         run: node tools/live_ux.mjs https://tenant-ps-web.ultrastable.workers.dev
       - name: real-browser accessibility check (axe, light and dark, desktop and phone)
