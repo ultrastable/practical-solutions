@@ -1,2 +1,3 @@
 {"at":"2026-11-18T01:11:37.831Z","kind":"host-expect","subject":"tenant-ps-llm","summary":"deploy recorded as expected","data":{"sha256":"f530609ceb5ae6b826da57f27611c84a907feebc5566a9455e3be8afaa4cbb15"}}
 {"at":"2026-11-18T01:11:44.410Z","kind":"host-expect","subject":"tenant-ps-core","summary":"deploy recorded as expected","data":{"sha256":"7693371268ba0d4b72482aad9bbe39fab41581eb89b3997ca9ad8281e857b057"}}
+{"at":"2026-11-18T01:11:47.843Z","kind":"host-expect","subject":"tenant-ps-web","summary":"deploy recorded as expected","data":{"sha256":"c26e664364d0281db845c5085179e17668e77ed87729bbf00cac42ac12dda3db"}}
