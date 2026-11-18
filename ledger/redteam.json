@@ -1,6 +1,6 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-17T18:25:38.153Z",
+ "at": "2026-11-18T13:25:17.865Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
@@ -147,6 +147,156 @@
      "q": 15,
      "challenge": "Inadequate consideration of external factors",
      "falsifier": "Analysis revealing that improvements in attendance or performance are due to external factors, such as changes in school resources or community health initiatives",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "emissions-market": {
+   "at": "2026-11-18T13:25:17.865Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Emissions increase under cap-and-trade",
+     "falsifier": "Observation of higher emissions at plants in the market compared to those under standard rules",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inequitable distribution of pollution burden",
+     "falsifier": "Evidence of disproportionate pollution exposure among vulnerable populations near plants participating in the cap-and-trade market",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumed equivalence of standard rules and cap-and-trade",
+     "falsifier": "Discovery of significant differences in enforcement or compliance mechanisms between standard rules and the cap-and-trade market",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate monitoring or data issues",
+     "falsifier": "Identification of systematic errors or biases in the continuous monitoring data used to assess emissions reductions",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "friendship-bench": {
+   "at": "2026-11-18T13:25:17.865Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Vulnerable populations",
+     "falsifier": "Higher rates of misdiagnosis or delayed specialist care in severe cases",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Lack of long-term follow-up",
+     "falsifier": "Relapse rates exceeding those of specialist-delivered therapy at 12-month follow-up",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "graduation": {
+   "at": "2026-11-18T13:25:17.865Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Consumption and food security do not increase",
+     "falsifier": "A randomized controlled trial showing no significant difference in consumption and food security between treatment and control groups",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Households with limited access to markets or coaching",
+     "falsifier": "Data showing that households in areas with poor market access or low-quality coaching experience decreased consumption and food security",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumption that coaching quality is consistently high",
+     "falsifier": "An evaluation revealing significant variability in coaching quality, leading to inconsistent outcomes",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate consideration of local market conditions",
+     "falsifier": "A pre-mortem analysis identifying a lack of market demand or infrastructure as a primary reason for the intervention's failure",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "helmets": {
+   "at": "2026-11-18T13:25:17.865Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Helmets do not significantly reduce the risk of death or head injury",
+     "falsifier": "A study showing no correlation between helmet use and reduced fatalities or head injuries",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Certain groups may be disproportionately affected by helmet laws",
+     "falsifier": "Data indicating that enforcement of helmet laws leads to increased harassment or targeting of specific demographic groups by law enforcement",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assuming all helmets provide equal protection",
+     "falsifier": "Evidence that low-quality helmets do not significantly reduce the risk of head injury or death",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Failure to account for other factors contributing to motorcycle accidents",
+     "falsifier": "Analysis revealing that the primary causes of motorcycle fatalities are unrelated to helmet use, such as reckless driving or poor road conditions",
      "severity": 2,
      "source": "model",
      "family": "meta"
