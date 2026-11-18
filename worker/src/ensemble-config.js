@@ -23,9 +23,7 @@ export const ENSEMBLE = {
     { id: 'mistral-small-3.1', route: 'workers-ai', model: '@cf/mistralai/mistral-small-3.1-24b-instruct', vendor: 'mistral', lineage: 'mistral' },
     { id: 'gemma-4', route: 'workers-ai', model: '@cf/google/gemma-4-26b-a4b-it', vendor: 'google', lineage: 'gemma' },
     { id: 'qwen3-30b', route: 'workers-ai', model: '@cf/qwen/qwen3-30b-a3b-fp8', vendor: 'alibaba', lineage: 'qwen' },
-    { id: 'glm-5.3-flash', route: 'workers-ai', model: '@cf/zai-org/glm-5.3-flash', vendor: 'zai', lineage: 'glm' },
-    { id: 'kimi-k2.6', route: 'workers-ai', model: '@cf/moonshotai/kimi-k2.6', vendor: 'moonshot', lineage: 'kimi' },
-    { id: 'deepseek-v4-flash', route: 'workers-ai', model: '@cf/deepseek-ai/deepseek-v4-flash-0731', vendor: 'deepseek', lineage: 'deepseek' },
+    // glm-5.3-flash, kimi-k2.6 and deepseek-v4-flash left the pool on 2026-11-18: Workers AI answers 5035 (not available on the Workers Free plan), and this system stays on the free plan (FREE-TIER-1)
     { id: 'nemotron-3', route: 'workers-ai', model: '@cf/nvidia/nemotron-3-120b-a12b', vendor: 'nvidia', lineage: 'nemotron' },
   ],
   github_models: [
