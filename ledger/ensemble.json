@@ -14,16 +14,16 @@
    "outcome": "rejected"
   },
   "deworming": {
-   "at": "2026-11-17T18:01:45.400Z",
-   "outcome": "rejected"
+   "at": "2026-11-18T13:55:28.790Z",
+   "outcome": "no change proposed: The entry accurately describes the specific scientific debate between the Kenya trial and the Cochrane review, and the provided sources do not contradict this summary or its details."
   },
   "emissions-market": {
-   "at": "2026-11-17T18:01:45.400Z",
-   "outcome": "no change proposed: The provided sources do not contain information relevant to the catalogue entry about a regulated pollution market with continuous monitoring."
+   "at": "2026-11-18T13:55:28.790Z",
+   "outcome": "no change proposed: None of the sources mention pollution markets, cap-and-trade systems, or Surat, India, so the entry's claims remain unchallenged."
   },
   "friendship-bench": {
-   "at": "2026-11-17T18:01:45.400Z",
-   "outcome": "pending"
+   "at": "2026-11-18T13:55:28.790Z",
+   "outcome": "no sources: Europe PMC HTTP 500"
   },
   "graduation": {
    "at": "2026-11-17T19:04:41.635Z",
@@ -319,12 +319,12 @@
    "errors": 0
   },
   "gemma-4": {
-   "calls": 5,
+   "calls": 6,
    "errors": 2,
    "last": "empty"
   },
   "qwen3-30b": {
-   "calls": 7,
+   "calls": 8,
    "errors": 4,
    "last": "empty"
   },
@@ -508,11 +508,23 @@
     "deepseek-v4-flash: worker-ai HTTP 502 5035: Model @cf/deepseek-ai/deepseek-v4-flash-0731 is not available on the Workers Free pl",
     "nemotron-3: unparseable"
    ]
+  },
+  {
+   "at": "2026-11-18T13:55:28.790Z",
+   "examined": 3,
+   "proposed": 0,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": []
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-18T11:24:54.426Z"
+ "at": "2026-11-18T13:55:28.790Z"
 }
