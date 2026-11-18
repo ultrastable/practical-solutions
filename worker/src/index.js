@@ -39,6 +39,7 @@ export default {
     }
     // AUDIT-1: public summary, verify and proof; events and writes need the tick token or this repository's Actions OIDC token.
     if (pathname === '/audit' || pathname.startsWith('/audit/')) { const r = await ps(env).org.audit.handle(request, { authorize: authorizer(env) }); if (r) return r; }
+    if (pathname === '/internal/goals' && request.headers.get('x-ps-internal') === '1') { const m = await metrics(env.DB); return Response.json({ sent: m.sent, replies: m.replies, implementation_signals: m.implementation_signals }); }  // GOALS-1: reached only through the web Worker's service binding
     if (pathname === '/internal/tick' && request.method === 'POST' && request.headers.get('x-ps-internal') === '1') return Response.json({ report: (await ps(env).tick()).report });
     if (pathname === '/agencies.json') return Response.json(agenciesGraph(SOLUTIONS));
     if (pathname.startsWith('/ps/outreach/')) {
