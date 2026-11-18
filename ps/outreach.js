@@ -15,7 +15,7 @@ export function sectorsFor(solution, targeting) {
 export function match(solution, agencies, targeting, contacts = {}) {
   const want = sectorsFor(solution, targeting);
   const ranked = agencies
-    .map(a => { const common = a.sectors.filter(x => want.includes(x)); return { agency: a, score: common.length ? common.length * (targeting.remit_weight?.[a.remit] ?? 1) : 0, reason: common.length ? `its mandate covers ${common.join(', ')}` : '' }; })
+    .map(a => { const common = a.sectors.filter(x => want.includes(x)); return { agency: a, score: common.length ? common.length * (targeting.remit_weight?.[a.remit] ?? 1) : 0, reason: common.length ? ((a.audience || 'agency') === 'agency' || a.remit === 'implements' || a.remit === 'funds' ? `its mandate covers ${common.join(', ')}` : `your published work covers ${common.join(', ')}`) : '' }; })
     .filter(m => m.score >= (targeting.min_match ?? 1))
     .sort((a, b) => b.score - a.score || Number(Boolean(contacts[b.agency.id]?.length)) - Number(Boolean(contacts[a.agency.id]?.length)) || a.agency.id.localeCompare(b.agency.id));
   const used = {};
