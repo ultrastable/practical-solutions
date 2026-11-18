@@ -1,13 +1,14 @@
 # SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 # One entrypoint: from an empty repo plus the secrets CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID (and optionally ANTHROPIC_API_KEY)
-# this brings the whole instance up, runs the first cycle and commits its ledger. Daily it re-runs `up`, which is idempotent, so a
-# deleted deployment comes back with no person involved.
+# this brings the whole instance up, runs the first cycle and commits its ledger.
+# BOOTSTRAP-SCHEDULE-1: the daily schedule is removed. This repository holds no Cloudflare secrets by design (deploy-tenant and deploy-backend
+# deploy over OIDC), so every scheduled run failed with "missing secrets" (run 44096335543). Redeploy is owned by those workflows and the
+# Ultrastable watchdog's site probe; this entrypoint stays for a fresh instance that is given the secrets.
 name: bootstrap
 on:
   workflow_dispatch:
     inputs:
       action: { description: 'up | down | rebuild', default: 'up', required: true }
-  schedule: [{ cron: '41 4 * * *' }]
 concurrency: { group: bootstrap, cancel-in-progress: false }
 permissions: { contents: write }
 jobs:
