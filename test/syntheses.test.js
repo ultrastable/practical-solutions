@@ -85,3 +85,10 @@ test('repair: a citation missing only its bookkeeping fields is completed, one m
   const r = repairCitations(c); assert.deepEqual(validateCandidate(r), []);
   const bare = good(); bare.citations = bare.citations.map(x => ({ q: x.q, year: x.year })); assert.ok(validateCandidate(repairCitations(bare)).some(e => /citations/.test(e)));
 });
+
+test('repair round trip: a structurally invalid proposal is sent back once with its defects and accepted when fixed', async () => {
+  const bad = good(); bad.citations = bad.citations.map(x => ({ q: x.q, year: x.year }));
+  const answers = [JSON.stringify([bad]), JSON.stringify(good()), JSON.stringify({ fatal: false, reasons: ['thin'], closest_existing_work: 'none' })];
+  const r = await discover({ ask: async () => answers.shift(), max: 1, prev: { entries: [], log: [] } });
+  assert.equal(r.entries.length, 1); assert.equal(r.entries[0].id, 'candidate-one');
+});

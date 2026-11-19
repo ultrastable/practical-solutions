@@ -78,8 +78,12 @@ export async function discover({ ask, ground = null, max = 2, prev = { entries: 
   const out = await ask(proposePrompt(max, existing, papers)), list = json(out);
   if (!Array.isArray(list)) { log.push({ at: now(), event: 'no usable proposal', detail: String(out || '').slice(0, 120) }); return { schema: 'ps-synth-discovered/1', at: now(), entries, log: log.slice(-100) }; }
   for (const raw0 of list.slice(0, max)) {
-    const raw = repairCitations(raw0);
-    const errs = validateCandidate(raw); if (errs.length) { log.push({ at: now(), id: raw && raw.id, event: 'rejected: structure', detail: errs.slice(0, 5) }); continue; }
+    let raw = repairCitations(raw0), errs = validateCandidate(raw);
+    if (errs.length) { // REPAIR-2: one model round trip to fix exactly the named defects, keeping the paper titles it already chose
+      const fixed = json(await ask(`This proposal failed validation: ${errs.join('; ')}. Return the SAME proposal as one JSON object with those defects fixed. Every citation must be {id, role, cite, q (exact paper title), year (integer), numbers: [], supports (what the paper shows)}, with at least three citations${papers.length ? ' taken only from this verified list: ' + papers.map(p => `${p.title} (${p.year})`).join('; ') : ''}. Proposal: ${JSON.stringify(raw)}`));
+      if (fixed && !Array.isArray(fixed)) { raw = repairCitations(fixed); errs = validateCandidate(raw); }
+    }
+    if (errs.length) { const cs = Array.isArray(raw && raw.citations) ? raw.citations : []; log.push({ at: now(), id: raw && raw.id, event: 'rejected: structure', detail: [...errs.slice(0, 5), `citations=${cs.length}; fields seen: ${[...new Set(cs.flatMap(x => x && typeof x === 'object' ? Object.keys(x) : []))].join(',')}`] }); continue; }
     if (papers.length && raw.citations.some(x => !seen.has(norm(x.q)))) { log.push({ at: now(), id: raw.id, event: 'rejected: citation outside the verified list' }); continue; }
     const c = sanitize(raw), merr = modelAccepted(c); if (merr.length) { log.push({ at: now(), id: c.id, event: 'rejected: model', detail: merr }); continue; }
     const rt = json(await ask(redTeamPrompt(c))) || {};
