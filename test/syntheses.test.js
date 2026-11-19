@@ -68,3 +68,13 @@ test('title matching tolerates a dropped subtitle but not an unrelated title tha
   assert.ok(titleMatch('Placebo and Nocebo Effects', 'Placebo & nocebo effects'));
   assert.ok(!titleMatch('Placebo and Nocebo Effects', 'Cultural influences on placebo and nocebo effects'));
 });
+
+import { groundPapers, proposePrompt } from '../tools/discover.mjs';
+test('grounding: the model may cite only papers handed to it, and a proposal citing anything else is rejected', async () => {
+  const f = async () => ({ ok: true, json: async () => ({ message: { items: [{ title: ['Real Trial of Something'], issued: { 'date-parts': [[2019]] } }] } }) });
+  const papers = await groundPapers({ f, n: 1 }); assert.deepEqual(papers, [{ title: 'Real Trial of Something', year: 2019 }]);
+  assert.match(proposePrompt(1, [], papers), /Real Trial of Something \(2019\)/);
+  const bad = good(); bad.citations = bad.citations.map(c => ({ ...c, q: 'An Invented Paper', year: 2019 }));
+  const r = await discover({ ask: async () => JSON.stringify([bad]), ground: async () => papers, max: 1, prev: { entries: [], log: [] } });
+  assert.equal(r.entries.length, 0); assert.ok(r.log.some(l => /outside the verified list/.test(l.event)));
+});
