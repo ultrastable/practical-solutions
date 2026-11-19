@@ -67,12 +67,18 @@ export async function groundPapers({ f = globalThis.fetch, n = 8, now = Date.now
   return out;
 }
 
+// REPAIR-1: free models drop bookkeeping fields (id, cite, role) from a citation while keeping the paper itself; fill those in from the paper's title and year
+// and never invent the substance: a citation still needs a title, an integer year and what it supports.
+export const repairCitations = c => !c || !Array.isArray(c.citations) ? c : { ...c, citations: c.citations.map((x, i) => { if (!x || typeof x !== 'object') return x; const q = x.q || x.title, year = typeof x.year === 'string' && /^\d{4}$/.test(x.year) ? Number(x.year) : x.year;
+  return { ...x, q, year, id: x.id || String(i + 1), role: x.role || 'Supporting study', cite: x.cite || (q ? `${q} (${year})` : x.cite), numbers: Array.isArray(x.numbers) ? x.numbers : [] }; }) };
+
 export async function discover({ ask, ground = null, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString() }) {
   const existing = [...SYNTHESES.map(s => s.id), ...prev.entries.map(s => s.id)], log = [...prev.log], entries = [...prev.entries];
   const papers = ground ? await ground().catch(e => { log.push({ at: now(), event: 'grounding failed', detail: String(e.message || e).slice(0, 120) }); return []; }) : [], seen = new Set(papers.map(p => norm(p.title)));
   const out = await ask(proposePrompt(max, existing, papers)), list = json(out);
   if (!Array.isArray(list)) { log.push({ at: now(), event: 'no usable proposal', detail: String(out || '').slice(0, 120) }); return { schema: 'ps-synth-discovered/1', at: now(), entries, log: log.slice(-100) }; }
-  for (const raw of list.slice(0, max)) {
+  for (const raw0 of list.slice(0, max)) {
+    const raw = repairCitations(raw0);
     const errs = validateCandidate(raw); if (errs.length) { log.push({ at: now(), id: raw && raw.id, event: 'rejected: structure', detail: errs.slice(0, 5) }); continue; }
     if (papers.length && raw.citations.some(x => !seen.has(norm(x.q)))) { log.push({ at: now(), id: raw.id, event: 'rejected: citation outside the verified list' }); continue; }
     const c = sanitize(raw), merr = modelAccepted(c); if (merr.length) { log.push({ at: now(), id: c.id, event: 'rejected: model', detail: merr }); continue; }
