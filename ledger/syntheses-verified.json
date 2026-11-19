@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-19T03:35:05.528Z",
+ "at": "2026-11-19T12:05:17.086Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-19T03:34:10.928Z"
+   "checked_at": "2026-11-19T12:04:42.193Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-19T03:34:35.774Z"
+   "checked_at": "2026-11-19T12:04:59.747Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -378,7 +378,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-19T03:34:51.146Z"
+   "checked_at": "2026-11-19T12:05:05.479Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -444,7 +444,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-19T03:34:57.969Z"
+   "checked_at": "2026-11-19T12:05:12.570Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -514,7 +514,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-19T03:35:05.528Z"
+   "checked_at": "2026-11-19T12:05:17.086Z"
   }
  },
  "errors": []
