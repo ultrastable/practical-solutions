@@ -40,13 +40,20 @@ export function sanitize(c) { const m = { ...c.model, nodes: c.model.nodes.map(n
 export function modelAccepted(c) { const errs = validate({ id: c.id, title: c.title, ...c.model, contexts: {} }); return errs; }
 
 const json = t => { const m = /[\[{][\s\S]*[\]}]/.exec(String(t || '')); if (!m) return null; try { return JSON.parse(m[0]); } catch { return null; } };
-export const proposePrompt = (max, existing, papers = []) => `You propose NEW practical solutions made by transferring or combining interventions that published studies support, to a context or combination that no published trial has tested. Do not invent papers: every citation must be a real, published paper whose exact title and year you are sure of.${papers.length ? ' Cite ONLY papers from the verified list below, copying each title and year exactly; an idea that needs a paper not on the list is left out.' : ''} Do not quote figures (leave "numbers" as an empty list). If you are not sure a paper exists, leave that idea out.
+// NOVEL-SEED-1: a rotating cross-sector pairing and a list of standard programmes to exclude, so proposals are not rewordings.
+export const STANDARD = ['unconditional or conditional cash transfers', 'graduation (ultra-poor) programmes', 'community health worker programmes', 'insecticide-treated bed nets', 'oral rehydration with zinc', 'kangaroo mother care', 'school feeding', 'deworming', 'microfinance', 'vaccination drives'];
+export function seedPair(n = 0, list = SOLUTIONS) {
+  const a = list[n % list.length], rest = list.filter(s => !(s.problem_ids || []).some(p => (a.problem_ids || []).includes(p)) && s.id !== a.id), b = (rest.length ? rest : list.filter(s => s.id !== a.id))[Math.floor(n / list.length) % Math.max(1, (rest.length || list.length - 1))];
+  return [a, b];
+}
+export const proposePrompt = (max, existing, papers = [], seed = null) => `You propose NEW practical solutions made by transferring or combining interventions that published studies support, to a context or combination that no published trial has tested. Do not invent papers: every citation must be a real, published paper whose exact title and year you are sure of.${papers.length ? ' Cite ONLY papers from the verified list below, copying each title and year exactly; an idea that needs a paper not on the list is left out.' : ''} Do not quote figures (leave "numbers" as an empty list). If you are not sure a paper exists, leave that idea out.
 
 ${papers.length ? 'Verified papers (found in Crossref):\n' + papers.map(p => `- ${p.title} (${p.year})`).join('\n') + '\n\n' : ''}Catalogue entries you may build on (use their ids in "components"):
 ${SOLUTIONS.slice(0, 30).map(s => `- ${s.id}: ${s.title}`).join('\n')}
 
 Pressing problems with a measured gap to target: ${PROBLEMS.map(p => p.title).join('; ')}.
 Already proposed (do not repeat): ${existing.join(', ')}.
+Standard programmes (a proposal that is a rewording of any of these, or of any catalogue entry above, is rejected by the reviewer): ${STANDARD.join('; ')}.${seed ? `\nStart from this cross-sector pairing and ask what one lends the other that neither has been tried with: "${seed[0].title}" and "${seed[1].title}". The novelty must be a mechanism or delivery channel carried from one setting into another, not a bundle of two programmes.` : ''}
 
 Return a JSON array of at most ${max} objects, nothing else. Each object has exactly these fields: id (kebab-case), title, headline (one sentence an implementer can act on), domain, problem, transfer {from, to}, components (catalogue ids), mechanism (why the parts should combine), citations (3 to 5 of {id, role, cite, q (exact paper title), year (integer), numbers: [], supports (what the paper shows)}), novelty {statement, queries: [{label, q, must: [words that would appear in the title of a paper that already tested this]}]}, who, takes, first_test (a cheap randomised pilot that states a stop rule: when it counts as failed), cost_note, limits, risks (at least 2), model {cost: {upfront: USD, years: 1}, nodes: [{id, label, kind: "direct"|"multiplier"|"spillover"|"unintended", parent (for non-direct), amount: {kind: "ci90", low, high, shape: "lognormal"}, unit: "daly"|"death_averted"|"wellby"|"consumption_doubling_year", years, source: "assumption: show the arithmetic"}]}.`;
 export const redTeamPrompt = c => `You are a hostile reviewer. A proposal says: "${c.title}": ${c.headline} It combines: ${c.transfer.from} -> ${c.transfer.to}. Cited papers: ${c.citations.map(x => `${x.q} (${x.year})`).join('; ')}.
@@ -75,7 +82,7 @@ export const repairCitations = c => !c || !Array.isArray(c.citations) ? c : { ..
 export async function discover({ ask, ground = null, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString() }) {
   const existing = [...SYNTHESES.map(s => s.id), ...prev.entries.map(s => s.id)], log = [...prev.log], entries = [...prev.entries];
   const papers = ground ? await ground().catch(e => { log.push({ at: now(), event: 'grounding failed', detail: String(e.message || e).slice(0, 120) }); return []; }) : [], seen = new Set(papers.map(p => norm(p.title)));
-  const out = await ask(proposePrompt(max, existing, papers)), list = json(out);
+  const out = await ask(proposePrompt(max, existing, papers, seedPair(Math.floor(Date.parse(now()) / 1000) % 997))), list = json(out);
   if (!Array.isArray(list)) { log.push({ at: now(), event: 'no usable proposal', detail: String(out || '').slice(0, 120) }); return { schema: 'ps-synth-discovered/1', at: now(), entries, log: log.slice(-100) }; }
   for (const raw0 of list.slice(0, max)) {
     let raw = repairCitations(raw0), errs = validateCandidate(raw);
