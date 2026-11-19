@@ -92,3 +92,11 @@ test('repair round trip: a structurally invalid proposal is sent back once with 
   const r = await discover({ ask: async () => answers.shift(), max: 1, prev: { entries: [], log: [] } });
   assert.equal(r.entries.length, 1); assert.equal(r.entries[0].id, 'candidate-one');
 });
+
+test('NOVEL-SEED-1: prompt carries a cross-sector pairing and the standard-programme exclusions', async () => {
+  const { proposePrompt, seedPair, STANDARD } = await import('../tools/discover.mjs');
+  const [a, b] = seedPair(3);
+  assert.notEqual(a.id, b.id);
+  const p = proposePrompt(1, [], [], [a, b]);
+  assert.ok(p.includes(a.title) && p.includes(b.title) && p.includes(STANDARD[0]));
+});
