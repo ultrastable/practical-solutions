@@ -1,6 +1,6 @@
 {
  "schema": "ps-synth-discovered/1",
- "at": "2026-11-19T03:25:55.815Z",
+ "at": "2026-11-19T03:29:50.264Z",
  "entries": [
   {
    "id": "kmc-ors-zinc",
@@ -413,6 +413,23 @@
    "event": "rejected: red team",
    "detail": [
     "(b) a cited paper does not exist or does not support what is claimed",
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:29:38.429Z",
+   "id": "kmc-electrification",
+   "event": "rejected: red team",
+   "detail": [
+    "b",
+    "d"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:29:50.264Z",
+   "id": "kmc-tarl",
+   "event": "rejected: red team",
+   "detail": [
     "(d) it is a rewording of a standard programme"
    ]
   }
