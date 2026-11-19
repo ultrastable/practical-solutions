@@ -1,6 +1,6 @@
 {
  "schema": "ps-synth-discovered/1",
- "at": "2026-11-19T03:16:59.994Z",
+ "at": "2026-11-19T03:21:04.292Z",
  "entries": [
   {
    "id": "kmc-ors-zinc",
@@ -377,6 +377,24 @@
    "event": "rejected: red team",
    "detail": [
     "(b) a cited paper does not exist or does not support what is claimed",
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:21:02.835Z",
+   "id": "tarl-cash-graduation",
+   "event": "rejected: red team",
+   "detail": [
+    "a published trial of exactly this combination does not exist but the combination itself seems highly unlikely to be novel",
+    "the proposal seems to be a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:21:04.292Z",
+   "id": "vita-tarl-cash",
+   "event": "rejected: red team",
+   "detail": [
+    "(b) a cited paper does not support what is claimed",
     "(d) it is a rewording of a standard programme"
    ]
   }
