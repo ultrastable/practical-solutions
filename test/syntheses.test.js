@@ -78,3 +78,10 @@ test('grounding: the model may cite only papers handed to it, and a proposal cit
   const r = await discover({ ask: async () => JSON.stringify([bad]), ground: async () => papers, max: 1, prev: { entries: [], log: [] } });
   assert.equal(r.entries.length, 0); assert.ok(r.log.some(l => /outside the verified list/.test(l.event)));
 });
+
+import { repairCitations } from '../tools/discover.mjs';
+test('repair: a citation missing only its bookkeeping fields is completed, one missing substance is still rejected', async () => {
+  const c = good(); c.citations = c.citations.map(x => ({ title: x.q, year: String(x.year), supports: x.supports }));
+  const r = repairCitations(c); assert.deepEqual(validateCandidate(r), []);
+  const bare = good(); bare.citations = bare.citations.map(x => ({ q: x.q, year: x.year })); assert.ok(validateCandidate(repairCitations(bare)).some(e => /citations/.test(e)));
+});
