@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# BRANCH-SWEEP-1: merge every feature branch to main automatically and delete each branch once merged. The platform token is the only credential.
+name: branch-sweep
+on:
+  workflow_run: { workflows: [ci], types: [completed] }
+  pull_request: { types: [opened, reopened, synchronize] }
+  schedule: [{ cron: "*/30 * * * *" }]
+  workflow_dispatch: {}
+concurrency: { group: branch-sweep, cancel-in-progress: false }
+permissions: { contents: write, pull-requests: write }
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node tools/branch_sweep.mjs "${{ github.repository }}"
+        env: { GH_TOKEN: "${{ github.token }}" }
