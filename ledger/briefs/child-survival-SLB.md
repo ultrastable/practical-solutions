@@ -1,6 +1,6 @@
-# Child survival beyond what income and setting predict: Solomon Islands
+# Solution brief: Child survival beyond what income and setting predict
 
-**Bright spot.** Solomon Islands (SLB) has an outcome of 20.000 where its context (NY.GDP.PCAP.PP.KD, SP.URB.TOTL.IN.ZS, SP.POP.TOTL) predicts 53.013; lower is better. That is 2.80 robust standard deviations above expectation, and it stays above 1 in 100% of bootstrap refits (n = 185).
+**Evidence case (a place, not the solution).** Solomon Islands (SLB) has an outcome of 20.000 where its context (NY.GDP.PCAP.PP.KD, SP.URB.TOTL.IN.ZS, SP.POP.TOTL) predicts 53.013; lower is better. That is 2.80 robust standard deviations above expectation, and it stays above 1 in 100% of bootstrap refits (n = 185).
 
 **Matched peers** (nearest in context, not bright): COM, TLS, LSO, GNB, FSM.
 

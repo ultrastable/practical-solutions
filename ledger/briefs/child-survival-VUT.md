@@ -1,6 +1,6 @@
-# Child survival beyond what income and setting predict: Vanuatu
+# Solution brief: Child survival beyond what income and setting predict
 
-**Bright spot.** Vanuatu (VUT) has an outcome of 17.100 where its context (NY.GDP.PCAP.PP.KD, SP.URB.TOTL.IN.ZS, SP.POP.TOTL) predicts 43.923; lower is better. That is 2.28 robust standard deviations above expectation, and it stays above 1 in 100% of bootstrap refits (n = 185).
+**Evidence case (a place, not the solution).** Vanuatu (VUT) has an outcome of 17.100 where its context (NY.GDP.PCAP.PP.KD, SP.URB.TOTL.IN.ZS, SP.POP.TOTL) predicts 43.923; lower is better. That is 2.28 robust standard deviations above expectation, and it stays above 1 in 100% of bootstrap refits (n = 185).
 
 **Matched peers** (nearest in context, not bright): FSM, COM, WSM, TLS, TON.
 

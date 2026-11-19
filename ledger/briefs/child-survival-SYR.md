@@ -1,6 +1,6 @@
-# Child survival beyond what income and setting predict: Syrian Arab Republic
+# Solution brief: Child survival beyond what income and setting predict
 
-**Bright spot.** Syrian Arab Republic (SYR) has an outcome of 18.400 where its context (NY.GDP.PCAP.PP.KD, SP.URB.TOTL.IN.ZS, SP.POP.TOTL) predicts 45.738; lower is better. That is 2.32 robust standard deviations above expectation, and it stays above 1 in 100% of bootstrap refits (n = 185).
+**Evidence case (a place, not the solution).** Syrian Arab Republic (SYR) has an outcome of 18.400 where its context (NY.GDP.PCAP.PP.KD, SP.URB.TOTL.IN.ZS, SP.POP.TOTL) predicts 45.738; lower is better. That is 2.32 robust standard deviations above expectation, and it stays above 1 in 100% of bootstrap refits (n = 185).
 
 **Matched peers** (nearest in context, not bright): NPL, AGO, GHA, CMR, SEN.
 
