@@ -4,6 +4,8 @@
     "repo": "ultrastable/ultrastable"
   },
   "keep": {
+    ".github/workflows/branch-sweep.yml": "tenant trigger for branch_sweep; generic merge-and-delete of this repository branches, lifting queued upstream",
+    "tools/branch_sweep.mjs": "merges feature branches and deletes merged ones for this repository; lifting queued upstream",
     ".github/workflows/bootstrap.yml": "boots the tenant's own organisation",
     ".github/workflows/ci.yml": "tenant CI; runs the sync check",
     ".github/workflows/host-sync.yml": "tenant's own trigger for core/hostsync; names this tenant's deploy workflows",
