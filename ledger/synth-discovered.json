@@ -1,6 +1,6 @@
 {
  "schema": "ps-synth-discovered/1",
- "at": "2026-11-19T03:29:50.264Z",
+ "at": "2026-11-19T03:33:51.104Z",
  "entries": [
   {
    "id": "kmc-ors-zinc",
@@ -432,6 +432,11 @@
    "detail": [
     "(d) it is a rewording of a standard programme"
    ]
+  },
+  {
+   "at": "2026-11-19T03:33:51.104Z",
+   "event": "no usable proposal",
+   "detail": ""
   }
  ]
 }
