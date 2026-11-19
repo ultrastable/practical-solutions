@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-19T03:15:34.006Z",
+ "at": "2026-11-19T03:19:38.678Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -50,7 +50,7 @@
    },
    "novelty": [],
    "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-19T03:14:22.365Z"
+   "checked_at": "2026-11-19T03:18:12.737Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -100,7 +100,7 @@
    },
    "novelty": [],
    "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-19T03:14:50.169Z"
+   "checked_at": "2026-11-19T03:18:46.023Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -153,7 +153,7 @@
    },
    "novelty": [],
    "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-19T03:15:08.865Z"
+   "checked_at": "2026-11-19T03:19:26.856Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -179,9 +179,47 @@
      "reason": "no Crossref title match"
     }
    },
-   "novelty": [],
-   "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-19T03:15:28.546Z"
+   "novelty": [
+    {
+     "label": "Existing studies",
+     "total": 7,
+     "closest": [
+      {
+       "title": "Pediatric emergency care capacity in a low-resource setting: An assessment of district hospitals in Rwanda",
+       "year": 2017,
+       "url": "https://doi.org/10.1371/journal.pone.0173233",
+       "hit": false
+      },
+      {
+       "title": "Caregiver Behavior Change for Child Survival and Development in Low- and Middle-Income Countries: An Examination of the Evidence",
+       "year": 2014,
+       "url": "https://doi.org/10.1080/10810730.2014.940477",
+       "hit": false
+      },
+      {
+       "title": "Methodological considerations and cost to measure coverage of multisectoral nutrition interventions: protocol for the One Nutrition Coverage Survey in Bangladesh",
+       "year": 2025,
+       "url": "https://doi.org/10.1136/bmjopen-2025-099314",
+       "hit": false
+      },
+      {
+       "title": "Learning From History About Reducing Infant Mortality: Contrasting the Centrality of Structural Interventions to Early 20th‐Century Successes in the United States to Their Neglect in Current Global Initiatives",
+       "year": 2019,
+       "url": "https://doi.org/10.1111/1468-0009.12376",
+       "hit": false
+      },
+      {
+       "title": "Effectiveness of Culturally Based HIV Education on Adolescents' Knowledge, Attitudes, and Intentions: A Systematic Review",
+       "year": 2026,
+       "url": "https://doi.org/10.56338/mppki.v9i11.11325",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-19T03:19:31.283Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -251,7 +289,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-19T03:15:34.006Z"
+   "checked_at": "2026-11-19T03:19:38.678Z"
   }
  },
  "errors": []
