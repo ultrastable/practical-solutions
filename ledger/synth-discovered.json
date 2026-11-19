@@ -1,6 +1,6 @@
 {
  "schema": "ps-synth-discovered/1",
- "at": "2026-11-19T03:06:45.015Z",
+ "at": "2026-11-19T03:10:56.784Z",
  "entries": [
   {
    "id": "kmc-ors-zinc",
@@ -329,6 +329,22 @@
    "event": "rejected: structure",
    "detail": [
     "at least three citations, each with id, exact title (q), year, cite, supports and role"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:10:42.687Z",
+   "id": "tarl-helmets-graduation",
+   "event": "rejected: red team",
+   "detail": [
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:10:56.783Z",
+   "id": "tarl-helmets-cash",
+   "event": "rejected: red team",
+   "detail": [
+    "(d) it is a rewording of a standard programme"
    ]
   }
  ]
