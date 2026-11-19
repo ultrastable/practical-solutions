@@ -8,7 +8,7 @@ export const WORKERS_AI_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 // key: Anthropic API key (optional). ai: a Cloudflare Workers AI binding (account-bound, no secret, nothing for a person to paste).
 export async function narrate({ fetch: f = globalThis.fetch, env = {}, key, ai, model = 'claude-sonnet-5-5', brief }) {
   if (!key && !(ai && ai.run)) return { text: null, called: false };
-  const prompt = `You are a careful analyst. Write at most 120 words: a transfer hypothesis for why this bright spot may do better than its context predicts, who could test it, and the cheapest first test. Use only these facts, and say plainly that this is a hypothesis.\n${JSON.stringify({ unit: brief.name, z: brief.z, practices: brief.practices, peers: brief.peers, contextKeys: brief.contextKeys })}`;
+  const prompt = `You are a careful analyst. Write at most 120 words: a hypothesis about which implementable solution (a program, policy or delivery practice, not a place) explains why this evidence case does better than its context predicts: what implementing it takes, who could implement it, the cheapest first test, and one risk. Use only these facts, and say plainly that this is a hypothesis.\n${JSON.stringify({ unit: brief.name, z: brief.z, practices: brief.practices, peers: brief.peers, contextKeys: brief.contextKeys, candidate_solutions: (brief.levers || []).map(l => l.solution) })}`;
   if (!key) {
     try {
       const out = await ai.run(WORKERS_AI_MODEL, { messages: [{ role: 'user', content: prompt }], max_tokens: 300 });
