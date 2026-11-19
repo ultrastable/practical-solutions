@@ -40,9 +40,9 @@ export function sanitize(c) { const m = { ...c.model, nodes: c.model.nodes.map(n
 export function modelAccepted(c) { const errs = validate({ id: c.id, title: c.title, ...c.model, contexts: {} }); return errs; }
 
 const json = t => { const m = /[\[{][\s\S]*[\]}]/.exec(String(t || '')); if (!m) return null; try { return JSON.parse(m[0]); } catch { return null; } };
-export const proposePrompt = (max, existing) => `You propose NEW practical solutions made by transferring or combining interventions that published studies support, to a context or combination that no published trial has tested. Do not invent papers: every citation must be a real, published paper whose exact title and year you are sure of. Do not quote figures (leave "numbers" as an empty list). If you are not sure a paper exists, leave that idea out.
+export const proposePrompt = (max, existing, papers = []) => `You propose NEW practical solutions made by transferring or combining interventions that published studies support, to a context or combination that no published trial has tested. Do not invent papers: every citation must be a real, published paper whose exact title and year you are sure of.${papers.length ? ' Cite ONLY papers from the verified list below, copying each title and year exactly; an idea that needs a paper not on the list is left out.' : ''} Do not quote figures (leave "numbers" as an empty list). If you are not sure a paper exists, leave that idea out.
 
-Catalogue entries you may build on (use their ids in "components"):
+${papers.length ? 'Verified papers (found in Crossref):\n' + papers.map(p => `- ${p.title} (${p.year})`).join('\n') + '\n\n' : ''}Catalogue entries you may build on (use their ids in "components"):
 ${SOLUTIONS.slice(0, 30).map(s => `- ${s.id}: ${s.title}`).join('\n')}
 
 Pressing problems with a measured gap to target: ${PROBLEMS.map(p => p.title).join('; ')}.
@@ -52,12 +52,29 @@ Return a JSON array of at most ${max} objects, nothing else. Each object has exa
 export const redTeamPrompt = c => `You are a hostile reviewer. A proposal says: "${c.title}": ${c.headline} It combines: ${c.transfer.from} -> ${c.transfer.to}. Cited papers: ${c.citations.map(x => `${x.q} (${x.year})`).join('; ')}.
 Say whether it is fatally flawed: (a) a published trial of exactly this combination already exists, (b) a cited paper does not exist or does not support what is claimed, (c) it is likely to cause harm, or (d) it is a rewording of a standard programme. Reply with one JSON object only: {"fatal": true|false, "reasons": ["..."], "closest_existing_work": "title or none"}.`;
 
-export async function discover({ ask, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString() }) {
+export const norm = t => String(t || '').toLowerCase().replace(/<[^>]+>/g, ' ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+// GROUNDING-1: the model cannot recall papers reliably (every citation of the first two proposals failed verification), so it is handed real
+// titles from Crossref for a rotating sample of catalogue interventions and may cite only those.
+export async function groundPapers({ f = globalThis.fetch, n = 8, now = Date.now() } = {}) {
+  const pool = SOLUTIONS.slice(0, 30), start = Math.floor(now / 86400000) % pool.length, out = [];
+  for (let i = 0; i < n; i++) {
+    const s = pool[(start + i) % pool.length];
+    try { const r = await f(`https://api.crossref.org/works?query.bibliographic=${encodeURIComponent(s.title + ' randomized trial')}&rows=3&select=title,issued&filter=type:journal-article`, { headers: { 'user-agent': 'practical-solutions-discovery (+https://ultrastable.org/method)' } });
+      if (!r.ok) continue; const j = await r.json();
+      for (const it of (j.message && j.message.items) || []) { const t = (it.title || [])[0], y = it.issued && it.issued['date-parts'] && it.issued['date-parts'][0] && it.issued['date-parts'][0][0]; if (t && Number.isInteger(y)) out.push({ title: t, year: y }); }
+    } catch (e) { console.error('grounding lookup failed for ' + s.id + ': ' + String(e.message || e)); }
+  }
+  return out;
+}
+
+export async function discover({ ask, ground = null, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString() }) {
   const existing = [...SYNTHESES.map(s => s.id), ...prev.entries.map(s => s.id)], log = [...prev.log], entries = [...prev.entries];
-  const out = await ask(proposePrompt(max, existing)), list = json(out);
+  const papers = ground ? await ground().catch(e => { log.push({ at: now(), event: 'grounding failed', detail: String(e.message || e).slice(0, 120) }); return []; }) : [], seen = new Set(papers.map(p => norm(p.title)));
+  const out = await ask(proposePrompt(max, existing, papers)), list = json(out);
   if (!Array.isArray(list)) { log.push({ at: now(), event: 'no usable proposal', detail: String(out || '').slice(0, 120) }); return { schema: 'ps-synth-discovered/1', at: now(), entries, log: log.slice(-100) }; }
   for (const raw of list.slice(0, max)) {
     const errs = validateCandidate(raw); if (errs.length) { log.push({ at: now(), id: raw && raw.id, event: 'rejected: structure', detail: errs.slice(0, 5) }); continue; }
+    if (papers.length && raw.citations.some(x => !seen.has(norm(x.q)))) { log.push({ at: now(), id: raw.id, event: 'rejected: citation outside the verified list' }); continue; }
     const c = sanitize(raw), merr = modelAccepted(c); if (merr.length) { log.push({ at: now(), id: c.id, event: 'rejected: model', detail: merr }); continue; }
     const rt = json(await ask(redTeamPrompt(c))) || {};
     if (rt.fatal !== false) { log.push({ at: now(), id: c.id, event: rt.fatal === true ? 'rejected: red team' : 'rejected: red team gave no verdict', detail: rt.reasons || [] }); continue; }
@@ -70,7 +87,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const i = process.argv.indexOf('--max'), max = i > 0 ? Number(process.argv[i + 1]) : 2;
   const ask = async prompt => { const r = await complete({ secrets: process.env, prompt: 'Reply with JSON only.\n\n' + prompt, maxTokens: 6000 }); return r.ok ? r.text : ''; };
   const prev = existsSync(DISCOVERED) ? JSON.parse(readFileSync(DISCOVERED, 'utf8')) : { entries: [], log: [] };
-  const r = await discover({ ask, max, prev });
+  const r = await discover({ ask, max, prev, ground: () => groundPapers() });
   writeFileSync(DISCOVERED, JSON.stringify(r, null, 1) + '\n');
   console.log(JSON.stringify({ entries: r.entries.length, last: r.log.slice(-3) }));
 }
