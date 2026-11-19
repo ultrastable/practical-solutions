@@ -1,6 +1,6 @@
 {
  "schema": "ps-synth-discovered/1",
- "at": "2026-11-19T01:42:11.184Z",
+ "at": "2026-11-19T02:46:32.704Z",
  "entries": [
   {
    "id": "kmc-ors-zinc",
@@ -294,6 +294,22 @@
   {
    "at": "2026-11-19T01:42:11.184Z",
    "id": "tarl-cash-helmets",
+   "event": "rejected: structure",
+   "detail": [
+    "at least three citations, each with id, exact title (q), year, cite, supports and role"
+   ]
+  },
+  {
+   "at": "2026-11-19T02:46:32.704Z",
+   "id": "tarl-vita-cash",
+   "event": "rejected: structure",
+   "detail": [
+    "at least three citations, each with id, exact title (q), year, cite, supports and role"
+   ]
+  },
+  {
+   "at": "2026-11-19T02:46:32.704Z",
+   "id": "tarl-immunisation-cash",
    "event": "rejected: structure",
    "detail": [
     "at least three citations, each with id, exact title (q), year, cite, supports and role"
