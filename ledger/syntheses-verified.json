@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-19T02:48:25.073Z",
+ "at": "2026-11-19T03:08:28.342Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-19T02:46:50.855Z"
+   "checked_at": "2026-11-19T03:07:23.261Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -175,7 +175,7 @@
    },
    "novelty": [],
    "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-19T02:47:27.039Z"
+   "checked_at": "2026-11-19T03:07:58.442Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -226,9 +226,84 @@
      }
     }
    },
-   "novelty": [],
-   "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-19T02:48:01.423Z"
+   "novelty": [
+    {
+     "label": "older adult volunteers delivering foundational learning in low-income countries",
+     "total": 534,
+     "closest": [
+      {
+       "title": "Literacy and numeracy support for homeless adults",
+       "year": 2018,
+       "url": "https://doi.org/10.17635/lancaster/thesis/272",
+       "hit": false
+      },
+      {
+       "title": "Prisoners’ Experiences of Foundation Skills – an Intensive Adult Literacy and Numeracy Programme Delivered in New Zealand Prisons",
+       "year": 2014,
+       "url": "https://doi.org/10.26686/wgtn.17007358.v1",
+       "hit": false
+      },
+      {
+       "title": "Supporting english literacy and numeracy learning for Indigenous students in the early years",
+       "year": 2003,
+       "url": "https://openalex.org/W2156824084",
+       "hit": false
+      },
+      {
+       "title": "The impact of adult literacy and numeracy on small businesses in rural Lincolnshire and Rutland: a case study",
+       "year": 2004,
+       "url": "https://openalex.org/W2101503942",
+       "hit": false
+      },
+      {
+       "title": "Perceptions of how literacy and numeracy instructions influence the lives of adult learners: a qualitative multiple case study of learners with low literacy skills",
+       "year": 2019,
+       "url": "https://doi.org/10.17918/00000102",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    },
+    {
+     "label": "Teaching at the Right Level and older volunteers",
+     "total": 37357,
+     "closest": [
+      {
+       "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
+       "year": 2022,
+       "url": "https://doi.org/10.1016/j.ssmqr.2022.100061",
+       "hit": false
+      },
+      {
+       "title": "Organisational volunteering: Meanings of volunteering, professionalism, volunteer communities of practice and wellbeing",
+       "year": 2012,
+       "url": "https://openalex.org/W118528062",
+       "hit": false
+      },
+      {
+       "title": "What is the effect of intergenerational activities on the wellbeing and mental health of older people?: A systematic review",
+       "year": 2023,
+       "url": "https://doi.org/10.1002/cl2.1355",
+       "hit": true
+      },
+      {
+       "title": "Qualitative exploration of the impact of employment and volunteering upon the health and wellbeing of African refugees settled in regional Australia: a refugee perspective",
+       "year": 2019,
+       "url": "https://doi.org/10.1186/s12889-018-6328-2",
+       "hit": false
+      },
+      {
+       "title": "Older women: Employment and wellbeing in later life",
+       "year": 2017,
+       "url": "https://openalex.org/W2772598573",
+       "hit": true
+      }
+     ],
+     "possible_prior_work": true
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-19T03:08:16.793Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -254,9 +329,47 @@
      "reason": "no Crossref title match"
     }
    },
-   "novelty": [],
-   "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-19T02:48:20.567Z"
+   "novelty": [
+    {
+     "label": "Existing studies",
+     "total": 7,
+     "closest": [
+      {
+       "title": "Pediatric emergency care capacity in a low-resource setting: An assessment of district hospitals in Rwanda",
+       "year": 2017,
+       "url": "https://doi.org/10.1371/journal.pone.0173233",
+       "hit": false
+      },
+      {
+       "title": "Caregiver Behavior Change for Child Survival and Development in Low- and Middle-Income Countries: An Examination of the Evidence",
+       "year": 2014,
+       "url": "https://doi.org/10.1080/10810730.2014.940477",
+       "hit": false
+      },
+      {
+       "title": "Methodological considerations and cost to measure coverage of multisectoral nutrition interventions: protocol for the One Nutrition Coverage Survey in Bangladesh",
+       "year": 2025,
+       "url": "https://doi.org/10.1136/bmjopen-2025-099314",
+       "hit": false
+      },
+      {
+       "title": "Learning From History About Reducing Infant Mortality: Contrasting the Centrality of Structural Interventions to Early 20th‐Century Successes in the United States to Their Neglect in Current Global Initiatives",
+       "year": 2019,
+       "url": "https://doi.org/10.1111/1468-0009.12376",
+       "hit": false
+      },
+      {
+       "title": "Effectiveness of Culturally Based HIV Education on Adolescents' Knowledge, Attitudes, and Intentions: A Systematic Review",
+       "year": 2026,
+       "url": "https://doi.org/10.56338/mppki.v9i11.11325",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-19T03:08:19.572Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -326,7 +439,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-19T02:48:25.073Z"
+   "checked_at": "2026-11-19T03:08:28.342Z"
   }
  },
  "errors": []
