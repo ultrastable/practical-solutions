@@ -1,0 +1,38 @@
+// SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+// Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+// Runs the user stories and the structural audit against a running site (the live Worker after a deploy, or a local server), over
+// plain HTTP. Exit code 1 on any failed story or audit rule. Usage: node tools/live_ux.mjs https://tenant-ps-web.ultrastable.workers.dev
+import { STORIES } from '../ux/stories.js';
+import { runAll } from '../ux/runner.js';
+import { auditHtml } from '../worker/src/kit/audit.js';
+
+const base = (process.argv[2] || process.env.BASE || '').replace(/\/$/, '');
+if (!base) { console.error('usage: live_ux.mjs <base url>'); process.exit(2); }
+// The edge throttles a fast crawl with 429/502/503 before the Worker runs (no Worker event is logged), so retry those with backoff.
+const sleep = ms => new Promise(res => setTimeout(res, ms));
+const get = async path => {
+  let r;
+  await sleep(100); for (let i = 0; i < 8; i++) { try { r = await fetch(base + path, { redirect: 'follow' }); } catch (e) { if (i === 7) throw e; await sleep(Math.min(15000, 1000 * 2 ** i)); continue; } /* a dropped connection is retried like a throttle */ if (![429, 502, 503].includes(r.status) || i === 7) break; await r.text(); await sleep(Math.min(15000, 1000 * 2 ** i)); }
+  return { status: r.status, type: r.headers.get('content-type') || '', text: await r.text() };
+};
+
+// the stories visit the new routes too, so a 5xx on them fails the deploy with the path and status in the log
+let results = await runAll(STORIES, get);
+// a story that failed only on edge throttling (status 429/502/503) runs again after a cool-down before it is judged
+const throttledStory = r => !r.ok && r.failures.some(f => /status (429|502|503)\b/.test(f));
+const again = STORIES.filter(s => throttledStory(results.find(r => r.id === s.id) || { ok: true, failures: [] }));
+if (again.length) { console.log(`edge-throttled stories, retrying after cool-down: ${again.map(s => s.id).join(' ')}`); await sleep(90000); const re = await runAll(again, get); results = results.map(r => re.find(x => x.id === r.id) || r); }
+for (const r of results) console.log(r.ok ? 'ok  ' : 'FAIL', r.id, ...r.failures);
+const idx = JSON.parse((await get('/index.json')).text);
+const pages = ['/', '/for', '/solutions', '/problems', '/domains', '/method', '/api', '/compare', '/impact', '/changes', '/leads', '/unknowns', '/context', '/country', '/about', ...idx.solutions.map(s => '/solutions/' + s.id), ...idx.problems.map(p => '/problems/' + p.id), ...idx.domains.map(d => '/domains/' + d.slug)];
+const bad = [];
+const got = new Map(); for (const p of pages) got.set(p, await get(p));
+// A page still throttled at the edge after a minute of retries is fetched again after a cool-down before it is judged.
+const throttled = pages.filter(p => [429, 502, 503].includes(got.get(p).status) && !/1102|resource limits/i.test(got.get(p).text)); if (throttled.length) { console.log(`edge-throttled, retrying after cool-down: ${throttled.join(' ')}`); await sleep(90000); for (const p of throttled) got.set(p, await get(p)); }
+// CPU-LIMIT-1: Cloudflare error 1102 (Worker exceeded resource limits) is a hard failure named as such, never retried as throttling.
+const limit = t => /error code:?\s*1102|exceeded resource limits/i.test(t);
+// a cold isolate can pass the limit once while compiling; the same page must then load within three more tries (warm isolate or edge cache), or it is a failure
+for (const p of pages) for (let i = 0; i < 3 && limit(got.get(p).text); i++) { await sleep(2000); got.set(p, await get(p)); }
+for (const p of pages) { const r = got.get(p); if (limit(r.text)) bad.push(`${p}: CPU-LIMIT-1: Worker exceeded resource limits (1102)`); else if (r.status !== 200) bad.push(`${p} ${r.status}`); for (const v of /html/.test(r.type) && !limit(r.text) ? auditHtml(r.text) : []) bad.push(`${p}: ${v.rule}: ${v.detail}`); }
+console.log(`audited ${pages.length} pages, ${bad.length} violations`); for (const b of bad) console.log('  ' + b);
+process.exit(results.some(r => !r.ok) || bad.length ? 1 : 0);

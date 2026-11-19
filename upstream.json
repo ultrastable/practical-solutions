@@ -1,0 +1,136 @@
+{
+  "core": {
+    "dir": "workers",
+    "repo": "ultrastable/ultrastable"
+  },
+  "keep": {
+    ".github/workflows/branch-sweep.yml": "tenant trigger for branch_sweep; generic merge-and-delete of this repository branches, lifting queued upstream",
+    "tools/branch_sweep.mjs": "merges feature branches and deletes merged ones for this repository; lifting queued upstream",
+    ".github/workflows/bootstrap.yml": "boots the tenant's own organisation",
+    ".github/workflows/ci.yml": "tenant CI; runs the sync check",
+    ".github/workflows/host-sync.yml": "tenant's own trigger for core/hostsync; names this tenant's deploy workflows",
+    "tools/dispatch_deploy.sh": "names this tenant's own deploy-tenant workflow; nothing generic to lift",
+    "bin/issues.mjs": "applies the tenant's issue plan with gh",
+    "ps/brief.js": "renders a bright-spot brief",
+    "ps/detect.js": "the bright-spot detector is the product's domain method",
+    "ps/issues.js": "bright-spot issue lifecycle over the tenant's own predictions",
+    "ps/ledger.js": "exports the tenant ledger",
+    "ps/metrics.js": "tenant metric set",
+    "ps/narrate.js": "tenant brief narration",
+    "ps/org.js": "creates the tenant's own organisation",
+    "ps/promote_step.js": "tenant promotion step over its own entries",
+    "ps/synth.js": "synthetic world for the detector tests",
+    "ps/verify.js": "verifies bright-spot briefs",
+    "tools/bca_precompute.mjs": "generates the tenant's own benefit-cost precompute from its own seed models (bca-models.js); tenant-specific",
+    "tools/live_ux.mjs": "probes the tenant's own live pages",
+    "worker/src/audiences.js": "tenant audiences",
+    "worker/src/domains-meta.js": "tenant domain list",
+    "worker/src/kit/tokens.js": "tenant design tokens (accent and type pair), the permitted variation",
+    "worker/src/redteam-config.js": "tenant red-team pool config",
+    "worker/src/freshness.js": "reports this tenant's own generated bundles (ensemble ledger age, bca and selfmigrate), so it names tenant files and is not generic",
+    ".github/workflows/synth.yml": "tenant's own synthesis loop over its own entries"
+  },
+  "lifted": {
+    "ps/ensemble.js": "core/ensemble/index.js",
+    "ps/linalg.js": "core/_shared/linalg.js",
+    "ps/oidc.js": "core/auth/actions-oidc.js",
+    "ps/selfmigrate.js": "core/migrations/selfmigrate.js",
+    "worker/src/kit/audit.js": "core/ui/audit.js",
+    "worker/src/kit/components.js": "core/ui/components.js",
+    "worker/src/kit/html.js": "core/ui/html.js",
+    "worker/src/kit/index.js": "core/ui/index.js",
+    "worker/src/kit/layout.js": "core/ui/layout.js"
+  },
+  "lifting": {
+    ".github/workflows/agent.yml": {
+      "core": "core/codeloop/templates/agent.yml",
+      "hold": "queued: workflow templates lift after parameterising the tenant name",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    ".github/workflows/ensemble.yml": {
+      "core": "core/modelport/templates/ensemble.yml",
+      "hold": "ensemble thread lifts the ensemble family",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    ".github/workflows/indexnow.yml": {
+      "core": "core/promote/templates/indexnow.yml",
+      "hold": "queued: workflow templates lift after parameterising the tenant name",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    ".github/workflows/modelprobe.yml": {
+      "core": "core/modelport/templates/modelprobe.yml",
+      "hold": "queued: workflow templates lift after parameterising the tenant name",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "ps/db.js": {
+      "core": "core/_shared/opendb.js",
+      "hold": "queued: imports the vendored sqlite adapter; lifts after review",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "ps/extract.js": {
+      "core": "core/modelport/extract.js",
+      "hold": "queued: depends on ps/llm.js, which lifts with the ensemble",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "ps/review.js": {
+      "core": "core/codeloop/review.js",
+      "hold": "ensemble thread lifts the ensemble family",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "tools/build_migrations.mjs": {
+      "core": "core/migrations/build_migrations.mjs",
+      "hold": "queued: parameterise the tenant paths",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "tools/deploy_tenant.mjs": {
+      "core": "core/deploy/deploy_tenant.mjs",
+      "hold": "queued: parameterise the tenant paths",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "worker/src/ensemble-config.js": {
+      "core": "core/modelport/ensemble-config.js",
+      "hold": "ensemble thread lifts the ensemble family",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "worker/src/ensemble-view.js": {
+      "core": "core/modelport/ensemble-view.js",
+      "hold": "ensemble thread lifts the ensemble family",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    ".github/workflows/audit-anchor.yml": {
+      "core": "core/audit/templates/audit-anchor.yml",
+      "hold": "queued: workflow templates lift after parameterising the tenant name",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "tools/audit_anchor.mjs": {
+      "core": "core/audit/anchor.mjs",
+      "hold": "queued: lifts with the audit module's anchor helper once the base URL is a parameter",
+      "item": "Q-LIFT-TENANT-1"
+    }
+  },
+  "min_lines": 8,
+  "scan_roots": [
+    "ps",
+    "tools",
+    "worker/src",
+    "worker-llm/src",
+    "worker-mail/src",
+    ".github/workflows",
+    "bin"
+  ],
+  "schema": "tenant-upstream/1",
+  "token_max": 2,
+  "tokens": [
+    "practical[- ]solutions",
+    "tenant-ps",
+    "wellby",
+    "bright ?spot",
+    "europe ?pmc",
+    "\\bcountr",
+    "ultrastable\\.org",
+    "\\bps\\b",
+    "implementab",
+    "world ?bank"
+  ],
+  "vendor_dir": "vendor/ultrastable"
+}

@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-export const NAMES = { worker: 'ps-practical-solutions', d1: 'ps-practical-solutions' };
+export const NAMES = { worker: "tenant-ps-core", d1: "tenant-ps-db" };
 
 export function plan({ names = NAMES, env = process.env } = {}) {
   const missing = ['CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_ACCOUNT_ID'].filter(k => !env[k]);

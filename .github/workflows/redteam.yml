@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: about 2 minutes a day (public repository: Actions minutes are free)
+# trigger: daily, so each entry is challenged by a model about once every 10 days; no faster. The model rotates through the ensemble pool (worker/src/redteam-config.js).
+# free-alternative: Workers AI in the tenant Worker when its AI binding is present (worker/src/unknowns.js)
+# The model red team: GitHub Models on this run's own token (models: read), then Workers AI through the tenant model Worker (OIDC). Writes ledger/redteam.json, which the site reads.
+name: redteam
+on:
+  schedule: [{ cron: '41 4 * * *' }]
+  workflow_dispatch:
+permissions: { contents: write, models: read, id-token: write }
+concurrency: { group: redteam, cancel-in-progress: false }
+jobs:
+  redteam:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node --no-warnings tools/redteam.mjs --budget 4
+      - name: commit the findings
+        run: |
+          git config user.name "practical-solutions-redteam"
+          git config user.email "redteam@users.noreply.github.com"
+          git add ledger/redteam.json
+          git diff --cached --quiet || { git commit -m "redteam: model challenges for the stalest entries"; git push; }

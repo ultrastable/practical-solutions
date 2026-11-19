@@ -1,0 +1,521 @@
+{
+ "schema": "ps-syntheses-verified/1",
+ "at": "2026-11-19T03:35:05.528Z",
+ "entries": {
+  "barbershop-hearts": {
+   "status": "verified",
+   "citations": {
+    "victor2018": {
+     "found": true,
+     "doi": "10.1056/nejmoa1717250",
+     "title": "A Cluster-Randomized Trial of Blood-Pressure Reduction in Black Barbershops",
+     "year": 2018,
+     "journal": "New England Journal of Medicine",
+     "similarity": 1,
+     "reason": "matched",
+     "numbers_checked": {
+      "via": "europepmc",
+      "quoted": [
+       "27.0"
+      ],
+      "missing": []
+     }
+    },
+    "jaffe2013": {
+     "found": true,
+     "doi": "10.1001/jama.2013.108769",
+     "title": "Improved Blood Pressure Control Associated With a Large-Scale Hypertension Program",
+     "year": 2013,
+     "journal": "JAMA",
+     "similarity": 1,
+     "reason": "matched",
+     "numbers_checked": {
+      "via": "europepmc",
+      "quoted": [
+       "43.6",
+       "80.4"
+      ],
+      "missing": []
+     }
+    },
+    "ncdrisc2021": {
+     "found": true,
+     "doi": "10.3410/f.740693066.793589850",
+     "title": "Faculty Opinions recommendation of Worldwide trends in hypertension prevalence and progress in treatment and control from 1990 to 2019: a pooled analysis of 1201 population-representative studies with 104 million participants.",
+     "year": 2021,
+     "journal": "Faculty Opinions – Post-Publication Peer Review of the Biomedical Literature",
+     "similarity": 0.89,
+     "reason": "matched"
+    }
+   },
+   "novelty": [
+    {
+     "label": "barbershop and hypertension, Africa or Asia",
+     "total": 18,
+     "closest": [
+      {
+       "title": "Global epidemiology, health burden and effective interventions for elevated blood pressure and hypertension",
+       "year": 2021,
+       "url": "https://doi.org/10.1038/s41569-021-00559-8",
+       "hit": false
+      },
+      {
+       "title": "Addressing global disparities in blood pressure control: perspectives of the International Society of Hypertension",
+       "year": 2022,
+       "url": "https://doi.org/10.1093/cvr/cvac130",
+       "hit": false
+      },
+      {
+       "title": "Prevalence and associated factors of hypertension among Africans",
+       "year": 2026,
+       "url": "https://openalex.org/W7224141463",
+       "hit": false
+      },
+      {
+       "title": "Hypertension in Sub-Saharan Africa: Burden, Barriers and Priorities for Improving Treatment Outcomes",
+       "year": 2025,
+       "url": "https://doi.org/10.1161/circresaha.124.323889",
+       "hit": false
+      },
+      {
+       "title": "World Heart Federation Roadmap for Hypertension – A 2021 Update",
+       "year": 2021,
+       "url": "https://doi.org/10.5334/gh.1066",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    },
+    {
+     "label": "hair salon and blood pressure",
+     "total": 54,
+     "closest": [
+      {
+       "title": "A pilot study to examine the feasibility of involving urban beauty salons and stylists in a social marketing campaign aimed at improving calcium consumption among low income, African-American and Hispanic children",
+       "year": 2008,
+       "url": "https://doi.org/10.7282/t3v1254t",
+       "hit": true
+      },
+      {
+       "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
+       "year": 2012,
+       "url": "https://openalex.org/W166737179",
+       "hit": false
+      },
+      {
+       "title": "Reckoning Time in the Barber Shop:A Qualitative Study of a Barber Navigating Time, Temporality, and Rhythm",
+       "year": 2014,
+       "url": "https://openalex.org/W2243527285",
+       "hit": true
+      },
+      {
+       "title": "Stay Beautiful -- Stay Alive: Assessing the Receptivity of African American Beauty Salon Owners to the Integration of Breast Cancer Intervention Programs into Salon Operations",
+       "year": 2013,
+       "url": "https://openalex.org/W45837067",
+       "hit": true
+      },
+      {
+       "title": "Screening for hypertension at the hairdresser: a feasibility study in France and Morocco",
+       "year": 2020,
+       "url": "https://doi.org/10.1080/08037051.2020.1728189",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": true
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-19T03:34:10.928Z"
+  },
+  "expectation-framing-hearts": {
+   "status": "verified",
+   "citations": {
+    "wood2020": {
+     "found": true,
+     "doi": "10.1056/nejmc2031173",
+     "title": "N-of-1 Trial of a Statin, Placebo, or No Treatment to Assess Side Effects",
+     "year": 2020,
+     "journal": "New England Journal of Medicine",
+     "similarity": 1,
+     "reason": "matched"
+    },
+    "gupta2017": {
+     "found": true,
+     "doi": "10.1016/s0140-6736(17)31075-9",
+     "title": "Adverse events associated with unblinded, but not with blinded, statin therapy in the Anglo-Scandinavian Cardiac Outcomes Trial—Lipid-Lowering Arm (ASCOT-LLA): a randomised double-blind placebo-controlled trial and its non-randomised non-blind extension phase",
+     "year": 2017,
+     "journal": "The Lancet",
+     "similarity": 1,
+     "reason": "matched",
+     "numbers_checked": {
+      "via": "europepmc",
+      "quoted": [
+       "41"
+      ],
+      "missing": []
+     }
+    },
+    "colloca2020": {
+     "found": true,
+     "doi": "10.26226/morressier.5cf632c0af72dec2b0554738",
+     "title": "Placebo and nocebo effects in visual attention",
+     "year": 2019,
+     "similarity": 0.57,
+     "reason": "matched"
+    },
+    "abegaz2017": {
+     "found": true,
+     "doi": "10.1097/md.0000000000005641",
+     "title": "Nonadherence to antihypertensive drugs",
+     "year": 2017,
+     "journal": "Medicine",
+     "similarity": 1,
+     "reason": "matched"
+    }
+   },
+   "novelty": [
+    {
+     "label": "nocebo framing and antihypertensive adherence",
+     "total": 18,
+     "closest": [
+      {
+       "title": "Psychological aspects of hypertension treatment - Beliefs, placebo and nocebo effects",
+       "year": 2017,
+       "url": "https://doi.org/10.17192/z2017.0407",
+       "hit": true
+      },
+      {
+       "title": "Perceived barriers and facilitators to exercise adherence in osteoarthritis: A thematic synthesis of qualitative studies",
+       "year": 2025,
+       "url": "https://doi.org/10.1016/j.ocarto.2025.100584",
+       "hit": false
+      },
+      {
+       "title": "Effectiveness and reliability of hypnosis in stereotaxy: a randomized study",
+       "year": 2024,
+       "url": "https://doi.org/10.1007/s00701-024-05943-0",
+       "hit": false
+      },
+      {
+       "title": "Health care professional barriers and facilitators to discontinuing antidepressant use: A systematic review and thematic synthesis",
+       "year": 2024,
+       "url": "https://doi.org/10.1016/j.jad.2024.04.060",
+       "hit": false
+      },
+      {
+       "title": "Getting the Benefit of the Doubt: The Effect of Randomization Ratio on the Placebo Response",
+       "year": 2019,
+       "url": "https://openalex.org/W2989759371",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": true
+    },
+    {
+     "label": "side-effect counselling script and hypertension in Africa",
+     "total": 1606,
+     "closest": [
+      {
+       "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
+       "year": 2023,
+       "url": "https://doi.org/10.1016/s0140-6736(23)01573-8",
+       "hit": false
+      },
+      {
+       "title": "Assessing implementation outcomes from studies addressing medication adherence for hypertension management in Sub-Saharan Africa: a systematic review",
+       "year": 2025,
+       "url": "https://doi.org/10.1186/s12889-025-24438-w",
+       "hit": false
+      },
+      {
+       "title": "Factors associated with poor adherence to medication among hypertensive patients in twelve low and middle income Sub-Saharan countries",
+       "year": 2019,
+       "url": "https://doi.org/10.1371/journal.pone.0219266",
+       "hit": false
+      },
+      {
+       "title": "Process evaluation of a brief messaging intervention to improve diabetes treatment adherence in sub-Saharan Africa",
+       "year": 2021,
+       "url": "https://doi.org/10.1186/s12889-021-11552-8",
+       "hit": false
+      },
+      {
+       "title": "Nurse-led interventions for hypertension management in Sub-Saharan Africa: A scoping review",
+       "year": 2026,
+       "url": "https://doi.org/10.1016/j.ijnsa.2026.100656",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-19T03:34:35.774Z"
+  },
+  "elder-teaching-at-the-right-level": {
+   "status": "verified",
+   "citations": {
+    "banerjee2017": {
+     "found": true,
+     "doi": "10.1257/jep.31.4.73",
+     "title": "From Proof of Concept to Scalable Policies: Challenges and Solutions, with an Application",
+     "year": 2017,
+     "journal": "Journal of Economic Perspectives",
+     "similarity": 1,
+     "reason": "matched"
+    },
+    "banerjee2007": {
+     "found": true,
+     "doi": "10.1162/qjec.122.3.1235",
+     "title": "Remedying Education: Evidence from Two Randomized Experiments in India",
+     "year": 2007,
+     "journal": "The Quarterly Journal of Economics",
+     "similarity": 1,
+     "reason": "matched"
+    },
+    "rebok2004": {
+     "found": true,
+     "doi": "10.1093/jurban/jth095",
+     "title": "Short-Term Impact of Experience Corps(R) Participation on Children and Schools: Results From a Pilot Randomized Trial",
+     "year": 2004,
+     "journal": "Journal of Urban Health: Bulletin of the New York Academy of Medicine",
+     "similarity": 0.94,
+     "reason": "matched"
+    },
+    "holtlunstad2015": {
+     "found": true,
+     "doi": "10.1177/1745691614568352",
+     "title": "Loneliness and Social Isolation as Risk Factors for Mortality",
+     "year": 2015,
+     "journal": "Perspectives on Psychological Science",
+     "similarity": 0.69,
+     "reason": "matched",
+     "numbers_checked": {
+      "via": "europepmc",
+      "quoted": [
+       "26",
+       "29",
+       "32"
+      ],
+      "missing": []
+     }
+    }
+   },
+   "novelty": [
+    {
+     "label": "older adult volunteers delivering foundational learning in low-income countries",
+     "total": 534,
+     "closest": [
+      {
+       "title": "Literacy and numeracy support for homeless adults",
+       "year": 2018,
+       "url": "https://doi.org/10.17635/lancaster/thesis/272",
+       "hit": false
+      },
+      {
+       "title": "Prisoners’ Experiences of Foundation Skills – an Intensive Adult Literacy and Numeracy Programme Delivered in New Zealand Prisons",
+       "year": 2014,
+       "url": "https://doi.org/10.26686/wgtn.17007358.v1",
+       "hit": false
+      },
+      {
+       "title": "Supporting english literacy and numeracy learning for Indigenous students in the early years",
+       "year": 2003,
+       "url": "https://openalex.org/W2156824084",
+       "hit": false
+      },
+      {
+       "title": "The impact of adult literacy and numeracy on small businesses in rural Lincolnshire and Rutland: a case study",
+       "year": 2004,
+       "url": "https://openalex.org/W2101503942",
+       "hit": false
+      },
+      {
+       "title": "Perceptions of how literacy and numeracy instructions influence the lives of adult learners: a qualitative multiple case study of learners with low literacy skills",
+       "year": 2019,
+       "url": "https://doi.org/10.17918/00000102",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    },
+    {
+     "label": "Teaching at the Right Level and older volunteers",
+     "total": 37357,
+     "closest": [
+      {
+       "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
+       "year": 2022,
+       "url": "https://doi.org/10.1016/j.ssmqr.2022.100061",
+       "hit": false
+      },
+      {
+       "title": "Organisational volunteering: Meanings of volunteering, professionalism, volunteer communities of practice and wellbeing",
+       "year": 2012,
+       "url": "https://openalex.org/W118528062",
+       "hit": false
+      },
+      {
+       "title": "What is the effect of intergenerational activities on the wellbeing and mental health of older people?: A systematic review",
+       "year": 2023,
+       "url": "https://doi.org/10.1002/cl2.1355",
+       "hit": true
+      },
+      {
+       "title": "Qualitative exploration of the impact of employment and volunteering upon the health and wellbeing of African refugees settled in regional Australia: a refugee perspective",
+       "year": 2019,
+       "url": "https://doi.org/10.1186/s12889-018-6328-2",
+       "hit": false
+      },
+      {
+       "title": "Older women: Employment and wellbeing in later life",
+       "year": 2017,
+       "url": "https://openalex.org/W2772598573",
+       "hit": true
+      }
+     ],
+     "possible_prior_work": true
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-19T03:34:51.146Z"
+  },
+  "kmc-ors-zinc": {
+   "status": "failed",
+   "citations": {
+    "1": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "2": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "3": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "4": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "5": {
+     "found": false,
+     "reason": "no Crossref title match"
+    }
+   },
+   "novelty": [
+    {
+     "label": "Existing studies",
+     "total": 7,
+     "closest": [
+      {
+       "title": "Pediatric emergency care capacity in a low-resource setting: An assessment of district hospitals in Rwanda",
+       "year": 2017,
+       "url": "https://doi.org/10.1371/journal.pone.0173233",
+       "hit": false
+      },
+      {
+       "title": "Caregiver Behavior Change for Child Survival and Development in Low- and Middle-Income Countries: An Examination of the Evidence",
+       "year": 2014,
+       "url": "https://doi.org/10.1080/10810730.2014.940477",
+       "hit": false
+      },
+      {
+       "title": "Methodological considerations and cost to measure coverage of multisectoral nutrition interventions: protocol for the One Nutrition Coverage Survey in Bangladesh",
+       "year": 2025,
+       "url": "https://doi.org/10.1136/bmjopen-2025-099314",
+       "hit": false
+      },
+      {
+       "title": "Learning From History About Reducing Infant Mortality: Contrasting the Centrality of Structural Interventions to Early 20th‐Century Successes in the United States to Their Neglect in Current Global Initiatives",
+       "year": 2019,
+       "url": "https://doi.org/10.1111/1468-0009.12376",
+       "hit": false
+      },
+      {
+       "title": "Effectiveness of Culturally Based HIV Education on Adolescents' Knowledge, Attitudes, and Intentions: A Systematic Review",
+       "year": 2026,
+       "url": "https://doi.org/10.56338/mppki.v9i11.11325",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-19T03:34:57.969Z"
+  },
+  "itn-tarl": {
+   "status": "failed",
+   "citations": {
+    "1": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "2": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "3": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "4": {
+     "found": false,
+     "reason": "no Crossref title match"
+    },
+    "5": {
+     "found": false,
+     "doi": "10.31219/osf.io/wbu6e",
+     "title": "Teaching at the Right Level",
+     "year": 2023,
+     "similarity": 0.63,
+     "reason": "year 2023 is not 2020"
+    }
+   },
+   "novelty": [
+    {
+     "label": "Existing studies",
+     "total": 399,
+     "closest": [
+      {
+       "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
+       "year": 2026,
+       "url": "https://doi.org/10.3390/tropicalmed11050137",
+       "hit": false
+      },
+      {
+       "title": "Cost-effectiveness of intermittent preventive therapy and insecticide-treated bed nets for malaria prevention among pregnant women in Jos North, Plateau State, Nigeria",
+       "year": 2025,
+       "url": "https://doi.org/10.1186/s12936-025-05607-z",
+       "hit": true
+      },
+      {
+       "title": "Assessment of the Willingness to Buy and the Use of Insecticide Treated Nets (ITN) among Caregivers of Under-Five Children Attending Immunization Clinics in a Private Tertiary Hospital in Plateau State, Nigeria",
+       "year": 2020,
+       "url": "https://doi.org/10.4236/aid.2020.102008",
+       "hit": false
+      },
+      {
+       "title": "A decline in the coverage and utilization of long-lasting insecticidal nets in Southern Ethiopia: A repeated cross-sectional study",
+       "year": 2025,
+       "url": "https://doi.org/10.1371/journal.pone.0322342",
+       "hit": false
+      },
+      {
+       "title": "“In starvation, a bone can also be meat”: a mixed methods evaluation of factors associated with discarding of long-lasting insecticidal nets in Bagamoyo, Tanzania",
+       "year": 2022,
+       "url": "https://doi.org/10.1186/s12936-022-04126-5",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": true
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-19T03:35:05.528Z"
+  }
+ },
+ "errors": []
+}

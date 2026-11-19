@@ -197,7 +197,7 @@ test('content rules: empty, over the channel limit, secret patterns, missing sen
   assert.equal((await guard.send(msg({ content: 'hi', idempotencyKey: '3' }))).reason, 'sender_identification_missing');
   const ok = await guard.send(msg({ content: 'hi Sent by Example', idempotencyKey: '4' }));
   assert.equal(ok.decision, 'sent');
-  for (const [i, s] of ['ghp_' + 'a'.repeat(30), 'AKIA' + 'B'.repeat(16), 'password=hunter2hunter2', '-----BEGIN PRIVATE KEY-----', 'Bearer ' + 'z'.repeat(30)].entries()) {
+  for (const [i, s] of ['ghp_' + 'a'.repeat(30), 'AKIA' + 'B'.repeat(16), 'password=hunter2hunter2', '-----BEGIN ' + 'PRIVATE KEY-----', 'Bearer ' + 'z'.repeat(30)].entries()) {
     const channel2 = fakeChannel();
     const r = await guard.send(msg({ content: `see ${s}`, idempotencyKey: `s${i}` }));
     assert.equal(r.reason === 'content_secret_pattern' || r.reason === 'content_too_long', true, s);
@@ -302,8 +302,8 @@ test('T21-6 a pack step that throws or hangs files an item and the tick complete
   assert.deepEqual((await packs.register(m, { dir: path.join(dir, 'p') })).errors, undefined);
   await packs.enablePack('boomer', { by: 'owner', cardText: m.enable_gate });
   const r = await runTick(db, { config: tickConfig, now: T0, extraSteps: await packs.packSteps() });
-  assert.equal(r.total, 9);
-  assert.equal(r.completed, 9);                                                       // every step ran to its end
+  assert.equal(r.total, 10);
+  assert.equal(r.completed, 10);                                                      // every step ran to its end
   assert.ok(r.errors.some(e => /kaboom/.test(e)) && r.errors.some(e => /exceeded 200 ms/.test(e)));
   const items = rows(db, `SELECT id, owner_role, priority FROM items WHERE id LIKE 'PACKFAIL-boomer-%'`);
   assert.equal(items.length, 2); assert.ok(items.every(i => i.owner_role === 'pack-manager-boomer' && i.priority === 0));

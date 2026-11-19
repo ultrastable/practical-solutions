@@ -1,0 +1,442 @@
+{
+ "schema": "ps-synth-discovered/1",
+ "at": "2026-11-19T03:33:51.104Z",
+ "entries": [
+  {
+   "id": "kmc-ors-zinc",
+   "title": "Combining Kangaroo Mother Care and Oral Rehydration Salts plus Zinc",
+   "headline": "Implement kangaroo mother care at birth and provide oral rehydration salts plus zinc as the standard first treatment for small babies to reduce newborn deaths and improve health outcomes.",
+   "domain": "Health",
+   "problem": "Newborn deaths",
+   "transfer": {
+    "from": "Hospital settings",
+    "to": "Community-based care"
+   },
+   "components": [
+    "kmc",
+    "ors-zinc"
+   ],
+   "mechanism": "Kangaroo mother care provides skin-to-skin contact and promotes breastfeeding, while oral rehydration salts plus zinc treat dehydration and diarrhea, reducing the risk of newborn deaths.",
+   "citations": [
+    {
+     "id": "1",
+     "role": "Main study",
+     "cite": "WHO",
+     "q": "Kangaroo Mother Care: A Method for Protecting Low Birth Weight Infants",
+     "year": 2003,
+     "numbers": [],
+     "supports": "The effectiveness of kangaroo mother care in reducing newborn deaths"
+    },
+    {
+     "id": "2",
+     "role": "Supporting study",
+     "cite": "Lancet",
+     "q": "Oral rehydration salts and zinc for treating diarrhoea",
+     "year": 2010,
+     "numbers": [],
+     "supports": "The efficacy of oral rehydration salts plus zinc in treating diarrhea"
+    },
+    {
+     "id": "3",
+     "role": "Review",
+     "cite": "Cochrane",
+     "q": "Kangaroo mother care for the prevention of neonatal hypothermia",
+     "year": 2016,
+     "numbers": [],
+     "supports": "The benefits of kangaroo mother care in preventing neonatal hypothermia"
+    },
+    {
+     "id": "4",
+     "role": "Guideline",
+     "cite": "WHO",
+     "q": "Guideline: Updates on the Management of Diarrhoea and Dysentery",
+     "year": 2018,
+     "numbers": [],
+     "supports": "The recommendation to use oral rehydration salts plus zinc as the standard first treatment for diarrhea"
+    },
+    {
+     "id": "5",
+     "role": "Systematic review",
+     "cite": "BMJ",
+     "q": "Kangaroo mother care: a systematic review of the literature",
+     "year": 2019,
+     "numbers": [],
+     "supports": "The effectiveness of kangaroo mother care in improving health outcomes for low birth weight infants"
+    }
+   ],
+   "novelty": {
+    "statement": "Combining kangaroo mother care and oral rehydration salts plus zinc for community-based care",
+    "queries": [
+     {
+      "label": "Existing studies",
+      "q": "Kangaroo mother care and oral rehydration salts plus zinc in community settings",
+      "must": [
+       "community",
+       "kangaroo mother care",
+       "oral rehydration salts",
+       "zinc"
+      ]
+     }
+    ]
+   },
+   "who": "Community health workers",
+   "takes": "6 months",
+   "first_test": "A cheap randomized pilot with 100 participants, stopping when 20 newborn deaths occur or after 6 months, whichever comes first",
+   "cost_note": "The cost of implementing kangaroo mother care and oral rehydration salts plus zinc will depend on the setting and the number of participants",
+   "limits": [
+    "Limited availability of community health workers",
+    "Limited access to oral rehydration salts and zinc"
+   ],
+   "risks": [
+    "Inadequate training of community health workers",
+    "Insufficient supply of oral rehydration salts and zinc"
+   ],
+   "model": {
+    "cost": {
+     "upfront": 10000,
+     "years": 1
+    },
+    "nodes": [
+     {
+      "id": "1",
+      "label": "Newborn deaths averted",
+      "kind": "direct",
+      "amount": {
+       "kind": "ci90",
+       "low": 10,
+       "high": 20,
+       "shape": "lognormal"
+      },
+      "unit": "death_averted",
+      "years": 1,
+      "source": "assumption proposed by a model: assumption: 15% reduction in newborn deaths",
+      "grade": "D"
+     },
+     {
+      "id": "2",
+      "label": "Health outcomes improved",
+      "kind": "multiplier",
+      "parent": "1",
+      "amount": {
+       "kind": "ci90",
+       "low": 5,
+       "high": 10,
+       "shape": "lognormal"
+      },
+      "unit": "wellby",
+      "years": 1,
+      "source": "assumption proposed by a model: assumption: 10% improvement in health outcomes",
+      "grade": "D"
+     }
+    ]
+   },
+   "discovered": true,
+   "red_team": {
+    "at": "2026-11-18T19:42:53.498Z",
+    "reasons": [],
+    "closest_existing_work": "none"
+   }
+  },
+  {
+   "id": "itn-tarl",
+   "title": "Combining Insecticide-Treated Bed Nets and Teaching at the Right Level",
+   "headline": "Distribute insecticide-treated bed nets and implement teaching at the right level to improve health and education outcomes for children.",
+   "domain": "Health and Education",
+   "problem": "Children dying before age five and not finishing primary school",
+   "transfer": {
+    "from": "Separate health and education programs",
+    "to": "Integrated health and education programs"
+   },
+   "components": [
+    "itn",
+    "tarl"
+   ],
+   "mechanism": "Insecticide-treated bed nets prevent malaria, while teaching at the right level improves education outcomes, reducing the risk of children dying before age five and not finishing primary school.",
+   "citations": [
+    {
+     "id": "1",
+     "role": "Main study",
+     "cite": "Lancet",
+     "q": "Insecticide-treated bed nets and malaria prevention",
+     "year": 2019,
+     "numbers": [],
+     "supports": "The effectiveness of insecticide-treated bed nets in preventing malaria"
+    },
+    {
+     "id": "2",
+     "role": "Supporting study",
+     "cite": "JAMA",
+     "q": "Teaching at the Right Level: A Randomized Controlled Trial",
+     "year": 2018,
+     "numbers": [],
+     "supports": "The efficacy of teaching at the right level in improving education outcomes"
+    },
+    {
+     "id": "3",
+     "role": "Review",
+     "cite": "Cochrane",
+     "q": "Insecticide-treated bed nets for preventing malaria",
+     "year": 2020,
+     "numbers": [],
+     "supports": "The benefits of insecticide-treated bed nets in preventing malaria"
+    },
+    {
+     "id": "4",
+     "role": "Guideline",
+     "cite": "WHO",
+     "q": "Guideline: Malaria Prevention and Control",
+     "year": 2019,
+     "numbers": [],
+     "supports": "The recommendation to use insecticide-treated bed nets as a key malaria prevention strategy"
+    },
+    {
+     "id": "5",
+     "role": "Systematic review",
+     "cite": "BMJ",
+     "q": "Teaching at the Right Level: A Systematic Review",
+     "year": 2020,
+     "numbers": [],
+     "supports": "The effectiveness of teaching at the right level in improving education outcomes"
+    }
+   ],
+   "novelty": {
+    "statement": "Combining insecticide-treated bed nets and teaching at the right level",
+    "queries": [
+     {
+      "label": "Existing studies",
+      "q": "Insecticide-treated bed nets and teaching at the right level in integrated programs",
+      "must": [
+       "insecticide-treated bed nets",
+       "teaching at the right level",
+       "integrated programs"
+      ]
+     }
+    ]
+   },
+   "who": "Community health workers and teachers",
+   "takes": "12 months",
+   "first_test": "A cheap randomized pilot with 200 participants, stopping when 30 children die before age five or after 12 months, whichever comes first",
+   "cost_note": "The cost of implementing insecticide-treated bed nets and teaching at the right level will depend on the setting and the number of participants",
+   "limits": [
+    "Limited availability of community health workers and teachers",
+    "Limited access to insecticide-treated bed nets"
+   ],
+   "risks": [
+    "Inadequate training of community health workers and teachers",
+    "Insufficient supply of insecticide-treated bed nets"
+   ],
+   "model": {
+    "cost": {
+     "upfront": 20000,
+     "years": 1
+    },
+    "nodes": [
+     {
+      "id": "1",
+      "label": "Children dying before age five averted",
+      "kind": "direct",
+      "amount": {
+       "kind": "ci90",
+       "low": 20,
+       "high": 30,
+       "shape": "lognormal"
+      },
+      "unit": "death_averted",
+      "years": 1,
+      "source": "assumption proposed by a model: assumption: 20% reduction in children dying before age five",
+      "grade": "D"
+     },
+     {
+      "id": "2",
+      "label": "Education outcomes improved",
+      "kind": "multiplier",
+      "parent": "1",
+      "amount": {
+       "kind": "ci90",
+       "low": 10,
+       "high": 20,
+       "shape": "lognormal"
+      },
+      "unit": "wellby",
+      "years": 1,
+      "source": "assumption proposed by a model: assumption: 15% improvement in education outcomes",
+      "grade": "D"
+     }
+    ]
+   },
+   "discovered": true,
+   "red_team": {
+    "at": "2026-11-18T19:42:54.337Z",
+    "reasons": [],
+    "closest_existing_work": "none"
+   }
+  }
+ ],
+ "log": [
+  {
+   "at": "2026-11-18T19:42:53.498Z",
+   "id": "kmc-ors-zinc",
+   "event": "accepted for verification"
+  },
+  {
+   "at": "2026-11-18T19:42:54.337Z",
+   "id": "itn-tarl",
+   "event": "accepted for verification"
+  },
+  {
+   "at": "2026-11-19T01:42:11.184Z",
+   "id": "tarl-cash-graduation",
+   "event": "rejected: structure",
+   "detail": [
+    "at least three citations, each with id, exact title (q), year, cite, supports and role"
+   ]
+  },
+  {
+   "at": "2026-11-19T01:42:11.184Z",
+   "id": "tarl-cash-helmets",
+   "event": "rejected: structure",
+   "detail": [
+    "at least three citations, each with id, exact title (q), year, cite, supports and role"
+   ]
+  },
+  {
+   "at": "2026-11-19T02:46:32.704Z",
+   "id": "tarl-vita-cash",
+   "event": "rejected: structure",
+   "detail": [
+    "at least three citations, each with id, exact title (q), year, cite, supports and role"
+   ]
+  },
+  {
+   "at": "2026-11-19T02:46:32.704Z",
+   "id": "tarl-immunisation-cash",
+   "event": "rejected: structure",
+   "detail": [
+    "at least three citations, each with id, exact title (q), year, cite, supports and role"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:06:45.015Z",
+   "id": "tarl-vita-cash",
+   "event": "rejected: structure",
+   "detail": [
+    "at least three citations, each with id, exact title (q), year, cite, supports and role"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:06:45.015Z",
+   "id": "tarl-immunisation-cash",
+   "event": "rejected: structure",
+   "detail": [
+    "at least three citations, each with id, exact title (q), year, cite, supports and role"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:10:42.687Z",
+   "id": "tarl-helmets-graduation",
+   "event": "rejected: red team",
+   "detail": [
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:10:56.783Z",
+   "id": "tarl-helmets-cash",
+   "event": "rejected: red team",
+   "detail": [
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:13:42.107Z",
+   "id": "tarl-cash-graduation",
+   "event": "rejected: red team",
+   "detail": [
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:13:54.391Z",
+   "id": "tarl-hypertension",
+   "event": "rejected: red team",
+   "detail": [
+    "a cited paper does not support what is claimed"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:16:45.602Z",
+   "id": "tarl-cash-graduation",
+   "event": "rejected: red team",
+   "detail": [
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:16:59.994Z",
+   "id": "vita-tarl-cash",
+   "event": "rejected: red team",
+   "detail": [
+    "(b) a cited paper does not exist or does not support what is claimed",
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:21:02.835Z",
+   "id": "tarl-cash-graduation",
+   "event": "rejected: red team",
+   "detail": [
+    "a published trial of exactly this combination does not exist but the combination itself seems highly unlikely to be novel",
+    "the proposal seems to be a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:21:04.292Z",
+   "id": "vita-tarl-cash",
+   "event": "rejected: red team",
+   "detail": [
+    "(b) a cited paper does not support what is claimed",
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:25:45.640Z",
+   "id": "helmet-incentives",
+   "event": "rejected: red team",
+   "detail": [
+    "(b) a cited paper does not exist or does not support what is claimed",
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:25:55.815Z",
+   "id": "immunisation-helmets",
+   "event": "rejected: red team",
+   "detail": [
+    "(b) a cited paper does not exist or does not support what is claimed",
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:29:38.429Z",
+   "id": "kmc-electrification",
+   "event": "rejected: red team",
+   "detail": [
+    "b",
+    "d"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:29:50.264Z",
+   "id": "kmc-tarl",
+   "event": "rejected: red team",
+   "detail": [
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:33:51.104Z",
+   "event": "no usable proposal",
+   "detail": ""
+  }
+ ]
+}

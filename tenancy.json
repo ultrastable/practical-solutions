@@ -1,0 +1,12 @@
+{
+  "tenant": "ps",
+  "host_account": "ultrastable",
+  "rule": "Tenant resources carry the prefix tenant-ps-. Nothing here shares a binding, secret, D1 database, KV namespace, R2 bucket or service binding with an ultrastable-* core resource. The only way across is the core's published HTTP interface.",
+  "resources": {
+    "frontend_worker": "tenant-ps-web",
+    "backend_worker": "tenant-ps-core",
+    "d1": "tenant-ps-db"
+  },
+  "forbidden_prefixes": ["ultrastable-", "us-idea-", "example-co-"],
+  "core_interface": "HTTP only; none used today"
+}

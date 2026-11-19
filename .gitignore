@@ -5,3 +5,4 @@ simulate.txt
 worker/wrangler.jsonc
 worker/seed.sql
 /briefs/
+.build-tenant.js

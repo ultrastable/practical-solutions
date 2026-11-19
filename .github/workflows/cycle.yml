@@ -6,7 +6,7 @@
 # The continuous loop on GitHub's own compute, needing no secret beyond the built-in GITHUB_TOKEN: `ps cycle` restores the committed
 # state (ledger/ps.sqlite), ticks against live World Bank data, records essential variables, corrective actions and out-of-bounds
 # tests as one line in ledger/cycles.jsonl, publishes verified briefs as open data with a changelog, and this job files one issue
-# per new brief. Predictions registered in one cycle come due and are scored in a later one.
+# per new brief, closed at once with its prediction's disposition and commented with the verdict when scored (ps/issues.js). Predictions registered in one cycle come due and are scored in a later one.
 name: cycle
 on:
   schedule: [{ cron: '17 3 * * *' }]
@@ -20,7 +20,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      PS_LLM_URL: https://ps-llm.q08.workers.dev/ps/llm
+      PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
       GITHUB_MODELS_TOKEN: ${{ github.token }}  # the model route that needs no key a person mints: GitHub Models on the run's own token
     steps:
       - uses: actions/checkout@v4
@@ -30,14 +30,10 @@ jobs:
       - run: npm test
       - name: run one cycle on persisted state
         run: node --no-warnings bin/ps.mjs cycle --db ledger/ps.sqlite --ledger ledger/cycles.jsonl --out ledger/briefs --n 8 --run ${{ github.run_number }}
-      - name: one issue per new brief
-        run: |
-          gh label create bright-spot -R "$GITHUB_REPOSITORY" --color 0e8a16 --description "Lead from the loop; a hypothesis to check, not a finding" || true
-          node -e "for (const b of JSON.parse(require('fs').readFileSync('ledger/briefs/index.json','utf8'))) console.log(b.file)" | while read f; do
-            t="Bright spot: ${f%.md}"
-            n=$(gh issue list -R "$GITHUB_REPOSITORY" --label bright-spot --state all --search "\"$t\" in:title" --json number --jq length)
-            if [ "$n" = 0 ]; then gh issue create -R "$GITHUB_REPOSITORY" --label bright-spot --title "$t" --body-file "ledger/briefs/$f" || echo "issue create failed for $f"; fi
-          done
+      - name: bright-spot issues (ISSUE-LOOP-1)
+        id: issues
+        continue-on-error: true  # a failed gh call is logged by bin/issues.mjs and fails this step visibly; the state commit below still runs
+        run: node --no-warnings bin/issues.mjs --db ledger/ps.sqlite --briefs ledger/briefs
       - name: commit state
         run: |
           git config user.name practical-solutions-bot

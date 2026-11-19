@@ -306,6 +306,14 @@ export function psSteps({ fetch: f = globalThis.fetch, secrets = {}, sourceFor, 
   const upstream = {
     name: 'ps_upstream',
     async run(db, ctx) {
+      // UPSTREAM-2 closes on evidence that the vendored core outreach migration is applied here.
+      const up2 = await first(db, `SELECT id FROM items WHERE id='UPSTREAM-2' AND status!='done'`);
+      if (up2 && await first(db, `SELECT name FROM sqlite_master WHERE type='table' AND name='outreach_intents'`)) {
+        const ev2 = 'core/feed and core/outreach are vendored from ultrastable/workers#206 and the outreach tables exist in this database';
+        await run(db, `UPDATE items SET status='done', disposition=?, updated_at=? WHERE id='UPSTREAM-2'`, `completed: ${ev2}`, ctx.nowIso);
+        await run(db, `INSERT INTO outcomes (item_id, agent, surface, action_class, result, evidence, at) VALUES ('UPSTREAM-2', ?, 'ps_upstream', 'verify', 'verified', ?, ?)`, ANALYST, ev2, ctx.nowIso);
+        ctx.notes.push('upstream: UPSTREAM-2 closed on evidence');
+      }
       const it = await first(db, `SELECT id FROM items WHERE id='UPSTREAM-1' AND status!='done'`);
       if (!it) return;
       const r = await first(db, `SELECT COUNT(*) n FROM predictions WHERE metric='ps_residual_z' AND verdict IS NOT NULL AND observed IS NOT NULL`);

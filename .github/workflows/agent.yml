@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, so Actions minutes are unmetered; each run is about 3 minutes.
+# trigger: an issue labelled `idea` or `agent-task` (intake), every 2 hours (backlog; a run with no open agent-task issue exits in under a minute), a finished deploy (settle), manual dispatch.
+# free-alternative: none needed; models run on GitHub Models with the run's own GITHUB_TOKEN, no key a person mints.
+# The free code agent: works `agent-task` issues from trusted authors through tests, deploy and the live check; reverts what breaks.
+name: agent
+on:
+  issues: { types: [opened, labeled] }
+  schedule: [{ cron: '41 */2 * * *' }]
+  workflow_run: { workflows: [deploy-tenant], types: [completed] }
+  workflow_dispatch: { inputs: { issue: { description: 'issue number (default: lowest open agent-task)', required: false } } }
+concurrency: { group: agent, cancel-in-progress: false }
+permissions: { contents: write, issues: write, pull-requests: write, actions: write, models: read, id-token: write }
+env:
+  GH_TOKEN: ${{ github.token }}
+  GITHUB_TOKEN: ${{ github.token }}
+  # second free route: Workers AI behind the tenant's model Worker, reached with this run's OIDC token (GitHub Models may be off for the org)
+  PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
+jobs:
+  work:
+    # issues: only an issue labelled idea or agent-task starts a run (a label added by the built-in token starts no workflow, so intake happens in the first step)
+    if: ${{ vars.HALT != '1' && github.event_name != 'workflow_run' && (github.event_name != 'issues' || ((github.event.label.name == 'idea' || github.event.label.name == 'agent-task' || contains(join(github.event.issue.labels.*.name, ','), 'idea') || contains(join(github.event.issue.labels.*.name, ','), 'agent-task')))) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: ensure labels
+        run: |
+          for l in agent-task agent-failed idea; do gh label create "$l" -R "$GITHUB_REPOSITORY" --color 5319e7 || true; done
+      - name: intake, an idea from a trusted author becomes an agent task
+        if: ${{ github.event_name == 'issues' }}
+        run: |
+          # trusted means write access (the API reports a private org member as CONTRIBUTOR, so the association alone is not enough)
+          perm=$(gh api "repos/$GITHUB_REPOSITORY/collaborators/${{ github.event.issue.user.login }}/permission" --jq .permission || echo none)
+          case "$perm" in admin|maintain|write) gh issue edit ${{ github.event.issue.number }} --add-label agent-task -R "$GITHUB_REPOSITORY" ;; *) echo "author has $perm access: not an agent task" ;; esac
+      - name: work one agent-task issue
+        id: agent
+        run: node --no-warnings tools/agent.mjs run ${{ inputs.issue && format('--issue {0}', inputs.issue) || '' }} | tee agent.json
+      - name: record in the audit log
+        if: success()
+        run: node tools/audit_post.mjs --kind entry_change --subject agent --summary "code agent worked one agent-task issue" --payload-file agent.json
+      - name: deploy what the agent merged (a push by the built-in token does not start workflows)
+        if: ${{ always() }}
+        run: grep -q '"ok":true' agent.json && bash tools/dispatch_deploy.sh || echo "nothing merged"
+  settle:
+    # The live check is the merge gate: when the deploy of an agent change fails, the change is reverted and its issue reopened.
+    if: ${{ vars.HALT != '1' && github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node --no-warnings tools/agent.mjs settle ${{ github.event.workflow_run.conclusion == 'failure' && '--force' || '' }}

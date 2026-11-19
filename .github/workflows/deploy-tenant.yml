@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Deploys the tenant front-end Worker whenever its code changes on main, after the tests pass.
+# No repo secrets: the run proves its identity to the ultrastable deploy gateway with a GitHub OIDC token.
+name: deploy-tenant
+on:
+  push: { branches: [main], paths: ['worker/src/**', 'data/**', 'vendor/ultrastable/core/feed/**', 'tools/deploy_tenant.mjs', '.github/workflows/deploy-tenant.yml'] }
+  workflow_dispatch: {}
+concurrency: { group: deploy-tenant, cancel-in-progress: false }
+permissions: { contents: write, id-token: write }  # HOSTSYNC-1: the record step commits ops/hosting
+env:
+  GATEWAY: https://ultrastable-deploy-gateway.ultrastable.workers.dev
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test
+      - name: build
+        run: npx --yes esbuild worker/src/tenant.js --bundle --format=esm --platform=neutral --minify --outfile=.build-tenant.js
+      - name: deploy via gateway
+        run: |
+          tok=$(curl -fsS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$GATEWAY" | jq -r .value)
+          curl -sS -X POST "$GATEWAY/deploy" -H "Authorization: Bearer $tok" -F script=tenant-ps-web -F worker.js=@.build-tenant.js -o out.json -w '%{http_code}\n' | tee code.txt
+          cat out.json; echo; [ "$(cat code.txt)" = 200 ]
+      - name: live check
+        run: |
+          for p in / /syntheses /syntheses.json /method /problems/tb /solutions/kmc /domains /search?q=water /impact /metrics.json /graph.json /questions.json /index.json /sitemap.xml /feed.xml /brightspots.json; do
+            for try in 1 2 3 4 5; do   # a new version takes a few seconds to reach every location
+              code=$(curl -s -o /dev/null -w '%{http_code}' "https://tenant-ps-web.ultrastable.workers.dev$p"); [ "$code" = 200 ] && break; sleep 6
+            done
+            echo "$p $code"; [ "$code" = 200 ] || exit 1
+          done
+      - name: record in the audit log
+        if: success()
+        run: node tools/audit_post.mjs --kind deploy --subject tenant-ps-web --summary "tenant web worker deployed through the gateway and passed the live check"
+      - name: record the deployed module as expected (HOSTSYNC-1)
+        if: success()
+        run: |
+          node vendor/ultrastable/tools/hostsync.mjs expect --script tenant-ps-web --sha256 "$(jq -r .sha256 out.json)"
+          bash vendor/ultrastable/tools/hostsync_commit.sh "host-sync - record deployed tenant-ps-web"
+      - name: user stories and structural audit against the live site
+        run: node tools/live_ux.mjs https://tenant-ps-web.ultrastable.workers.dev
+      - name: real-browser accessibility check (axe, light and dark, desktop and phone)
+        run: |
+          npm i --no-save --no-audit --no-fund playwright@1.49.1 axe-core@4.10.2
+          npx playwright install --with-deps chromium
+          node tools/live_axe.mjs https://tenant-ps-web.ultrastable.workers.dev

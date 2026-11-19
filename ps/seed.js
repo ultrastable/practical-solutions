@@ -15,4 +15,7 @@ export async function seedOrg(db, { problems, now = Date.now(), slug = 'practica
   await db.prepare(`INSERT OR IGNORE INTO items (id, title, kind, owner_role, done_check, closing_probe, priority, status)
     VALUES ('UPSTREAM-1', 'Core score_predictions marks any metric it does not know as a miss; add a metric registration hook so domain metrics can be scored by core', 'fix', 'operations',
             'PR merged in ultrastable/workers adding metric registration, then this repo drops its own scorer', 'core grades a ps_residual_z prediction (workers#175 merged at 145fdfe)', 30, 'ready')`).run();
+  await db.prepare(`INSERT OR IGNORE INTO items (id, title, kind, owner_role, done_check, closing_probe, priority, status)
+    VALUES ('UPSTREAM-2', 'Upstream the tenant-agnostic changelog feed and approval-gated outreach outbox into ultrastable/workers as core/feed and core/outreach (ultrastable/workers#206, issue #210)', 'fix', 'operations',
+            'PR merged in ultrastable/workers; this repo imports them from vendor', 'the outreach_intents table from the vendored core migration exists in this database', 35, 'ready')`).run();
 }

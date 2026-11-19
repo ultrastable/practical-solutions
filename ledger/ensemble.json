@@ -1,0 +1,530 @@
+{
+ "schema": "ps-ensemble/1",
+ "examined": {
+  "cash": {
+   "at": "2026-11-18T11:24:54.426Z",
+   "outcome": "no change proposed: The entry describes a specific study (likely the GiveDirectly Kenya study) that is not directly covered by the provided sources, but its general claims are consistent with the findings in the sources."
+  },
+  "chlorine": {
+   "at": "2026-11-18T11:24:54.426Z",
+   "outcome": "no change proposed: The entry agrees with the sources."
+  },
+  "clean-cooking": {
+   "at": "2026-11-18T11:24:54.426Z",
+   "outcome": "rejected"
+  },
+  "deworming": {
+   "at": "2026-11-18T13:55:28.790Z",
+   "outcome": "no change proposed: The entry accurately describes the specific scientific debate between the Kenya trial and the Cochrane review, and the provided sources do not contradict this summary or its details."
+  },
+  "emissions-market": {
+   "at": "2026-11-18T13:55:28.790Z",
+   "outcome": "no change proposed: None of the sources mention pollution markets, cap-and-trade systems, or Surat, India, so the entry's claims remain unchallenged."
+  },
+  "friendship-bench": {
+   "at": "2026-11-18T13:55:28.790Z",
+   "outcome": "no sources: Europe PMC HTTP 500"
+  },
+  "graduation": {
+   "at": "2026-11-17T19:04:41.635Z",
+   "outcome": "no change proposed: None of the sources provide information that contradicts or updates the entry."
+  },
+  "helmets": {
+   "at": "2026-11-17T19:04:41.635Z",
+   "outcome": "rejected"
+  },
+  "hypertension": {
+   "at": "2026-11-17T19:04:41.635Z",
+   "outcome": "no change proposed: The entry already agrees with the sources, which describe various health studies and outcomes within the Kaiser Permanente Northern California system, but do not provide information that contradicts o"
+  },
+  "immunisation": {
+   "at": "2026-11-17T19:19:50.543Z",
+   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, with no discrepancies or outdated information found."
+  },
+  "itn": {
+   "at": "2026-11-17T19:19:50.543Z",
+   "outcome": "no change proposed: All fields in the entry are consistent with the information provided in the cited sources."
+  },
+  "kmc": {
+   "at": "2026-11-17T19:19:50.543Z",
+   "outcome": "uncertain"
+  },
+  "mobile-money": {
+   "at": "2026-11-17T19:30:56.255Z",
+   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, with no discrepancies or outdated information found."
+  },
+  "ors-zinc": {
+   "at": "2026-11-17T19:30:56.255Z",
+   "outcome": "no change proposed: The provided sources do not contain information that contradicts or refines the details of the ORS plus zinc treatment entry."
+  },
+  "rural-electrification": {
+   "at": "2026-11-17T19:30:56.255Z",
+   "outcome": "no change proposed: None of the sources relate to grid connection subsidies in rural Kenya or challenge the entry's claims, limits, works_where, takes, or first_test fields."
+  },
+  "tarl": {
+   "at": "2026-11-18T11:14:33.506Z",
+   "outcome": "no change proposed: The provided sources are unrelated to the 'Teaching at the Right Level' program and do not provide information to verify or correct the entry."
+  },
+  "vita": {
+   "at": "2026-11-18T11:14:33.506Z",
+   "outcome": "no change proposed: The entry's claim about Vitamin A supplementation reducing mortality is not contradicted by the sources, which focus on Vitamin D, clinical deficiency prevalence, and nutrition service gaps, but do no"
+  },
+  "women-leaders": {
+   "at": "2026-11-18T11:14:33.506Z",
+   "outcome": "no change proposed: None of the provided sources discuss village‑council seat reservations for women in India, so there is no evidence to correct any field."
+  }
+ },
+ "proposals": [
+  {
+   "id": "5ae43e1b6bd5",
+   "entry": "cash",
+   "field": "works_where",
+   "old": "Rural Kenya; many other countries through GiveDirectly and government programmes.",
+   "new": "Rural Kenya; many other countries through GiveDirectly and government programmes; Massachusetts, USA; India",
+   "source": {
+    "url": "https://europepmc.org/article/MED/41688611",
+    "title": "Randomized unconditional cash transfers improved diet quantity and quality in a low-income community in Massachusetts, USA."
+   },
+   "quote": "During COVID-19, Chelsea, a city in Massachusetts, USA, implemented an unconditional cash transfer (UCT) programme ('Chelsea Eats') that provided a nine-month benefit of up to US$400 per month to low-income households, allocated via lottery.",
+   "why": "The new text includes additional locations where unconditional cash transfers have been implemented, as supported by source 3.",
+   "proposer": {
+    "id": "llama-3.3-fp8",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [],
+   "status": "pending",
+   "reason": "only 0 usable verifiers from distinct vendors; 2 are needed",
+   "at": "2026-11-17T17:48:56.425Z"
+  },
+  {
+   "id": "ff2fcd3eca4b",
+   "entry": "chlorine",
+   "field": "limits",
+   "old": "Effect depends on people using the dispensers; works poorly where households already treat water or sources are piped and treated.",
+   "new": "Effect depends on people using the dispensers; works poorly where households already treat water or sources are piped and treated, or where water infrastructure is lacking",
+   "source": {
+    "url": "https://europepmc.org/article/MED/40375160",
+    "title": "Social dynamics influencing cholera risk in the City of Goma, Democratic Republic of Congo: a qualitative study."
+   },
+   "quote": "The lack of water infrastructure was the main issue with cholera risk in Goma as it prompted use of unsafe drinking water from Lake Kivu, the small Lake vert and Mubambiro River",
+   "why": "The new text includes the additional limitation of lacking water infrastructure, which is supported by source 3.",
+   "proposer": {
+    "id": "llama-3.3-fp8",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [],
+   "status": "pending",
+   "reason": "only 0 usable verifiers from distinct vendors; 2 are needed",
+   "at": "2026-11-17T17:48:56.425Z"
+  },
+  {
+   "id": "f4b95b39079b",
+   "entry": "deworming",
+   "field": "claim",
+   "old": "An influential trial found that treating schoolchildren for worms raised school attendance, but a later Cochrane review found little effect on growth, school performance or survival for mass treatment.",
+   "new": "An influential trial found that treating schoolchildren for worms raised school attendance, and a study also found that deworming before age five leads to improvements in morbidity and lifespan decades later, but a later Cochrane review found little effect on growth, school performance or survival for mass treatment.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/40857314",
+    "title": "Early-life infectious disease exposure, the \"hygiene hypothesis,\" and lifespan: Evidence from hookworm disease."
+   },
+   "quote": "Findings show deworming before age five leads to 2.5 additional months of life in a large sample of adult death records.",
+   "why": "The new text incorporates the findings from source 1, which provides additional evidence of the benefits of deworming.",
+   "proposer": {
+    "id": "llama-3.3-fp8",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-17T18:01:45.400Z"
+  },
+  {
+   "id": "149be85936ab",
+   "entry": "friendship-bench",
+   "field": "works_where",
+   "old": "Harare clinics, Zimbabwe; adapted in other countries.",
+   "new": "Zimbabwe; adapted in Botswana and Palestine",
+   "source": {
+    "url": "https://europepmc.org/article/MED/41653177",
+    "title": "Piloting a Near-Peer Lay Counselor Based Problem Solving Therapy Intervention for Youth With and Without HIV in Botswana: An Adaptation of the Friendship Bench."
+   },
+   "quote": "The Safe Haven intervention, adapted from Zimbabwe's Friendship Bench, addresses this gap by leveraging near-peer youth lay counselors trained in Problem-Solving Therapy",
+   "why": "The quote shows that the Friendship Bench intervention has been adapted in Botswana, in addition to its original location in Zimbabwe, and also in Palestine as seen in source 4.",
+   "proposer": {
+    "id": "llama-3.3-fp8",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [],
+   "status": "pending",
+   "reason": "only 0 usable verifiers from distinct vendors; 2 are needed",
+   "at": "2026-11-17T18:01:45.400Z"
+  },
+  {
+   "id": "84a60c334487",
+   "entry": "helmets",
+   "field": "limits",
+   "old": "The review pools observational studies, not randomised trials; benefit depends on helmet quality and on actual wearing, not just a law.",
+   "new": "The review pools observational studies, not randomised trials; benefit depends on helmet quality, actual wearing, and enforcement, as poor-quality helmets are widely available in some areas due to a lack of standards and weak regulations.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42966954",
+    "title": "Accessing quality motorcycle helmets in Ghana: a qualitative inquiry."
+   },
+   "quote": "The analysis highlighted four interconnected system gaps and potential enablers: limited knowledge and awareness of helmet quality, limited availability of quality helmets, economic constraints, and the absence of regulations and enforcement.",
+   "why": "Source [1] highlights the importance of helmet quality and regulation, which is not fully captured in the original limits field.",
+   "proposer": {
+    "id": "llama-3.3-70b",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-17T19:04:41.635Z"
+  },
+  {
+   "id": "464a55601d8f",
+   "entry": "kmc",
+   "field": "claim",
+   "old": "Skin-to-skin contact with a parent, begun immediately after birth for babies weighing 1.0 to 1.8 kg, cut deaths in the first 28 days by about a quarter.",
+   "new": "Skin-to-skin contact with a parent, begun immediately after birth for babies weighing 1.0 to 1.8 kg, improves survival by about a third.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42744379",
+    "title": "Effect of Kangaroo Mother Care during the first 72 hours of life on early growth and breastfeeding in normal birthweight newborns: protocol for a randomised controlled trial."
+   },
+   "quote": "improving survival by 32% and conferring multiple clinical and neurodevelopmental benefits",
+   "why": "The source reports a 32% survival improvement, not a 25% reduction in deaths.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [
+    {
+     "id": "llama-3.3-70b",
+     "vendor": "meta",
+     "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+     "verdict": "contradicts",
+     "reason": "The abstract mentions that Kangaroo Mother Care improves survival by 32% for preterm and low birthweight infants, but the new sentence claims it improves survival by about a third for babies weighing "
+    },
+    {
+     "id": "mistral-small-3.1",
+     "vendor": "mistral",
+     "model": "@cf/mistralai/mistral-small-3.1-24b-instruct",
+     "verdict": "contradicts",
+     "reason": "The abstract states that KMC improves survival by 32%, not by about a third."
+    }
+   ],
+   "status": "uncertain",
+   "reason": "models disagree: 0 supports, 2 contradicts, 0 unclear",
+   "at": "2026-11-17T19:19:50.543Z"
+  },
+  {
+   "id": "35957041ce2f",
+   "entry": "clean-cooking",
+   "field": "claim",
+   "old": "A large multi-country trial that gave households LPG stoves and fuel did not find a significant reduction in severe infant pneumonia, so health benefits are less certain than often assumed.",
+   "new": "The HAPIN trial, a large multi‑country LPG stove and fuel intervention, reported a modest increase in hemoglobin among pregnant women but did not assess severe infant pneumonia.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42270650",
+    "title": "Effects of cooking with liquefied petroleum gas versus biomass on hemoglobin concentrations in pregnant women: a pre-specified exploratory analysis of the HAPIN trial."
+   },
+   "quote": "We identify a significant increase in hemoglobin in the intervention group (0.074 g/dL, 95% CI: 0.002, 0.145) compared to the control group.",
+   "why": "The source describes hemoglobin outcomes, not pneumonia, so the original claim about no pneumonia benefit is unsupported.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-18T11:24:54.426Z"
+  }
+ ],
+ "health": {
+  "mistral-small": {
+   "calls": 5,
+   "errors": 5,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  },
+  "deepseek-v3": {
+   "calls": 7,
+   "errors": 7,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  },
+  "phi-4": {
+   "calls": 9,
+   "errors": 9,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  },
+  "grok-3-mini": {
+   "calls": 9,
+   "errors": 9,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  },
+  "command-a": {
+   "calls": 9,
+   "errors": 9,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  },
+  "gemma-3": {
+   "calls": 9,
+   "errors": 0
+  },
+  "gpt-4.1-mini": {
+   "calls": 3,
+   "errors": 3,
+   "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  },
+  "mistral-small-3.1": {
+   "calls": 4,
+   "errors": 0
+  },
+  "gemma-4": {
+   "calls": 6,
+   "errors": 2,
+   "last": "empty"
+  },
+  "qwen3-30b": {
+   "calls": 8,
+   "errors": 4,
+   "last": "empty"
+  },
+  "glm-5.3-flash": {
+   "calls": 6,
+   "errors": 6,
+   "last": "worker-ai HTTP 502 5035: Model @cf/zai-org/glm-5.3-flash is not available on the Workers Free plan. Upgrade t"
+  },
+  "kimi-k2.6": {
+   "calls": 6,
+   "errors": 6,
+   "last": "worker-ai HTTP 502 5035: Model @cf/moonshotai/kimi-k2.6 is not available on the Workers Free plan. Upgrade to"
+  },
+  "deepseek-v4-flash": {
+   "calls": 7,
+   "errors": 7,
+   "last": "worker-ai HTTP 502 5035: Model @cf/deepseek-ai/deepseek-v4-flash-0731 is not available on the Workers Free pl"
+  },
+  "nemotron-3": {
+   "calls": 7,
+   "errors": 6,
+   "last": "unparseable"
+  },
+  "gpt-oss-120b": {
+   "calls": 5,
+   "errors": 2,
+   "last": "empty"
+  },
+  "llama-3.3-70b": {
+   "calls": 3,
+   "errors": 0
+  }
+ },
+ "benched": {},
+ "history": [
+  {
+   "id": "464a55601d8f",
+   "votes": {
+    "meta": "contradicts",
+    "mistral": "contradicts"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "at": "2026-11-17T17:48:56.425Z",
+   "examined": 3,
+   "proposed": 2,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 2,
+   "none": 1,
+   "panel_failures": 0
+  },
+  {
+   "at": "2026-11-17T18:01:45.400Z",
+   "examined": 3,
+   "proposed": 2,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 1,
+   "pending": 1,
+   "none": 1,
+   "panel_failures": 0,
+   "failures": [
+    "mistral-small: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "deepseek-v3: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "phi-4: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "grok-3-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "command-a: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "deepseek-v3: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "phi-4: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "grok-3-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "command-a: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "phi-4: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "grok-3-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "command-a: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "gemma-3: substituted by llama-3.3-fp8",
+    "gpt-4.1-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "mistral-small: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "deepseek-v3: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "phi-4: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "grok-3-mini: Unexpected token 'O', \"OK\r\n\" is not valid JSON",
+    "command-a: Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+   ]
+  },
+  {
+   "at": "2026-11-17T19:04:41.635Z",
+   "examined": 3,
+   "proposed": 1,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 1,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": [
+    "gemma-4: empty",
+    "qwen3-30b: empty",
+    "glm-5.3-flash: worker-ai HTTP 500",
+    "kimi-k2.6: worker-ai HTTP 500",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty",
+    "gpt-oss-120b: empty",
+    "qwen3-30b: empty",
+    "glm-5.3-flash: worker-ai HTTP 500",
+    "kimi-k2.6: worker-ai HTTP 500",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty",
+    "gpt-oss-120b: empty"
+   ]
+  },
+  {
+   "at": "2026-11-17T19:19:50.543Z",
+   "examined": 3,
+   "proposed": 1,
+   "accepted": 0,
+   "uncertain": 1,
+   "rejected": 0,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": [
+    "gemma-4: empty",
+    "qwen3-30b: empty",
+    "glm-5.3-flash: worker-ai HTTP 500",
+    "kimi-k2.6: worker-ai HTTP 500",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty",
+    "qwen3-30b: empty",
+    "glm-5.3-flash: worker-ai HTTP 500",
+    "kimi-k2.6: worker-ai HTTP 500",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty",
+    "deepseek-v4-flash: worker-ai HTTP 500",
+    "nemotron-3: empty"
+   ]
+  },
+  {
+   "at": "2026-11-17T19:30:56.255Z",
+   "examined": 3,
+   "proposed": 0,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 0,
+   "none": 3,
+   "panel_failures": 0,
+   "failures": []
+  },
+  {
+   "at": "2026-11-18T11:14:33.506Z",
+   "examined": 3,
+   "proposed": 0,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 0,
+   "none": 3,
+   "panel_failures": 0,
+   "failures": [
+    "glm-5.3-flash: worker-ai HTTP 502",
+    "kimi-k2.6: worker-ai HTTP 502",
+    "deepseek-v4-flash: worker-ai HTTP 502"
+   ]
+  },
+  {
+   "at": "2026-11-18T11:24:54.426Z",
+   "examined": 3,
+   "proposed": 1,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 1,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": [
+    "glm-5.3-flash: worker-ai HTTP 502 5035: Model @cf/zai-org/glm-5.3-flash is not available on the Workers Free plan. Upgrade t",
+    "kimi-k2.6: worker-ai HTTP 502 5035: Model @cf/moonshotai/kimi-k2.6 is not available on the Workers Free plan. Upgrade to",
+    "deepseek-v4-flash: worker-ai HTTP 502 5035: Model @cf/deepseek-ai/deepseek-v4-flash-0731 is not available on the Workers Free pl",
+    "nemotron-3: unparseable"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:55:28.790Z",
+   "examined": 3,
+   "proposed": 0,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": []
+  }
+ ],
+ "metrics": {
+  "measured": false,
+  "pairs": []
+ },
+ "at": "2026-11-18T13:55:28.790Z"
+}
