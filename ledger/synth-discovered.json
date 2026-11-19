@@ -1,6 +1,6 @@
 {
  "schema": "ps-synth-discovered/1",
- "at": "2026-11-19T03:10:56.784Z",
+ "at": "2026-11-19T03:13:54.391Z",
  "entries": [
   {
    "id": "kmc-ors-zinc",
@@ -345,6 +345,22 @@
    "event": "rejected: red team",
    "detail": [
     "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:13:42.107Z",
+   "id": "tarl-cash-graduation",
+   "event": "rejected: red team",
+   "detail": [
+    "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-19T03:13:54.391Z",
+   "id": "tarl-hypertension",
+   "event": "rejected: red team",
+   "detail": [
+    "a cited paper does not support what is claimed"
    ]
   }
  ]
