@@ -26,16 +26,16 @@
    "outcome": "no sources: Europe PMC HTTP 500"
   },
   "graduation": {
-   "at": "2026-11-17T19:04:41.635Z",
-   "outcome": "no change proposed: None of the sources provide information that contradicts or updates the entry."
+   "at": "2026-11-19T14:24:35.317Z",
+   "outcome": "no sources: Europe PMC HTTP 503"
   },
   "helmets": {
-   "at": "2026-11-17T19:04:41.635Z",
-   "outcome": "rejected"
+   "at": "2026-11-19T14:24:35.317Z",
+   "outcome": "no sources: Europe PMC HTTP 503"
   },
   "hypertension": {
-   "at": "2026-11-17T19:04:41.635Z",
-   "outcome": "no change proposed: The entry already agrees with the sources, which describe various health studies and outcomes within the Kaiser Permanente Northern California system, but do not provide information that contradicts o"
+   "at": "2026-11-19T14:24:35.317Z",
+   "outcome": "rejected"
   },
   "immunisation": {
    "at": "2026-11-17T19:19:50.543Z",
@@ -277,6 +277,35 @@
    "status": "rejected",
    "reason": "evidence check failed: the old text is not found exactly once in the source file",
    "at": "2026-11-18T11:24:54.426Z"
+  },
+  {
+   "id": "1fdac3941d38",
+   "entry": "hypertension",
+   "field": "claim",
+   "old": "A single simple drug protocol, with follow-up and tracking of who is controlled, raises blood-pressure control far above usual care.",
+   "new": "A multi‑disease, integrated population‑health management model, such as that used by Kaiser Permanente Northern California, is associated with significantly lower mortality for heart disease and other leading causes, indicating that system‑level strategies can greatly improve outcomes.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42558962",
+    "title": "Associations of multiple evidence-based care strategies with disease mortality, life expectancy, and disparities in the United States."
+   },
+   "quote": "Among 3 944 173 persons demographics‑adjusted mortality was significantly lower for ... heart disease (0.69; 0.67‑0.71) ... Kaiser Permanente, Northern California vs United States.",
+   "why": "The source attributes the improvement to a comprehensive integrated health‑system model, not to a single simple drug protocol.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the quote is not in the abstract",
+     "replacement is much longer than the original"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the quote is not in the abstract; replacement is much longer than the original",
+   "at": "2026-11-19T14:24:35.317Z"
   }
  ],
  "health": {
@@ -349,7 +378,7 @@
    "last": "unparseable"
   },
   "gpt-oss-120b": {
-   "calls": 5,
+   "calls": 6,
    "errors": 2,
    "last": "empty"
   },
@@ -520,11 +549,23 @@
    "none": 2,
    "panel_failures": 0,
    "failures": []
+  },
+  {
+   "at": "2026-11-19T14:24:35.317Z",
+   "examined": 3,
+   "proposed": 1,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 1,
+   "pending": 0,
+   "none": 0,
+   "panel_failures": 0,
+   "failures": []
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-18T13:55:28.790Z"
+ "at": "2026-11-19T14:24:35.317Z"
 }
