@@ -9,6 +9,8 @@ import { bcaBlock } from './bca.js';
 import { unknownsBlock } from './unknowns.js';
 import { ensembleBlock } from './ensemble-view.js';
 import { FOOTER } from './publish.js';
+import { RELEASES } from './releases.gen.js';
+import { digest } from '../../vendor/ultrastable/core/progress/index.js';  // PROGRESS-1: counts of recorded changes per period, from the core's shared rule
 import { AUDIENCES, audience } from './audiences.js';
 import { domainMeta } from './domains-meta.js';
 import { embedSnippet, datasetLd } from './export.js';
@@ -195,11 +197,25 @@ ${ui.section({ id: 'solutions', title: 'Solutions', body: d.solutions.length ? u
 }
 
 // ---------------------------------------------------------------- home, audiences, compare, search, trust pages
+const changeEvents = c => c.changes.filter(x => x && x.at).map((x, n) => ({ id: `${x.at}#${x.kind}:${x.id ?? x.problem ?? n}`, at: x.at, system: 'changes', kind: 'update', title: String(x.kind) }));
+export function changeCounts(c, now = Date.now()) {
+  const ev = changeEvents(c);
+  return { day: digest(ev, { now, period: 'daily' }).count, week: digest(ev, { now, period: 'weekly' }).count, month: digest(ev, { now, period: 'monthly' }).count };
+}
+// PROGRESS-1: the home page says what is new, from the newest release and the loop's recorded changes. No number here is typed.
+function whatsNew(c, now = Date.now()) {
+  const r = RELEASES.releases[0], n = changeCounts(c, now);
+  const parts = r ? Object.keys(r.counts).filter(k => r.counts[k]).map(k => `${r.counts[k]} new ${k === 'syntheses' ? 'combinations' : k === 'insights' ? 'red-team findings' : k}`) : [];
+  return ui.section({ id: 'new', title: 'What is new', body: `${r ? `<p>Release <a href="/releases#r-${esc(r.version)}">${esc(r.version)}</a> (${esc(r.date)})${r.first ? ', the first, holds the whole catalogue as it stood' : parts.length ? ': ' + esc(parts.join(', ')) : ''}.</p>` : '<p>No release has been cut yet.</p>'}
+<p class="m">The loop recorded ${n.day} change(s) in the last 24 hours, ${n.week} in the last 7 days and ${n.month} in the last 30 days. <a href="/changes">Every change</a> · <a href="/releases">Releases</a> · <a href="/releases.atom">Subscribe</a> · <a href="https://ultrastable.io/progress" rel="noopener">Progress across every Ultrastable system</a></p>` });
+}
+
 export function home(c, o) {
   const open = c.probs.filter(p => !(c.byProblem[p.id] || []).length), ready = c.sols.filter(s => s.impl && s.impl.score >= 7).slice(0, 6), top = c.probs.filter(p => p.ranked).slice(0, 5);
   const body = `${ui.hero({ title: 'What actually works, and how to do it', lede: 'An evidence-based encyclopedia of practical solutions to pressing problems. Every entry shows its sources, how strong the evidence is, what it costs and who can deliver it. Written and kept current by an automated loop, in the open.',
     search: SHELL.search, actions: [{ href: '/solutions?ready=ready', label: 'See solutions ready to implement' }, { href: '/catalogue', label: 'Browse the problem catalogue', alt: true }, { href: '/method', label: 'How we know', alt: true }] })}
 ${ui.stats([{ value: c.sols.length, label: 'solutions' }, { value: c.probs.length, label: 'problems' }, { value: c.domains.length, label: 'domains' }, { value: c.sols.filter(s => s.impl && s.impl.score >= 7).length, label: 'ready to implement' }, { value: open.length, label: 'problems with no solution yet' }])}
+${whatsNew(c)}
 ${ui.section({ id: 'who', title: 'Start from who you are', body: ui.cardGrid(AUDIENCES.map(a => ui.card({ title: a.name, href: '/for/' + a.id, body: a.goal, meta: a.who, hue: a.hue }))) })}
 ${ui.section({ id: 'ready', title: 'Ready to implement', body: `<p class="m">High evidence is not enough; these also have low cost, real-world scale and an existing way to deliver them.</p>${ui.cardGrid(ready.map(s => solCard(s, c)))}<p><a href="/solutions?ready=ready">All solutions ready to implement</a></p>` })}
 ${ui.section({ id: 'gaps', title: 'Largest gaps between the world and its targets', body: ui.list(top.map(p => `${pLink(p)} <span class="m">${esc(p.domain)} · gap ${gapPct(p)}% · ${(c.byProblem[p.id] || []).length} solution(s)</span>${ui.bar(gapPct(p), `Gap to target ${gapPct(p)} percent`)}`)) + '<p><a href="/problems">All problems</a></p>' })}

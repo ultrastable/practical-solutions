@@ -1,5 +1,5 @@
 {
- "commit": "091d29e789400381ae9ab46e1f570a9d1429f938",
+ "commit": "059423d816b8737c0a4c5c5b170a4a5ee26c3538",
  "files": {
   ".claude/settings.json": "db2a7917aac18605c5ba25c2bb717aacf61ddae27873766a7c0a51856b9dec43",
   ".cursor/rules/ultrastable.mdc": "5b85ce4a068a628916dac979af4bf4da49015fc4183bc4ce06a6ccbf9d22c479",
@@ -472,6 +472,9 @@
   "core/principles/principles.json": "55ad3c15d104921a7287a18476408c90bb6b99ebd6f1a20b6b2eff8d9ebe372f",
   "core/principles/principles.test.js": "9bb76c154b075c7200ecbed0832ec87c99b94dfdaa8bf62106496c4fc0e8bf07",
   "core/principles/render.js": "40b783e0d0510841f92f643e01238787e1623cbfd95c71000558d553ea50fcc5",
+  "core/progress/README.md": "e6f1de591bf9f63cc72b41388fadf22b9bb57b6e476cc653a090a3638b5a7968",
+  "core/progress/index.js": "c13b145f6bff673f373a3fd12875c5c8ef1245d88bd9d800eccdda1c0eabfe00",
+  "core/progress/progress.test.js": "fa2568f75c1fd4cb9fb964864b6cd1c1d9a990741f2726fc61201ff116a490df",
   "core/promote/README.md": "13da7de4491f15f6d88dae11e87029ccfc32493ccee94706dea7aa5d65a26b14",
   "core/promote/index.js": "db79f0e21f715cde14918cc369764001124182fd8ad0d66fc7a23925cc387636",
   "core/promote/migrations/0001_promote.sql": "34803099b0e5f46ece968075e29bee573ad0586b7f12370d88ce86be2ce340f7",
@@ -810,7 +813,7 @@
   "tools/EXTRACTED.md": "55657c07b0bb51bb3cbaa12c772d362aa61ec51df3a062a4f0f44680f8e28ac8",
   "tools/actions_budget.py": "24781a5549fe84d72e7b02a82dd1b31bc0083f3d567826925ca782c547cdb874",
   "tools/apply_migrations.py": "6c62122eddbb014a007ccb39b62ee851b3a6853e208575e7c708f5bd12c0e04a",
-  "tools/boundary.json": "bfb6bfcca899ad2ac27985952d0b4d2abca384bdac2423051ae577684c344b37",
+  "tools/boundary.json": "5032c6089b7aa31bb0232731268aae3e06d31ef1793965e2d0754af2b042f928",
   "tools/boundary_check.mjs": "a7f95a15a5cdfee2da5377801097e70223034c5c801069713024eecacbc8bd23",
   "tools/build_help.mjs": "4f3797d79a48f70c793435ac438b8ecfe1d19ddbbe37b33372ff4652e91587a9",
   "tools/build_migrations.mjs": "e08aa36a0e74bd8bce487b618475660e3b1d83cd98b362f94e26368b2e34be1d",
