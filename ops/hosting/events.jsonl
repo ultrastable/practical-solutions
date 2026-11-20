@@ -132,3 +132,4 @@
 {"at":"2026-11-20T18:25:05.865Z","kind":"host-drift","host":"cloudflare-gateway","subject":"tenant-ps-web","summary":"sha256 repo-to-host","data":{"script":"tenant-ps-web","field":"sha256","expected":"5e698c3fe16b577600c4b66b1703be644b340dd2d4a171ca608998d2aceecc97","observed":"45641be069e051c11ed767994d46c18b29fbda82248d203de2a86ada8a2fc360","direction":"repo-to-host"}}
 {"at":"2026-11-20T18:25:07.458Z","kind":"host-redeploy","host":"cloudflare-gateway","subject":"tenant-ps-web","summary":"redeploy requested","data":{"fields":["sha256"]}}
 {"at":"2026-11-20T18:25:32.520Z","kind":"host-expect","subject":"tenant-ps-web","summary":"deploy recorded as expected","data":{"sha256":"45641be069e051c11ed767994d46c18b29fbda82248d203de2a86ada8a2fc360"}}
+{"at":"2026-11-20T18:30:49.461Z","kind":"host-expect","subject":"tenant-ps-web","summary":"deploy recorded as expected","data":{"sha256":"a165c65efe241129840eec9a2ee847559574d63d200af08eb813d477f2ea1b61"}}
