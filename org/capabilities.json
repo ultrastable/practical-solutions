@@ -206,29 +206,93 @@
       "id": "glossary",
       "reference": "Wikipedia, Cochrane",
       "feature": "Glossary of terms used (WELLBY, grade, bright spot) linked from entries",
-      "probe": null,
-      "priority": 2
+      "probe": {
+        "path": "/glossary",
+        "text": "WELLBY"
+      }
     },
     {
       "id": "accessibility-statement",
       "reference": "GOV.UK, Our World in Data",
       "feature": "Accessibility statement with how to report a barrier",
-      "probe": null,
-      "priority": 3
+      "probe": {
+        "path": "/accessibility",
+        "text": "Report a barrier"
+      }
     },
     {
       "id": "datapackage",
       "reference": "Our World in Data",
       "feature": "Frictionless datapackage.json describing the CSV files and their fields",
-      "probe": null,
-      "priority": 2
+      "probe": {
+        "path": "/datapackage.json",
+        "text": "\"resources\""
+      }
     },
     {
       "id": "country-compare",
       "reference": "Our World in Data",
       "feature": "Compare two or more countries on problems and fit",
+      "probe": {
+        "path": "/country/compare",
+        "text": "Compare countries"
+      }
+    },
+    {
+      "id": "methodology-versioning",
+      "reference": "GiveWell, Cochrane",
+      "feature": "Versioned method page: what changed in the method and when",
       "probe": null,
       "priority": 2
+    },
+    {
+      "id": "data-dictionary",
+      "reference": "Our World in Data",
+      "feature": "Field-by-field data dictionary page for the JSON and CSV",
+      "probe": null,
+      "priority": 2
+    },
+    {
+      "id": "faq",
+      "reference": "GiveWell",
+      "feature": "Frequently asked questions with schema.org FAQPage markup",
+      "probe": null,
+      "priority": 3
+    },
+    {
+      "id": "problem-compare",
+      "reference": "Copenhagen Consensus",
+      "feature": "Compare problems side by side: gap, rank, solutions, evidence",
+      "probe": null,
+      "priority": 2
+    },
+    {
+      "id": "solution-checklist",
+      "reference": "J-PAL",
+      "feature": "Printable implementation checklist per solution from what it takes and first test",
+      "probe": null,
+      "priority": 2
+    },
+    {
+      "id": "random-entry",
+      "reference": "Wikipedia",
+      "feature": "Random entry link for discovery",
+      "probe": null,
+      "priority": 3
+    },
+    {
+      "id": "recent-by-domain-feeds",
+      "reference": "Wikipedia, Cochrane",
+      "feature": "Per-domain feeds of new and changed entries",
+      "probe": null,
+      "priority": 2
+    },
+    {
+      "id": "source-index",
+      "reference": "Cochrane, Wikipedia",
+      "feature": "Index of every cited source with the entries that cite it",
+      "probe": null,
+      "priority": 1
     }
   ]
 }

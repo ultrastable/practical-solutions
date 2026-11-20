@@ -1,8 +1,8 @@
 {
-  "at": "2026-11-20T18:16:07.042Z",
-  "total": 22,
-  "shipped": 18,
-  "coverage": 0.818,
+  "at": "2026-11-20T18:22:28.032Z",
+  "total": 35,
+  "shipped": 22,
+  "coverage": 0.629,
   "deferred": [
     {
       "id": "pwa-offline",
@@ -21,5 +21,60 @@
       "reason": "Owned by the Ask and multilingual work (I18N-1)."
     }
   ],
-  "gaps": []
+  "gaps": [
+    {
+      "id": "source-index",
+      "priority": 1,
+      "feature": "Index of every cited source with the entries that cite it",
+      "reference": "Cochrane, Wikipedia"
+    },
+    {
+      "id": "data-dictionary",
+      "priority": 2,
+      "feature": "Field-by-field data dictionary page for the JSON and CSV",
+      "reference": "Our World in Data"
+    },
+    {
+      "id": "entry-history",
+      "priority": 2,
+      "feature": "Per-entry revision history: what changed and when, with the reason",
+      "reference": "Wikipedia"
+    },
+    {
+      "id": "methodology-versioning",
+      "priority": 2,
+      "feature": "Versioned method page: what changed in the method and when",
+      "reference": "GiveWell, Cochrane"
+    },
+    {
+      "id": "problem-compare",
+      "priority": 2,
+      "feature": "Compare problems side by side: gap, rank, solutions, evidence",
+      "reference": "Copenhagen Consensus"
+    },
+    {
+      "id": "recent-by-domain-feeds",
+      "priority": 2,
+      "feature": "Per-domain feeds of new and changed entries",
+      "reference": "Wikipedia, Cochrane"
+    },
+    {
+      "id": "solution-checklist",
+      "priority": 2,
+      "feature": "Printable implementation checklist per solution from what it takes and first test",
+      "reference": "J-PAL"
+    },
+    {
+      "id": "faq",
+      "priority": 3,
+      "feature": "Frequently asked questions with schema.org FAQPage markup",
+      "reference": "GiveWell"
+    },
+    {
+      "id": "random-entry",
+      "priority": 3,
+      "feature": "Random entry link for discovery",
+      "reference": "Wikipedia"
+    }
+  ]
 }
