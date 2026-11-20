@@ -9,7 +9,7 @@ name: translate
 on:
   schedule: [{ cron: '47 4 * * *' }]
   workflow_dispatch:
-    inputs: { langs: { description: 'comma-separated language codes (default: the two least covered)', default: '' } }
+    inputs: { langs: { description: 'comma-separated language codes (default: the two least covered)', default: '' }, calls: { description: 'model calls per language (25 segments each)', default: '12' } }
 concurrency: { group: translate, cancel-in-progress: false }
 permissions: { contents: write, actions: write, id-token: write }
 env:
@@ -28,7 +28,7 @@ jobs:
       - name: rebuild the Ask index
         run: node tools/askindex.mjs
       - name: translate the next languages
-        run: node --no-warnings tools/translate.mjs --calls 12 --max-langs 2 ${{ github.event.inputs.langs && format('--langs {0}', github.event.inputs.langs) || '' }} | tee translate.json
+        run: node --no-warnings tools/translate.mjs --calls ${{ github.event.inputs.calls || 12 }} --max-langs 2 ${{ github.event.inputs.langs && format('--langs {0}', github.event.inputs.langs) || '' }} | tee translate.json
       - run: npm test
       - name: commit
         run: |
