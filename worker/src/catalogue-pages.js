@@ -7,6 +7,7 @@ import { trendSvg } from './views.js';
 import { SCAN } from './problem-scan.gen.js';
 import { slug } from './catalog.js';
 import { figure, rate, machine } from './numfmt.js';
+import { section as uiaSection } from './uia-links.js';
 
 const { esc } = ui, PAGE_SIZE = 24, SRC = SCAN.sources;
 export const entries = (c, scan = SCAN) => scan.entries.map(e => ({ ...e, dslug: slug(e.domain), sought: !(c && c.sols || []).some(s => (s.problem_ids || []).includes(e.id)) }));
@@ -46,6 +47,7 @@ export function entryPage(e, c, o, page) {
 ${ui.keyMessages([e.m ? `<b>What the source shows:</b> ${esc(vector(e))}; ${esc(dir(e))}; ${esc(trend(e))}.` : '<b>What the source shows:</b> the source lists this indicator; the loop has not read a world figure for it.', sols.length ? `<b>What can be done:</b> ${sols.map(x => `<a href="/solutions/${esc(x.id)}">${esc(x.title)}</a>`).join(', ')}.` : '<b>What can be done:</b> no reviewed solution is listed. The search for evidence-backed solutions is open.'])}
 ${e.m && trendSvg(e.m, e.title) ? ui.section({ id: 'trend', title: 'Trend', body: trendSvg(e.m, e.title) + `<p class="m">Two readings from the source, not a forecast.</p>` }) : ''}
 ${ui.section({ id: 'source', title: 'Where this came from', body: ui.summaryList([['Source', `<a href="${esc(s.home || '#')}">${esc(s.name || e.source)}</a>`], ['Source code', esc(e.code)], ['Source page', `<a href="${esc(e.page)}">${esc(e.page)}</a>`], ['Licence', esc(s.licence || '')], ['Found by rule', e.matched ? esc(`indicator wording contains "${e.matched}"`) : 'listed in a problem taxonomy'], ['First listed', esc(e.first_seen)], ['Direction', esc(dir(e))], ['Latest world value', e.m ? esc(`${figure(e.m.value, e.title)} (${e.m.year})`) : ''], ['Earlier value', e.m && e.m.base != null ? esc(`${figure(e.m.base, e.title)} (${e.m.base_year})`) : ''], ['Pace of change', e.m && e.m.pace != null ? esc(paceWords(e)) : ''], ['Rank by pace', e.rank ? String(e.rank) : '']]) })}
+${uiaSection(e.id, esc) ? ui.section({ id: 'related', title: 'Related references', body: uiaSection(e.id, esc) }) : ''}
 ${ui.section({ id: 'limits', title: 'Limits', body: `<p>This entry says what a public statistics source measures. It does not say how many people are harmed, why the figure moves, or what would change it. ${esc(SCAN.rank_rule || '')}</p><p><a href="/catalogue/${esc(e.id)}.json">This entry as JSON</a></p>` })}`;
   return page('/catalogue/' + e.id, o, e.title, `${e.title}: what ${s.name || 'a public source'} shows, and whether a solution is listed yet.`, body);
 }
