@@ -3,7 +3,7 @@
 // I18N-1 loop: renders every page of the site in the source language, cuts the text into segments (core/i18n), translates the missing ones with the free
 // model route, keeps only translations that pass the deterministic checks, and writes ledger/i18n/<lang>/<shard>.json plus ledger/i18n/manifest.json
 // (which languages are live, and the shard hashes the Worker's tick copies). Machine-translated, labelled as such on every page.
-//   node tools/translate.mjs [--langs es,fr] [--calls 30] [--batch 25] [--stats] [--check]
+//   node tools/translate.mjs [--langs es,fr] [--calls 30] [--batch 25] [--minutes 20] [--stats]
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { LANGS, segmentsOf, segKey, shardOf, translateBatch, MT_KEY } from '../vendor/ultrastable/core/i18n/index.js';
@@ -48,13 +48,13 @@ const generator = () => async ({ system, user, maxTokens }) => {
   throw new Error('no model route answered');
 };
 
-export async function run({ langs, calls = 30, batch = 25, generate = generator(), pages, now = new Date().toISOString(), dir = DIR }) {
+export async function run({ langs, calls = 30, batch = 25, generate = generator(), pages, now = new Date().toISOString(), dir = DIR, deadline = Infinity }) {
   const man = existsSync(`${dir}/manifest.json`) ? JSON.parse(readFileSync(`${dir}/manifest.json`, 'utf8')) : { schema: 'ps-i18n/1', langs: {} };
   const report = {};
-  for (const lang of langs) {
+  await Promise.all(langs.map(async lang => {   // languages run side by side: the model route is the slow part, not the machine
     const keep = new Set(pages.keys()); let dict = Object.fromEntries(Object.entries(load(lang, dir)).filter(([k]) => keep.has(k)));   // translations of text that no longer exists are dropped
     const todo = [...pages.values()].filter(e => !dict[e.key]).sort((a, b) => b.pages - a.pages || a.text.localeCompare(b.text)), stat = { before: Object.keys(dict).length, rejected: {}, calls: 0 };
-    for (let i = 0; i < calls && i * batch < todo.length; i++) {
+    for (let i = 0; i < calls && i * batch < todo.length && Date.now() < deadline; i++) {
       const seg = todo.slice(i * batch, (i + 1) * batch); stat.calls++;
       let r; try { r = await translateBatch({ generate, lang, segments: seg.map(s => s.text) }); } catch (e) { stat.error = String(e.message || e); break; }
       Object.assign(dict, r.ok); for (const x of r.rejected) stat.rejected[x.why] = (stat.rejected[x.why] || 0) + 1;
@@ -63,7 +63,7 @@ export async function run({ langs, calls = 30, batch = 25, generate = generator(
     const shards = save(lang, dict, dir), cov = coverage(pages, dict);
     man.langs[lang] = { live: cov >= LIVE_AT, coverage: Math.round(cov * 1000) / 1000, segments: Object.keys(dict).length, of: pages.size, shards, at: now };
     report[lang] = { ...stat, after: Object.keys(dict).length, coverage: man.langs[lang].coverage, live: man.langs[lang].live };
-  }
+  }));
   man.at = now; man.source = 'en'; man.total_segments = pages.size;
   mkdirSync(dir, { recursive: true }); writeFileSync(`${dir}/manifest.json`, JSON.stringify(man, null, 1) + '\n');
   return report;
@@ -77,7 +77,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // Rollout order: languages that are not yet live first (in LANGS order), then the least covered; at most --max-langs per run.
   const all = LANGS.map(l => l.code).filter(c => c !== 'en'), cov = c => (man.langs[c] || { coverage: 0 }).coverage;
   const langs = arg('langs') ? arg('langs').split(',') : [...all].sort((a, b) => cov(a) - cov(b) || all.indexOf(a) - all.indexOf(b)).slice(0, Number(arg('max-langs', 2)));
-  const out = await run({ langs, calls: Number(arg('calls', 30)), batch: Number(arg('batch', 25)), pages });
+  const out = await run({ langs, calls: Number(arg('calls', 30)), batch: Number(arg('batch', 25)), pages, deadline: Date.now() + Number(arg('minutes', 20)) * 60e3 });
   console.log(JSON.stringify(out));
   if (Object.values(out).every(r => r.error && r.after === r.before)) { console.error('no language progressed'); process.exit(1); }
 }
