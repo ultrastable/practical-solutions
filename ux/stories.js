@@ -63,6 +63,8 @@ export const STORIES = [
     steps: [v('/sitemap.xml'), x({ type: 'xml', text: ['/solutions/kmc', '/problems/tb', '/for/implementers'] })] },
   { id: 'DEV-3', who: 'developers', want: 'see every endpoint and the rule for reusing claims', so: 'I integrate correctly', covers: ['apiPage', 'table', 'callout'],
     steps: [v('/api'), x({ heading: 'Data and API', text: ['Endpoints', 'Keep the labels'] })] },
+  { id: 'FUN-VIEWS-1', who: 'funders', want: 'see solutions ranked by benefit per dollar, and where evidence is missing', so: 'I fund what buys the most and I know which gaps need research', covers: ['table'],
+    steps: [v('/ranking'), x({ heading: 'Benefit-cost ranking', text: ['Cautious', 'Chance of net benefit'] }), v('/evidence-map'), x({ heading: 'Evidence map', text: 'Problems with no solution' })] },
   { id: 'RES-CITE-1', who: 'researchers', want: 'export a citation and embed a card for a solution', so: 'I cite it in my reference manager and show it with its label and limit on my own page', covers: ['solutionPage', 'section'],
     steps: [v('/solutions/kmc'), x({ heading: 'Cite, export and embed', link: '^/solutions/kmc\\.bib$' }), v('/solutions/kmc.bib'), x({ text: '@misc' }), v('/embed/solutions/kmc'), x({ text: ['Main limit', 'Read the full entry'] })] },
   { id: 'DEV-4', who: 'developers', want: 'fetch one problem with its linked solutions', so: 'I do not download everything', covers: ['json-entity'],

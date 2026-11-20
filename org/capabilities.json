@@ -16,11 +16,11 @@
     { "id": "structured-data", "reference": "Our World in Data", "feature": "schema.org Dataset markup on the data page", "probe": { "path": "/api", "text": "\"@type\":\"Dataset\"" } },
     { "id": "pwa-offline", "reference": "Wikipedia app", "feature": "Installable, offline reading (manifest, service worker)", "probe": null, "priority": 3 },
     { "id": "og-images", "reference": "Our World in Data", "feature": "Per-page share image (PNG) for social previews", "probe": null, "priority": 3 },
-    { "id": "interactive-charts", "reference": "Our World in Data", "feature": "Indicator trend charts per problem (script-free SVG from catalogue history)", "probe": null, "priority": 1 },
+    { "id": "interactive-charts", "reference": "Our World in Data", "feature": "Indicator trend charts per problem (script-free SVG from catalogue history)", "probe": { "path": "/catalogue/wb-sh-dyn-mort", "text": "Two readings from the source" } },
     { "id": "subscribe", "reference": "GiveWell, J-PAL", "feature": "Subscribe to changes by email, double opt-in", "probe": null, "priority": 2 },
-    { "id": "evidence-map", "reference": "Cochrane, J-PAL", "feature": "Evidence gap map: problems by solution evidence label", "probe": null, "priority": 1 },
+    { "id": "evidence-map", "reference": "Cochrane, J-PAL", "feature": "Evidence gap map: problems by solution evidence label", "probe": { "path": "/evidence-map", "text": "Evidence map" } },
     { "id": "argument-map", "reference": "Kialo", "feature": "Pro and con claims per solution with sources", "probe": null, "priority": 2 },
-    { "id": "cost-effectiveness-table", "reference": "GiveWell, Copenhagen Consensus", "feature": "Sortable benefit-cost ranking across solutions", "probe": null, "priority": 1 },
+    { "id": "cost-effectiveness-table", "reference": "GiveWell, Copenhagen Consensus", "feature": "Sortable benefit-cost ranking across solutions", "probe": { "path": "/ranking", "text": "Benefit-cost ranking" } },
     { "id": "translations", "reference": "Wikipedia", "feature": "Translated entry pages", "probe": null, "priority": 2 },
     { "id": "print-view", "reference": "Wikipedia", "feature": "Print stylesheet for entries", "probe": null, "priority": 3 }
   ]
