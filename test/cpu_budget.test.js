@@ -28,7 +28,7 @@ test('stored results are used for refined models, so the request path never scor
 });
 test('every page and data route renders within the CPU budget (catalogue build included)', () => {
   const t0 = process.hrtime.bigint(), c = buildCatalog({ problems: null, solutions: SOLUTIONS });
-  const paths = ['/', '/problems', '/solutions', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/api', '/about', '/index.json', '/solutions.csv', '/llms.txt', '/sitemap.xml', ...c.sols.map(s => '/solutions/' + s.id), ...c.probs.map(p => '/problems/' + p.id)];
+  const paths = ['/', '/problems', '/solutions', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/api', '/about', '/index.json', '/solutions.csv', '/problems.csv', '/catalogue.csv', '/openapi.json', '/llms.txt', '/sitemap.xml', ...c.sols.map(s => '/solutions/' + s.id), ...c.probs.map(p => '/problems/' + p.id)];
   const slow = [];
   // Each route is timed as the best of three calls, so a one-off GC or JIT pause on a loaded runner is not read as route cost; the Monte Carlo engine costs ~40 ms on EVERY call and still fails.
   // first pass is cold (JIT, lazy init in Node): 30 ms; second pass is the warm isolate: 8 ms. The Monte Carlo engine cost ~40 ms per estimate.

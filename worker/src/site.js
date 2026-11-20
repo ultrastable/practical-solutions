@@ -18,6 +18,7 @@ import * as SY from './syntheses-pages.js';
 import { RELEASES } from './releases.gen.js';
 import * as CAT from './catalogue-pages.js';
 import { SCAN } from './problem-scan.gen.js';
+import * as X from './export.js';
 
 const { esc } = ui;
 export const HEADERS = { ...SECURITY_HEADERS, 'cache-control': 'public, max-age=300' };
@@ -44,8 +45,13 @@ export function solutionsCsv(c, o) {
   return [head, ...c.sols.map(s => [s.id, s.title, s.domains.join('; '), s.label, s.design, s.impl ? s.impl.score : '', s.impl ? s.impl.band : '', s.impl ? s.impl.cost : '', s.impl ? s.impl.adoption : '', s.impl ? s.impl.channel || '' : '', o + '/solutions/' + s.id])].map(r => r.map(csvCell).join(',')).join('\n') + '\n';
 }
 
+export function problemsCsv(c, o) {
+  const head = ['id', 'title', 'domain', 'indicator', 'value', 'year', 'target', 'gap_share', 'rank', 'solutions_listed', 'url'];
+  return [head, ...c.probs.map(p => [p.id, p.title, p.domain, p.ind, p.value ?? '', p.year ?? '', p.target ?? '', p.ranked ? p.shortfall : '', p.rank ?? '', (c.byProblem[p.id] || []).length, o + '/problems/' + p.id])].map(r => r.map(csvCell).join(',')).join('\n') + '\n';
+}
+
 export function llmsTxt(c, o) {
-  return `# Practical Solutions\n\n> An evidence-based encyclopedia of practical solutions to pressing problems. ${c.sols.length} solutions, ${c.probs.length} problems, ${c.domains.length} domains. Each solution carries an evidence label, sources, implementability and limits. Keep the label and limits when quoting.\n\n## Data\n- [Whole catalogue](${o}/index.json)\n- [Solutions as CSV](${o}/solutions.csv)\n- [Solution entry](${o}/solutions/{id}.json)\n- [Problem entry](${o}/problems/{id}.json)\n- [Changes feed](${o}/feed.json)\n\n## Pages\n- [Method](${o}/method)\n- [Data and API](${o}/api)\n\n## Solutions\n${c.sols.map(s => `- [${s.title}](${o}/solutions/${s.id}): ${s.label}; ${s.impl ? s.impl.band : 'not scored'}`).join('\n')}\n`;
+  return `# Practical Solutions\n\n> An evidence-based encyclopedia of practical solutions to pressing problems. ${c.sols.length} solutions, ${c.probs.length} problems, ${c.domains.length} domains. Each solution carries an evidence label, sources, implementability and limits. Keep the label and limits when quoting.\n\n## Data\n- [Whole catalogue](${o}/index.json)\n- [Solutions as CSV](${o}/solutions.csv)\n- [Problems as CSV](${o}/problems.csv)\n- [Catalogue as CSV](${o}/catalogue.csv)\n- [OpenAPI description](${o}/openapi.json)\n- [Citation formats](${o}/solutions/{id}.bib, .ris, .csl.json)\n- [Solution entry](${o}/solutions/{id}.json)\n- [Problem entry](${o}/problems/{id}.json)\n- [Changes feed](${o}/feed.json)\n\n## Pages\n- [Method](${o}/method)\n- [Data and API](${o}/api)\n\n## Solutions\n${c.sols.map(s => `- [${s.title}](${o}/solutions/${s.id}): ${s.label}; ${s.impl ? s.impl.band : 'not scored'}`).join('\n')}\n`;
 }
 
 function leadsPage(c, o) {
@@ -105,6 +111,9 @@ function methodPage(c, o) {
 }
 
 const h = (b, s = 200) => new Response(b, { status: s, headers: HEADERS });
+const embedHeaders = () => { const { 'x-frame-options': _x, ...rest } = HEADERS; return { ...rest, 'content-security-policy': X.EMBED_CSP }; };
+const text = (b, type) => new Response(b, { headers: { 'content-type': type + '; charset=utf-8', 'cache-control': 'public, max-age=300' } });
+const csv = (name, b) => new Response(b, { headers: { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': `inline; filename="${name}"`, 'cache-control': 'public, max-age=300' } });
 const json = (o, s = 200) => Response.json(o, { status: s, headers: { 'cache-control': 'public, max-age=300' } });
 
 // Returns a Response or null when the path is not an encyclopedia page.
@@ -131,6 +140,14 @@ export function route(u, c) {
   if (p === '/llms.txt') return new Response(llmsTxt(c, o), { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'public, max-age=300' } });
   if (p === '/sitemap.xml') return new Response(sitemap(c, o), { headers: { 'content-type': 'application/xml' } });
   if (p === '/robots.txt') return new Response(`User-agent: *\nAllow: /\nSitemap: ${o}/sitemap.xml\n`, { headers: { 'content-type': 'text/plain' } });
+  if (p === '/openapi.json') return json(X.openapi(o));
+  if (p === '/problems.csv') return csv('problems.csv', problemsCsv(c, o));
+  if (p === '/catalogue.csv') return csv('catalogue.csv', CAT.csvText(c, o));
+  if (p === '/oembed') { const um = /\/solutions\/([a-z0-9-]+)\/?$/.exec(new URL(u.searchParams.get('url') || 'https://x/', o).pathname), x = um && c.sols.find(y => y.id === um[1]); return x ? json(X.oembed(x, o)) : json({ error: 'not found' }, 404); }
+  { const em = /^\/embed\/solutions\/([a-z0-9-]+)$/.exec(p), x = em && c.sols.find(y => y.id === em[1]); if (em) return x ? new Response(X.embedPage(x, o), { headers: embedHeaders() }) : h(P.notFound(c, o, p), 404); }
+  { const cm = /^\/(solutions|problems)\/([a-z0-9-]+)\.(bib|ris|csl\.json)$/.exec(p);
+    if (cm) { const kind = cm[1] === 'solutions' ? 'solution' : 'problem', x = (kind === 'solution' ? c.sols : c.probs).find(y => y.id === cm[2]); if (!x) return json({ error: 'not found' }, 404);
+      const e = X.entryOf(kind, x); return cm[3] === 'bib' ? text(X.bibtex(e, o), 'application/x-bibtex') : cm[3] === 'ris' ? text(X.ris(e, o), 'application/x-research-info-systems') : json(X.csl(e, o)); } }
   let m;
   const nf = () => h(P.notFound(c, o, p), 404), nfj = () => json({ error: 'not found' }, 404);
   if ((m = /^\/problems\/([a-z0-9-]+)(\.json)?$/.exec(p))) { const x = c.probs.find(y => y.id === m[1]); return m[2] ? (x ? json(problemJson(x, c, o)) : nfj()) : x ? h(P.problemPage(x, c, o)) : nf(); }

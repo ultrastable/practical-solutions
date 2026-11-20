@@ -11,6 +11,7 @@ import { ensembleBlock } from './ensemble-view.js';
 import { FOOTER } from './publish.js';
 import { AUDIENCES, audience } from './audiences.js';
 import { domainMeta } from './domains-meta.js';
+import { embedSnippet, datasetLd } from './export.js';
 import { STORIES, storiesFor } from '../../ux/stories.js';
 
 const { esc } = ui;
@@ -85,6 +86,7 @@ registerSection('solution', { id: 'evidence', title: 'Evidence and sources', ord
 <p class="m">Verification: ${esc(s.verified)}${s.checkable ? ' The loop re-checks the quoted numbers against the paper abstract every day.' : ' No automatic check is defined for this entry yet, so the figures are the source\'s own, unconfirmed here.'}</p>`; } });
 registerSection('solution', { id: 'limits', title: 'Limits', order: 60, render: s => `<p>${esc(s.limits)}</p>` });
 registerSection('solution', { id: 'related', title: 'See also', order: 70, render: (s, c) => { const r = c.related(s); return r.length ? ui.cardGrid(r.map(x => solCard(x, c))) : ''; } });
+registerSection('solution', { id: 'reuse', title: 'Cite, export and embed', order: 95, render: (s, c, o) => `<p>Cite it in your reference manager: <a href="${esc(sUrl(s))}.bib">BibTeX</a> · <a href="${esc(sUrl(s))}.ris">RIS</a> · <a href="${esc(sUrl(s))}.csl.json">CSL-JSON</a>.</p><p>Embed a card with the label and main limit on your own page:</p>${ui.cite(embedSnippet(s, o))}` });
 registerSection('solution', { id: 'use', title: 'Use and cite this entry', order: 90, render: (s, c, o) => `<p>Permanent link: <a href="${esc(sUrl(s))}">${esc(o + sUrl(s))}</a></p>${ui.cite(citation(s.title, sUrl(s), o))}
 <p><a href="${esc(sUrl(s))}.json">This entry as JSON</a> · <a href="/compare?ids=${esc(s.id)}">Compare with others</a> · <a href="${esc(correctionHref(s.title, sUrl(s)))}">Report an error or suggest a correction</a></p>` });
 
@@ -272,11 +274,11 @@ ${ui.section({ id: 'who', title: 'Who it is for', body: ui.list(AUDIENCES.map(a 
 
 export function apiPage(c, o) {
   const rows = [['/index.json', 'JSON', 'The whole catalogue: problems, solutions, labels, implementability, sources.'], ['/solutions.csv', 'CSV', 'One row per solution, for spreadsheets.'], ['/solutions/{id}.json', 'JSON', 'One solution with its sources.'],
-    ['/problems/{id}.json', 'JSON', 'One problem with its gap and its solutions.'], ['/search.json?q=', 'JSON', 'Search results.'], ['/feed.xml, /feed.json', 'RSS, JSON Feed', 'Every automatic change.'], ['/sitemap.xml', 'XML', 'Every page.'], ['/llms.txt', 'Text', 'A short description for language models.'], ['/metrics.json', 'JSON', 'Aggregate reach counters.']];
+    ['/problems/{id}.json', 'JSON', 'One problem with its gap and its solutions.'], ['/search.json?q=', 'JSON', 'Search results.'], ['/feed.xml, /feed.json', 'RSS, JSON Feed', 'Every automatic change.'], ['/sitemap.xml', 'XML', 'Every page.'], ['/problems.csv, /catalogue.csv', 'CSV', 'One row per problem; one row per catalogued indicator.'], ['/solutions/{id}.bib, .ris, .csl.json', 'BibTeX, RIS, CSL-JSON', 'Citation export for a reference manager (also /problems/{id}.bib, .ris).'], ['/embed/solutions/{id}, /oembed?url=', 'HTML, oEmbed', 'A card for an iframe that keeps the label and the main limit.'], ['/openapi.json', 'OpenAPI 3.1', 'A machine-readable description of these endpoints.'], ['/llms.txt', 'Text', 'A short description for language models.'], ['/metrics.json', 'JSON', 'Aggregate reach counters.']];
   const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Data and API' }])}<h1>Data and API</h1><p class="lede">The same facts the pages show are available as data, with labels and sources intact. No key, no sign-up, no rate limit beyond fair use.</p>
 ${ui.table({ caption: 'Endpoints', head: ['Path', 'Format', 'What it returns'], rows: rows.map(r => [`<code>${esc(r[0])}</code>`, esc(r[1]), esc(r[2])]) })}
 ${ui.callout({ tone: 'warn', title: 'Keep the labels', body: '<p>When you reuse a claim, keep its <code>label</code> and <code>limits</code> with it. A claim without its evidence label is not what this site says. Entries are licensed for reuse with attribution; cite the permanent link.</p>' })}
 ${ui.section({ id: 'ex', title: 'Example', body: `<p>One solution:</p>${ui.cite(`curl ${o}/solutions/kmc.json`)}<p>Only the fields an agent needs to decide:</p>${ui.cite('jq \'.solutions[] | select(.implementability.score >= 7) | {id, label, url}\' index.json')}` })}`;
-  return render('/api', o, { title: `Data and API | ${SITE}`, description: 'Read the whole catalogue as JSON, CSV or a feed.', body });
+  return render('/api', o, { jsonld: datasetLd(o), title: `Data and API | ${SITE}`, description: 'Read the whole catalogue as JSON, CSV or a feed.', body });
 }
 export { AUDIENCES, audience, STORIES };
