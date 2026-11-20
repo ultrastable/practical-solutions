@@ -7,7 +7,8 @@
 //   4. append every change to a capped changelog
 // Self-contained and injectable: `store` has get/put (a KV namespace fits), `fetchFn` is fetch. No model calls, no core bindings.
 import { findSpots } from './brightspots.js';
-import { buildGraph, questionsFor, unsolvedProblemIds } from './graph.js';
+import { buildGraph, questionsFor, unsolvedProblemIds, leadQuestions } from './graph.js';
+import { CONNECTIONS } from './connections.gen.js';  // DISCOVER-1
 const EPMC = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search';
 // Economics and development papers (JPE, Econometrica, JEP, QJE) are mostly outside Europe PMC; OpenAlex indexes them with abstracts.
 const OPENALEX = 'https://api.openalex.org/works';
@@ -187,7 +188,7 @@ export async function tick({ store, fetchFn = fetch, rank, now = Date.now(), max
     let agencies = await getJson(store, 'agencies_view', null);
     if (BACKEND_URL && fetchFn) { try { const r = await fetchFn(BACKEND_URL + '/agencies.json'); if (r.ok) { const v = await r.json(); if (v && Array.isArray(v.nodes)) { agencies = v; await putJson(store, 'agencies_view', v); } } } catch { /* keep the last copy */ } }
     const g = await buildGraph({ solutions: sols, agencies });
-    await putJson(store, 'questions', { at, questions: await questionsFor(g) });
+    await putJson(store, 'questions', { at, questions: [...await questionsFor(g), ...leadQuestions(CONNECTIONS)] });
     await putJson(store, 'graph', { at, stats: await g.stats(), ...(await g.export()) });
   } catch (e) { changes.push({ kind: 'graph_error', error: String(e.message || e) }); }
   // 4. changelog

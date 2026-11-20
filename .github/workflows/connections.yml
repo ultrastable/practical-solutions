@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; about 3 minutes a run. Embeddings only for items whose text changed (the first run embeds all, about
+#   1,700 short texts with a small embedding model, a few hundred Workers AI neurons), at most 3 short model calls to word the top new leads.
+# trigger: daily, and when the catalogue or this pipeline changes on main; the catalogue changes a few times a day, so faster adds no information.
+# free-alternative: none needed; the model route is the tenant's own Worker reached with this run's OIDC token, no secret is stored.
+# DISCOVER-1: the catalogue's knowledge graph and vector index. Embeds what changed, finds connections nobody has drawn, screens them for
+# novelty, settles earlier leads against what the catalogue adopted, tunes its threshold with a scored prediction, rebuilds the generated
+# modules behind /connections and /ask, commits them and dispatches the deploy, whose live check is the gate.
+name: connections
+on:
+  schedule: [{ cron: '17 5 * * *' }]
+  push: { branches: [main], paths: ['worker/src/solutions.js', 'worker/src/problems.js', 'worker/src/problem-scan.gen.js', 'worker/src/syntheses.gen.js', 'worker/src/ask-index.gen.js', 'tools/connections.mjs', 'vendor/ultrastable/core/discover/**', '.github/workflows/connections.yml'] }
+  workflow_dispatch: {}
+concurrency: { group: connections, cancel-in-progress: false }
+permissions: { contents: write, actions: write, id-token: write }
+jobs:
+  connections:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: embed, discover, settle, tune
+        run: node --no-warnings tools/connections.mjs | tee connections.json
+      - run: npm test
+      - name: commit and deploy
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/embeddings.json ledger/connections.json worker/src/connections.gen.js worker/src/ask-vectors.gen.js
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "connections: knowledge graph run, ledger and generated modules (DISCOVER-1)"
+          for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+          bash tools/dispatch_deploy.sh
