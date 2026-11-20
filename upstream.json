@@ -35,7 +35,14 @@
     ".github/workflows/gapscan.yml": "runs this tenant's own gap analysis against its own routes (org/capabilities.json) and files its own idea issues",
     "ps/gapscan.js": "scans this tenant's capability registry; the registry and probes are tenant data, a core copy would only be the loop shell",
     "tools/gapscan.mjs": "drives ps/gapscan.js against this tenant's router and issue tracker",
-    "worker/src/catalogue-pages.js": "renders this tenant's problem catalogue pages from its generated scan module"
+    "worker/src/catalogue-pages.js": "renders this tenant's problem catalogue pages from its generated scan module",
+    "worker/src/ask-docs.js": "turns this tenant's own catalogue into Ask documents",
+    "worker/src/ask.js": "this tenant's Ask page and model wiring over core/ask",
+    "worker/src/i18n.js": "this tenant's language list, dictionary store and switcher over core/i18n",
+    "tools/translate.mjs": "harvests this tenant's pages and writes its translation ledger",
+    "tools/askindex.mjs": "builds this tenant's Ask index",
+    "worker/src/ask-index.gen.js": "generated from this tenant's catalogue",
+    ".github/workflows/translate.yml": "tenant trigger for its own translation loop"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",

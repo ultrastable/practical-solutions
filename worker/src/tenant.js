@@ -16,6 +16,10 @@ import { ignoranceTick, ignView } from './unknowns.js';
 import { bcaTick, KEY as BCA_KEY } from './bca.js';
 import * as PV from '../../ps/provenance.js';  // PROVENANCE-1
 import { goalsTick, knob } from './goals.js';  // GOALS-1
+import { askRoute } from './ask.js';  // ASK-1
+import { sitemapFor, sitemapIndex, parsePath, localizable } from '../../vendor/ultrastable/core/i18n/index.js';  // I18N-1
+import { CODES, manifest, liveLangs, decorate, syncDictionaries, SOURCE_LANG } from './i18n.js';
+import { sitemapPaths } from './site.js';
 
 // Behind the ultrastable.org edge the request arrives on the workers.dev host with x-forwarded-host set; links and canonicals use the public host.
 const PUBLIC_HOSTS = new Set(['ultrastable.org', 'solutions.ultrastable.org']);
@@ -26,7 +30,7 @@ const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-
 
 const catalog = async env => buildCatalog({ problems: await j(env, 'problems', null), solutions: SOLUTIONS, verif: await j(env, 'verif', {}), cands: await j(env, 'candidates', {}), drafts: await j(env, 'drafts', {}), spots: await j(env, 'brightspots', {}), changes: await j(env, 'changes', []), lastTick: await j(env, 'last_tick', null), bcaState: await j(env, BCA_KEY, null) });
 
-export default {
+const handler = {
   // The account is at the free plan's cron limit, so the backend has no cron of its own: this Worker's schedule also runs the backend tick
   // through a service binding (CORE). The backend has no public route, so only this call reaches /internal/tick.
   async scheduled(_e, env, ctx) {
@@ -34,9 +38,10 @@ export default {
     ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems, mailto: env.OPENALEX_MAILTO, maxVerify: knob(await j(env, 'goals:knobs', {}), 'ps.verify.per_tick', undefined) });  // GOALS-1: core's knob value, the default when unset await PV.recordChanges(env.STATE, [...r.changes, ...r.errors], r.at);
       try { const b = await bcaTick({ store: env.STATE }); const be = b.changes.filter(c => /_error$/.test(c.kind)), bc = b.changes.filter(c => !/_error$/.test(c.kind)); await recordErrors(env.STATE, be, b.at); if (b.changes.length) { await PV.recordChanges(env.STATE, b.changes, b.at); if (bc.length) await env.STATE.put('changes', JSON.stringify([...bc.map(c => ({ at: b.at, ...c })), ...(await j(env, 'changes', []))].slice(0, 200))); } } catch (e) { await env.STATE.put('bca:error', String(e.message || e)); }
       try { let backend = null; try { if (env.CORE) { const b = await env.CORE.fetch('https://core.internal/internal/goals', { headers: { 'x-ps-internal': '1' } }); if (b.ok) backend = await b.json(); } } catch { } await goalsTick({ store: env.STATE, cat: await catalog(env), reach: await summary(env.STATE), backend }); } catch (e) { await env.STATE.put('goals:error', String(e.message || e)); }  // GOALS-1
+      try { await syncDictionaries(env); await env.STATE.delete('i18n:error'); } catch (e) { await env.STATE.put('i18n:error', String(e.message || e)); }  // I18N-1
       try { await ignoranceTick({ store: env.STATE, env, cat: await catalog(env), fetchFn: (u) => fetch(u) }); await env.STATE.delete('ignorance:error'); } catch (e) { await env.STATE.put('ignorance:error', String(e.message || e)); } })());
   },
-  async fetch(r, env, ctx) {
+  async inner(r, env, ctx) {
     const u = new URL(r.url);
     if (ctx && ctx.waitUntil) ctx.waitUntil(recordView(env.STATE, r).catch(() => {}));
     if (u.pathname === '/metrics.json') return Response.json(await summary(env.STATE), { headers: { 'cache-control': 'public, max-age=300' } });
@@ -68,6 +73,14 @@ export default {
     if (u.pathname === '/changes.json') return Response.json({ changes: await j(env, 'changes', []), last_tick: await j(env, 'last_tick', null) });
     if (/^\/[a-f0-9]{32}\.txt$/.test(u.pathname) && u.pathname === '/' + await indexnowKey('practical-solutions') + '.txt') return new Response(u.pathname.slice(1, 33), { headers: { 'content-type': 'text/plain' } });
     const origin = canonicalOrigin(r, u);
+    const asked = await askRoute(r, u, env, ctx, { origin, lang: r.headers.get('x-ps-lang') || SOURCE_LANG, headers });  // ASK-1
+    if (asked) return asked;
+    if (u.pathname === '/sitemap.xml' || /^\/sitemap-[a-z]{2,3}\.xml$/.test(u.pathname)) {  // I18N-1: an index plus one sitemap per live language, with hreflang alternates
+      const live = liveLangs(await manifest(env)), x = { headers: { 'content-type': 'application/xml', 'cache-control': 'public, max-age=3600' } };
+      if (u.pathname === '/sitemap.xml') return new Response(sitemapIndex({ origin, langs: live }), x);
+      const lang = u.pathname.slice(9, -4); if (lang !== SOURCE_LANG && !live.includes(lang)) return new Response('not found\n', { status: 404 });
+      return new Response(sitemapFor({ origin, paths: sitemapPaths(await catalog(env)), lang, live, def: SOURCE_LANG }), x);
+    }
     if (['/feed.xml', '/feed.json'].includes(u.pathname)) {
       const meta = { title: 'Practical Solutions: what changed', link: origin, description: 'Every automatic change the improvement loop made: re-rankings, evidence checks, new candidate evidence.' };
       const items = itemsFrom(await j(env, 'changes', []), c => describeChange(c, origin));
@@ -83,5 +96,29 @@ export default {
     if (site) { if (edge && site.status === 200 && ctx && ctx.waitUntil) ctx.waitUntil(edge.put(ckey, site.clone()).catch(() => {})); return site; }
     if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
     return notFoundResponse(cat, new URL(u.pathname + u.search, origin));
+  },
+};
+
+// I18N-1: /<lang>/... serves the same page in a live language; every HTML page also carries hreflang alternates and a language switcher. The finished
+// page is cached at the edge by its public URL, so a request normally costs one cache read.
+const htmlOk = res => res.status === 200 && /text\/html/.test(res.headers.get('content-type') || '');
+export default {
+  scheduled: handler.scheduled,
+  async fetch(r, env, ctx) {
+    const u = new URL(r.url);
+    if (r.method !== 'GET' || !localizable(u.pathname + u.search)) return handler.inner(r, env, ctx);
+    const { lang, rest } = parsePath(u.pathname, CODES), origin = canonicalOrigin(r, u);
+    const edge = typeof caches !== 'undefined' ? caches.default : null, ckey = edge && new Request(origin + u.pathname + u.search + '#i18n');
+    if (edge) { const hit = await edge.match(ckey); if (hit) return hit; }
+    if (lang && !liveLangs(await manifest(env)).includes(lang)) return Response.redirect(origin + rest + u.search, 302);
+    const inner = lang ? new Request(u.origin + rest + u.search, { headers: new Headers([...r.headers, ['x-ps-lang', lang]]) }) : r;
+    const res = await handler.inner(inner, env, ctx);
+    if (!htmlOk(res)) return res;
+    const html = await decorate(await res.text(), { env, lang: lang || SOURCE_LANG, origin, path: rest + u.search });
+    const out = new Response(html, { status: 200, headers: new Headers(res.headers) });
+    if (lang) out.headers.set('content-language', lang);
+    out.headers.set('vary', 'accept-encoding');
+    if (edge && ctx && ctx.waitUntil) ctx.waitUntil(edge.put(ckey, out.clone()).catch(() => {}));
+    return out;
   },
 };

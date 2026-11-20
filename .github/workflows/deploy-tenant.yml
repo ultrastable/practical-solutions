@@ -27,7 +27,7 @@ jobs:
           cat out.json; echo; [ "$(cat code.txt)" = 200 ]
       - name: live check
         run: |
-          for p in / /syntheses /syntheses.json /method /problems/tb /solutions/kmc /domains /search?q=water /impact /metrics.json /graph.json /questions.json /index.json /sitemap.xml /feed.xml /brightspots.json; do
+          for p in / /ask /sitemap.xml /syntheses /syntheses.json /method /problems/tb /solutions/kmc /domains /search?q=water /impact /metrics.json /graph.json /questions.json /index.json /sitemap.xml /feed.xml /brightspots.json; do
             for try in 1 2 3 4 5; do   # a new version takes a few seconds to reach every location
               code=$(curl -s -o /dev/null -w '%{http_code}' "https://tenant-ps-web.ultrastable.workers.dev$p"); [ "$code" = 200 ] && break; sleep 6
             done
