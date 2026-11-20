@@ -35,3 +35,16 @@ test("the workflow runs the sweep on a schedule and after CI, with the platform 
   assert.match(w, /workflow_run/);
   assert.match(w, /github\.token/);
 });
+
+test("a merge dispatches the deploy once; a sweep with no merge does not; a failing dispatch is logged, not thrown (SWEEP-DEPLOY-1)", () => {
+  const mk = (rows, deploy) => ({ branches: () => rows.map((r) => r.name), ahead: (n) => rows.find((r) => r.name === n).ahead, prs: (n) => rows.find((r) => r.name === n).prs, openPr() {}, merge() {}, del() {}, deploy });
+  const green = [{ name: "a", ahead: 1, prs: [{ number: 1, state: "OPEN", mergeStateStatus: "CLEAN" }] }, { name: "b", ahead: 2, prs: [{ number: 2, state: "OPEN", mergeStateStatus: "CLEAN" }] }];
+  let n = 0; const logs = [];
+  run("o/r", mk(green, () => { n++; }), (l) => logs.push(l));
+  assert.equal(n, 1); assert.ok(logs.some((l) => l.startsWith("deploy dispatched after 2")));
+  n = 0; run("o/r", mk([{ name: "c", ahead: 1, prs: [{ number: 3, state: "OPEN", mergeStateStatus: "BLOCKED" }] }], () => { n++; }), () => {});
+  assert.equal(n, 0);
+  const l2 = []; run("o/r", mk(green, () => { throw new Error("boom"); }), (l) => l2.push(l));
+  assert.ok(l2.some((l) => l.startsWith("FAILED deploy dispatch: boom")));
+  assert.match(readFileSync(new URL("../.github/workflows/branch-sweep.yml", import.meta.url), "utf8"), /actions: write/);
+});

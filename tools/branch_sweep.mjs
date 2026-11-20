@@ -31,20 +31,24 @@ export function ghRunner(repo) {
     openPr: (n) => gh("pr", "create", "--repo", repo, "--head", n, "--base", "main", "--title", `auto: merge ${n}`, "--body", "BRANCH-SWEEP-1: opened automatically for a branch ahead of main."),
     merge: (num) => gh("pr", "merge", String(num), "--repo", repo, "--squash", "--delete-branch"),
     del: (n) => gh("api", "-X", "DELETE", `repos/${repo}/git/refs/heads/${n}`),
+    // SWEEP-DEPLOY-1: a merge made with the platform token does not fire `on: push`, so the sweep starts the deploy itself (PRs 140 and 141 merged on 2026-11-20 and nothing deployed).
+    deploy: () => execFileSync("bash", ["tools/dispatch_deploy.sh"], { encoding: "utf8", env: { ...process.env, GITHUB_REPOSITORY: repo } }),
   };
 }
 
 export function run(repo, io = ghRunner(repo), log = console.log) {
   const rows = io.branches().filter((n) => !PROTECTED.has(n)).map((name) => ({ name, ahead: io.ahead(name), prs: io.prs(name) }));
   const actions = plan(rows);
+  let merged = 0;
   for (const a of actions) {
     try {
       if (a.do === "delete") io.del(a.branch);
       else if (a.do === "open-pr") io.openPr(a.branch);
-      else if (a.do === "merge") io.merge(a.pr);
+      else if (a.do === "merge") { io.merge(a.pr); merged++; }
       log(`${a.do} ${a.branch}${a.pr ? ` #${a.pr}` : ""}: ${a.why}`);
     } catch (e) { log(`FAILED ${a.do} ${a.branch}: ${String(e.message).split("\n")[0]}`); }
   }
+  if (merged && io.deploy) { try { io.deploy(); log(`deploy dispatched after ${merged} merge(s)`); } catch (e) { log(`FAILED deploy dispatch: ${String(e.message).split("\n")[0]}`); } }
   return actions;
 }
 
