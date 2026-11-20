@@ -93,6 +93,8 @@ export async function run({ embed = null, ask = null, now = Date.now(), maxEmbed
   const g = await D.refreshEmbeddings({ nodes: input.nodes, cache: cache.graph || {}, embed: embed || noEmbed, model: EMBED_MODEL, max: maxEmbed });
   const a = await D.refreshEmbeddings({ nodes: askDocs.map(d => ({ id: d.id, label: d.title, text: d.text })), cache: cache.ask || {}, embed: embed || noEmbed, model: EMBED_MODEL, max: Math.max(0, maxEmbed - g.embedded) });
   errors.push(...g.errors.map(e => ({ step: 'embed-graph', ...e })), ...a.errors.map(e => ({ step: 'embed-ask', ...e })));
+  // no vectors at all (the model route is down and nothing is cached): record nothing, tune nothing, publish nothing; the run reports failure
+  if (!Object.keys(g.cache.rows || {}).length) return { at, errors, run: null, embedded: 0, pending: g.pending, cache: { graph: g.cache, ask: a.cache }, ledger, view: null, askPacked: null, skipped: true };
   const M = D.unpack(D.packCache(g.cache));
   const prior = ledger || { v: 1, runs: [], entries: {}, retired: {}, params: { pct: D.DEFAULTS.pct }, decisions: [] };
   const params = { ...(prior.params || { pct: D.DEFAULTS.pct }) };
@@ -123,6 +125,7 @@ export async function run({ embed = null, ask = null, now = Date.now(), maxEmbed
 }
 
 export function write(r) {
+  if (r.skipped) return; // nothing was learned, so nothing is rewritten
   // one vector per line, so a run that changes ten items changes ten lines of history
   const rows = c => '{\n' + Object.entries(c.rows || {}).sort(([x], [y]) => x.localeCompare(y)).map(([id, x]) => JSON.stringify(id) + ':' + JSON.stringify(x)).join(',\n') + '\n}';
   writeFileSync(FILES.cache, `{"schema":"ps-embeddings/1","graph":{"model":${JSON.stringify(r.cache.graph.model)},"dim":${r.cache.graph.dim},"rows":${rows(r.cache.graph)}},\n"ask":{"model":${JSON.stringify(r.cache.ask.model)},"dim":${r.cache.ask.dim},"rows":${rows(r.cache.ask)}}}\n`);
@@ -137,7 +140,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const ask = arg('--no-model') || arg('--offline') ? null : async prompt => { const r = await complete({ secrets: process.env, prompt, maxTokens: 300 }); return r.ok ? r.text : ''; };
   const r = await run({ embed, ask, maxEmbed: val('--max-embed', 3000) });
   write(r);
+  if (r.skipped) { console.log(JSON.stringify({ at: r.at, skipped: true, errors: r.errors.slice(0, 5) })); process.exitCode = 2; process.exit(); }
   console.log(JSON.stringify({ at: r.at, embedded: r.embedded, pending: r.pending, run: r.run, totals: r.ledger.totals, tau: r.view.tau, decision: r.view.decision, scored: r.view.scored, errors: r.errors.slice(0, 5) }));
-  // an embedding failure with nothing cached is a failed run (the loop must see it); with a cache it degrades and still publishes
-  if (r.errors.length && !Object.keys(r.cache.graph.rows || {}).length) process.exitCode = 2;
 }
