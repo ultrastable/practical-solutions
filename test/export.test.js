@@ -43,7 +43,7 @@ test('every path in the OpenAPI description is served by the real router', async
 test('gap analysis: shipped capabilities pass their probe, gaps have none, issues are planned without duplicates', async () => {
   const reg = JSON.parse(readFileSync(new URL('../org/capabilities.json', import.meta.url), 'utf8'));
   const r = await scan(reg, async p => get(p));
-  assert.ok(r.shipped >= 13 && r.gaps.length >= 1);
+  assert.ok(r.shipped >= 16 && r.gaps.length >= 1);
   for (const g of r.gaps) assert.equal(reg.capabilities.find(x => x.id === g.id).probe, null, g.id + ' has a probe that fails');
   const plan = planIssues(r.gaps, [issueTitle(r.gaps[0])], 2);
   assert.equal(plan.length, 2); assert.ok(!plan.some(i => i.id === r.gaps[0].id)); assert.ok(plan[0].labels.includes('idea'));

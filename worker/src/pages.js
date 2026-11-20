@@ -30,7 +30,7 @@ export const SHELL = {
   feeds: [{ type: 'application/rss+xml', href: '/feed.xml', title: 'What changed' }],
   footer: {
     columns: [
-      { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'New solutions', href: '/syntheses' }, { label: 'Problems', href: '/problems' }, { label: 'Problem catalogue', href: '/catalogue' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }] },
+      { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'New solutions', href: '/syntheses' }, { label: 'Problems', href: '/problems' }, { label: 'Problem catalogue', href: '/catalogue' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }, { label: 'Benefit-cost ranking', href: '/ranking' }, { label: 'Evidence map', href: '/evidence-map' }] },
       { title: 'Who it is for', links: AUDIENCES.map(a => ({ label: a.name, href: '/for/' + a.id })) },
       { title: 'Trust', links: [{ label: 'About', href: '/about' }, { label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
       { title: 'Ultrastable family', links: [{ label: 'Ultrastable for good (.org)', href: 'https://ultrastable.org/' }, { label: 'Platform and product (.io)', href: 'https://ultrastable.io/' }, { label: 'How it is built', href: 'https://ultrastable.io/how' }, { label: 'Live proof', href: 'https://ultrastable.io/proof' }, { label: 'Contact', href: 'https://ultrastable.io/contact' }] },
