@@ -31,7 +31,8 @@
     ".github/workflows/synth.yml": "tenant's own synthesis loop over its own entries",
     ".github/workflows/release.yml": "cuts releases of this tenant's own catalogue (problems, solutions, combinations, findings) and dispatches its own loops",
     "tools/problemscan.mjs": "runs this tenant's scan and writes its ledger and generated module",
-    ".github/workflows/problemscan.yml": "tenant trigger for its own problem scan"
+    ".github/workflows/problemscan.yml": "tenant trigger for its own problem scan",
+    "worker/src/catalogue-pages.js": "renders this tenant's problem catalogue pages from its generated scan module"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",
