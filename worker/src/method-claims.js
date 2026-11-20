@@ -21,6 +21,8 @@ import { ENSEMBLE, WORKERS_AI_ALLOW } from './ensemble-config.js';
 import { candidates, askPanel, overlap, evidenceChecks, adjudicate, effectiveVotes, swapLiteral, reviewDecision, parseProposal, parseVote, ensembleRun, ledgerView } from '../../ps/ensemble.js';
 import { ENSEMBLE_LEDGER } from './ensemble-ledger.gen.js';
 import { allowed } from '../../ps/scope.js';
+import { scan as scanProblems, classify as classifyProblem, measure as measureProblem, RANK_RULE, unSdg, whoCauses, worldBank, whoGho } from '../../ps/problemscan.js';
+import { SCAN } from './problem-scan.gen.js';
 
 const must = (c, m) => { if (!c) throw new Error(m); };
 const eq = (a, b, m) => must(JSON.stringify(a) === JSON.stringify(b), `${m}: got ${JSON.stringify(a)}, expected ${JSON.stringify(b)}`);
@@ -67,6 +69,8 @@ export const STATEMENTS = defineStatements([
       must(r.unranked.some(x => x.id === PROBLEMS[0].id), 'problem with no data is not listed as unranked');
       const c = buildCatalog({ problems: r, solutions: SOLUTIONS }); must(c.probs.some(p => p.id === PROBLEMS[0].id && p.ranked === false), 'unranked problem not shown in the catalogue');
     } },
+  { id: 'catalogue-scan', section: 'problems', evidence: 'ps/problemscan.js; tools/problemscan.mjs; .github/workflows/problemscan.yml', text: () => `Beyond the ranked list, the problem catalogue is built by code that reads the indicator lists of the UN SDG framework, the WHO cause list and indicators, and the World Bank, keeps what a published wording rule reads as a problem, and shows the source, code and page of each. ${SCAN.entries.length} problems are published today. Entries with no listed solution are marked "solution sought".`,
+    verify: async () => { must(classifyProblem('Mortality rate, under-5').lower === true && classifyProblem('GDP (current US$)') === null, 'wording rule'); const ids = [unSdg(), whoCauses(), worldBank(), whoGho()].map(s => s.id); eq(ids, ['sdg', 'ghe', 'wb', 'who'], 'sources'); must(SCAN.entries.every(e => e.source && e.code && e.page && e.first_seen), 'an entry lacks provenance'); must(/not measure how many people are harmed/.test(RANK_RULE), 'rank rule limit'); } },
   { id: 'problems-limits', section: 'problems', evidence: 'worker/src/problems.js basis', text: () => 'The ranking measures the size of the gap only: it does not use deaths or years of life lost, and ignores how solvable a problem is.',
     verify: async () => { eq(rankProblems.length <= 1, true, 'rankProblems takes only a fetch'); const r = await rankProblems(async () => json([{}, [{ date: '2024', value: 50 }]])); must(/not deaths or DALYs/.test(r.basis) && /ignores how solvable/.test(r.basis), 'basis text'); } },
   { id: 'problems-refresh', section: 'problems', evidence: 'worker/src/improve.js tick()', text: c => `The ranking is refreshed at most every ${c.CADENCE.problemsHours} hours (the loop wakes more often; a refresh inside the window is skipped).`,

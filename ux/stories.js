@@ -7,6 +7,8 @@
 const v = path => ({ visit: path });
 const x = e => ({ expect: e });
 export const STORIES = [
+  { id: 'RES-CAT-1', who: 'researchers', want: 'browse every problem the catalogue knows about, with the source of each', so: 'I see where evidence is missing before I look for solutions', covers: ['catalogueIndex', 'facets', 'pagination'],
+    steps: [v('/catalogue'), x({ heading: 'Problem catalogue', form: '/catalogue', text: 'solution sought' }), v('/catalogue.json'), x({ json: { path: 'problems.length', min: 0 } })] },
   { id: 'IMP-1', who: 'implementers', want: 'see which solutions are ready to implement', so: 'I can shortlist one my team could deliver', covers: ['home', 'forPage', 'contextPage', 'solutionsIndex', 'card', 'badge'],
     steps: [v('/'), { follow: { href: '^/for/implementers$' } }, x({ heading: 'Ready to implement' }), { follow: { href: '^/solutions\\?ready=ready' } }, x({ text: 'ready to implement', link: '^/solutions/[a-z0-9-]+$' })] },
   { id: 'IMP-2', who: 'implementers', want: 'filter solutions by cost and domain', so: 'I only see what fits my budget and my field', covers: ['solutionsIndex', 'facets', 'pagination'],
@@ -80,5 +82,5 @@ export const STORIES = [
 ];
 export const storiesFor = who => STORIES.filter(s => s.who === who);
 // Every template, route and component a story may claim to cover. A story that names something else fails the traceability test.
-export const TEMPLATES = ['home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
-export const ROUTES = ['json-entity', 'csv', 'llms', 'sitemap'];
+export const TEMPLATES = ['catalogueIndex', 'catalogueEntry', 'home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
+export const ROUTES = ['json-entity', 'catalogue-json', 'csv', 'llms', 'sitemap'];
