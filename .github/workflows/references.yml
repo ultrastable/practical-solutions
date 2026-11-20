@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; about 3 minutes a run (at most 40 gentle page reads per source, 1.5 s apart).
+# trigger: weekly; a reference source changes slowly, and the run is a bounded batch that remembers misses for weeks, so it stays polite to the source.
+# free-alternative: none needed; plain HTTPS reads with the run's own GITHUB_TOKEN to commit.
+# REFERENCE-LINKS-1: verify catalogue-to-reference links (org/references.json), regenerate the module the Worker serves, then deploy. Link-only: titles and URLs, never source text.
+name: references
+on:
+  schedule: [{ cron: '41 4 * * 1' }]
+  workflow_dispatch:
+concurrency: { group: references, cancel-in-progress: false }
+permissions: { contents: write, actions: write }
+jobs:
+  verify:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node --no-warnings tools/references.mjs
+      - run: npm test
+      - name: commit and deploy
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/reference-links.json worker/src/reference-links.gen.js
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "references: verify links to outside reference sources"
+          for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+          bash tools/dispatch_deploy.sh
