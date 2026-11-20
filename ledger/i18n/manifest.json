@@ -67,19 +67,19 @@
     "ca3d163bab055381",
     "ca3d163bab055381"
    ],
-   "at": "2026-11-20T18:10:50.097Z"
+   "at": "2026-11-20T18:14:47.600Z"
   }
  },
  "source": "en",
- "at": "2026-11-20T18:10:50.097Z",
+ "at": "2026-11-20T18:14:47.600Z",
  "total_segments": 7135,
  "last_run": {
-  "at": "2026-11-20T18:10:50.097Z",
+  "at": "2026-11-20T18:14:47.600Z",
   "report": {
    "es": {
     "before": 74,
     "rejected": {
-     "model error: no model route answered (gemma-4: worker-ai HTTP 502 4006: you have used up your": 50
+     "model error: no model route answered (gpt-4.1-mini: github-models returned a non-JSON body (O": 50
     },
     "calls": 2,
     "error": "two batches with no accepted translation",
