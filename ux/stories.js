@@ -60,7 +60,7 @@ export const STORIES = [
   { id: 'DEV-1', who: 'developers', want: 'read a short machine description of the site', so: 'my agent knows what is here and how to cite it', covers: ['llms'],
     steps: [v('/llms.txt'), x({ type: 'text/plain', text: ['Practical Solutions', '/index.json'] })] },
   { id: 'DEV-2', who: 'developers', want: 'crawl every page from the sitemap', so: 'my index is complete', covers: ['sitemap'],
-    steps: [v('/sitemap.xml'), x({ type: 'xml', text: ['/solutions/kmc', '/problems/tb', '/for/implementers'] })] },
+    steps: [v('/sitemap.xml'), x({ type: 'xml', text: 'sitemap' }), v('/sitemap-en.xml'), x({ type: 'xml', text: ['/solutions/kmc', '/problems/tb', '/for/implementers'] })] },  // I18N-1: live, /sitemap.xml is an index of one sitemap per language
   { id: 'DEV-3', who: 'developers', want: 'see every endpoint and the rule for reusing claims', so: 'I integrate correctly', covers: ['apiPage', 'table', 'callout'],
     steps: [v('/api'), x({ heading: 'Data and API', text: ['Endpoints', 'Keep the labels'] })] },
   { id: 'FUN-VIEWS-1', who: 'funders', want: 'see solutions ranked by benefit per dollar, and where evidence is missing', so: 'I fund what buys the most and I know which gaps need research', covers: ['table'],

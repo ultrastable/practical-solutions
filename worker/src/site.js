@@ -155,7 +155,7 @@ export function route(u, c) {
   if (p === '/index.json') return json(indexJson(c, o));
   if (p === '/solutions.csv') return new Response(solutionsCsv(c, o), { headers: { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'inline; filename="solutions.csv"', 'cache-control': 'public, max-age=300' } });
   if (p === '/llms.txt') return new Response(llmsTxt(c, o), { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'public, max-age=300' } });
-  if (p === '/sitemap.xml') return new Response(sitemap(c, o), { headers: { 'content-type': 'application/xml' } });
+  if (p === '/sitemap.xml' || p === '/sitemap-en.xml') return new Response(sitemap(c, o), { headers: { 'content-type': 'application/xml' } });
   if (p === '/robots.txt') return new Response(`User-agent: *\nAllow: /\nSitemap: ${o}/sitemap.xml\n`, { headers: { 'content-type': 'text/plain' } });
   if (p === '/openapi.json') return json(X.openapi(o));
   if (p === '/datapackage.json') { const hd = t => t.split('\n')[0].split(','); return json(V.datapackage(o, { solutions: hd(solutionsCsv(c, o)), problems: hd(problemsCsv(c, o)), catalogue: hd(CAT.csvText(c, o)) })); }
