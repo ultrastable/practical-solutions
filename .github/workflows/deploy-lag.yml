@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# DEPLOY-LAG-1: live code must not lag main. Every 30 minutes, compare the commit of the last successful deploy
+# with the newest commit on main that touched deployable paths; past LAG_MIN minutes with no deploy queued or running, dispatch one.
+# budget: ~1 minute per run, 48 runs a day (about 50 min a day)
+# trigger: schedule, because pushes by many bots can supersede queued deploys and nothing else would notice
+# free-alternative: a Cloudflare cron worker calling the same dispatch
+name: deploy-lag
+on:
+  schedule: [{ cron: "*/30 * * * *" }]
+  workflow_dispatch: {}
+concurrency: { group: deploy-lag, cancel-in-progress: false }
+permissions: { contents: read, actions: write }
+jobs:
+  probe:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env: { GH_TOKEN: "${{ github.token }}", REPO: "${{ github.repository }}", LAG_MIN: "20" }
+    steps:
+      - name: dispatch a deploy when live lags main
+        run: |
+          set -euo pipefail
+          check() { # $1 workflow file, $2 path filter
+            ok=$(gh api "repos/$REPO/actions/workflows/$1/runs?status=success&per_page=1" --jq '.workflow_runs[0].head_sha // ""')
+            busy=$(gh api "repos/$REPO/actions/workflows/$1/runs?per_page=10" --jq '[.workflow_runs[] | select(.status=="queued" or .status=="in_progress" or .status=="pending" or .status=="waiting")] | length')
+            newest=$(gh api "repos/$REPO/commits?sha=main&path=$2&per_page=1" --jq '.[0].sha + " " + .[0].commit.committer.date')
+            sha=${newest% *}; when=${newest#* }
+            age=$(( ( $(date -u +%s) - $(date -u -d "$when" +%s) ) / 60 ))
+            echo "$1: deployed=${ok:0:7} newest=${sha:0:7} age=${age}m busy=$busy"
+            if [ -n "$sha" ] && [ "$ok" != "$sha" ] && [ "$busy" = 0 ] && [ "$age" -ge "$LAG_MIN" ]; then
+              echo "::warning::$1 lags main by ${age} minutes; dispatching"
+              gh workflow run "$1" --repo "$REPO" --ref main
+            fi
+          }
+          for wf in deploy-tenant.yml deploy-backend.yml; do # a hung run holds the queue: cancel any run older than 15 minutes
+            for id in $(gh api "repos/$REPO/actions/workflows/$wf/runs?status=in_progress&per_page=5" --jq '.workflow_runs[] | select((now - (.run_started_at | fromdateiso8601)) > 900) | .id'); do
+              echo "::warning::$wf run $id has run over 15 minutes; cancelling so the newest main can deploy"
+              gh api -X POST "repos/$REPO/actions/runs/$id/cancel"
+            done
+          done
+          check deploy-tenant.yml worker/src
+          check deploy-backend.yml worker/src

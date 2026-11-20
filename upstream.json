@@ -42,7 +42,9 @@
     "tools/translate.mjs": "harvests this tenant's pages and writes its translation ledger",
     "tools/askindex.mjs": "builds this tenant's Ask index",
     "worker/src/ask-index.gen.js": "generated from this tenant's catalogue",
-    ".github/workflows/translate.yml": "tenant trigger for its own translation loop"
+    ".github/workflows/translate.yml": "tenant trigger for its own translation loop",
+    "tools/push_main.py": "copy of core's MAIN-WRITER-1 pusher that vendor/ultrastable/tools/hostsync_commit.sh calls as tools/push_main.py; core does not ship it in the vendor tree yet",
+    ".github/workflows/deploy-lag.yml": "this tenant's deploy-lag probe over its own deploy workflows"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",
