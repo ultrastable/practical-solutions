@@ -1,0 +1,27 @@
+{
+  "_": "FEATURE-GAP-1: capabilities of best-in-class references, each with a probe against the site's own router. status is computed, never typed: a probe that passes is shipped; no probe is a gap. tools/gapscan.mjs files the top gaps as idea issues for the agent.",
+  "capabilities": [
+    { "id": "cite-bibtex", "reference": "Wikipedia, Cochrane", "feature": "Citation export for reference managers", "probe": { "path": "/solutions/kmc.bib", "text": "@misc" } },
+    { "id": "csl-json", "reference": "Cochrane, Zotero", "feature": "CSL-JSON citation data", "probe": { "path": "/solutions/kmc.csl.json", "text": "ps-solution-kmc" } },
+    { "id": "data-csv", "reference": "Our World in Data", "feature": "CSV download of problems and catalogue", "probe": { "path": "/problems.csv", "text": "id,title" } },
+    { "id": "embed-card", "reference": "Our World in Data, Wikipedia", "feature": "Embeddable card that keeps label and limit", "probe": { "path": "/embed/solutions/kmc", "text": "Main limit" } },
+    { "id": "oembed", "reference": "Our World in Data", "feature": "oEmbed discovery for the embed", "probe": { "path": "/oembed?url=https://x/solutions/kmc", "text": "\"type\":\"rich\"" } },
+    { "id": "openapi", "reference": "Our World in Data, GiveWell", "feature": "OpenAPI description of the data endpoints", "probe": { "path": "/openapi.json", "text": "openapi" } },
+    { "id": "feeds", "reference": "GiveWell, Cochrane", "feature": "Atom feed of dated releases", "probe": { "path": "/releases.atom", "text": "<feed" } },
+    { "id": "compare", "reference": "GiveWell", "feature": "Side by side comparison of solutions", "probe": { "path": "/compare?ids=kmc&ids=ors-zinc", "text": "Solutions compared" } },
+    { "id": "country-views", "reference": "Our World in Data", "feature": "Per-country views", "probe": { "path": "/country", "text": "Find what fits a country" } },
+    { "id": "search", "reference": "Wikipedia", "feature": "Site search with JSON", "probe": { "path": "/search.json?q=water", "text": "results" } },
+    { "id": "llms", "reference": "agents", "feature": "llms.txt for language models", "probe": { "path": "/llms.txt", "text": "Practical Solutions" } },
+    { "id": "sitemap", "reference": "search engines", "feature": "Sitemap", "probe": { "path": "/sitemap.xml", "text": "urlset" } },
+    { "id": "structured-data", "reference": "Our World in Data", "feature": "schema.org Dataset markup on the data page", "probe": { "path": "/api", "text": "\"@type\":\"Dataset\"" } },
+    { "id": "pwa-offline", "reference": "Wikipedia app", "feature": "Installable, offline reading (manifest, service worker)", "probe": null, "priority": 3 },
+    { "id": "og-images", "reference": "Our World in Data", "feature": "Per-page share image (PNG) for social previews", "probe": null, "priority": 3 },
+    { "id": "interactive-charts", "reference": "Our World in Data", "feature": "Indicator trend charts per problem (script-free SVG from catalogue history)", "probe": null, "priority": 1 },
+    { "id": "subscribe", "reference": "GiveWell, J-PAL", "feature": "Subscribe to changes by email, double opt-in", "probe": null, "priority": 2 },
+    { "id": "evidence-map", "reference": "Cochrane, J-PAL", "feature": "Evidence gap map: problems by solution evidence label", "probe": null, "priority": 1 },
+    { "id": "argument-map", "reference": "Kialo", "feature": "Pro and con claims per solution with sources", "probe": null, "priority": 2 },
+    { "id": "cost-effectiveness-table", "reference": "GiveWell, Copenhagen Consensus", "feature": "Sortable benefit-cost ranking across solutions", "probe": null, "priority": 1 },
+    { "id": "translations", "reference": "Wikipedia", "feature": "Translated entry pages", "probe": null, "priority": 2 },
+    { "id": "print-view", "reference": "Wikipedia", "feature": "Print stylesheet for entries", "probe": null, "priority": 3 }
+  ]
+}

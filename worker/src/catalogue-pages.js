@@ -43,3 +43,9 @@ ${ui.section({ id: 'source', title: 'Where this came from', body: ui.summaryList
 ${ui.section({ id: 'limits', title: 'Limits', body: `<p>This entry says what a public statistics source measures. It does not say how many people are harmed, why the figure moves, or what would change it. ${esc(SCAN.rank_rule || '')}</p><p><a href="/catalogue/${esc(e.id)}.json">This entry as JSON</a></p>` })}`;
   return page('/catalogue/' + e.id, o, e.title, `${e.title}: what ${s.name || 'a public source'} shows, and whether a solution is listed yet.`, body);
 }
+
+const cq = v => { const t = String(v ?? ''); return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+export function csvText(c, o, scan = SCAN) {
+  const head = ['id', 'title', 'domain', 'source', 'source_code', 'world_value', 'world_year', 'earlier_value', 'earlier_year', 'pace', 'rank', 'solution_status', 'url'];
+  return [head, ...entries(c, scan).map(e => [e.id, e.title, e.domain, e.source, e.code, e.m ? e.m.value : '', e.m ? e.m.year : '', e.m ? e.m.base : '', e.m ? e.m.base_year : '', e.m ? e.m.pace : '', e.rank ?? '', e.sought ? 'solution sought' : 'has listed solutions', o + '/catalogue/' + e.id])].map(r => r.map(cq).join(',')).join('\n') + '\n';
+}

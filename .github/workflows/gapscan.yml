@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; about 2 minutes a run.
+# trigger: weekly; a gap closes only when the agent ships its feature, so a faster cadence would only repeat open issues.
+# free-alternative: none needed; reads this repository's own router and files issues with the run's own GITHUB_TOKEN.
+# FEATURE-GAP-1: compare the site with best-in-class references (org/capabilities.json), record coverage in ledger/gaps.json and file the top two
+# missing features as `idea` issues for the free code agent (agent.yml). The registry grows by the agent's own pull requests.
+name: gapscan
+on:
+  schedule: [{ cron: '23 5 * * 1' }]
+  workflow_dispatch:
+concurrency: { group: gapscan, cancel-in-progress: false }
+permissions: { contents: write, issues: write }
+jobs:
+  scan:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node --no-warnings tools/gapscan.mjs --file
+      - name: commit ledger
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/gaps.json
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "gapscan: weekly capability coverage"
+          for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
