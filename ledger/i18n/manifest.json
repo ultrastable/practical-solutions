@@ -1,1 +1,92 @@
-{"schema":"ps-i18n/1","langs":{},"source":"en"}
+{
+ "schema": "ps-i18n/1",
+ "langs": {
+  "pt": {
+   "live": false,
+   "coverage": 0.061,
+   "segments": 64,
+   "of": 7123,
+   "shards": [
+    "4df64c08579447dd",
+    "d04038b884e08495",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-20T17:56:23.006Z"
+  },
+  "fr": {
+   "live": false,
+   "coverage": 0.064,
+   "segments": 68,
+   "of": 7123,
+   "shards": [
+    "64834b86d0f4d56d",
+    "6dd74f90b4b0aa46",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-20T17:56:23.006Z"
+  },
+  "ar": {
+   "live": false,
+   "coverage": 0.064,
+   "segments": 79,
+   "of": 7123,
+   "shards": [
+    "06f668ff0039f90b",
+    "167a0da0629d206a",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-20T17:56:23.006Z"
+  },
+  "es": {
+   "live": false,
+   "coverage": 0.067,
+   "segments": 74,
+   "of": 7135,
+   "shards": [
+    "29297a64f62d41d9",
+    "f225c9cb53f834fa",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-20T18:10:50.097Z"
+  }
+ },
+ "source": "en",
+ "at": "2026-11-20T18:10:50.097Z",
+ "total_segments": 7135,
+ "last_run": {
+  "at": "2026-11-20T18:10:50.097Z",
+  "report": {
+   "es": {
+    "before": 74,
+    "rejected": {
+     "model error: no model route answered (gemma-4: worker-ai HTTP 502 4006: you have used up your": 50
+    },
+    "calls": 2,
+    "error": "two batches with no accepted translation",
+    "after": 74,
+    "coverage": 0.067,
+    "live": false
+   }
+  }
+ }
+}

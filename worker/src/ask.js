@@ -14,9 +14,13 @@ export const EXAMPLES = ['Which solutions cut child deaths and what do they cost
 export const generatorFor = env => (env && env.AI && env.AI.run ? chatPort(env.AI, env.ASK_MODEL || ASK_MODEL) : undefined);
 
 export async function run(question, { env, request, lang = 'en', index = ASK_INDEX, generate = generatorFor(env), limits = LIMITS }) {
-  const gate = await allow(env && env.STATE, { caller: await callerId(request), ...limits });
+  // SMOKE-LIVE-1: production /api/ask answered with a bare 500 when the budget store or the model threw. Retrieval is local and always works, so a failing
+  // store or model degrades to the cited sources without a written answer instead of failing the request.
+  let gate;
+  try { gate = await allow(env && env.STATE, { caller: await callerId(request), ...limits }); } catch { gate = { ok: true, model: false }; }
   if (!gate.ok) return { ok: false, error: 'rate_limited' };
-  return answer(question, { index, generate: gate.model ? generate : undefined, lang, defaultLang: 'en' });
+  try { return await answer(question, { index, generate: gate.model ? generate : undefined, lang, defaultLang: 'en' }); }
+  catch { return answer(question, { index, generate: undefined, lang, defaultLang: 'en' }); }
 }
 
 const cite = (text, n) => esc(text).replace(/\[(\d{1,2})\]/g, (m, i) => Number(i) <= n ? `<a href="#src-${i}">[${i}]</a>` : m);

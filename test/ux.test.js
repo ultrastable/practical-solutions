@@ -37,7 +37,7 @@ test('colour tokens meet WCAG 2.2 AA in light and dark', () => {
   assert.ok(kit.contrast('#ffffff', '#000000') > 20 && kit.contrast('#777777', '#ffffff') < 4.5);
 });
 
-const paths = () => ['/', '/about', '/for', '/api', '/method', '/impact', '/leads', '/changes', '/domains', '/problems', '/solutions', '/solutions?page=2', '/compare', '/compare?ids=kmc&ids=cash', '/search?q=water', '/search?q=zzzzqq', '/search',
+const paths = () => ['/', '/about', '/privacy', '/for', '/api', '/method', '/impact', '/leads', '/changes', '/domains', '/problems', '/solutions', '/solutions?page=2', '/compare', '/compare?ids=kmc&ids=cash', '/search?q=water', '/search?q=zzzzqq', '/search',
   '/solutions?ready=ready', '/country', '/country?q=zzz', '/levels/low', '/levels/high', '/levels/nope', '/solutions?label=mixed+evidence', '/problems?coverage=none', '/solutions/nope',
   ...AUDIENCES.map(a => '/for/' + a.id), ...c.probs.map(p => '/problems/' + p.id), ...c.sols.map(s => '/solutions/' + s.id), ...c.domains.map(d => '/domains/' + d.slug)];
 

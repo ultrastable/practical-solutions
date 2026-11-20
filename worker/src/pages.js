@@ -35,7 +35,7 @@ export const SHELL = {
     columns: [
       { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'New solutions', href: '/syntheses' }, { label: 'Problems', href: '/problems' }, { label: 'Problem catalogue', href: '/catalogue' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }, { label: 'Benefit-cost ranking', href: '/ranking' }, { label: 'Evidence map', href: '/evidence-map' }] },
       { title: 'Who it is for', links: AUDIENCES.map(a => ({ label: a.name, href: '/for/' + a.id })) },
-      { title: 'Trust', links: [{ label: 'About', href: '/about' }, { label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
+      { title: 'Trust', links: [{ label: 'About', href: '/about' }, { label: 'Privacy', href: '/privacy' }, { label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
       { title: 'Ultrastable family', links: [{ label: 'Ultrastable for good (.org)', href: 'https://ultrastable.org/' }, { label: 'Platform and product (.io)', href: 'https://ultrastable.io/' }, { label: 'How it is built', href: 'https://ultrastable.io/how' }, { label: 'Live proof', href: 'https://ultrastable.io/proof' }, { label: 'Contact', href: 'https://ultrastable.io/contact' }] },
       { title: 'Data', links: [{ label: 'Data and API', href: '/api' }, { label: 'index.json', href: '/index.json' }, { label: 'solutions.csv', href: '/solutions.csv' }, { label: 'Feed', href: '/feed.xml' }, { label: 'llms.txt', href: '/llms.txt' }] },
     ],
@@ -287,6 +287,14 @@ ${ui.section({ id: 'how', title: 'How it is made', body: '<p>An automated loop r
 ${ui.section({ id: 'family', title: 'The Ultrastable family', body: '<p>Ultrastable.org is the public-benefit home of the Ultrastable platform: projects that put autonomous software to work on data for good. Each shares the same design, the same openness about method and the same rule that every claim carries its source. <a href="https://ultrastable.org/">ultrastable.org</a> · <a href="https://ultrastable.io/">ultrastable.io</a></p>' })}
 ${ui.section({ id: 'who', title: 'Who it is for', body: ui.list(AUDIENCES.map(a => `<a href="/for/${esc(a.id)}">${esc(a.name)}</a> <span class="m">${esc(a.goal)}</span>`)) })}`;
   return render('/about', o, { title: `About | ${SITE}`, description: 'What this site is, why it exists and the family of public-benefit projects it belongs to.', body });
+}
+
+export function privacyPage(c, o) {
+  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Privacy' }])}<h1>Privacy</h1><p class="lede">What this site keeps about the people who read it, in plain words.</p>
+${ui.section({ id: 'reach', title: 'Counting visits', body: '<p>Reach is counted as totals per day. No IP address, cookie or per-visitor record is kept for those counts.</p>' })}
+${ui.section({ id: 'ask', title: 'Asking a question', body: '<p>To stop one visitor from sending too many questions in a minute, the site makes a short one-way code from the visitor\'s network address and uses it as a counter key. The key expires after two minutes. The address itself is not stored. When the AI model writes the answer, the question text is sent to Cloudflare Workers AI to do so, and answers are labelled as automatic.</p>' })}
+${ui.section({ id: 'more', title: 'More', body: '<p>The platform this site runs on has its own notice at <a href="https://ultrastable.io/privacy">ultrastable.io/privacy</a>. To ask about anything here, use the correction link on any page.</p>' })}`;
+  return render('/privacy', o, { title: `Privacy | ${SITE}`, description: 'What this site keeps about its readers.', body });
 }
 
 export function apiPage(c, o) {
