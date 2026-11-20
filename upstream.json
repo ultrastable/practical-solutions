@@ -19,6 +19,7 @@
     "ps/narrate.js": "tenant brief narration",
     "ps/org.js": "creates the tenant's own organisation",
     "ps/promote_step.js": "tenant promotion step over its own entries",
+    "ps/voice.js": "this product's own social wording for its domains, problems and solutions",
     "ps/synth.js": "synthetic world for the detector tests",
     "ps/verify.js": "verifies bright-spot briefs",
     "tools/bca_precompute.mjs": "generates the tenant's own benefit-cost precompute from its own seed models (bca-models.js); tenant-specific",

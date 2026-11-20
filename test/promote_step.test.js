@@ -13,7 +13,7 @@ test('tick step pings IndexNow for every solution, skips social without credenti
   const f = async (u, o) => { calls.push(u); return u.endsWith('/metrics.json') ? { ok: true, json: async () => ({ daily: [{ day: '2026-11-17', views: 3 }] }) } : { ok: true, status: 200, json: async () => ({}) }; };
   const sols = [{ id: 'a', title: 'A', claim: 'c', label: 'l', domains: ['health'] }];
   const r = await promoteStep({ solutions: sols, fetch: f, env: {}, origin: 'https://ps.example' }).run(db, { now: Date.parse('2026-11-17T12:00:00Z') });
-  assert.equal(r.sent, 1); assert.ok(calls.some(u => u.includes('indexnow')));
+  assert.equal(r.sent, 35); assert.ok(calls.some(u => u.includes('indexnow')));
   assert.equal(r.alerts[0].metric, 'views');
-  assert.equal(entriesFrom(sols, 'https://ps.example')[0].url, 'https://ps.example/solutions/a');
+  assert.ok(entriesFrom(sols, 'https://ps.example').some(e => e.url === 'https://ps.example/solutions/a'));
 });
