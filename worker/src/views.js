@@ -4,8 +4,9 @@
 // Copenhagen Consensus) and a script-free trend chart (Our World in Data). Every number is read from catalogue data at request time.
 import * as ui from './kit/index.js';
 import { LABELS } from './catalog.js';
+import { figure, sig } from './numfmt.js';
 const { esc } = ui;
-const f = n => n >= 100 ? Math.round(n).toLocaleString('en-US') : n >= 10 ? n.toFixed(1) : n.toFixed(2);
+const f = n => sig(n, 3);  // NUMFMT-1: three significant figures, never a fixed two decimals
 
 export function evidenceMap(c) {
   const labels = Object.keys(LABELS);
@@ -34,9 +35,9 @@ ${ui.table({ caption: 'Benefit-cost, WELLBYs per USD 1,000', head: ['#', 'Soluti
 }
 
 // Two-point slope chart from the catalogue's own earlier and latest values; no script, readable by screen readers through the title and table.
-export function trendSvg(m) {
+export function trendSvg(m, title = '') {
   if (!m || m.base == null || m.value == null || m.base_year == null || m.year == null) return '';
   const lo = Math.min(m.base, m.value), hi = Math.max(m.base, m.value), span = hi - lo || 1, W = 320, H = 120, P = 24;
-  const y = v => Math.round(H - P - ((v - lo) / span) * (H - 2 * P)), x1 = P, x2 = W - P, up = m.value > m.base;
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="tr-t" width="100%" style="max-width:24rem"><title id="tr-t">From ${esc(String(m.base))} in ${esc(String(m.base_year))} to ${esc(String(m.value))} in ${esc(String(m.year))}</title><line x1="${x1}" y1="${y(m.base)}" x2="${x2}" y2="${y(m.value)}" stroke="currentColor" stroke-width="3"/><circle cx="${x1}" cy="${y(m.base)}" r="5" fill="currentColor"/><circle cx="${x2}" cy="${y(m.value)}" r="5" fill="currentColor"/><text x="${x1}" y="${H - 4}" font-size="14" fill="currentColor">${esc(String(m.base_year))}: ${esc(String(m.base))}</text><text x="${x2}" y="${H - 4}" font-size="14" text-anchor="end" fill="currentColor">${esc(String(m.year))}: ${esc(String(m.value))}</text><text x="${W / 2}" y="14" font-size="14" text-anchor="middle" fill="currentColor">${up ? 'rising' : m.value < m.base ? 'falling' : 'flat'}</text></svg>`;
+  const nb = figure(m.base, title) || sig(m.base, 3), nv = figure(m.value, title) || sig(m.value, 3), y = v => Math.round(H - P - ((v - lo) / span) * (H - 2 * P)), x1 = P, x2 = W - P, up = m.value > m.base;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="tr-t" width="100%" style="max-width:24rem"><title id="tr-t">From ${esc(nb)} in ${esc(String(m.base_year))} to ${esc(nv)} in ${esc(String(m.year))}</title><line x1="${x1}" y1="${y(m.base)}" x2="${x2}" y2="${y(m.value)}" stroke="currentColor" stroke-width="3"/><circle cx="${x1}" cy="${y(m.base)}" r="5" fill="currentColor"/><circle cx="${x2}" cy="${y(m.value)}" r="5" fill="currentColor"/><text x="${x1}" y="${H - 4}" font-size="14" fill="currentColor">${esc(String(m.base_year))}: ${esc(nb)}</text><text x="${x2}" y="${H - 4}" font-size="14" text-anchor="end" fill="currentColor">${esc(String(m.year))}: ${esc(nv)}</text><text x="${W / 2}" y="14" font-size="14" text-anchor="middle" fill="currentColor">${up ? 'rising' : m.value < m.base ? 'falling' : 'flat'}</text></svg>`;
 }

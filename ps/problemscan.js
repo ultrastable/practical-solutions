@@ -11,18 +11,32 @@ const clean = s => String(s || '').replace(/\s+/g, ' ').trim();
 // ---- the rule that decides what is a problem and which way is better ------------------------------------------------------------------------
 // First match wins, so the specific "should rise" patterns come before the generic "should fall" words (contraceptive prevalence is a coverage).
 export const RULES = [
-  { id: 'coverage', lower: false, re: /\b(access to|with access|coverage|immuni[sz]ation|vaccin|births attended|skilled (health|birth)|antenatal care|contraceptive prevalence|demand for family planning|literacy rate|completion rate|school enrol|enrolment|enrollment|life expectancy|survival to|treatment success|case detection|antiretroviral|using (at least basic|safely managed|basic|the internet)|individuals using the internet|account ownership|handwashing|exclusive breastfeeding|breastfed|trained teachers|qualified teachers|birth registration|births? .*registered|seats held by women|protected areas|renewable energy|clean fuels|electricity|insecticide-treated|oral rehydration|vitamin a supplementation|iodized salt|health service coverage|social (protection|insurance|safety net)s? .*coverag|pupils? .*proficien|minimum proficiency)/i },
+  // a count of people who NEED something is a burden, even when the thing needed (treatment) is a coverage elsewhere
+  { id: 'strong-coverage', lower: false, decisive: true, re: /\b(contraceptive prevalence|treatment success|tested for|treatment coverage|lifetime risk of maternal death \(1 in)\b/i },
+  { id: 'unclear', lower: null, decisive: true, re: /\belectricity production from (natural gas|nuclear|hydro)/i },
+  { id: 'strong-harm', lower: true, decisive: true, re: /\b(lifetime risk of maternal death \(%|pupils? below minimum|below minimum (reading|math)|repeaters|out-of-school|unmet need|electricity production from (oil|gas|coal|fossil)|oil, gas and coal sources|coal sources)\b/i },
+  { id: 'need', lower: true, decisive: true, re: /\b(needing|in need of|requiring|eligible for)\b/i },
+  { id: 'coverage', lower: false, re: /\b(access to|with access|coverage|immuni[sz]ation|vaccin|births attended|skilled (health|birth)|antenatal care|contraceptive prevalence|demand for family planning|literacy rate|completion rate|school enrol|enrolment|enrollment|life expectancy|survival to|treatment success|case detection|antiretroviral|using (at least basic|safely managed|basic|the internet)|individuals using the internet|account ownership|handwashing|exclusive breastfeeding|breastfed|trained teachers|qualified teachers|birth registration|births? .*registered|seats held by women|protected areas|renewable energy|clean fuels|electricity|insecticide-treated|oral rehydration|vitamin a supplementation|iodized salt|health service coverage|social (protection|insurance|safety net)s? .*coverag|pupils? .*proficien|minimum proficiency|tested for|screened|screening|notified|detected|receiving|received|reached)/i },
   { id: 'harm', lower: true, re: /\b(mortality|death|deaths|died|dying|stillbirth|suicide|homicide|killed|fatalit|prevalence|incidence|new (hiv )?infections|new cases|poverty|poor|undernourish|hunger|food insecurity|stunting|stunted|wasting|wasted|underweight|overweight|obes|an(a)?emia|low.?birth.?weight|out.of.school|not in (education|school)|dropout|drop-out|repeaters|illitera|unemploy|child (labou?r|marriage)|children in employment|married (by|before) age|vulnerable employment|informal employment|working poor|slum|homeless|pollution|pm2\.5|emissions|deforestation|degraded|threatened species|red list|water stress|natural disasters?|droughts, floods|bribe|corruption|violence|victims|trafficking|refugee population by country.*origin|internally displaced|conflict|unsafe|lacking|without|open defecation|smok|tobacco use|alcohol consumption|harmful use|road traffic|injur|disabilit|catastrophic|impoverish|out-of-pocket|unmet need|adolescent fertility|adolescent birth|teenage mothers|wait(ing)? time|losses|food loss|waste generated|hazardous waste|overfish|overexploit|gap|inequal|gini)\b/i },
 ];
 // Words that mark an indicator as a breakdown of another one, or as something that is not a level in the world today.
-export const SKIP = /\b(archived|discontinued|\(old\)|estimated number of people needing|number of countries|existence of|is there a|status of|standard error|sample size|confidence|lower bound|upper bound)\b/i;
+export const SKIP = /^\(a\)|out-of-pocket expenditure (\(oop\) )?per capita|\b(parity index|number of parties|parties to|archived|discontinued|\(old\)|estimated number of people needing|number of countries|existence of|is there a|status of|standard error|sample size|confidence|lower bound|upper bound)\b/i;
 export const BREAKDOWN = /,\s*(male|female|urban|rural|youth (male|female)|adult (male|female)|ages? [0-9][0-9 +-]*|(first|second|third|fourth|fifth|lowest|highest) (20%|10%|quintile))\b|\b(male|female)\s*\(/i;
 
+// A rule decides only when it is unambiguous: an explicit "need" wins, one matching family decides, and a title that reads as both a coverage and
+// a harm (for example "New cases tested for TB") has no direction we can trust, so it is kept with lower: null and described as "changing".
 export function classify(name, rules = RULES) {
   const t = clean(name);
   if (!t || SKIP.test(t)) return null;
-  for (const r of rules) { const m = r.re.exec(t); if (m) return { lower: r.lower, rule: r.id, matched: m[0].toLowerCase() }; }
-  return null;
+  const hits = rules.map(r => ({ r, m: r.re.exec(t) })).filter(x => x.m);
+  if (!hits.length) return null;
+  const first = hits[0];
+  if (first.r.decisive) return { lower: first.r.lower, rule: first.r.id, matched: first.m[0].toLowerCase() };
+  const dirs = new Set(hits.map(x => x.r.lower));
+  if (dirs.size > 1) return { lower: null, rule: 'ambiguous', matched: hits.map(x => x.m[0].toLowerCase()).join(' + ') };
+  // a service count ("number of children receiving treatment") moves with the size of the need as well as with the service, so its direction is not read
+  if (first.r.lower === false && /\bnumber\b/i.test(t) && !isPercent(t)) return { lower: null, rule: 'ambiguous', matched: first.m[0].toLowerCase() + ' (a count)' };
+  return { lower: first.r.lower, rule: first.r.id, matched: first.m[0].toLowerCase() };
 }
 export const isPercent = name => /%|per ?cent|proportion of|share of/i.test(String(name));
 
@@ -35,18 +49,25 @@ export function measure(rows, { lower, percent }, cfg = PACE) {
   if (!xs.length) return null;
   const latest = xs[0], cands = xs.filter(r => r.year <= latest.year - cfg.min_span);
   const base = cands.length ? cands.reduce((b, r) => Math.abs(r.year - (latest.year - cfg.base_years)) < Math.abs(b.year - (latest.year - cfg.base_years)) ? r : b) : null;
-  const out = { value: latest.value, year: latest.year, base: base ? base.value : null, base_year: base ? base.year : null, pace: null, status: 'no trend yet' };
+  const out = { value: latest.value, year: latest.year, base: base ? base.value : null, base_year: base ? base.year : null, pace: null, dir: null, status: 'no trend yet' };
   if (!base) return out;
+  const span = latest.year - base.year;
+  // a zero (or missing) baseline is not a starting level: the thing did not exist or was not recorded yet, so no growth is computed from it
+  if (!(base.value > 0) && !(base.value < 0)) { out.status = latest.value > 0 ? 'new' : 'no trend yet'; out.dir = latest.value > 0 ? 'up' : null; return out; }
+  const rel = (latest.value - base.value) / Math.abs(base.value);
+  out.dir = Math.abs(rel) < 0.005 * span ? 'flat' : latest.value > base.value ? 'up' : 'down';
+  if (lower == null) { out.status = out.dir === 'flat' ? 'little change' : 'changing'; return out; }
   const burden = v => lower ? v : percent ? 100 - v : v > 0 ? 1 / v : null;
   let b1 = burden(latest.value), b0 = burden(base.value);
   if (b1 == null || b0 == null || b1 < 0 || b0 < 0) { out.status = 'trend not computable'; return out; }
   if (percent) { b1 = Math.max(b1, cfg.floor); b0 = Math.max(b0, cfg.floor); }
-  if (!(b1 > 0) || !(b0 > 0)) { out.status = 'trend not computable'; return out; }
-  out.pace = Math.log(b1 / b0) / (latest.year - base.year);
+  if (!(b0 > 0)) { out.status = 'trend not computable'; return out; }
+  if (!(b1 > 0)) { out.status = 'improving'; return out; }  // the burden has gone to zero: improving, with no rate to state
+  out.pace = Math.log(b1 / b0) / span;
   out.status = out.pace > cfg.stall ? 'getting worse' : out.pace < -cfg.stall ? 'improving' : 'stalled';
   return out;
 }
-export const RANK_RULE = 'Problems with a world figure in two years at least five years apart are ranked by pace: the yearly rate at which the thing that should fall is changing over about ten years (for a coverage that should rise, the share still left out). Growing problems rank first, then stalled ones, then the slowest improvers. Pace compares directions across different units; it does not measure how many people are harmed. Problems with no usable world figure are listed unranked.';
+export const RANK_RULE = 'Problems with a world figure in two years at least five years apart are ranked by pace: the yearly rate at which the thing that should fall is changing over about ten years (for a coverage that should rise, the share still left out). Growing problems rank first, then stalled ones, then the slowest improvers. Pace compares directions across different units; it does not measure how many people are harmed. Where the wording does not make clear whether a rise is good or bad, the entry is described as changing and is not ranked; a figure that starts from zero is described as new, never as growth. Problems with no usable world figure are listed unranked.';
 export function rank(entries) {
   const paced = entries.filter(e => e.m && e.m.pace != null).sort((a, b) => b.m.pace - a.m.pace || a.id.localeCompare(b.id));
   const rest = entries.filter(e => !(e.m && e.m.pace != null)).sort((a, b) => (b.m ? 1 : 0) - (a.m ? 1 : 0) || a.title.localeCompare(b.title));
@@ -141,7 +162,7 @@ export const SOURCES = () => [unSdg(), whoCauses(), worldBank(), whoGho()];
 // source is a taxonomy (the problem is recognised even though this run found no figure for it).
 export async function scan({ sources = SOURCES(), prev = null, budget = 400, fetch: f = globalThis.fetch, now = () => new Date().toISOString(), rules = RULES, remeasure_days = 30 } = {}) {
   const at = now(), today = at.slice(0, 10), byId = new Map(((prev && prev.entries) || []).map(e => [e.id, e])), stats = {}, log = [...((prev && prev.log) || [])];
-  const items = new Map();
+  const items = new Map(), redirected = [];
   for (const s of sources) {
     const st = stats[s.id] = { name: s.name, home: s.home, licence: s.licence, listed: 0, matched: 0, breakdowns_skipped: 0, error: null };
     let list;
@@ -155,6 +176,7 @@ export async function scan({ sources = SOURCES(), prev = null, budget = 400, fet
       if (BREAKDOWN.test(it.name)) { const total = it.name.replace(BREAKDOWN, m => /\(/.test(m) ? '(' : '').toLowerCase(); if (names.has(total) || names.has(total.replace(/\s*\(/, ', total (')) || [...names].some(n => n !== it.name.toLowerCase() && n.replace(/,\s*total\b/, '') === total)) { st.breakdowns_skipped++; continue; } }
       st.matched++;
       const id = `${s.id}-${slug(it.code)}`, old = byId.get(id);
+      if (old && old.m) { const o = old.m, before = o.status, rows = [{ year: o.year, value: o.value }, ...(o.base != null ? [{ year: o.base_year, value: o.base }] : [])]; old.m = measure(rows, { lower: c.lower, percent: isPercent(it.name) }); if (old.m && old.m.status !== before) redirected.push(id); }
       items.set(id, { src: s, item: it, e: { id, source: s.id, code: it.code, title: it.name, domain: it.domain, note: it.note || '', lower: c.lower, rule: c.rule, matched: c.matched, percent: isPercent(it.name), page: s.page(it.code), first_seen: (old && old.first_seen) || today, published: (old && old.published) || null, m: (old && old.m) || null, measured_at: (old && old.measured_at) || null, read_url: (old && old.read_url) || s.listUrl || null, tries: (old && old.tries) || 0 } });
     }
   }
@@ -175,7 +197,24 @@ export async function scan({ sources = SOURCES(), prev = null, budget = 400, fet
   for (const e of all) { const taxonomy = (sources.find(s => s.id === e.source) || {}).taxonomy; if (!e.published && (e.m || taxonomy)) { e.published = today; added.push(e.id); } }
   const entries = rank(all.filter(e => e.published)), pending = all.filter(e => !e.published);
   for (const s of Object.keys(stats)) { stats[s].published = entries.filter(e => e.source === s).length; stats[s].measured = entries.filter(e => e.source === s && e.m).length; stats[s].awaiting_figure = pending.filter(e => e.source === s && !e.measured_at).length; stats[s].no_world_figure = pending.filter(e => e.source === s && e.measured_at).length; }
+  const removed = [...byId.values()].filter(e => e.published && !items.has(e.id)).map(e => e.id);
+  if (removed.length) log.push({ at, event: 'removed: no longer read as a problem', ids: removed.slice(0, 50), count: removed.length });
+  if (redirected.length) log.push({ at, event: 'trend re-read from stored figures', count: redirected.length, ids: redirected.slice(0, 50) });
   log.push({ at, event: 'scan', added: added.length, measured, no_figure: empty, failed, published: entries.length, due_left: [...items.values()].filter(x => x.src && x.src.series && x.e.lower != null && !x.e.measured_at).length });
   return { schema: 'problem-scan/1', at, rank_rule: RANK_RULE, sources: stats, entries: [...entries, ...pending.map(e => ({ ...e, rank: null }))], added, log: log.slice(-200) };
 }
 export const published = ledger => ((ledger && ledger.entries) || []).filter(e => e.published);
+
+// Offline re-read of a ledger with the current rules: direction, trend and membership are recomputed from the stored figures (no network).
+export function rederive(ledger, rules = RULES, taxonomy = ['sdg', 'ghe']) {
+  const kept = [], removed = [], changed = [];
+  for (const e of ledger.entries || []) {
+    const c = e.rule === 'taxonomy' ? { lower: e.lower, rule: 'taxonomy', matched: null } : classify(e.title, rules);
+    if (!c && !taxonomy.includes(e.source)) { removed.push(e.id); continue; }
+    const c2 = c || { lower: e.source === 'ghe' ? true : null, rule: 'taxonomy', matched: null };
+    const n = { ...e, lower: c2.lower, rule: c2.rule, matched: c2.matched };
+    if (e.m) { const rows = [{ year: e.m.year, value: e.m.value }, ...(e.m.base != null ? [{ year: e.m.base_year, value: e.m.base }] : [])]; n.m = measure(rows, { lower: c2.lower, percent: isPercent(e.title) }) || e.m; if (n.m.status !== e.m.status) changed.push(e.id); }
+    kept.push(n);
+  }
+  return { ledger: { ...ledger, entries: rank(kept.filter(e => e.published)).concat(kept.filter(e => !e.published)) }, removed, changed };
+}

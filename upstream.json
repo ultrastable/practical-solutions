@@ -125,6 +125,11 @@
       "core": "core/problemscan/index.js",
       "hold": "queued: the engine is tenant-agnostic (sources, rules and budget are arguments); lifts to core after its first live scan",
       "item": "Q-LIFT-TENANT-1"
+    },
+    "worker/src/numfmt.js": {
+      "core": "core/format/numfmt.js",
+      "hold": "queued: dependency-free number formatter (NUMFMT-1) lifts to core for every tenant",
+      "item": "Q-LIFT-TENANT-1"
     }
   },
   "min_lines": 8,
