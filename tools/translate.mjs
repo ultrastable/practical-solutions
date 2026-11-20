@@ -44,20 +44,22 @@ export const coverage = (pages, dict) => { let a = 0, b = 0; for (const e of pag
 // Models for translation: the multilingual-strong members of the pool first; the first that answers with passing lines wins.
 const LADDER = ['gemma-4', 'qwen3-30b', 'llama-3.3-70b', 'mistral-small-3.1'].map(id => ENSEMBLE.pool.find(m => m.id === id)).filter(Boolean);
 const generator = () => async ({ system, user, maxTokens }) => {
-  const why = [];
+  const why = [];   // Workers AI free plan: a daily neuron quota (error 4006) that resets at 00:00 UTC; the run stops on it and the next daily run continues
   for (const spec of LADDER) { const r = await askModel({ secrets: process.env, spec, prompt: system + '\n\n' + user, maxTokens }); if (r.ok && r.text) return r.text.replace(/<think>[\s\S]*?<\/think>/g, ''); why.push(`${spec.id}: ${r.error || 'empty'}`); }
   throw new Error('no model route answered (' + why.join('; ').slice(0, 400) + ')');   // the reasons ride in the run report, so a quota or plan error is data
 };
 
 export async function run({ langs, calls = 30, batch = 25, generate = generator(), pages, now = new Date().toISOString(), dir = DIR, deadline = Infinity }) {
   const man = existsSync(`${dir}/manifest.json`) ? JSON.parse(readFileSync(`${dir}/manifest.json`, 'utf8')) : { schema: 'ps-i18n/1', langs: {} };
-  const report = {};
+  const report = {}; let quotaOut = false;   // one language hitting the daily quota stops the others too: no point burning calls
   await Promise.all(langs.map(async lang => {   // languages run side by side: the model route is the slow part, not the machine
     const keep = new Set(pages.keys()); let dict = Object.fromEntries(Object.entries(load(lang, dir)).filter(([k]) => keep.has(k)));   // translations of text that no longer exists are dropped
     const todo = [...pages.values()].filter(e => !dict[e.key]).sort((a, b) => b.pages - a.pages || a.text.localeCompare(b.text)), stat = { before: Object.keys(dict).length, rejected: {}, calls: 0 };
     for (let i = 0; i < calls && i * batch < todo.length && Date.now() < deadline; i++) {
       const seg = todo.slice(i * batch, (i + 1) * batch); stat.calls++;
-      let r; try { r = await translateBatch({ generate, lang, segments: seg.map(s => s.text) }); } catch (e) { stat.error = String(e.message || e); break; }
+      if (quotaOut) { stat.error = 'quota: free daily model allowance used up; the next daily run continues'; break; }
+      let r; try { r = await translateBatch({ generate, lang, segments: seg.map(s => s.text) }); } catch (e) { stat.error = String(e.message || e); if (/4006|used up/.test(stat.error)) quotaOut = true; break; }
+      if (r.rejected.some(x => /4006|used up/.test(x.why))) quotaOut = true;
       Object.assign(dict, r.ok); for (const x of r.rejected) stat.rejected[x.why] = (stat.rejected[x.why] || 0) + 1;
       if (!Object.keys(r.ok).length && stat.calls >= 2) { stat.error = 'two batches with no accepted translation'; break; }
     }
