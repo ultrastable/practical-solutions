@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 // tenant-ps-web: the tenant's own Worker. Cron runs the improvement tick; fetch serves the page and the data it reads.
 // Bindings: STATE (tenant-ps-kv) only. Core is never called; the loop backend is reached by plain HTTP (BACKEND var).
+import { socialQueue, recentIds } from './social-voice.js';
 import { PAGE } from './ui.js';
 import { rankProblems } from './problems.js';
 import { tick, verifiedText, recordErrors } from './improve.js';
@@ -65,6 +66,7 @@ export default {
       let b = {}; try { b = await r.json(); } catch { return Response.json({ error: 'body must be JSON' }, { status: 400 }); }
       try { return Response.json(b.settle ? { ok: await PV.settle(env.STATE, b.settle, b.effect, b.note) } : { ok: true, row: await PV.add(env.STATE, b) }); } catch (x) { return Response.json({ error: String(x.message || x) }, { status: 400 }); }
     }
+    if (u.pathname === '/social-queue.json') { const cat = await catalog(env), origin = canonicalOrigin(r, u); return Response.json(socialQueue(cat, { origin, recent: recentIds(await j(env, 'changes', [])) }), { headers: { 'cache-control': 'public, max-age=600' } }); }  // SOCIAL-VOICE-1
     if (u.pathname === '/changes.json') return Response.json({ changes: await j(env, 'changes', []), last_tick: await j(env, 'last_tick', null) });
     if (/^\/[a-f0-9]{32}\.txt$/.test(u.pathname) && u.pathname === '/' + await indexnowKey('practical-solutions') + '.txt') return new Response(u.pathname.slice(1, 33), { headers: { 'content-type': 'text/plain' } });
     const origin = canonicalOrigin(r, u);
