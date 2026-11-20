@@ -13,6 +13,7 @@ import { AUDIENCES, audience } from './audiences.js';
 import { domainMeta } from './domains-meta.js';
 import { embedSnippet, datasetLd } from './export.js';
 import { STORIES, storiesFor } from '../../ux/stories.js';
+import { sig } from './numfmt.js';
 
 const { esc } = ui;
 export const SITE = 'Practical Solutions';
@@ -50,7 +51,7 @@ const labelBadge = l => ui.badge(l, labelTone(l));
 const implBadge = i => i ? ui.badge(`${i.band} · ${i.score}/8`, i.score >= 7 ? 'ok' : i.practical ? 'info' : 'warn') : '';
 const sUrl = s => '/solutions/' + s.id, pUrl = p => '/problems/' + p.id;
 const sLink = s => `<a href="${esc(sUrl(s))}">${esc(s.title)}</a>`, pLink = p => `<a href="${esc(pUrl(p))}">${esc(p.title)}</a>`;
-const gapText = p => p.ranked ? `${p.value} ${esc(p.unit)} (${p.year}); target ${p.target} (${esc(p.target_src)})` : 'No usable world figure yet. The loop retries every cycle.';
+const gapText = p => p.ranked ? `${sig(p.value)} ${esc(p.unit)} (${p.year}); target ${sig(p.target)} (${esc(p.target_src)})` : 'No usable world figure yet. The loop retries every cycle.';
 const gapPct = p => p.ranked ? Math.round(p.shortfall * 100) : 0;
 const dMeta = d => domainMeta(d);
 const domainOf = (c, name) => c.domains.find(d => d.name === name);
@@ -128,7 +129,7 @@ export function problemPage(p, c, o) {
     lede: p.ranked ? `${p.title}: the world is ${gapPct(p)}% of the way short of its target (${p.target_src}).` : `${p.title}. No usable world figure yet.`,
     crumb: [{ label: 'Home', href: '/' }, { label: 'Problems', href: '/problems' }, { label: p.title }], badges: [ui.badge(p.domain), ui.badge(sols.length ? `${sols.length} solution${sols.length > 1 ? 's' : ''} listed` : 'no solution listed yet', sols.length ? 'ok' : 'warn')],
     keys: [p.ranked ? `<b>Size of the gap:</b> ${gapText(p)}.` : '<b>Gap:</b> not yet measurable.', sols.length ? `<b>What can be done:</b> ${sols.map(sLink).join(', ')}.` : '<b>What can be done:</b> no reviewed solution yet; the loop is searching.'],
-    facts: [['Domain', d ? `<a href="/domains/${esc(d.slug)}">${esc(p.domain)}</a>` : esc(p.domain)], ['Latest value', p.ranked ? `${esc(p.value)} (${esc(p.year)})` : ''], ['Target', p.ranked ? esc(String(p.target)) : ''], ['Gap to target', p.ranked ? gapPct(p) + '%' : ''], ['Rank', p.ranked ? String(p.rank) : ''], ['Indicator', esc(p.ind)]],
+    facts: [['Domain', d ? `<a href="/domains/${esc(d.slug)}">${esc(p.domain)}</a>` : esc(p.domain)], ['Latest value', p.ranked ? `${esc(sig(p.value))} (${esc(p.year)})` : ''], ['Target', p.ranked ? esc(sig(p.target)) : ''], ['Gap to target', p.ranked ? gapPct(p) + '%' : ''], ['Rank', p.ranked ? String(p.rank) : ''], ['Indicator', esc(p.ind)]],
     jsonld: { '@context': 'https://schema.org', '@type': 'Article', headline: p.title, url: o + pUrl(p), isPartOf: { '@type': 'WebSite', name: SITE, url: o } } });
 }
 

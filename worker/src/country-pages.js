@@ -6,6 +6,7 @@ import * as ui from './kit/index.js';
 import * as P from './pages.js';
 import { LEVELS, levelName } from './context.js';
 import { INFRA, findCountries, solutionsFor, levelOf } from './countries.js';
+import { sig } from './numfmt.js';
 
 const { esc } = ui;
 const SITE = P.SITE;
@@ -35,7 +36,7 @@ export function countryPage(x, c, o) {
   const sol = a => ui.list(a.map(({ s, reasons }) => `<a href="/solutions/${esc(s.id)}">${esc(s.title)}</a> <span class="m">${esc(reasons.join('. '))}.</span>`)) || '<p>None.</p>';
   const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'By country', href: '/country' }, { label: x.name }])}<h1>${esc(x.name)}</h1><p class="lede">${esc(x.region)}. ${lv ? `Solutions below are chosen for the <b>${esc(levelName(lv.id))}</b> level (from the ${esc(lv.via)}).` : 'No income group or HDI figure is available, so solutions are not filtered by level.'}</p>
 ${ui.table({ caption: 'Context', head: ['Dimension', 'Value'], rows: [['World Bank income group', esc(levelName(x.level) || 'not classified')], ['Human Development Index tier', hdi], ...infra] })}
-<h2>Problems that rank highest at this income level</h2>${levelRank.length ? ui.list(levelRank.map(p => `${p.rank}. <a href="/problems/${esc(p.id)}">${esc(p.title)}</a> <span class="m">${Math.round(p.shortfall * 100)}% gap to target (${esc(p.value)} ${esc(p.unit)}, ${esc(p.year)})</span>`)) + `<p><a href="/levels/${esc(lv.id)}">Full ranking for ${esc(levelName(lv.id))}</a></p>` : '<p>No ranking for this level yet.</p>'}
+<h2>Problems that rank highest at this income level</h2>${levelRank.length ? ui.list(levelRank.map(p => `${p.rank}. <a href="/problems/${esc(p.id)}">${esc(p.title)}</a> <span class="m">${Math.round(p.shortfall * 100)}% gap to target (${esc(sig(p.value))} ${esc(p.unit)}, ${esc(p.year)})</span>`)) + `<p><a href="/levels/${esc(lv.id)}">Full ranking for ${esc(levelName(lv.id))}</a></p>` : '<p>No ranking for this level yet.</p>'}
 <h2>Solutions that fit here (${r.relevant.length})</h2>${sol(r.relevant)}
 <h2>Less relevant here (${r.less.length})</h2><p class="m">Already widespread, a different income level, or the infrastructure gap is nearly closed.</p>${sol(r.less)}
 <p class="m">Income level and infrastructure rules are judgements stated on each solution; they are a place to start, not a verdict. ${esc(String(ctx.at || '').slice(0, 10)) ? 'Snapshot ' + esc(String(ctx.at).slice(0, 10)) + '.' : ''} <a href="/country/${esc(x.iso3)}.json">JSON</a></p>`;
@@ -48,7 +49,7 @@ export function levelPage(id, c, o) {
   const ctx = ctxOf(c), l = LEVELS.find(v => v.id === id), d = ctx.levels && ctx.levels[id] || { ranked: [], unranked: [] };
   const members = Object.values(ctx.countries || {}).filter(x => x.level === id).sort((a, b) => a.name.localeCompare(b.name));
   const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'By income level', href: '/context' }, { label: l.name }])}<h1>Problems ranked for ${esc(l.name.toLowerCase())} countries</h1><p class="lede">Ranked by the gap between the group's latest figure and the same international target used for the world ranking (${esc(l.note)}, group aggregate). It ranks the size of the gap, not deaths or years of life lost.</p>
-${d.ranked.length ? ui.table({ caption: `Problems ranked for ${l.name}`, head: ['Rank', 'Problem', 'Latest', 'Target', 'Gap'], rows: d.ranked.map(p => [String(p.rank), `<a href="/problems/${esc(p.id)}">${esc(p.title)}</a>`, `${esc(p.value)} ${esc(p.unit)} (${esc(p.year)})`, esc(String(p.target)), Math.round(p.shortfall * 100) + '%']) }) : ui.callout({ tone: 'warn', title: 'Not ranked yet', body: '<p>The daily refresh has not produced this group\'s series yet.</p>' })}
+${d.ranked.length ? ui.table({ caption: `Problems ranked for ${l.name}`, head: ['Rank', 'Problem', 'Latest', 'Target', 'Gap'], rows: d.ranked.map(p => [String(p.rank), `<a href="/problems/${esc(p.id)}">${esc(p.title)}</a>`, `${esc(sig(p.value))} ${esc(p.unit)} (${esc(p.year)})`, esc(sig(p.target)), Math.round(p.shortfall * 100) + '%']) }) : ui.callout({ tone: 'warn', title: 'Not ranked yet', body: '<p>The daily refresh has not produced this group\'s series yet.</p>' })}
 ${d.unranked.length ? `<p class="m">No usable figure for this group: ${d.unranked.map(p => esc(p.title)).join(', ')}.</p>` : ''}
 <h2>Solutions relevant at this level (${c.sols.filter(s => s.fit.levels.includes(id)).length})</h2><p><a href="/solutions?level=${esc(id)}">See them</a></p>
 <h2>Countries (${members.length})</h2>${members.length ? `<p>${members.map(x => `<a href="/country/${esc(x.iso3)}">${esc(x.name)}</a>`).join(' · ')}</p>` : '<p>Country list not loaded yet.</p>'}${stale(ctx)}<p><a href="/levels/${esc(id)}.json">JSON</a></p>`;

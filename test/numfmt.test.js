@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { figure, pct, count, sig, rate, machine, unitOf, falsePrecision } from '../worker/src/numfmt.js';
 import { classify, measure } from '../ps/problemscan.js';
 import { SCAN } from '../worker/src/problem-scan.gen.js';
-import { route } from '../worker/src/site.js';
+import { route, sitemap } from '../worker/src/site.js';
 import { buildCatalog } from '../worker/src/catalog.js';
 import { SOLUTIONS } from '../worker/src/solutions.js';
 
@@ -75,9 +75,11 @@ test('every published entry agrees with the rules now and with its own two figur
     if (m.status === 'improving') assert.ok(e.lower ? down : up, e.id + ' says improving but moved the other way');
   }
 });
-test('no page the site serves shows false precision (raw floats, unseparated long integers)', async () => {
+test('no page in the sitemap shows false precision (raw floats, unseparated long integers)', async () => {
   const c = buildCatalog({ problems: null, solutions: SOLUTIONS }), u = p => new URL('https://x.test' + p);
-  const paths = ['/', '/catalogue', '/catalogue?domain=health', '/problems', '/solutions', '/domains', '/impact', '/method', '/unknowns', '/country', '/compare', '/releases', '/about', '/api', ...SCAN.entries.slice(0, 80).map(e => '/catalogue/' + e.id), ...c.probs.slice(0, 20).map(p => '/problems/' + p.id), ...c.sols.slice(0, 40).map(s => '/solutions/' + s.id)];
+  const paths = [...sitemap(c, 'https://x.test').matchAll(/<loc>https:\/\/x\.test([^<]*)<\/loc>/g)].map(m => m[1].replace(/&amp;/g, '&')), extra = ['/catalogue?domain=health', '/catalogue?trend=changing', '/catalogue?page=2'];
+  assert.ok(paths.length > 800, 'every sitemap page is checked: ' + paths.length);
+  paths.push(...extra);
   const bad = [];
   for (const p of paths) { const r = route(u(p), c); if (!r || !/html/.test(r.headers.get('content-type') || '')) continue; const f = falsePrecision(await r.text()); if (f) bad.push({ p, ...f }); }
   assert.ok(bad.length === 0, JSON.stringify(bad.slice(0, 5)));
