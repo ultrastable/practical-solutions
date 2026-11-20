@@ -6,6 +6,7 @@ import * as ui from './kit/index.js';
 import { answer, chatPort, allow, callerId } from '../../vendor/ultrastable/core/ask/index.js';
 import { ASK_INDEX } from './ask-index.gen.js';
 import { SHELL, SITE } from './pages.js';
+import { semanticFor } from './connections.js';  // DISCOVER-1: vector retrieval alongside keywords
 
 const { esc } = ui;
 export const ASK_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
@@ -13,13 +14,13 @@ export const LIMITS = { perMinute: 6, perDay: 150 };   // model calls per caller
 export const EXAMPLES = ['Which solutions cut child deaths and what do they cost?', 'What works against malaria?', 'Which problems are getting worse and have no solution yet?', 'How do I start a clean water project in a village?'];
 export const generatorFor = env => (env && env.AI && env.AI.run ? chatPort(env.AI, env.ASK_MODEL || ASK_MODEL) : undefined);
 
-export async function run(question, { env, request, lang = 'en', index = ASK_INDEX, generate = generatorFor(env), limits = LIMITS }) {
+export async function run(question, { env, request, lang = 'en', index = ASK_INDEX, generate = generatorFor(env), limits = LIMITS, semantic = semanticFor }) {
   // SMOKE-LIVE-1: production /api/ask answered with a bare 500 when the budget store or the model threw. Retrieval is local and always works, so a failing
   // store or model degrades to the cited sources without a written answer instead of failing the request.
   let gate;
   try { gate = await allow(env && env.STATE, { caller: await callerId(request), ...limits }); } catch { gate = { ok: true, model: false }; }
   if (!gate.ok) return { ok: false, error: 'rate_limited' };
-  try { return await answer(question, { index, generate: gate.model ? generate : undefined, lang, defaultLang: 'en' }); }
+  try { return await answer(question, { index, generate: gate.model ? generate : undefined, semantic: gate.model ? semantic(env) : undefined, lang, defaultLang: 'en' }); }
   catch { return answer(question, { index, generate: undefined, lang, defaultLang: 'en' }); }
 }
 

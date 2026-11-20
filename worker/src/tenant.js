@@ -17,7 +17,10 @@ import { ignoranceTick, ignView } from './unknowns.js';
 import { bcaTick, KEY as BCA_KEY } from './bca.js';
 import * as PV from '../../ps/provenance.js';  // PROVENANCE-1
 import { goalsTick, knob } from './goals.js';  // GOALS-1
-import { askRoute } from './ask.js';  // ASK-1
+import { askRoute, LIMITS as ASK_LIMITS } from './ask.js';  // ASK-1
+import { connectionsRoute } from './connections.js';  // DISCOVER-1
+import { allow, callerId } from '../../vendor/ultrastable/core/ask/index.js';
+import { sitePage } from './site.js';
 import { freshnessResponse } from './freshness.js';  // PAGES-FRESH-1
 import { sitemapFor, sitemapIndex, parsePath, localizable } from '../../vendor/ultrastable/core/i18n/index.js';  // I18N-1
 import { CODES, manifest, liveLangs, decorate, syncDictionaries, SOURCE_LANG } from './i18n.js';
@@ -81,6 +84,8 @@ const handler = {
     const origin = canonicalOrigin(r, u);
     const asked = await askRoute(r, u, env, ctx, { origin, lang: r.headers.get('x-ps-lang') || SOURCE_LANG, headers });  // ASK-1
     if (asked) return asked;
+    const conn = await connectionsRoute(u, env, { origin, page: sitePage, headers, allowFn: async () => (await allow(env.STATE, { caller: await callerId(r), ...ASK_LIMITS })).model });  // DISCOVER-1
+    if (conn) return conn;
     if (u.pathname === '/sitemap.xml' || /^\/sitemap-[a-z]{2,3}\.xml$/.test(u.pathname)) {  // I18N-1: an index plus one sitemap per live language, with hreflang alternates
       const live = liveLangs(await manifest(env)), x = { headers: { 'content-type': 'application/xml', 'cache-control': 'public, max-age=3600' } };
       if (u.pathname === '/sitemap.xml') return new Response(sitemapIndex({ origin, langs: live }), x);

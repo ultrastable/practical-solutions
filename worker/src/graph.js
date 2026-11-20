@@ -41,3 +41,9 @@ export async function unsolvedProblemIds(solutions, problems = PROBLEMS) {
   const g = await buildGraph({ solutions, problems });
   return (await g.gaps(RULES.filter(r => r.id === 'unsolved'))).map(x => x.node.replace(/^problem:/, ''));
 }
+
+// DISCOVER-1: the knowledge graph's transfer leads become questions the loop works on (a lead is never an edge until evidence confirms it).
+export function leadQuestions(view) {
+  return ((view && view.transfer) || []).slice(0, 10).map(c => ({ id: 'transfer:' + c.id, subject: c.members[1].id, rule: 'transfer-lead',
+    text: `Does "${c.members[0].label}" reduce "${c.members[1].label}"? It has evidence against "${c.via ? c.via.label : 'a related problem'}", which reads alike.` }));
+}

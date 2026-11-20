@@ -79,10 +79,18 @@ export async function groundPapers({ f = globalThis.fetch, n = 8, now = Date.now
 export const repairCitations = c => !c || !Array.isArray(c.citations) ? c : { ...c, citations: c.citations.map((x, i) => { if (!x || typeof x !== 'object') return x; const q = x.q || x.title, year = typeof x.year === 'string' && /^\d{4}$/.test(x.year) ? Number(x.year) : x.year;
   return { ...x, q, year, id: x.id || String(i + 1), role: x.role || 'Supporting study', cite: x.cite || (q ? `${q} (${year})` : x.cite), numbers: Array.isArray(x.numbers) ? x.numbers : [] }; }) };
 
-export async function discover({ ask, ground = null, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString() }) {
+// DISCOVER-1: the knowledge graph's best untried combination seeds the proposal, so the graph's leads become verified syntheses and, when one
+// is published, the graph confirms its own lead. Falls back to the rotating pairing when the graph has no open combination.
+export function graphSeed(ledger, list = SOLUTIONS) {
+  const by = new Map(list.map(s => [s.id, s]));
+  const open = Object.values((ledger && ledger.entries) || {}).filter(e => e.type === 'combination' && (e.status === 'new' || e.status === 'standing') && !e.seeded)
+    .map(e => ({ e, pair: e.members.map(m => by.get(String(m).replace(/^s:/, ''))) })).filter(x => x.pair.every(Boolean)).sort((a, b) => b.e.score - a.e.score);
+  return open.length ? { id: open[0].e.id, pair: open[0].pair } : null;
+}
+export async function discover({ ask, ground = null, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString(), seed = null }) {
   const existing = [...SYNTHESES.map(s => s.id), ...prev.entries.map(s => s.id)], log = [...prev.log], entries = [...prev.entries];
   const papers = ground ? await ground().catch(e => { log.push({ at: now(), event: 'grounding failed', detail: String(e.message || e).slice(0, 120) }); return []; }) : [], seen = new Set(papers.map(p => norm(p.title)));
-  const out = await ask(proposePrompt(max, existing, papers, seedPair(Math.floor(Date.parse(now()) / 1000) % 997))), list = json(out);
+  const out = await ask(proposePrompt(max, existing, papers, seed || seedPair(Math.floor(Date.parse(now()) / 1000) % 997))), list = json(out);
   if (!Array.isArray(list)) { log.push({ at: now(), event: 'no usable proposal', detail: String(out || '').slice(0, 120) }); return { schema: 'ps-synth-discovered/1', at: now(), entries, log: log.slice(-100) }; }
   for (const raw0 of list.slice(0, max)) {
     let raw = repairCitations(raw0), errs = validateCandidate(raw);
@@ -104,7 +112,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const i = process.argv.indexOf('--max'), max = i > 0 ? Number(process.argv[i + 1]) : 2;
   const ask = async prompt => { const r = await complete({ secrets: process.env, prompt: 'Reply with JSON only.\n\n' + prompt, maxTokens: 6000 }); return r.ok ? r.text : ''; };
   const prev = existsSync(DISCOVERED) ? JSON.parse(readFileSync(DISCOVERED, 'utf8')) : { entries: [], log: [] };
-  const r = await discover({ ask, max, prev, ground: () => groundPapers() });
+  const CONN = 'ledger/connections.json', ledger = existsSync(CONN) ? JSON.parse(readFileSync(CONN, 'utf8')) : null, g = graphSeed(ledger);
+  const r = await discover({ ask, max, prev, ground: () => groundPapers(), seed: g ? g.pair : null });
   writeFileSync(DISCOVERED, JSON.stringify(r, null, 1) + '\n');
+  if (g) { ledger.entries[g.id] = { ...ledger.entries[g.id], seeded: new Date().toISOString() }; writeFileSync(CONN, JSON.stringify(ledger, null, 1) + '\n'); }
   console.log(JSON.stringify({ entries: r.entries.length, last: r.log.slice(-3) }));
 }
