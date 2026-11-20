@@ -7,7 +7,7 @@ on:
   schedule: [{ cron: "*/30 * * * *" }]
   workflow_dispatch: {}
 concurrency: { group: branch-sweep, cancel-in-progress: false }
-permissions: { contents: write, pull-requests: write }
+permissions: { contents: write, pull-requests: write, actions: write }  # actions: the sweep dispatches deploy-tenant after a merge (SWEEP-DEPLOY-1)
 jobs:
   sweep:
     runs-on: ubuntu-latest
