@@ -173,10 +173,6 @@
       "class": "core",
       "role": "the L2 managerial layer"
     },
-    "core/discover": {
-      "class": "core",
-      "role": "Knowledge graph plus int8 vector index that proposes new connections (transfer, combination, bridge, frontier), screens them for novelty and scores itself against what the system adopts; tenant-agnostic (DISCOVER-1)"
-    },
     "core/kgraph": {
       "class": "core",
       "role": "Knowledge graph with provenance whose gaps generate the next questions; tenant-agnostic"
@@ -256,6 +252,10 @@
     "core/audit": {
       "class": "core",
       "role": "Hash-chained, Merkle-rolled, tamper-evident log of autonomous actions: hot events in D1, one compressed batch per day, verify and proof; tenant-agnostic (AUDIT-1)"
+    },
+    "core/discover": {
+      "class": "core",
+      "role": "Knowledge graph and vector index that keeps proposing connections nobody has drawn (transfer, combination, bridge, frontier); tenant-agnostic (DISCOVER-1)"
     },
     "core/promote": {
       "class": "core",
