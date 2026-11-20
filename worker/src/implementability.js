@@ -22,6 +22,9 @@ export const IMPL = {
   graduation: { cost: 'high', cost_note: 'Asset plus two years of coaching per household', adoption: 'scaled', channel: 'BRAC and government social-protection programmes', actors: 'social-protection ministries, BRAC' },
   deworming: { cost: 'low', cost_note: 'Cheap tablets', adoption: 'scaled', channel: 'school health programmes', actors: 'education and health ministries' },
   'clean-cooking': { cost: 'high', cost_note: 'Stove plus continuing fuel supply', adoption: 'piloted', channel: 'clean-cooking programmes', actors: 'energy ministries' },
+  'pph-bundle': { cost: 'low', cost_note: 'Drapes, a bundle trolley and training; the drugs are already stocked', adoption: 'piloted', channel: 'hospital maternity wards', actors: 'ministries of health, maternity ward managers' },
+  'tb-community-screening': { cost: 'high', cost_note: 'Many rapid molecular tests per case found, plus door-to-door teams', adoption: 'trial-only', channel: 'national tuberculosis programmes', actors: 'national tuberculosis programmes' },
+  cytisine: { cost: 'low', cost_note: 'A 25-day generic course', adoption: 'piloted', channel: 'quitlines and primary-care stop-smoking services', actors: 'health ministries, medicines regulators' },
   'emissions-market': { cost: 'high', cost_note: 'Monitors and a market platform', adoption: 'trial-only', channel: null, actors: 'state pollution control boards' },
 };
 export const COST = { low: 3, medium: 2, high: 1 }, ADOPT = { scaled: 3, piloted: 2, 'trial-only': 1 }, CHANNEL_POINTS = 2;

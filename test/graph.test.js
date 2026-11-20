@@ -8,9 +8,9 @@ import { tick } from '../worker/src/improve.js';
 const AG = { nodes: [{ id: 'agency:gh-moh', kind: 'agency', name: 'Ministry of Health, Ghana', country: 'GH', sectors: ['health'], level: 'national', url: 'https://moh.gov.gh/contact' }],
   edges: [{ src: 'solution:kmc', rel: 'implementable_by', dst: 'agency:gh-moh', why: 'newborn programmes' }, { src: 'solution:nope', rel: 'implementable_by', dst: 'agency:gh-moh', why: 'x' }] };
 
-test('TB has no solution, so the graph asks for one; a solved problem does not', async () => {
+test('Sanitation has no solution, so the graph asks for one; a solved problem does not', async () => {
   const open = await unsolvedProblemIds(SOLUTIONS);
-  assert.ok(open.includes('tb')); assert.ok(!open.includes('neonatal'));
+  assert.ok(open.includes('sanitation')); assert.ok(!open.includes('neonatal'));
 });
 
 test('every graph fact carries provenance and agency edges stay proposed leads', async () => {
@@ -19,7 +19,7 @@ test('every graph fact carries provenance and agency edges stay proposed leads',
   assert.equal((await g.edges({ rel: 'implementable_by' })).length, 0);
   assert.equal((await g.edges({ rel: 'implementable_by', status: 'proposed' })).length, 1);
   const qs = await questionsFor(g);
-  assert.ok(qs.some(q => q.id === 'unsolved:problem:tb'));
+  assert.ok(qs.some(q => q.id === 'unsolved:problem:sanitation'));
   assert.ok(qs.some(q => q.id === 'unadopted:solution:kmc'));
   assert.equal(RULES.length, 3);
 });
@@ -29,12 +29,12 @@ test('a tick stores the graph and its questions, and a problem with no solution 
   await store.put('solutions', JSON.stringify(SOLUTIONS));
   const urls = [];
   const f = async u => { urls.push(String(u)); if (String(u).includes('/agencies.json')) return { ok: true, json: async () => AG }; return { ok: true, json: async () => ({ resultList: { result: [] } }) }; };
-  const rank = async () => ({ basis: 'b', problems: [{ id: 'neonatal', rank: 1, year: 2023, title: 'n' }, { id: 'tb', rank: 9, year: 2023, title: 'TB' }], unranked: [] });
+  const rank = async () => ({ basis: 'b', problems: [{ id: 'neonatal', rank: 1, year: 2023, title: 'n' }, { id: 'sanitation', rank: 9, year: 2023, title: 'Sanitation' }], unranked: [] });
   await tick({ store, fetchFn: f, rank, now: Date.parse('2026-11-17T00:00:00Z') });
   const q = JSON.parse(await store.get('questions'));
-  assert.ok(q.questions.some(x => x.subject === 'problem:tb'));
+  assert.ok(q.questions.some(x => x.subject === 'problem:sanitation'));
   assert.ok(JSON.parse(await store.get('graph')).nodes.some(n => n.id === 'agency:gh-moh'));
-  assert.ok(JSON.parse(await store.get('candidates')).tb, 'TB was searched although it ranks outside the top');
+  assert.ok(JSON.parse(await store.get('candidates')).sanitation, 'sanitation was searched although it ranks outside the top');
 });
 
 test('income-level context: every solution has a fit, the graph links solutions to levels, and the level filter narrows the list', async () => {
