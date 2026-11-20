@@ -2,14 +2,14 @@
 # Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 # budget: public repository, unmetered; about 3 minutes a run. Embeddings only for items whose text changed (the first run embeds all, about
 #   1,700 short texts with a small embedding model, a few hundred Workers AI neurons), at most 3 short model calls to word the top new leads.
-# trigger: daily, and when the catalogue or this pipeline changes on main; the catalogue changes a few times a day, so faster adds no information.
+# trigger: twice daily (the free Workers AI allowance of 10,000 neurons is shared with the tenant's chat model and can run out; a run that embeds nothing writes nothing and the next one continues), and and when the catalogue or this pipeline changes on main; the catalogue changes a few times a day, so faster adds no information.
 # free-alternative: none needed; the model route is the tenant's own Worker reached with this run's OIDC token, no secret is stored.
 # DISCOVER-1: the catalogue's knowledge graph and vector index. Embeds what changed, finds connections nobody has drawn, screens them for
 # novelty, settles earlier leads against what the catalogue adopted, tunes its threshold with a scored prediction, rebuilds the generated
 # modules behind /connections and /ask, commits them and dispatches the deploy, whose live check is the gate.
 name: connections
 on:
-  schedule: [{ cron: '17 5 * * *' }]
+  schedule: [{ cron: '17 5 * * *' }, { cron: '41 0 * * *' }]   # 00:41 UTC is just after the free model allowance resets; 05:17 retries and picks up where a short allowance stopped
   push: { branches: [main], paths: ['worker/src/solutions.js', 'worker/src/problems.js', 'worker/src/problem-scan.gen.js', 'worker/src/syntheses.gen.js', 'worker/src/ask-index.gen.js', 'tools/connections.mjs', 'vendor/ultrastable/core/discover/**', '.github/workflows/connections.yml'] }
   workflow_dispatch: {}
 concurrency: { group: connections, cancel-in-progress: false }
