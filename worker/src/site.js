@@ -15,11 +15,12 @@ import { AUDIENCES, audience } from './audiences.js';
 import * as CP from './country-pages.js';
 import { LEVELS } from './context.js';
 import * as SY from './syntheses-pages.js';
+import { RELEASES } from './releases.gen.js';
 
 const { esc } = ui;
 export const HEADERS = { ...SECURITY_HEADERS, 'cache-control': 'public, max-age=300' };
 export const legend = P.legend;
-const SITE_PATHS = ['/', '/problems', '/solutions', '/syntheses', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/api', '/about'];
+const SITE_PATHS = ['/', '/problems', '/solutions', '/syntheses', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/releases', '/api', '/about'];
 
 const solutionJson = (s, c, o) => ({ id: s.id, title: s.title, claim: s.claim, label: s.label, implementability: s.impl, design: s.design, verdict: s.verdict, problems: s.problem_ids, domains: s.domains, verified: s.verified,
   works_where: s.works_where, takes: s.takes, who: s.who, first_test: s.first_test, limits: s.limits, sources: s.links.map(l => ({ cite: l.cite, finding: l.finding, links: [...l.direct.map(d => d.url), l.search] })), url: o + '/solutions/' + s.id, cite: P.citation(s.title, '/solutions/' + s.id, o) });
@@ -57,6 +58,19 @@ function changesPage(c, o) {
   const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Changes' }])}<h1>Changes</h1><p class="lede">Every change the loop made, newest first. <a href="/feed.xml">RSS</a> · <a href="/feed.json">JSON Feed</a></p>
 ${ui.list(c.changes.map(x => `${esc(String(x.kind).replace(/_/g, ' '))}: ${esc(x.id || x.title || x.problem || '')} <span class="m">${esc(String(x.at).slice(0, 16).replace('T', ' '))}</span>`)) || ''}${c.changes.length ? '' : '<p>No changes yet.</p>'}`;
   return page('/changes', o, 'Changes', 'Every automatic change.', body);
+}
+
+// RELEASE-1: dated releases cut by tools/release.mjs; every number here is read from the generated ledger module.
+const REL_KINDS = [['problems', 'problems', '/problems/'], ['solutions', 'solutions', '/solutions/'], ['syntheses', 'new combinations', '/syntheses/'], ['insights', 'red-team findings', null]];
+export function releasesPage(o, d = RELEASES) {
+  const one = r => `<section><h2 id="r-${esc(r.version)}">${esc(r.version)}</h2><p class="m">${esc(r.date)}${r.first ? ' · first release: the whole catalogue as it stood' : ''}</p>${REL_KINDS.map(([k, label, href]) => r.counts[k] ? `<h3>${r.counts[k]} new ${esc(label)}</h3>${ui.list(r.added[k].map(x => href ? `<a href="${href}${esc(x.id)}">${esc(x.title)}</a>` : esc(x.title))) || ''}${r.counts[k] > r.added[k].length ? `<p class="m">and ${r.counts[k] - r.added[k].length} more in <a href="/releases.json">releases.json</a></p>` : ''}` : '').join('')}</section>`;
+  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Releases' }])}<h1>Releases</h1><p class="lede">What is new in each release, newest first. <a href="/releases.atom">Atom feed</a> · <a href="/releases.json">JSON</a></p>
+${d.releases.map(one).join('') || '<p>No release yet.</p>'}`;
+  return page('/releases', o, 'Releases', 'New problems, solutions, combinations and findings in each release.', body);
+}
+export function releasesAtom(o, d = RELEASES) {
+  const e = r => `<entry><id>${esc(o)}/releases#r-${esc(r.version)}</id><title>Practical Solutions ${esc(r.version)}</title><updated>${esc(r.date)}T00:00:00Z</updated><link href="${esc(o)}/releases#r-${esc(r.version)}"/><summary>${esc(REL_KINDS.map(([k, label]) => `${r.counts[k]} new ${label}`).join(', '))}</summary></entry>`;
+  return `<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><id>${esc(o)}/releases</id><title>Practical Solutions releases</title><updated>${esc((d.releases[0] || {}).date || '1970-01-01')}T00:00:00Z</updated><link rel="self" href="${esc(o)}/releases.atom"/>${d.releases.map(e).join('')}</feed>`;
 }
 
 function impactPage(c, o) {
@@ -99,6 +113,9 @@ export function route(u, c) {
   if (p === '/syntheses') return h(SY.synthesesIndex(o, page));
   if (p === '/syntheses.json') return json(SY.indexJson(o));
   { const sm = /^\/syntheses\/([a-z0-9-]+)(\.json)?$/.exec(p); if (sm) { const x = SY.find(sm[1]); return sm[2] ? (x ? json(SY.synthesisJson(x, o)) : json({ error: 'not found' }, 404)) : x ? h(SY.synthesisPage(x, o, page)) : h(P.notFound(c, o, p), 404); } }
+  if (p === '/releases') return h(releasesPage(o));
+  if (p === '/releases.json') return json(RELEASES);
+  if (p === '/releases.atom') return new Response(releasesAtom(o), { headers: { 'content-type': 'application/atom+xml; charset=utf-8', 'cache-control': 'public, max-age=300' } });
   if (table[p]) return h(table[p]());
   if (p === '/search.json') return json({ q: u.searchParams.get('q') || '', results: search(searchIndex(c), u.searchParams.get('q')) });
   if (p === '/claims.json') return json({ statements: describe(STATEMENTS, CTX) });

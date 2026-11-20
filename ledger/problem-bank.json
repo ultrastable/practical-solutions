@@ -1,0 +1,17 @@
+{
+ "schema": "ps-problem-bank/1",
+ "rule": "PROBLEM-INTAKE-1: when no problem has been added for `gap_days`, every candidate here is measured against its international target with the same World Bank world series and shortfall rule as the catalogue, and the one with the largest measured shortfall joins the catalogue. Code picks; nobody chooses by hand.",
+ "gap_days": 28,
+ "min_shortfall": 0.02,
+ "candidates": [
+  { "id": "malaria", "title": "Malaria", "domain": "Infectious disease", "ind": "SH.MLR.INCD.P3", "unit": "cases per 1,000 people at risk", "lower": true, "target_from": 2015, "factor": 0.1, "target_src": "WHO Global Technical Strategy for Malaria: 90% lower than 2015" },
+  { "id": "hiv", "title": "New HIV infections", "domain": "Infectious disease", "ind": "SH.HIV.INCD.ZS", "unit": "new infections per 1,000 uninfected adults", "lower": true, "target_from": 2010, "factor": 0.1, "target_src": "UNAIDS target: 90% lower than 2010" },
+  { "id": "anaemia", "title": "Anaemia in women", "domain": "Maternal health", "ind": "SH.ANM.ALLW.ZS", "unit": "% of women aged 15 to 49", "lower": true, "target_from": 2012, "factor": 0.5, "target_src": "WHO global nutrition target: half the 2012 level" },
+  { "id": "wasting", "title": "Children dangerously thin for their height", "domain": "Food", "ind": "SH.STA.WAST.ZS", "unit": "% of children under five", "lower": true, "target": 3, "target_src": "WHO and UNICEF 2030 nutrition target: below 3%" },
+  { "id": "vaccination", "title": "Children missing basic vaccines", "domain": "Child health", "ind": "SH.IMM.IDPT", "unit": "% of one-year-olds with three DTP doses", "lower": false, "target": 90, "target_src": "WHO Immunization Agenda 2030: 90% coverage" },
+  { "id": "birth-care", "title": "Births without a skilled attendant", "domain": "Maternal health", "ind": "SH.STA.BRTC.ZS", "unit": "% of births attended by skilled health staff", "lower": false, "target": 90, "target_src": "Ending Preventable Maternal Mortality target: 90% of births" },
+  { "id": "secondary", "title": "Children who do not finish lower secondary school", "domain": "Education", "ind": "SE.SEC.CMPT.LO.ZS", "unit": "% completing lower secondary school", "lower": false, "target": 100, "target_src": "SDG 4.1: every child completes secondary education" },
+  { "id": "health-coverage", "title": "People without essential health services", "domain": "Chronic disease", "ind": "SH.UHC.SRVS.CV.XD", "unit": "service coverage index, 0 to 100", "lower": false, "target": 80, "target_src": "SDG 3.8 monitoring: coverage index of at least 80" }
+ ],
+ "log": []
+}

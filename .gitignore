@@ -6,3 +6,4 @@ worker/wrangler.jsonc
 worker/seed.sql
 /briefs/
 .build-tenant.js
+release-notes.md

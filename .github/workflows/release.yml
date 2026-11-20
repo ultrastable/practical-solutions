@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; about 2 minutes a run.
+# trigger: weekly; a release needs at least seven days of new entries, so faster adds cost and no information. The daily cycle dispatches this
+#   workflow as a second route when a release is due or late.
+# free-alternative: none needed; the run's own GITHUB_TOKEN commits, tags and dispatches.
+# RELEASE-1: cut a dated release of what is new (problems, solutions, combinations, red-team findings), publish it on /releases with a feed and as a
+# GitHub release. PROBLEM-INTAKE-1: when no problem was added for four weeks, the bank candidate with the largest measured shortfall joins.
+# When nothing is new or the cadence is late, the workflows that produce new entries are dispatched (self-healing cadence).
+name: release
+on:
+  schedule: [{ cron: '41 6 * * 1' }]
+  workflow_dispatch: {}
+concurrency: { group: release, cancel-in-progress: false }
+permissions: { contents: write, actions: write }
+jobs:
+  release:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: intake, decide, cut
+        run: node --no-warnings tools/release.mjs | tee release.json
+      - run: npm test
+      - name: commit, tag, publish, deploy
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/releases.json ledger/problem-bank.json worker/src/releases.gen.js worker/src/problems.js
+          if ! git diff --cached --quiet; then
+            git commit -m "release: $(node -p "JSON.parse(require('fs').readFileSync('release.json','utf8').trim().split('\n').pop()).version || 'cadence record'")"
+            for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+            bash tools/dispatch_deploy.sh
+          fi
+          ver=$(node -p "JSON.parse(require('fs').readFileSync('release.json','utf8').trim().split('\n').pop()).version || ''")
+          if [ -n "$ver" ] && [ -f release-notes.md ]; then gh release create "v$ver" --title "Practical Solutions $ver" --notes-file release-notes.md --target main || echo "::warning::GitHub release v$ver was not created; /releases carries it"; fi
+      - name: heal a quiet or late cadence
+        run: |
+          for w in $(node -p "JSON.parse(require('fs').readFileSync('release.json','utf8').trim().split('\n').pop()).heal.join(' ')"); do
+            gh workflow run "$w" -R "$GITHUB_REPOSITORY" --ref main && echo "dispatched $w"
+          done

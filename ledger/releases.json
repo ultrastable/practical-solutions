@@ -1,0 +1,556 @@
+{
+ "schema": "ps-releases/1",
+ "known": {
+  "problems": [
+   "air",
+   "birthreg",
+   "cooking",
+   "education",
+   "electricity",
+   "finance",
+   "hunger",
+   "internet",
+   "maternal",
+   "ncd",
+   "neonatal",
+   "poverty",
+   "road",
+   "sanitation",
+   "stunting",
+   "suicide",
+   "tb",
+   "tobacco",
+   "under5",
+   "water",
+   "women-power"
+  ],
+  "solutions": [
+   "cash",
+   "chlorine",
+   "clean-cooking",
+   "cytisine",
+   "deworming",
+   "emissions-market",
+   "friendship-bench",
+   "graduation",
+   "helmets",
+   "hypertension",
+   "immunisation",
+   "itn",
+   "kmc",
+   "mobile-money",
+   "ors-zinc",
+   "pph-bundle",
+   "rural-electrification",
+   "tarl",
+   "tb-community-screening",
+   "vita",
+   "women-leaders"
+  ],
+  "syntheses": [
+   "barbershop-hearts",
+   "elder-teaching-at-the-right-level",
+   "expectation-framing-hearts"
+  ],
+  "insights": [
+   "cash:38c2c7b855",
+   "cash:44f0691be4",
+   "cash:6059188020",
+   "cash:8612cc3d53",
+   "chlorine:06735c34b0",
+   "chlorine:f9f09b8488",
+   "clean-cooking:2b4622d94e",
+   "clean-cooking:6132f34c63",
+   "clean-cooking:77cedc4244",
+   "clean-cooking:bba6791153",
+   "deworming:67e1ddb922",
+   "deworming:7277e09ef0",
+   "deworming:96086ace59",
+   "deworming:aa4f053d0b",
+   "emissions-market:2887fec175",
+   "emissions-market:504216822a",
+   "emissions-market:e9dbcda3db",
+   "emissions-market:edced219da",
+   "friendship-bench:534e491249",
+   "friendship-bench:d5c38cabf6",
+   "graduation:445d709a29",
+   "graduation:77949df98a",
+   "graduation:82c2f1077e",
+   "graduation:949ed2c54f",
+   "helmets:55c571fe60",
+   "helmets:633a3e1cce",
+   "helmets:7b52f08cf2",
+   "helmets:932dd8e9d0",
+   "hypertension:75e6804338",
+   "hypertension:9b26bfe366",
+   "hypertension:d5c38cabf6",
+   "immunisation:4e87fed6ca",
+   "immunisation:9e1b5fd82e",
+   "immunisation:c578dec6a5",
+   "immunisation:c7b36d0dee",
+   "itn:0774233790",
+   "itn:1a68e223e9",
+   "itn:32434efcbf",
+   "itn:9f66bbcd1c",
+   "kmc:6e4366980f",
+   "kmc:7393a5770f",
+   "kmc:8c6010b07b",
+   "kmc:9c593d41a3",
+   "mobile-money:0ad8117dfa",
+   "mobile-money:5c7b39aa56",
+   "mobile-money:7296b1f2cd",
+   "mobile-money:8a08dd6903",
+   "ors-zinc:136416bf66",
+   "ors-zinc:51d7f0623b",
+   "ors-zinc:95a37c7c80",
+   "ors-zinc:99c2f01257",
+   "rural-electrification:65882e63c5",
+   "rural-electrification:6885048de3",
+   "rural-electrification:81169aa19b",
+   "rural-electrification:abdc28b896",
+   "tarl:71fe6de957",
+   "tarl:9b38716027",
+   "tarl:e20346b150",
+   "tarl:e9360ca2fe"
+  ]
+ },
+ "releases": [
+  {
+   "version": "2026.11.20",
+   "date": "2026-11-20",
+   "first": true,
+   "added": {
+    "problems": [
+     {
+      "id": "air",
+      "title": "Polluted air"
+     },
+     {
+      "id": "birthreg",
+      "title": "Children whose birth is never registered"
+     },
+     {
+      "id": "cooking",
+      "title": "Smoky cooking fuel"
+     },
+     {
+      "id": "education",
+      "title": "Children not finishing primary school"
+     },
+     {
+      "id": "electricity",
+      "title": "People without electricity"
+     },
+     {
+      "id": "finance",
+      "title": "Adults without a financial account"
+     },
+     {
+      "id": "hunger",
+      "title": "Chronic hunger"
+     },
+     {
+      "id": "internet",
+      "title": "People offline"
+     },
+     {
+      "id": "maternal",
+      "title": "Mothers dying in childbirth"
+     },
+     {
+      "id": "ncd",
+      "title": "Early death from heart disease, cancer, diabetes and lung disease"
+     },
+     {
+      "id": "neonatal",
+      "title": "Newborn deaths"
+     },
+     {
+      "id": "poverty",
+      "title": "Extreme poverty"
+     },
+     {
+      "id": "road",
+      "title": "Road traffic deaths"
+     },
+     {
+      "id": "sanitation",
+      "title": "Unsafe sanitation"
+     },
+     {
+      "id": "stunting",
+      "title": "Stunted growth in children"
+     },
+     {
+      "id": "suicide",
+      "title": "Suicide"
+     },
+     {
+      "id": "tb",
+      "title": "Tuberculosis"
+     },
+     {
+      "id": "tobacco",
+      "title": "Adults who smoke tobacco"
+     },
+     {
+      "id": "under5",
+      "title": "Children dying before age five"
+     },
+     {
+      "id": "water",
+      "title": "Unsafe drinking water"
+     },
+     {
+      "id": "women-power",
+      "title": "Women missing from national parliaments"
+     }
+    ],
+    "solutions": [
+     {
+      "id": "cash",
+      "title": "Give unconditional cash directly to poor households"
+     },
+     {
+      "id": "chlorine",
+      "title": "Chlorinate water at the point where people collect it"
+     },
+     {
+      "id": "clean-cooking",
+      "title": "Clean-fuel stoves (the largest trial found no clear pneumonia benefit)"
+     },
+     {
+      "id": "cytisine",
+      "title": "Offer cytisine, a low-cost plant-based tablet, to people who want to stop smoking"
+     },
+     {
+      "id": "deworming",
+      "title": "School-based deworming (evidence is contested)"
+     },
+     {
+      "id": "emissions-market",
+      "title": "A regulated pollution market with continuous monitoring"
+     },
+     {
+      "id": "friendship-bench",
+      "title": "Lay health workers deliver problem-solving therapy on a bench"
+     },
+     {
+      "id": "graduation",
+      "title": "The graduation approach: a bundle of an asset, training, savings and coaching"
+     },
+     {
+      "id": "helmets",
+      "title": "Require and enforce motorcycle helmets"
+     },
+     {
+      "id": "hypertension",
+      "title": "Treat high blood pressure with one standard protocol"
+     },
+     {
+      "id": "immunisation",
+      "title": "Reliable immunisation camps with a small incentive"
+     },
+     {
+      "id": "itn",
+      "title": "Distribute insecticide-treated bed nets, choosing nets that beat local resistance"
+     },
+     {
+      "id": "kmc",
+      "title": "Start kangaroo mother care at birth for small babies"
+     },
+     {
+      "id": "mobile-money",
+      "title": "Mobile money agent networks"
+     },
+     {
+      "id": "ors-zinc",
+      "title": "Oral rehydration salts plus zinc as the standard first treatment"
+     },
+     {
+      "id": "pph-bundle",
+      "title": "Measure blood loss with a calibrated drape and treat heavy bleeding with one bundle"
+     },
+     {
+      "id": "rural-electrification",
+      "title": "Subsidise grid connections for rural households (benefits are smaller than hoped)"
+     },
+     {
+      "id": "tarl",
+      "title": "Teaching at the Right Level: group by skill, not grade"
+     },
+     {
+      "id": "tb-community-screening",
+      "title": "Test every adult in a high-burden community once a year, whatever their symptoms"
+     },
+     {
+      "id": "vita",
+      "title": "Vitamin A supplementation in deficient populations"
+     },
+     {
+      "id": "women-leaders",
+      "title": "Reserve leadership seats for women"
+     }
+    ],
+    "syntheses": [
+     {
+      "id": "barbershop-hearts",
+      "title": "Treat high blood pressure in barbershops, with a one-protocol drug plan, for men who never visit clinics"
+     },
+     {
+      "id": "elder-teaching-at-the-right-level",
+      "title": "Teach children at the right level using older adults as the teachers"
+     },
+     {
+      "id": "expectation-framing-hearts",
+      "title": "Frame side-effect warnings so patients keep taking their blood-pressure drugs"
+     }
+    ],
+    "insights": [
+     {
+      "id": "cash:38c2c7b855",
+      "title": "cash: Assuming perfect targeting"
+     },
+     {
+      "id": "cash:44f0691be4",
+      "title": "cash: No impact on assets and consumption"
+     },
+     {
+      "id": "cash:6059188020",
+      "title": "cash: Dependence on external funding"
+     },
+     {
+      "id": "cash:8612cc3d53",
+      "title": "cash: Inflation hurts fixed-income households"
+     },
+     {
+      "id": "chlorine:06735c34b0",
+      "title": "chlorine: Implementation Failure"
+     },
+     {
+      "id": "chlorine:f9f09b8488",
+      "title": "chlorine: Unintended Consequences"
+     },
+     {
+      "id": "clean-cooking:2b4622d94e",
+      "title": "clean-cooking: Alternative explanations for pneumonia reduction"
+     },
+     {
+      "id": "clean-cooking:6132f34c63",
+      "title": "clean-cooking: Assumed consistent use of LPG stoves"
+     },
+     {
+      "id": "clean-cooking:77cedc4244",
+      "title": "clean-cooking: Vulnerable populations' exposure to mixed fuel use"
+     },
+     {
+      "id": "clean-cooking:bba6791153",
+      "title": "clean-cooking: Potential biases in the trial's methodology"
+     },
+     {
+      "id": "deworming:67e1ddb922",
+      "title": "deworming: Inadequate consideration of external factors"
+     },
+     {
+      "id": "deworming:7277e09ef0",
+      "title": "deworming: Assumption of uniform worm infestation rates"
+     },
+     {
+      "id": "deworming:96086ace59",
+      "title": "deworming: Lack of significant impact on attendance"
+     },
+     {
+      "id": "deworming:aa4f053d0b",
+      "title": "deworming: Potential harm to children with undiagnosed conditions"
+     },
+     {
+      "id": "emissions-market:2887fec175",
+      "title": "emissions-market: Emissions increase under cap-and-trade"
+     },
+     {
+      "id": "emissions-market:504216822a",
+      "title": "emissions-market: Inadequate monitoring or data issues"
+     },
+     {
+      "id": "emissions-market:e9dbcda3db",
+      "title": "emissions-market: Inequitable distribution of pollution burden"
+     },
+     {
+      "id": "emissions-market:edced219da",
+      "title": "emissions-market: Assumed equivalence of standard rules and cap-and-trade"
+     },
+     {
+      "id": "friendship-bench:534e491249",
+      "title": "friendship-bench: Lack of long-term follow-up"
+     },
+     {
+      "id": "friendship-bench:d5c38cabf6",
+      "title": "friendship-bench: Vulnerable populations"
+     },
+     {
+      "id": "graduation:445d709a29",
+      "title": "graduation: Assumption that coaching quality is consistently high"
+     },
+     {
+      "id": "graduation:77949df98a",
+      "title": "graduation: Households with limited access to markets or coaching"
+     },
+     {
+      "id": "graduation:82c2f1077e",
+      "title": "graduation: Consumption and food security do not increase"
+     },
+     {
+      "id": "graduation:949ed2c54f",
+      "title": "graduation: Inadequate consideration of local market conditions"
+     },
+     {
+      "id": "helmets:55c571fe60",
+      "title": "helmets: Certain groups may be disproportionately affected by helmet laws"
+     },
+     {
+      "id": "helmets:633a3e1cce",
+      "title": "helmets: Assuming all helmets provide equal protection"
+     },
+     {
+      "id": "helmets:7b52f08cf2",
+      "title": "helmets: Helmets do not significantly reduce the risk of death or head injury"
+     },
+     {
+      "id": "helmets:932dd8e9d0",
+      "title": "helmets: Failure to account for other factors contributing to motorcycle accidents"
+     },
+     {
+      "id": "hypertension:75e6804338",
+      "title": "hypertension: Implementation barriers"
+     },
+     {
+      "id": "hypertension:9b26bfe366",
+      "title": "hypertension: Assumed accessibility"
+     },
+     {
+      "id": "hypertension:d5c38cabf6",
+      "title": "hypertension: Vulnerable populations"
+     },
+     {
+      "id": "immunisation:4e87fed6ca",
+      "title": "immunisation: Incentives have no impact"
+     },
+     {
+      "id": "immunisation:9e1b5fd82e",
+      "title": "immunisation: Inequitable distribution of incentives"
+     },
+     {
+      "id": "immunisation:c578dec6a5",
+      "title": "immunisation: Assuming incentive effectiveness is universal"
+     },
+     {
+      "id": "immunisation:c7b36d0dee",
+      "title": "immunisation: Inadequate supply chain reliability"
+     },
+     {
+      "id": "itn:0774233790",
+      "title": "itn: Vulnerable populations, such as pregnant women and children under 5, may not benefit from treated nets"
+     },
+     {
+      "id": "itn:1a68e223e9",
+      "title": "itn: Insecticide-treated bed nets have no effect on child mortality"
+     },
+     {
+      "id": "itn:32434efcbf",
+      "title": "itn: Assuming that dual-insecticide nets will always be effective against local mosquito resistance"
+     },
+     {
+      "id": "itn:9f66bbcd1c",
+      "title": "itn: Current malaria mortality rates are not comparable to those during the trial period"
+     },
+     {
+      "id": "kmc:6e4366980f",
+      "title": "kmc: Mother or baby fatigue and stress"
+     },
+     {
+      "id": "kmc:7393a5770f",
+      "title": "kmc: Inadequate hospital resources or training"
+     },
+     {
+      "id": "kmc:8c6010b07b",
+      "title": "kmc: No reduction in mortality"
+     },
+     {
+      "id": "kmc:9c593d41a3",
+      "title": "kmc: Assumption of adequate maternal support"
+     },
+     {
+      "id": "mobile-money:0ad8117dfa",
+      "title": "mobile-money: Lack of agent network density does not hinder money transfer"
+     },
+     {
+      "id": "mobile-money:5c7b39aa56",
+      "title": "mobile-money: Assumption that agent density is the primary factor in poverty reduction"
+     },
+     {
+      "id": "mobile-money:7296b1f2cd",
+      "title": "mobile-money: Households in areas with low agent density are not disadvantaged"
+     },
+     {
+      "id": "mobile-money:8a08dd6903",
+      "title": "mobile-money: Regulatory environment does not impact the effectiveness of mobile money services"
+     },
+     {
+      "id": "ors-zinc:136416bf66",
+      "title": "ors-zinc: Assuming caregivers can access and administer zinc correctly"
+     },
+     {
+      "id": "ors-zinc:51d7f0623b",
+      "title": "ors-zinc: Delayed treatment due to reliance on zinc"
+     },
+     {
+      "id": "ors-zinc:95a37c7c80",
+      "title": "ors-zinc: Inadequate supply chain or distribution of zinc supplements"
+     },
+     {
+      "id": "ors-zinc:99c2f01257",
+      "title": "ors-zinc: Zinc does not shorten episodes or reduce repeat episodes"
+     },
+     {
+      "id": "rural-electrification:65882e63c5",
+      "title": "rural-electrification: Assuming that short-run effects are representative of long-run outcomes"
+     },
+     {
+      "id": "rural-electrification:6885048de3",
+      "title": "rural-electrification: Potential flaws in study design or implementation"
+     },
+     {
+      "id": "rural-electrification:81169aa19b",
+      "title": "rural-electrification: Potential harm to taxpayers or other beneficiaries of alternative uses of subsidy funds"
+     },
+     {
+      "id": "rural-electrification:abdc28b896",
+      "title": "rural-electrification: Assuming subsidised connections have no effect on income or schooling"
+     },
+     {
+      "id": "tarl:71fe6de957",
+      "title": "tarl: The program's effectiveness is dependent on consistent implementation and quality control"
+     },
+     {
+      "id": "tarl:9b38716027",
+      "title": "tarl: Sorting children by grade rather than skill leads to better outcomes"
+     },
+     {
+      "id": "tarl:e20346b150",
+      "title": "tarl: Protected class time is not feasible or beneficial for certain student groups"
+     },
+     {
+      "id": "tarl:e9360ca2fe",
+      "title": "tarl: The assumption that teachers can accurately assess student skills and adapt instruction accordingly"
+     }
+    ]
+   },
+   "totals": {
+    "problems": 21,
+    "solutions": 21,
+    "syntheses": 3,
+    "insights": 59
+   }
+  }
+ ]
+}
