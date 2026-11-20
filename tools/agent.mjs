@@ -88,7 +88,7 @@ export function applyEdits(edits, root, fs = { read: p => readFileSync(p, 'utf8'
     next.set(abs, cur.replace(e.find, () => String(e.replace ?? '')));
   }
   for (const [abs, t] of next) fs.write(abs, t);
-  return [...next.keys()].map(a => relative(root, a));
+  return [...next.keys()].map(a => relative(root, a).split('\\').join('/')); // repository paths use '/', on every platform
 }
 
 export const sh = (cmd, args, o = {}) => execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...o });
