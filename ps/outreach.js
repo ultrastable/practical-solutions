@@ -60,6 +60,7 @@ export function compose(solution, agency, reason, origin, targeting = {}) {
     `Known limits: ${esc(solution.limits)}`,
     `Verification status: ${esc(solution.verified)}`,
     `Everything above, with its sources, is on one page: ${link}`,
+    ['researcher', 'media', 'community'].includes(agency.audience) ? `If you follow the debate on autonomous systems: this site is kept up by a bounded loop with no per-change human approval, and its record, including what it does not prove, is at ${origin}/autonomy` : '',
     f.ask,
   ].filter(Boolean).join('\n\n');
   return { subject, body, evidence_url: link };
