@@ -64,7 +64,7 @@ export async function run({ langs, calls = 30, batch = 25, generate = generator(
     man.langs[lang] = { live: cov >= LIVE_AT, coverage: Math.round(cov * 1000) / 1000, segments: Object.keys(dict).length, of: pages.size, shards, at: now };
     report[lang] = { ...stat, after: Object.keys(dict).length, coverage: man.langs[lang].coverage, live: man.langs[lang].live };
   }));
-  man.at = now; man.source = 'en'; man.total_segments = pages.size;
+  man.at = now; man.source = 'en'; man.total_segments = pages.size; man.last_run = { at: now, report };   // the report rides in the manifest so a run's failure reasons are data the next run and the check-in loop can read
   mkdirSync(dir, { recursive: true }); writeFileSync(`${dir}/manifest.json`, JSON.stringify(man, null, 1) + '\n');
   return report;
 }
