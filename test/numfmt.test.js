@@ -40,6 +40,7 @@ test('direction rule: needs are burdens, coverage should rise, parity is not a d
   assert.equal(fell.status, 'improving', 'a falling burden is improving, not getting worse');
 });
 const KNOWN = [ // [title, better]: true = lower is better, false = higher is better, null = not clear from the wording
+  ['Electricity production from oil, gas and coal sources (% of total)', true], ['Estimated number of children needing antiretroviral therapy based on WHO methods', true], ['Trained teachers in upper secondary education (% of total teachers)', false],
   ['Mortality rate, under-5 (per 1,000 live births)', true], ['Prevalence of undernourishment (% of population)', true], ['Estimated malaria incidence (per 1000 population at risk)', true], ['Number of new HIV infections', true],
   ['Tuberculosis incidence (per 100,000 people)', true], ['Suicide mortality rate (per 100,000 population)', true], ['Prevalence of anemia among women of reproductive age (% of women ages 15-49)', true], ['Out-of-school children of primary school age', true],
   ['Repeaters, primary, total (% of total enrollment)', true], ['Pupils below minimum reading proficiency at end of primary (%)', true], ['Lifetime risk of maternal death (%)', true], ['Unmet need for contraception (% of married women ages 15-49)', true],
