@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-20T13:12:56.399Z",
+ "at": "2026-11-20T16:09:07.238Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T13:10:30.364Z"
+   "checked_at": "2026-11-20T16:08:40.788Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -176,7 +176,7 @@
    "novelty": [
     {
      "label": "nocebo framing and antihypertensive adherence",
-     "total": 18,
+     "total": 19,
      "closest": [
       {
        "title": "Psychological aspects of hypertension treatment - Beliefs, placebo and nocebo effects",
@@ -213,7 +213,7 @@
     },
     {
      "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1636,
+     "total": 1637,
      "closest": [
       {
        "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
@@ -234,15 +234,15 @@
        "hit": false
       },
       {
-       "title": "Factors associated with poor adherence to medication among hypertensive patients in twelve low and middle income Sub-Saharan countries",
-       "year": 2019,
-       "url": "https://doi.org/10.1371/journal.pone.0219266",
-       "hit": false
-      },
-      {
        "title": "Process evaluation of a brief messaging intervention to improve diabetes treatment adherence in sub-Saharan Africa",
        "year": 2021,
        "url": "https://doi.org/10.1186/s12889-021-11552-8",
+       "hit": false
+      },
+      {
+       "title": "Factors associated with poor adherence to medication among hypertensive patients in twelve low and middle income Sub-Saharan countries",
+       "year": 2019,
+       "url": "https://doi.org/10.1371/journal.pone.0219266",
        "hit": false
       }
      ],
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T13:10:46.652Z"
+   "checked_at": "2026-11-20T16:08:46.281Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -304,7 +304,7 @@
    "novelty": [
     {
      "label": "older adult volunteers delivering foundational learning in low-income countries",
-     "total": 558,
+     "total": 559,
      "closest": [
       {
        "title": "Literacy and numeracy support for homeless adults",
@@ -341,7 +341,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 38662,
+     "total": 38699,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -378,7 +378,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T13:12:49.411Z"
+   "checked_at": "2026-11-20T16:08:55.243Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -422,15 +422,15 @@
        "hit": false
       },
       {
-       "title": "Methodological considerations and cost to measure coverage of multisectoral nutrition interventions: protocol for the One Nutrition Coverage Survey in Bangladesh",
-       "year": 2025,
-       "url": "https://doi.org/10.1136/bmjopen-2025-099314",
-       "hit": false
-      },
-      {
        "title": "Learning From History About Reducing Infant Mortality: Contrasting the Centrality of Structural Interventions to Early 20th‐Century Successes in the United States to Their Neglect in Current Global Initiatives",
        "year": 2019,
        "url": "https://doi.org/10.1111/1468-0009.12376",
+       "hit": false
+      },
+      {
+       "title": "Methodological considerations and cost to measure coverage of multisectoral nutrition interventions: protocol for the One Nutrition Coverage Survey in Bangladesh",
+       "year": 2025,
+       "url": "https://doi.org/10.1136/bmjopen-2025-099314",
        "hit": false
       },
       {
@@ -444,7 +444,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T13:12:53.871Z"
+   "checked_at": "2026-11-20T16:08:59.928Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -514,7 +514,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T13:12:56.399Z"
+   "checked_at": "2026-11-20T16:09:07.238Z"
   }
  },
  "errors": []

@@ -1,0 +1,44 @@
+{
+  "at": "2026-11-20T16:01:42.186Z",
+  "total": 22,
+  "shipped": 16,
+  "coverage": 0.727,
+  "gaps": [
+    {
+      "id": "argument-map",
+      "priority": 2,
+      "feature": "Pro and con claims per solution with sources",
+      "reference": "Kialo"
+    },
+    {
+      "id": "subscribe",
+      "priority": 2,
+      "feature": "Subscribe to changes by email, double opt-in",
+      "reference": "GiveWell, J-PAL"
+    },
+    {
+      "id": "translations",
+      "priority": 2,
+      "feature": "Translated entry pages",
+      "reference": "Wikipedia"
+    },
+    {
+      "id": "og-images",
+      "priority": 3,
+      "feature": "Per-page share image (PNG) for social previews",
+      "reference": "Our World in Data"
+    },
+    {
+      "id": "print-view",
+      "priority": 3,
+      "feature": "Print stylesheet for entries",
+      "reference": "Wikipedia"
+    },
+    {
+      "id": "pwa-offline",
+      "priority": 3,
+      "feature": "Installable, offline reading (manifest, service worker)",
+      "reference": "Wikipedia app"
+    }
+  ]
+}

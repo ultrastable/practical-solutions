@@ -1,14 +1,14 @@
 {
  "tenant-ps-core": {
-  "sha256": "386cedfc075e0eb7586d64db93373c5125b95361e243593ead94cec61eb2e3f3",
-  "sha": "c71de05ffcab0e2d4ceed47b68cbbf254897a2ea"
+  "sha256": "1a6665e07090593164962eed1ffbec3601a9b7b277130b413c35110c23597233",
+  "sha": "e0b89c5add9b90e4008cb804a50898ee553a74c9"
  },
  "tenant-ps-llm": {
   "sha256": "1dd3093f7caa305eee53736f3b2f8184677b5df57019ec2ab0b241f4056959bb",
   "sha": "95ee83156cc80609be61e93692ed31f49f0e911e"
  },
  "tenant-ps-web": {
-  "sha256": "80bfb92c2676299f99a12b3c14a975b4af14a30fe8bce72a12f1dbe84ef12a4b",
-  "sha": "a5b5a02e0d3ce0c54b5cdf4632a3f9721934310b"
+  "sha256": "fab5bddfeaa2874d0a3ea3c919711744fc7ed50208515ef898f489926f9b98d0",
+  "sha": "facbdea173cd0da92b204616280ed66df0af7462"
  }
 }

@@ -7,6 +7,8 @@
 const v = path => ({ visit: path });
 const x = e => ({ expect: e });
 export const STORIES = [
+  { id: 'RES-CAT-1', who: 'researchers', want: 'browse every problem the catalogue knows about, with the source of each', so: 'I see where evidence is missing before I look for solutions', covers: ['catalogueIndex', 'facets', 'pagination'],
+    steps: [v('/catalogue'), x({ heading: 'Problem catalogue', form: '/catalogue', text: 'solution sought' }), v('/catalogue.json'), x({ json: { path: 'problems.length', min: 0 } })] },
   { id: 'IMP-1', who: 'implementers', want: 'see which solutions are ready to implement', so: 'I can shortlist one my team could deliver', covers: ['home', 'forPage', 'contextPage', 'solutionsIndex', 'card', 'badge'],
     steps: [v('/'), { follow: { href: '^/for/implementers$' } }, x({ heading: 'Ready to implement' }), { follow: { href: '^/solutions\\?ready=ready' } }, x({ text: 'ready to implement', link: '^/solutions/[a-z0-9-]+$' })] },
   { id: 'IMP-2', who: 'implementers', want: 'filter solutions by cost and domain', so: 'I only see what fits my budget and my field', covers: ['solutionsIndex', 'facets', 'pagination'],
@@ -61,6 +63,10 @@ export const STORIES = [
     steps: [v('/sitemap.xml'), x({ type: 'xml', text: ['/solutions/kmc', '/problems/tb', '/for/implementers'] })] },
   { id: 'DEV-3', who: 'developers', want: 'see every endpoint and the rule for reusing claims', so: 'I integrate correctly', covers: ['apiPage', 'table', 'callout'],
     steps: [v('/api'), x({ heading: 'Data and API', text: ['Endpoints', 'Keep the labels'] })] },
+  { id: 'FUN-VIEWS-1', who: 'funders', want: 'see solutions ranked by benefit per dollar, and where evidence is missing', so: 'I fund what buys the most and I know which gaps need research', covers: ['table'],
+    steps: [v('/ranking'), x({ heading: 'Benefit-cost ranking', text: ['Cautious', 'Chance of net benefit'] }), v('/evidence-map'), x({ heading: 'Evidence map', text: 'Problems with no solution' })] },
+  { id: 'RES-CITE-1', who: 'researchers', want: 'export a citation and embed a card for a solution', so: 'I cite it in my reference manager and show it with its label and limit on my own page', covers: ['solutionPage', 'section'],
+    steps: [v('/solutions/kmc'), x({ heading: 'Cite, export and embed', link: '^/solutions/kmc\\.bib$' }), v('/solutions/kmc.bib'), x({ text: '@misc' }), v('/embed/solutions/kmc'), x({ text: ['Main limit', 'Read the full entry'] })] },
   { id: 'DEV-4', who: 'developers', want: 'fetch one problem with its linked solutions', so: 'I do not download everything', covers: ['json-entity'],
     steps: [v('/problems/tb.json'), x({ type: 'json', json: { path: 'id', equals: 'tb' } })] },
   { id: 'EXP-1', who: 'experts', want: 'see the entries with the weakest evidence', so: 'I review where I add most value', covers: ['forPage', 'contextPage', 'solutionsIndex'],
@@ -71,6 +77,8 @@ export const STORIES = [
     steps: [v('/solutions/kmc'), x({ text: 'Verification:' })] },
   { id: 'PUB-5', who: 'public', want: 'learn who is behind this and why', so: 'I can decide whether to trust it', covers: ['aboutPage', 'familyBar', 'siteFooter'],
     steps: [v('/'), { follow: { href: '^/about$' } }, x({ heading: 'Why it exists', text: ['Ultrastable', 'takes no money'], link: '^/method$' })] },
+  { id: 'ASK-1', who: 'everyone', want: 'ask a question in my own words and get an answer with sources', so: 'I do not have to read the whole site to find what applies to me', covers: ['askPage', 'siteHeader'],
+    steps: [v('/'), { follow: { href: '^/ask$' } }, x({ heading: 'Ask a question', form: '/ask', text: 'Try asking' }), { submit: { action: '/ask', fields: { q: 'malaria' } } }, x({ heading: 'Ask' })] },
   { id: 'ALL-1', who: 'everyone', want: 'skip straight to the content with the keyboard', so: 'I do not tab through navigation every page', covers: ['skipLink', 'siteHeader'],
     steps: [v('/'), x({ link: '^#main$', text: 'Skip to main content' }), v('/solutions/kmc'), x({ link: '^#main$' })] },
   { id: 'ALL-2', who: 'everyone', want: 'read on a phone and in print', so: 'the site works wherever I am', covers: ['siteFooter', 'toc'],
@@ -80,5 +88,5 @@ export const STORIES = [
 ];
 export const storiesFor = who => STORIES.filter(s => s.who === who);
 // Every template, route and component a story may claim to cover. A story that names something else fails the traceability test.
-export const TEMPLATES = ['home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
-export const ROUTES = ['json-entity', 'csv', 'llms', 'sitemap'];
+export const TEMPLATES = ['askPage', 'catalogueIndex', 'catalogueEntry', 'home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
+export const ROUTES = ['json-entity', 'catalogue-json', 'csv', 'llms', 'sitemap'];
