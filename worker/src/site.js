@@ -21,6 +21,7 @@ import { SCAN } from './problem-scan.gen.js';
 import { askPage } from './ask.js';
 import { connectionsPage, connectionsJson } from './connections.js';  // DISCOVER-1
 import * as X from './export.js';
+import { autonomyPage, autonomyData } from './autonomy.js';  // AUTONOMY-1
 import * as V from './views.js';
 import { levelName } from './context.js';
 import { INFRA, solutionsFor } from './countries.js';
@@ -28,7 +29,7 @@ import { INFRA, solutionsFor } from './countries.js';
 const { esc } = ui;
 export const HEADERS = { ...SECURITY_HEADERS, 'cache-control': 'public, max-age=300' };
 export const legend = P.legend;
-const SITE_PATHS = ['/', '/ask', '/problems', '/catalogue', '/solutions', '/syntheses', '/connections', '/evidence-map', '/ranking', '/glossary', '/accessibility', '/country/compare', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/releases', '/api', '/about', '/privacy'];
+const SITE_PATHS = ['/', '/ask', '/problems', '/catalogue', '/solutions', '/syntheses', '/connections', '/evidence-map', '/ranking', '/glossary', '/accessibility', '/country/compare', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/autonomy', '/releases', '/api', '/about', '/privacy'];
 
 const solutionJson = (s, c, o) => ({ id: s.id, title: s.title, claim: s.claim, label: s.label, implementability: s.impl, design: s.design, verdict: s.verdict, problems: s.problem_ids, domains: s.domains, verified: s.verified,
   works_where: s.works_where, takes: s.takes, who: s.who, first_test: s.first_test, limits: s.limits, sources: s.links.map(l => ({ cite: l.cite, finding: l.finding, links: [...l.direct.map(d => d.url), l.search] })), url: o + '/solutions/' + s.id, cite: P.citation(s.title, '/solutions/' + s.id, o) });
@@ -148,6 +149,8 @@ export function route(u, c) {
   if (p === '/catalogue') return h(CAT.indexPage(c, u, o, page));
   if (p === '/catalogue.json') return json(CAT.indexJson(c, o));
   { const cm = /^\/catalogue\/([a-z0-9-]+)(\.json)?$/.exec(p); if (cm) { const x = CAT.find(cm[1]); return cm[2] ? (x ? json(CAT.entryJson(x, o)) : json({ error: 'not found' }, 404)) : x ? h(CAT.entryPage(x, c, o, page)) : h(P.notFound(c, o, p), 404); } }
+  if (p === '/autonomy') return h(autonomyPage(c, o, page));
+  if (p === '/autonomy.json') return json(autonomyData(c));
   if (p === '/releases') return h(releasesPage(o));
   if (p === '/releases.json') return json(RELEASES);
   if (p === '/releases.atom') return new Response(releasesAtom(o), { headers: { 'content-type': 'application/atom+xml; charset=utf-8', 'cache-control': 'public, max-age=300' } });

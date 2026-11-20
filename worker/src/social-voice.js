@@ -12,7 +12,10 @@ const fit = (head, tail) => `${clip(head, LIMIT - tail.length - 1)}\n${tail}`;
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 const num = v => (typeof v === 'number' ? Number(v.toPrecision(3)).toString() : String(v));
 
+const A = f => Object.assign(f, { link: '/autonomy' });
 export const META = [
+  A(o => `Claim: a system left to run its own loop, inside fixed limits, can do useful public work. Test: this one has been compiling evidence on child health, water and hunger on its own. Its record, and what it doesn't prove:`),
+  A(o => `"Autonomous AI can't be trusted without a human in every step." Maybe. So we built one with hard limits, open records and public corrections, and count what it does. Check our numbers, then tell us where we're wrong:`),
   o => `Practical Solutions is a free library of fixes with real evidence behind them: child deaths, dirty water, hunger. It keeps itself up to date, and it's the first thing built on Ultrastable, a platform for systems that improve themselves. ${o}`,
   o => `What happens if a system watches its own results, fixes what's wrong, and keeps going? Practical Solutions is our first try, built on Ultrastable. Poke holes in it, please. ${o}`,
   o => `Most websites stop improving the day they launch. This one re-checks its own evidence and re-ranks problems on its own. Free, no signup. What should it cover next? ${o}`,
@@ -51,7 +54,7 @@ export function solutionPost(s, o) {
   return fit(head, url);
 }
 
-export const metaPost = (week, i, o) => fit(META[i % META.length]('').trim(), o + '/how');
+export const metaPost = (week, i, o) => fit(META[i % META.length]('').trim(), o + (META[i % META.length].link || '/how'));
 
 // Queue: hierarchy order, stable ids, so core posts each exactly once. Anything the loop touched in the last 3 days (changes feed) is an event and goes first.
 export function socialQueue(cat, { origin, now = Date.now(), recent = new Set() } = {}) {

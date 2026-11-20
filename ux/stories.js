@@ -91,8 +91,10 @@ export const STORIES = [
     steps: [v('/solutions/kmc'), x({ text: ['name="viewport"', '@media print', 'prefers-color-scheme:dark'] })] },
   { id: 'ALL-3', who: 'everyone', want: 'always know where I am and how to go back', so: 'I never feel lost', covers: ['breadcrumbs', 'siteHeader'],
     steps: [v('/solutions/kmc'), x({ text: ['aria-label="Breadcrumb"', 'aria-current="page"'], link: '^/solutions$' })] },
+  { id: 'RES-AUT-1', who: 'researchers', want: 'see what the self-running loop has actually done and what that does not prove', so: 'I can test the claim that a bounded autonomous system does useful work, and say where it is wrong', covers: ['autonomyPage', 'callout'],
+    steps: [v('/autonomy'), x({ heading: 'Autonomy record', text: 'What this does not show', link: '^/changes$' }), v('/autonomy.json'), x({ json: { path: 'recorded_changes', min: 0 } })] },
 ];
 export const storiesFor = who => STORIES.filter(s => s.who === who);
 // Every template, route and component a story may claim to cover. A story that names something else fails the traceability test.
-export const TEMPLATES = ['askPage', 'catalogueIndex', 'catalogueEntry', 'home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
+export const TEMPLATES = ['askPage', 'autonomyPage', 'catalogueIndex', 'catalogueEntry', 'home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
 export const ROUTES = ['json-entity', 'catalogue-json', 'csv', 'llms', 'sitemap'];
