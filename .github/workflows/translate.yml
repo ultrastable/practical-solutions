@@ -11,9 +11,10 @@ on:
   workflow_dispatch:
     inputs: { langs: { description: 'comma-separated language codes (default: the one least covered, so the free daily allowance finishes a language before starting the next)', default: '' }, calls: { description: 'model calls per language (25 segments each)', default: '12' } }
 concurrency: { group: translate, cancel-in-progress: false }
-permissions: { contents: write, actions: write, id-token: write }
+permissions: { contents: write, actions: write, id-token: write, models: read }
 env:
   GH_TOKEN: ${{ github.token }}
+  GITHUB_TOKEN: ${{ github.token }}
   PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
 jobs:
   translate:

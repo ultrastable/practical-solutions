@@ -42,10 +42,13 @@ export function save(lang, dict, dir = DIR) {
 export const coverage = (pages, dict) => { let a = 0, b = 0; for (const e of pages.values()) { b += e.pages; if (dict[e.key]) a += e.pages; } return b ? a / b : 0; };
 
 // Models for translation: the multilingual-strong members of the pool first; the first that answers with passing lines wins.
-const LADDER = ['gemma-4', 'qwen3-30b', 'llama-3.3-70b', 'mistral-small-3.1'].map(id => ENSEMBLE.pool.find(m => m.id === id)).filter(Boolean);
+// GitHub Models (free, on the run's GITHUB_TOKEN with models: read) first, so the translation does not draw on the Workers AI allowance that Ask needs; Workers AI is the fallback.
+const GH = ['gpt-4.1-mini', 'llama-3.3-70b-gh', 'mistral-small-gh'].map(id => ENSEMBLE.github_models.find(m => m.id === id)).filter(Boolean);
+const LADDER = [...GH, ...['gemma-4', 'qwen3-30b', 'llama-3.3-70b', 'mistral-small-3.1'].map(id => ENSEMBLE.pool.find(m => m.id === id)).filter(Boolean)];
+const strikes = new Map();   // a model that fails three calls in a row is skipped for the rest of the run (a route that answers a bare "OK" costs a round trip every batch)
 const generator = () => async ({ system, user, maxTokens }) => {
   const why = [];   // Workers AI free plan: a daily neuron quota (error 4006) that resets at 00:00 UTC; the run stops on it and the next daily run continues
-  for (const spec of LADDER) { const r = await askModel({ secrets: process.env, spec, prompt: system + '\n\n' + user, maxTokens }); if (r.ok && r.text) return r.text.replace(/<think>[\s\S]*?<\/think>/g, ''); why.push(`${spec.id}: ${r.error || 'empty'}`); }
+  for (const spec of LADDER) { if ((strikes.get(spec.id) || 0) >= 3) continue; const r = await askModel({ secrets: process.env, spec, prompt: system + '\n\n' + user, maxTokens }); if (r.ok && r.text) { strikes.set(spec.id, 0); return r.text.replace(/<think>[\s\S]*?<\/think>/g, ''); } strikes.set(spec.id, (strikes.get(spec.id) || 0) + 1); why.push(`${spec.id}: ${r.error || 'empty'}`); }
   throw new Error('no model route answered (' + why.join('; ').slice(0, 400) + ')');   // the reasons ride in the run report, so a quota or plan error is data
 };
 
@@ -54,7 +57,7 @@ export async function run({ langs, calls = 30, batch = 25, generate = generator(
   const report = {}; let quotaOut = false;   // one language hitting the daily quota stops the others too: no point burning calls
   await Promise.all(langs.map(async lang => {   // languages run side by side: the model route is the slow part, not the machine
     const keep = new Set(pages.keys()); let dict = Object.fromEntries(Object.entries(load(lang, dir)).filter(([k]) => keep.has(k)));   // translations of text that no longer exists are dropped
-    const todo = [...pages.values()].filter(e => !dict[e.key]).sort((a, b) => b.pages - a.pages || a.text.localeCompare(b.text)), stat = { before: Object.keys(dict).length, rejected: {}, calls: 0 };
+    const todo = [...pages.values()].filter(e => !dict[e.key]).sort((a, b) => b.pages - a.pages || a.text.length - b.text.length || a.text.localeCompare(b.text)), stat = { before: Object.keys(dict).length, rejected: {}, calls: 0 };
     for (let i = 0; i < calls && i * batch < todo.length && Date.now() < deadline; i++) {
       const seg = todo.slice(i * batch, (i + 1) * batch); stat.calls++;
       if (quotaOut) { stat.error = 'quota: free daily model allowance used up; the next daily run continues'; break; }
