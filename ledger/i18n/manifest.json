@@ -56,7 +56,7 @@
    "live": false,
    "coverage": 0.067,
    "segments": 74,
-   "of": 7123,
+   "of": 7135,
    "shards": [
     "29297a64f62d41d9",
     "f225c9cb53f834fa",
@@ -67,57 +67,24 @@
     "ca3d163bab055381",
     "ca3d163bab055381"
    ],
-   "at": "2026-11-20T17:56:23.006Z"
+   "at": "2026-11-20T18:10:50.097Z"
   }
  },
  "source": "en",
- "at": "2026-11-20T17:56:23.006Z",
- "total_segments": 7123,
+ "at": "2026-11-20T18:10:50.097Z",
+ "total_segments": 7135,
  "last_run": {
-  "at": "2026-11-20T17:56:23.006Z",
+  "at": "2026-11-20T18:10:50.097Z",
   "report": {
-   "fr": {
-    "before": 68,
-    "rejected": {
-     "model error: no model route answered": 50
-    },
-    "calls": 2,
-    "error": "two batches with no accepted translation",
-    "after": 68,
-    "coverage": 0.064,
-    "live": false
-   },
-   "ar": {
-    "before": 79,
-    "rejected": {
-     "model error: no model route answered": 50
-    },
-    "calls": 2,
-    "error": "two batches with no accepted translation",
-    "after": 79,
-    "coverage": 0.064,
-    "live": false
-   },
    "es": {
     "before": 74,
     "rejected": {
-     "model error: no model route answered": 50
+     "model error: no model route answered (gemma-4: worker-ai HTTP 502 4006: you have used up your": 50
     },
     "calls": 2,
     "error": "two batches with no accepted translation",
     "after": 74,
     "coverage": 0.067,
-    "live": false
-   },
-   "pt": {
-    "before": 64,
-    "rejected": {
-     "model error: no model route answered": 50
-    },
-    "calls": 2,
-    "error": "two batches with no accepted translation",
-    "after": 64,
-    "coverage": 0.061,
     "live": false
    }
   }
