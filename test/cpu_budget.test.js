@@ -10,9 +10,13 @@ import { buildCatalog } from '../worker/src/catalog.js';
 import { SOLUTIONS } from '../worker/src/solutions.js';
 import { route } from '../worker/src/site.js';
 
+// PORTABLE-FLOAT-1: Node releases differ in the last digit of some floating-point results (Node 22 gives p95 2469.8339655372224, Node 24 gives ...372223).
+// Numbers are compared to 12 significant digits, so a runtime upgrade cannot fail every merge while a real change to a model still does.
+const round = v => JSON.parse(JSON.stringify(v), (k, x) => typeof x === 'number' ? Number(x.toPrecision(12)) : x);
+test('float rounding keeps real differences visible', () => { assert.deepEqual(round({ a: 2469.8339655372224 }), round({ a: 2469.833965537223 })); assert.notDeepEqual(round({ a: 2469.83396 }), round({ a: 2469.83397 })); });
 test('the precomputed seed estimates match the engine (regenerate with tools/bca_precompute.mjs)', () => {
   assert.deepEqual(Object.keys(PRECOMPUTED).sort(), Object.keys(MODELS).sort());
-  for (const id of Object.keys(MODELS)) assert.deepEqual(JSON.parse(JSON.stringify(PRECOMPUTED[id])), JSON.parse(JSON.stringify(computeSeed(id))), id + ' is stale');
+  for (const id of Object.keys(MODELS)) assert.deepEqual(round(PRECOMPUTED[id]), round(computeSeed(id)), id + ' is stale');
 });
 test('stored results are used for refined models, so the request path never scores', () => {
   const id = Object.keys(MODELS)[0], m = { ...MODELS[id], evidence: [...(MODELS[id].evidence || []), { node: 'x', source: 's', grade: 'C' }] };
