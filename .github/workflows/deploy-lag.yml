@@ -32,5 +32,11 @@ jobs:
               gh workflow run "$1" --repo "$REPO" --ref main
             fi
           }
+          for wf in deploy-tenant.yml deploy-backend.yml; do # a hung run holds the queue: cancel any run older than 15 minutes
+            for id in $(gh api "repos/$REPO/actions/workflows/$wf/runs?status=in_progress&per_page=5" --jq '.workflow_runs[] | select((now - (.run_started_at | fromdateiso8601)) > 900) | .id'); do
+              echo "::warning::$wf run $id has run over 15 minutes; cancelling so the newest main can deploy"
+              gh api -X POST "repos/$REPO/actions/runs/$id/cancel"
+            done
+          done
           check deploy-tenant.yml worker/src
           check deploy-backend.yml worker/src
