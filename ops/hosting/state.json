@@ -37,15 +37,15 @@
    "compat_date": "2026-10-01",
    "compat_flags": [],
    "deployment": {
-    "id": "ccc3f3c8-f79c-4076-b96c-079ea93cf96f",
-    "created_on": "2026-11-20T18:45:10.268889Z"
+    "id": "233e9c5d-8f5d-4be9-b19a-15e66bd8b1e3",
+    "created_on": "2026-11-20T19:37:02.360659Z"
    },
    "read_errors": []
   },
   "tenant-ps-core": {
    "script": "tenant-ps-core",
    "found": true,
-   "sha256": "bf84c204b411977d33c13913ad4eb8376942ada28206d1c0bc1dcdafad4e3b8a",
+   "sha256": "9b794542cf5319d3bc953c88edf07bdeab7fdaf49bb4dd8df675dfde14f9fa03",
    "bindings": [
     {
      "type": "d1",
@@ -82,8 +82,8 @@
     "nodejs_compat"
    ],
    "deployment": {
-    "id": "5cf764e6-1324-4330-87df-59d2916c1cf7",
-    "created_on": "2026-11-20T18:23:09.189539Z"
+    "id": "2cd72c33-e5a8-4145-b9d2-17141a695bf7",
+    "created_on": "2026-11-20T19:36:59.41892Z"
    },
    "read_errors": []
   },
