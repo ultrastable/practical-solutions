@@ -18,6 +18,7 @@ import { bcaTick, KEY as BCA_KEY } from './bca.js';
 import * as PV from '../../ps/provenance.js';  // PROVENANCE-1
 import { goalsTick, knob } from './goals.js';  // GOALS-1
 import { askRoute } from './ask.js';  // ASK-1
+import { freshnessResponse } from './freshness.js';  // PAGES-FRESH-1
 import { sitemapFor, sitemapIndex, parsePath, localizable } from '../../vendor/ultrastable/core/i18n/index.js';  // I18N-1
 import { CODES, manifest, liveLangs, decorate, syncDictionaries, SOURCE_LANG } from './i18n.js';
 import { sitemapPaths } from './site.js';
@@ -45,6 +46,9 @@ const handler = {
   async inner(r, env, ctx) {
     const u = new URL(r.url);
     if (ctx && ctx.waitUntil) ctx.waitUntil(recordView(env.STATE, r).catch(() => {}));
+    // PAGES-FRESH-1: the public front end reports the age of its own bundles. The route existed only on the backend Worker, so the core's
+    // pages-live probe of this host read 404 and a stale front end could not be detected (found 2026-11-20).
+    if (u.pathname === '/api/freshness') return freshnessResponse();
     if (u.pathname === '/metrics.json') return Response.json(await summary(env.STATE), { headers: { 'cache-control': 'public, max-age=300' } });
     // AUDIT-1: the public half of the audit log (counts, chain head, verification, Merkle proofs) is read from the backend through the service binding.
     if (env.CORE && (u.pathname === '/audit/summary.json' || u.pathname === '/audit/verify' || u.pathname === '/audit/proof') && r.method === 'GET') return env.CORE.fetch('https://core.internal' + u.pathname + u.search);
