@@ -1,0 +1,6 @@
+{"schema":"ps-embeddings/1","graph":{"model":"@cf/baai/bge-small-en-v1.5","dim":0,"rows":{
+
+}},
+"ask":{"model":"@cf/baai/bge-small-en-v1.5","dim":0,"rows":{
+
+}}}

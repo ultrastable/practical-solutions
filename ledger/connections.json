@@ -1,0 +1,38 @@
+{
+ "schema": "ps-connections/1",
+ "v": 1,
+ "runs": [
+  {
+   "at": "2026-11-20T20:37:44.866Z",
+   "tau": 1,
+   "nodes": 0,
+   "candidates": 0,
+   "new": 0,
+   "confirmed": 0,
+   "dropped": 0,
+   "open": 0
+  }
+ ],
+ "entries": {},
+ "retired": {},
+ "params": {
+  "pct": 0.89
+ },
+ "decisions": [
+  {
+   "at": "2026-11-20T20:37:44.866Z",
+   "knob": "pct",
+   "from": 0.9,
+   "to": 0.89,
+   "why": "0 new candidates is below 5",
+   "prediction": "new_candidates >= 5 within 24 h"
+  }
+ ],
+ "totals": {
+  "entered": 0,
+  "confirmed": 0,
+  "dropped": 0,
+  "open": 0,
+  "hit_rate": null
+ }
+}
