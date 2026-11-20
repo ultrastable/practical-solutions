@@ -1,6 +1,6 @@
 {
  "schema": "ps-synth-discovered/1",
- "at": "2026-11-19T03:33:51.104Z",
+ "at": "2026-11-20T13:09:29.903Z",
  "entries": [
   {
    "id": "kmc-ors-zinc",
@@ -437,6 +437,15 @@
    "at": "2026-11-19T03:33:51.104Z",
    "event": "no usable proposal",
    "detail": ""
+  },
+  {
+   "at": "2026-11-20T13:09:29.903Z",
+   "id": "deworming-ors-zinc-transfer",
+   "event": "rejected: red team",
+   "detail": [
+    "b",
+    "d"
+   ]
   }
  ]
 }
