@@ -72,6 +72,18 @@
   "women-leaders": {
    "at": "2026-11-18T11:14:33.506Z",
    "outcome": "no change proposed: None of the provided sources discuss village‑council seat reservations for women in India, so there is no evidence to correct any field."
+  },
+  "cytisine": {
+   "at": "2026-11-20T13:59:08.078Z",
+   "outcome": "rejected"
+  },
+  "pph-bundle": {
+   "at": "2026-11-20T13:59:08.078Z",
+   "outcome": "rejected"
+  },
+  "tb-community-screening": {
+   "at": "2026-11-20T13:59:08.078Z",
+   "outcome": "rejected"
   }
  },
  "proposals": [
@@ -306,6 +318,90 @@
    "status": "rejected",
    "reason": "evidence check failed: the quote is not in the abstract; replacement is much longer than the original",
    "at": "2026-11-19T14:24:35.317Z"
+  },
+  {
+   "id": "06b53e5b4ef8",
+   "entry": "cytisine",
+   "field": "claim",
+   "old": "A 25-day course of cytisine with brief behavioural support helped more smokers stay off cigarettes than nicotine replacement did, and it is among the cheapest stop-smoking medicines.",
+   "new": "Cytisine combined with brief behavioural support has demonstrated clinically meaningful smoking cessation outcomes in real‑world cohorts, though direct comparisons to nicotine‑replacement therapy are limited.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42996805",
+    "title": "Association between early treatment response and long-term smoking cessation: A real-world retrospective cohort study of cytisine treatment."
+   },
+   "quote": "Cytisine, when combined with structured behavioral support, was associated with clinically meaningful smoking cessation outcomes in this real‑world cohort.",
+   "why": "The original claim about a 25‑day course and being among the cheapest medicines is not supported by the cited abstracts.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-20T13:59:08.078Z"
+  },
+  {
+   "id": "a416a580f650",
+   "entry": "pph-bundle",
+   "field": "works_where",
+   "old": "Secondary-level hospitals in Kenya, Nigeria, South Africa and Tanzania, vaginal births.",
+   "new": "Secondary-level hospitals in Kenya, Nigeria, Zambia, Ethiopia and Tanzania, vaginal births.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42260002",
+    "title": "From guesstimates to game changers: Introducing objective measurement of blood loss for timely postpartum hemorrhage detection in Nigeria, Zambia, and Kenya."
+   },
+   "quote": "introducing calibrated drapes for PPH detection in coordination with governments of Nigeria and Zambia and supporting county government-led rollout in Kenya.",
+   "why": "South Africa is not mentioned in the sources, while Zambia and Ethiopia are, so the list of countries should be updated accordingly.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-20T13:59:08.078Z"
+  },
+  {
+   "id": "4601223418cc",
+   "entry": "tb-community-screening",
+   "field": "claim",
+   "old": "Three yearly rounds of sputum testing offered to all adults, with or without symptoms, left a community with markedly less tuberculosis than standard clinic-based case finding.",
+   "new": "Three yearly rounds of active case finding offered to all adults, with or without symptoms, can reduce tuberculosis prevalence in a community",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42305733",
+    "title": "Scoping review of community-wide screening to break the chain of TB transmission."
+   },
+   "quote": "Reducing the force of infection can be accomplished by performing multiple cycles of community-wide screening to reach substantial numbers of community members with TB",
+   "why": "The original claim is too specific and the new text better reflects the findings of the scoping review",
+   "proposer": {
+    "id": "llama-3.3-70b",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-20T13:59:08.078Z"
   }
  ],
  "health": {
@@ -373,17 +469,17 @@
    "last": "worker-ai HTTP 502 5035: Model @cf/deepseek-ai/deepseek-v4-flash-0731 is not available on the Workers Free pl"
   },
   "nemotron-3": {
-   "calls": 7,
-   "errors": 6,
-   "last": "unparseable"
+   "calls": 8,
+   "errors": 7,
+   "last": "worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
   },
   "gpt-oss-120b": {
-   "calls": 6,
+   "calls": 8,
    "errors": 2,
    "last": "empty"
   },
   "llama-3.3-70b": {
-   "calls": 3,
+   "calls": 4,
    "errors": 0
   }
  },
@@ -561,11 +657,25 @@
    "none": 0,
    "panel_failures": 0,
    "failures": []
+  },
+  {
+   "at": "2026-11-20T13:59:08.078Z",
+   "examined": 3,
+   "proposed": 3,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 3,
+   "pending": 0,
+   "none": 0,
+   "panel_failures": 0,
+   "failures": [
+    "nemotron-3: worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-19T14:24:35.317Z"
+ "at": "2026-11-20T13:59:08.078Z"
 }
