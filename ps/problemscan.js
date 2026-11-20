@@ -11,11 +11,13 @@ const clean = s => String(s || '').replace(/\s+/g, ' ').trim();
 // ---- the rule that decides what is a problem and which way is better ------------------------------------------------------------------------
 // First match wins, so the specific "should rise" patterns come before the generic "should fall" words (contraceptive prevalence is a coverage).
 export const RULES = [
+  // a count of people who NEED something is a burden, even when the thing needed (treatment) is a coverage elsewhere
+  { id: 'need', lower: true, re: /\b(needing|in need of|requiring|eligible for)\b/i },
   { id: 'coverage', lower: false, re: /\b(access to|with access|coverage|immuni[sz]ation|vaccin|births attended|skilled (health|birth)|antenatal care|contraceptive prevalence|demand for family planning|literacy rate|completion rate|school enrol|enrolment|enrollment|life expectancy|survival to|treatment success|case detection|antiretroviral|using (at least basic|safely managed|basic|the internet)|individuals using the internet|account ownership|handwashing|exclusive breastfeeding|breastfed|trained teachers|qualified teachers|birth registration|births? .*registered|seats held by women|protected areas|renewable energy|clean fuels|electricity|insecticide-treated|oral rehydration|vitamin a supplementation|iodized salt|health service coverage|social (protection|insurance|safety net)s? .*coverag|pupils? .*proficien|minimum proficiency)/i },
   { id: 'harm', lower: true, re: /\b(mortality|death|deaths|died|dying|stillbirth|suicide|homicide|killed|fatalit|prevalence|incidence|new (hiv )?infections|new cases|poverty|poor|undernourish|hunger|food insecurity|stunting|stunted|wasting|wasted|underweight|overweight|obes|an(a)?emia|low.?birth.?weight|out.of.school|not in (education|school)|dropout|drop-out|repeaters|illitera|unemploy|child (labou?r|marriage)|children in employment|married (by|before) age|vulnerable employment|informal employment|working poor|slum|homeless|pollution|pm2\.5|emissions|deforestation|degraded|threatened species|red list|water stress|natural disasters?|droughts, floods|bribe|corruption|violence|victims|trafficking|refugee population by country.*origin|internally displaced|conflict|unsafe|lacking|without|open defecation|smok|tobacco use|alcohol consumption|harmful use|road traffic|injur|disabilit|catastrophic|impoverish|out-of-pocket|unmet need|adolescent fertility|adolescent birth|teenage mothers|wait(ing)? time|losses|food loss|waste generated|hazardous waste|overfish|overexploit|gap|inequal|gini)\b/i },
 ];
 // Words that mark an indicator as a breakdown of another one, or as something that is not a level in the world today.
-export const SKIP = /\b(archived|discontinued|\(old\)|estimated number of people needing|number of countries|existence of|is there a|status of|standard error|sample size|confidence|lower bound|upper bound)\b/i;
+export const SKIP = /\b(parity index|number of parties|parties to|archived|discontinued|\(old\)|estimated number of people needing|number of countries|existence of|is there a|status of|standard error|sample size|confidence|lower bound|upper bound)\b/i;
 export const BREAKDOWN = /,\s*(male|female|urban|rural|youth (male|female)|adult (male|female)|ages? [0-9][0-9 +-]*|(first|second|third|fourth|fifth|lowest|highest) (20%|10%|quintile))\b|\b(male|female)\s*\(/i;
 
 export function classify(name, rules = RULES) {
@@ -141,7 +143,7 @@ export const SOURCES = () => [unSdg(), whoCauses(), worldBank(), whoGho()];
 // source is a taxonomy (the problem is recognised even though this run found no figure for it).
 export async function scan({ sources = SOURCES(), prev = null, budget = 400, fetch: f = globalThis.fetch, now = () => new Date().toISOString(), rules = RULES, remeasure_days = 30 } = {}) {
   const at = now(), today = at.slice(0, 10), byId = new Map(((prev && prev.entries) || []).map(e => [e.id, e])), stats = {}, log = [...((prev && prev.log) || [])];
-  const items = new Map();
+  const items = new Map(), redirected = [];
   for (const s of sources) {
     const st = stats[s.id] = { name: s.name, home: s.home, licence: s.licence, listed: 0, matched: 0, breakdowns_skipped: 0, error: null };
     let list;
@@ -155,6 +157,7 @@ export async function scan({ sources = SOURCES(), prev = null, budget = 400, fet
       if (BREAKDOWN.test(it.name)) { const total = it.name.replace(BREAKDOWN, m => /\(/.test(m) ? '(' : '').toLowerCase(); if (names.has(total) || names.has(total.replace(/\s*\(/, ', total (')) || [...names].some(n => n !== it.name.toLowerCase() && n.replace(/,\s*total\b/, '') === total)) { st.breakdowns_skipped++; continue; } }
       st.matched++;
       const id = `${s.id}-${slug(it.code)}`, old = byId.get(id);
+      if (old && old.m && old.lower !== c.lower) { const o = old.m, rows = [{ year: o.year, value: o.value }, ...(o.base != null ? [{ year: o.base_year, value: o.base }] : [])]; old.m = measure(rows, { lower: c.lower, percent: isPercent(it.name) }); redirected.push(id); }
       items.set(id, { src: s, item: it, e: { id, source: s.id, code: it.code, title: it.name, domain: it.domain, note: it.note || '', lower: c.lower, rule: c.rule, matched: c.matched, percent: isPercent(it.name), page: s.page(it.code), first_seen: (old && old.first_seen) || today, published: (old && old.published) || null, m: (old && old.m) || null, measured_at: (old && old.measured_at) || null, read_url: (old && old.read_url) || s.listUrl || null, tries: (old && old.tries) || 0 } });
     }
   }
@@ -175,6 +178,9 @@ export async function scan({ sources = SOURCES(), prev = null, budget = 400, fet
   for (const e of all) { const taxonomy = (sources.find(s => s.id === e.source) || {}).taxonomy; if (!e.published && (e.m || taxonomy)) { e.published = today; added.push(e.id); } }
   const entries = rank(all.filter(e => e.published)), pending = all.filter(e => !e.published);
   for (const s of Object.keys(stats)) { stats[s].published = entries.filter(e => e.source === s).length; stats[s].measured = entries.filter(e => e.source === s && e.m).length; stats[s].awaiting_figure = pending.filter(e => e.source === s && !e.measured_at).length; stats[s].no_world_figure = pending.filter(e => e.source === s && e.measured_at).length; }
+  const removed = [...byId.values()].filter(e => e.published && !items.has(e.id)).map(e => e.id);
+  if (removed.length) log.push({ at, event: 'removed: no longer read as a problem', ids: removed.slice(0, 50), count: removed.length });
+  if (redirected.length) log.push({ at, event: 'direction re-read', count: redirected.length, ids: redirected.slice(0, 50) });
   log.push({ at, event: 'scan', added: added.length, measured, no_figure: empty, failed, published: entries.length, due_left: [...items.values()].filter(x => x.src && x.src.series && x.e.lower != null && !x.e.measured_at).length });
   return { schema: 'problem-scan/1', at, rank_rule: RANK_RULE, sources: stats, entries: [...entries, ...pending.map(e => ({ ...e, rank: null }))], added, log: log.slice(-200) };
 }
