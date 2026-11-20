@@ -1,1 +1,76 @@
-{"schema":"ps-i18n/1","langs":{},"source":"en"}
+{
+ "schema": "ps-i18n/1",
+ "langs": {
+  "pt": {
+   "live": false,
+   "coverage": 0.061,
+   "segments": 65,
+   "of": 7123,
+   "shards": [
+    "5201c4c6cb19e677",
+    "d04038b884e08495",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-20T16:52:10.609Z"
+  },
+  "fr": {
+   "live": false,
+   "coverage": 0.064,
+   "segments": 69,
+   "of": 7123,
+   "shards": [
+    "77c923c319154016",
+    "6dd74f90b4b0aa46",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-20T16:52:10.609Z"
+  },
+  "ar": {
+   "live": false,
+   "coverage": 0.064,
+   "segments": 80,
+   "of": 7123,
+   "shards": [
+    "496789afb01ec5ed",
+    "167a0da0629d206a",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-20T16:52:10.609Z"
+  },
+  "es": {
+   "live": false,
+   "coverage": 0.067,
+   "segments": 75,
+   "of": 7123,
+   "shards": [
+    "1039584c1bb00746",
+    "f225c9cb53f834fa",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-20T16:52:10.609Z"
+  }
+ },
+ "source": "en",
+ "at": "2026-11-20T16:52:10.609Z",
+ "total_segments": 7123
+}
