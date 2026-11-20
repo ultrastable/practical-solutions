@@ -14,6 +14,7 @@ import { digest } from '../../vendor/ultrastable/core/progress/index.js';  // PR
 import { AUDIENCES, audience } from './audiences.js';
 import { domainMeta } from './domains-meta.js';
 import { embedSnippet, datasetLd } from './export.js';
+import { argumentBlock } from './views.js';
 import { STORIES, storiesFor } from '../../ux/stories.js';
 import { sig } from './numfmt.js';
 
@@ -87,6 +88,7 @@ registerSection('solution', { id: 'evidence', title: 'Evidence and sources', ord
   const dz = DESIGN[s.design];
   return `<p>${esc(dz.name)}: ${esc(dz.note)}</p><ul class="list">${s.links.map(l => `<li><b>${esc(l.cite)}</b><br>${esc(l.finding)}<span class="links">${l.direct.map(d => `<a href="${esc(d.url)}">${esc(d.label)}</a>`).join('')}<a href="${esc(l.search)}">Find this paper on Europe PMC</a></span></li>`).join('')}</ul>
 <p class="m">Verification: ${esc(s.verified)}${s.checkable ? ' The loop re-checks the quoted numbers against the paper abstract every day.' : ' No automatic check is defined for this entry yet, so the figures are the source\'s own, unconfirmed here.'}</p>`; } });
+registerSection('solution', { id: 'arguments', title: 'Arguments for and against', order: 58, render: (s, c) => argumentBlock(s, c) });
 registerSection('solution', { id: 'limits', title: 'Limits', order: 60, render: s => `<p>${esc(s.limits)}</p>` });
 registerSection('solution', { id: 'related', title: 'See also', order: 70, render: (s, c) => { const r = c.related(s); return r.length ? ui.cardGrid(r.map(x => solCard(x, c))) : ''; } });
 registerSection('solution', { id: 'reuse', title: 'Cite, export and embed', order: 95, render: (s, c, o) => `<p>Cite it in your reference manager: <a href="${esc(sUrl(s))}.bib">BibTeX</a> · <a href="${esc(sUrl(s))}.ris">RIS</a> · <a href="${esc(sUrl(s))}.csl.json">CSL-JSON</a>.</p><p>Embed a card with the label and main limit on your own page:</p>${ui.cite(embedSnippet(s, o))}` });

@@ -13,7 +13,7 @@ import { route } from '../worker/src/site.js';
 const registry = JSON.parse(readFileSync(new URL('../org/capabilities.json', import.meta.url), 'utf8'));
 const c = buildCatalog({ problems: null, solutions: SOLUTIONS });
 const r = await scan(registry, async p => route(new URL('https://x' + p), c));
-const ledger = { at: new Date().toISOString(), total: r.total, shipped: r.shipped, coverage: Number(r.coverage.toFixed(3)), gaps: r.gaps.map(g => ({ id: g.id, priority: g.priority, feature: g.feature, reference: g.reference })) };
+const ledger = { at: new Date().toISOString(), total: r.total, shipped: r.shipped, coverage: Number(r.coverage.toFixed(3)), deferred: r.deferred, gaps: r.gaps.map(g => ({ id: g.id, priority: g.priority, feature: g.feature, reference: g.reference })) };
 writeFileSync(new URL('../ledger/gaps.json', import.meta.url), JSON.stringify(ledger, null, 2) + '\n');
 console.log(JSON.stringify(ledger, null, 2));
 if (process.argv.includes('--file')) {

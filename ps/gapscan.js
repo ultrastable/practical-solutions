@@ -11,10 +11,10 @@ export async function scan(registry, fetchFn) {
       try { const r = await fetchFn(c.probe.path); const body = r ? await r.text() : ''; shipped = !!r && r.status === (c.probe.status || 200) && (!c.probe.text || body.includes(c.probe.text)); detail = r ? `status ${r.status}` : 'no response'; }
       catch (e) { detail = 'probe error: ' + e.message; }
     }
-    out.push({ id: c.id, reference: c.reference, feature: c.feature, priority: c.priority || 2, shipped, detail });
+    out.push({ id: c.id, reference: c.reference, feature: c.feature, priority: c.priority || 2, shipped, deferred: shipped ? null : (c.deferred || null), detail });
   }
-  const gaps = out.filter(x => !x.shipped).sort((a, b) => a.priority - b.priority || a.id.localeCompare(b.id));
-  return { total: out.length, shipped: out.filter(x => x.shipped).length, coverage: out.length ? out.filter(x => x.shipped).length / out.length : 0, gaps, capabilities: out };
+  const gaps = out.filter(x => !x.shipped && !x.deferred).sort((a, b) => a.priority - b.priority || a.id.localeCompare(b.id));
+  return { total: out.length, shipped: out.filter(x => x.shipped).length, deferred: out.filter(x => x.deferred).map(x => ({ id: x.id, reason: x.deferred })), coverage: out.length ? out.filter(x => x.shipped).length / out.length : 0, gaps, capabilities: out };
 }
 export const issueTitle = g => `Feature gap: ${g.feature}`;
 export const issueBody = g => `Gap found by the weekly gap analysis (FEATURE-GAP-1, \`ps/gapscan.js\`).\n\nReference: ${g.reference}\nCapability: ${g.feature} (\`${g.id}\`)\nProbe: ${g.detail}\n\nDone when the probe for \`${g.id}\` in \`org/capabilities.json\` exists and passes in \`npm test\`; add a story to \`ux/stories.js\` for any user-facing page. Closing probe: \`node tools/gapscan.mjs\` lists \`${g.id}\` as shipped.\nPrediction: capability_coverage > current within 72 h.\nDisposition: owner \`agent\` (.github/workflows/agent.yml), trigger: label \`idea\`.`;

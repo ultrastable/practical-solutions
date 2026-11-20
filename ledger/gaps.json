@@ -1,44 +1,25 @@
 {
-  "at": "2026-11-20T16:01:42.186Z",
+  "at": "2026-11-20T18:16:07.042Z",
   "total": 22,
-  "shipped": 16,
-  "coverage": 0.727,
-  "gaps": [
+  "shipped": 18,
+  "coverage": 0.818,
+  "deferred": [
     {
-      "id": "argument-map",
-      "priority": 2,
-      "feature": "Pro and con claims per solution with sources",
-      "reference": "Kialo"
-    },
-    {
-      "id": "subscribe",
-      "priority": 2,
-      "feature": "Subscribe to changes by email, double opt-in",
-      "reference": "GiveWell, J-PAL"
-    },
-    {
-      "id": "translations",
-      "priority": 2,
-      "feature": "Translated entry pages",
-      "reference": "Wikipedia"
+      "id": "pwa-offline",
+      "reason": "Needs a service worker and a script registration; pages are script-free by rule (AGENTS.md 7) and the shared UI kit cannot add a manifest link. Revisit when core/ui supports it."
     },
     {
       "id": "og-images",
-      "priority": 3,
-      "feature": "Per-page share image (PNG) for social previews",
-      "reference": "Our World in Data"
+      "reason": "Major platforms need PNG share images; a Worker without a PNG renderer cannot make them cheaply. Revisit when core offers a build-time image step."
     },
     {
-      "id": "print-view",
-      "priority": 3,
-      "feature": "Print stylesheet for entries",
-      "reference": "Wikipedia"
+      "id": "subscribe",
+      "reason": "Email subscription stores reader addresses and needs consent, a verified sender and privacy-page claims; the feeds (RSS, Atom, JSON Feed) already serve subscribers. Owned with the outreach sender setup."
     },
     {
-      "id": "pwa-offline",
-      "priority": 3,
-      "feature": "Installable, offline reading (manifest, service worker)",
-      "reference": "Wikipedia app"
+      "id": "translations",
+      "reason": "Owned by the Ask and multilingual work (I18N-1)."
     }
-  ]
+  ],
+  "gaps": []
 }

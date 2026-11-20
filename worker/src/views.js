@@ -41,3 +41,17 @@ export function trendSvg(m, title = '') {
   const nb = figure(m.base, title) || sig(m.base, 3), nv = figure(m.value, title) || sig(m.value, 3), y = v => Math.round(H - P - ((v - lo) / span) * (H - 2 * P)), x1 = P, x2 = W - P, up = m.value > m.base;
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="tr-t" width="100%" style="max-width:24rem"><title id="tr-t">From ${esc(nb)} in ${esc(String(m.base_year))} to ${esc(nv)} in ${esc(String(m.year))}</title><line x1="${x1}" y1="${y(m.base)}" x2="${x2}" y2="${y(m.value)}" stroke="currentColor" stroke-width="3"/><circle cx="${x1}" cy="${y(m.base)}" r="5" fill="currentColor"/><circle cx="${x2}" cy="${y(m.value)}" r="5" fill="currentColor"/><text x="${x1}" y="${H - 4}" font-size="14" fill="currentColor">${esc(String(m.base_year))}: ${esc(nb)}</text><text x="${x2}" y="${H - 4}" font-size="14" text-anchor="end" fill="currentColor">${esc(String(m.year))}: ${esc(nv)}</text><text x="${W / 2}" y="14" font-size="14" text-anchor="middle" fill="currentColor">${up ? 'rising' : m.value < m.base ? 'falling' : 'flat'}</text></svg>`;
 }
+
+// Argument map (Kialo-style, from data already on the entry): the claim, what supports it with its source, and what weighs against it.
+export function argumentMap(s, c) {
+  const pro = (s.evidence || []).map(e => ({ text: e.finding, src: e.src }));
+  const con = [{ text: s.limits, src: 'Limits recorded on this entry' }];
+  if (s.verdict === 'mixed' || s.verdict === 'limited') con.push({ text: s.verdict === 'mixed' ? 'The evidence cited is mixed: some studies find a smaller or no effect.' : 'The evidence found so far is limited.', src: 'Evidence label: ' + s.label });
+  if (s.bca && !s.bca.error && s.bca.evidence_share > 0.5) con.push({ text: 'More than half of the benefit estimate rests on weak evidence (grade C or D).', src: 'Benefit and cost model' });
+  const u = (c.unknowns && c.unknowns[s.id]) || null; void u;
+  return { claim: s.claim, pro, con };
+}
+export function argumentBlock(s, c) {
+  const m = argumentMap(s, c), li = a => a.map(x => `<li>${esc(x.text)}<br><span class="m">${esc(x.src)}</span></li>`).join('');
+  return `<p><b>Claim:</b> ${esc(m.claim)}</p><div class="cols"><div><h3>For</h3><ul class="list">${li(m.pro)}</ul></div><div><h3>Against, or limits</h3><ul class="list">${li(m.con)}</ul></div></div><p class="m">Built from the entry's own sources and limits, not from votes. A claim stays only while its sources hold.</p>`;
+}
