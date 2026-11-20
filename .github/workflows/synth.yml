@@ -30,7 +30,8 @@ jobs:
         run: |
           git config user.name practical-solutions-bot
           git config user.email bot@users.noreply.github.com
-          git add ledger/syntheses-verified.json worker/src/syntheses.gen.js
+          node tools/askindex.mjs
+          git add ledger/syntheses-verified.json worker/src/syntheses.gen.js worker/src/ask-index.gen.js
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git commit -m "syntheses: verification record and generated module"
           for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done

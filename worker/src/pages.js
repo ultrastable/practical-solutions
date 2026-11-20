@@ -24,7 +24,7 @@ export const SHELL = {
   // FAMILY-1: the .org home of the Ultrastable family (public-benefit demos); accent colours come from https://ultrastable.io/family.json tokens.
   theme: { light: { accent: '#b83800' }, dark: { accent: '#ff7f4d' } },
   family: { label: 'Ultrastable for good: public-benefit demos built on Ultrastable', links: [{ label: 'About this project', href: 'https://ultrastable.io/showcase/practical-solutions' }, { label: 'ultrastable.io', href: 'https://ultrastable.io/' }] },
-  nav: [{ label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'New solutions', href: '/syntheses', match: /^\/syntheses/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Catalogue', href: '/catalogue', match: /^\/catalogue/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ }, { label: 'By country', href: '/country', match: /^\/(country|levels|context)/ },
+  nav: [{ label: 'Ask', href: '/ask', match: /^\/ask/ }, { label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'New solutions', href: '/syntheses', match: /^\/syntheses/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Catalogue', href: '/catalogue', match: /^\/catalogue/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ }, { label: 'By country', href: '/country', match: /^\/(country|levels|context)/ },
     { label: 'For you', href: '/for', match: /^\/for/ }, { label: 'Method', href: '/method', match: /^\/method/ }, { label: 'Data', href: '/api', match: /^\/api/ }],
   search: { action: '/search', name: 'q', label: 'Search solutions and problems', placeholder: 'Search, for example water' },
   feeds: [{ type: 'application/rss+xml', href: '/feed.xml', title: 'What changed' }],

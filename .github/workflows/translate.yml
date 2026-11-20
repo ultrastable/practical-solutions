@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: about 5 minutes a day (public repository: Actions minutes are free); at most 24 free model calls a run, so the shared Workers AI quota is not drained.
+# trigger: daily after the problem scan, so new catalogue text is translated within a day; no faster, the free model quota is shared with the ensemble and the code agent.
+# free-alternative: none needed; Workers AI behind the tenant model Worker on the run's OIDC token. No key a person mints.
+# I18N-1: translate the site's text into the next least-covered languages (machine translation, checked by code, labelled on every page). The Worker's own tick
+# copies the committed dictionaries into its store, so no deploy is needed for text; the retrieval index for Ask (ASK-1) is rebuilt here too and deployed when it changed.
+name: translate
+on:
+  schedule: [{ cron: '47 4 * * *' }]
+  workflow_dispatch:
+    inputs: { langs: { description: 'comma-separated language codes (default: the two least covered)', default: '' } }
+concurrency: { group: translate, cancel-in-progress: false }
+permissions: { contents: write, actions: write, id-token: write }
+env:
+  GH_TOKEN: ${{ github.token }}
+  PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
+jobs:
+  translate:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: rebuild the Ask index
+        run: node tools/askindex.mjs
+      - name: translate the next languages
+        run: node --no-warnings tools/translate.mjs --calls 12 --max-langs 2 ${{ github.event.inputs.langs && format('--langs {0}', github.event.inputs.langs) || '' }} | tee translate.json
+      - run: npm test
+      - name: commit
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/i18n worker/src/ask-index.gen.js
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git diff --cached --name-only | grep -q '^worker/src/' && echo deploy=1 > .deploy || true
+          git commit -m "translate: next languages and Ask index"
+          for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+          if [ -f .deploy ]; then bash tools/dispatch_deploy.sh; fi

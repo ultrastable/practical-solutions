@@ -75,6 +75,8 @@ export const STORIES = [
     steps: [v('/solutions/kmc'), x({ text: 'Verification:' })] },
   { id: 'PUB-5', who: 'public', want: 'learn who is behind this and why', so: 'I can decide whether to trust it', covers: ['aboutPage', 'familyBar', 'siteFooter'],
     steps: [v('/'), { follow: { href: '^/about$' } }, x({ heading: 'Why it exists', text: ['Ultrastable', 'takes no money'], link: '^/method$' })] },
+  { id: 'ASK-1', who: 'everyone', want: 'ask a question in my own words and get an answer with sources', so: 'I do not have to read the whole site to find what applies to me', covers: ['askPage', 'siteHeader'],
+    steps: [v('/'), { follow: { href: '^/ask$' } }, x({ heading: 'Ask a question', form: '/ask', text: 'Try asking' }), { submit: { action: '/ask', fields: { q: 'malaria' } } }, x({ heading: 'Ask' })] },
   { id: 'ALL-1', who: 'everyone', want: 'skip straight to the content with the keyboard', so: 'I do not tab through navigation every page', covers: ['skipLink', 'siteHeader'],
     steps: [v('/'), x({ link: '^#main$', text: 'Skip to main content' }), v('/solutions/kmc'), x({ link: '^#main$' })] },
   { id: 'ALL-2', who: 'everyone', want: 'read on a phone and in print', so: 'the site works wherever I am', covers: ['siteFooter', 'toc'],
@@ -84,5 +86,5 @@ export const STORIES = [
 ];
 export const storiesFor = who => STORIES.filter(s => s.who === who);
 // Every template, route and component a story may claim to cover. A story that names something else fails the traceability test.
-export const TEMPLATES = ['catalogueIndex', 'catalogueEntry', 'home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
+export const TEMPLATES = ['askPage', 'catalogueIndex', 'catalogueEntry', 'home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
 export const ROUTES = ['json-entity', 'catalogue-json', 'csv', 'llms', 'sitemap'];

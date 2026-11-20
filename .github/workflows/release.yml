@@ -32,7 +32,8 @@ jobs:
         run: |
           git config user.name practical-solutions-bot
           git config user.email bot@users.noreply.github.com
-          git add ledger/releases.json ledger/problem-bank.json worker/src/releases.gen.js worker/src/problems.js
+          node tools/askindex.mjs
+          git add ledger/releases.json ledger/problem-bank.json worker/src/releases.gen.js worker/src/problems.js worker/src/ask-index.gen.js
           if ! git diff --cached --quiet; then
             git commit -m "release: $(node -p "JSON.parse(require('fs').readFileSync('release.json','utf8').trim().split('\n').pop()).version || 'cadence record'")"
             for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
