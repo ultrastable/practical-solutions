@@ -107,7 +107,7 @@ export const whoCauses = ({ base = 'https://ghoapi.azureedge.net/api' } = {}) =>
 export const SDG_GOALS = ['Poverty', 'Food', 'Health', 'Education', 'Gender equality', 'Water', 'Energy', 'Work and economy', 'Industry and infrastructure', 'Inequality', 'Cities and housing', 'Consumption and waste', 'Climate', 'Oceans', 'Land and biodiversity', 'Peace, justice and institutions', 'Global cooperation'];
 const SDG_TOTAL = /^(_T|BOTHSEX|ALLAGE|ALLAREA|TOTAL|ALL|_X|G|E|C|CA|M|N|NA)$/i;
 // UN SDG global indicator framework: every indicator the UN Statistical Commission agreed to track is a recognised problem statement.
-export const unSdg = ({ base = 'https://unstats.un.org/sdgs/UNSDG/api/v1/sdg' } = {}) => ({
+export const unSdg = ({ base = 'https://unstats.un.org/sdgapi/v1/sdg' } = {}) => ({
   id: 'sdg', name: 'UN SDG global indicator framework', home: 'https://unstats.un.org/sdgs/indicators/indicators-list/', licence: 'UN Statistics Division open data', taxonomy: true,
   listUrl: `${base}/Indicator/List`,
   async list(f) {
