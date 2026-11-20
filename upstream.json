@@ -29,7 +29,9 @@
     "worker/src/redteam-config.js": "tenant red-team pool config",
     "worker/src/freshness.js": "reports this tenant's own generated bundles (ensemble ledger age, bca and selfmigrate), so it names tenant files and is not generic",
     ".github/workflows/synth.yml": "tenant's own synthesis loop over its own entries",
-    ".github/workflows/release.yml": "cuts releases of this tenant's own catalogue (problems, solutions, combinations, findings) and dispatches its own loops"
+    ".github/workflows/release.yml": "cuts releases of this tenant's own catalogue (problems, solutions, combinations, findings) and dispatches its own loops",
+    "tools/problemscan.mjs": "runs this tenant's scan and writes its ledger and generated module",
+    ".github/workflows/problemscan.yml": "tenant trigger for its own problem scan"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",
@@ -106,6 +108,11 @@
     "tools/audit_anchor.mjs": {
       "core": "core/audit/anchor.mjs",
       "hold": "queued: lifts with the audit module's anchor helper once the base URL is a parameter",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "ps/problemscan.js": {
+      "core": "core/problemscan/index.js",
+      "hold": "queued: the engine is tenant-agnostic (sources, rules and budget are arguments); lifts to core after its first live scan",
       "item": "Q-LIFT-TENANT-1"
     }
   },

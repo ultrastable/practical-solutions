@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; about 15 minutes a run.
+# trigger: daily; each run reads a bounded batch of indicators (never read first, then the oldest), so the catalogue grows every day and the sources are
+#   read gently. The weekly release run dispatches it as a second route when the catalogue has not grown.
+# free-alternative: none needed; plain HTTPS reads of public statistics with the run's own GITHUB_TOKEN to commit.
+# PROBLEM-SCAN-1: enumerate problems from public statistical sources (UN SDG framework, WHO, World Bank), measure, rank by pace, publish with provenance,
+# then deploy. No model is involved; a source that fails keeps its earlier entries.
+name: problemscan
+on:
+  schedule: [{ cron: '17 3 * * *' }]
+  workflow_dispatch:
+    inputs: { budget: { description: 'indicators to measure this run', default: '600' } }
+concurrency: { group: problemscan, cancel-in-progress: false }
+permissions: { contents: write, actions: write }
+jobs:
+  scan:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: scan
+        run: node --no-warnings tools/problemscan.mjs --budget "${{ github.event.inputs.budget || 600 }}" | tee scan.json
+      - run: npm test
+      - name: commit and deploy
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/problem-scan.json worker/src/problem-scan.gen.js
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "problemscan: daily scan of public indicator lists"
+          for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+          bash tools/dispatch_deploy.sh

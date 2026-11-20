@@ -23,13 +23,13 @@ export const SHELL = {
   // FAMILY-1: the .org home of the Ultrastable family (public-benefit demos); accent colours come from https://ultrastable.io/family.json tokens.
   theme: { light: { accent: '#b83800' }, dark: { accent: '#ff7f4d' } },
   family: { label: 'Ultrastable for good: public-benefit demos built on Ultrastable', links: [{ label: 'About this project', href: 'https://ultrastable.io/showcase/practical-solutions' }, { label: 'ultrastable.io', href: 'https://ultrastable.io/' }] },
-  nav: [{ label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'New solutions', href: '/syntheses', match: /^\/syntheses/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ }, { label: 'By country', href: '/country', match: /^\/(country|levels|context)/ },
+  nav: [{ label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'New solutions', href: '/syntheses', match: /^\/syntheses/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Catalogue', href: '/catalogue', match: /^\/catalogue/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ }, { label: 'By country', href: '/country', match: /^\/(country|levels|context)/ },
     { label: 'For you', href: '/for', match: /^\/for/ }, { label: 'Method', href: '/method', match: /^\/method/ }, { label: 'Data', href: '/api', match: /^\/api/ }],
   search: { action: '/search', name: 'q', label: 'Search solutions and problems', placeholder: 'Search, for example water' },
   feeds: [{ type: 'application/rss+xml', href: '/feed.xml', title: 'What changed' }],
   footer: {
     columns: [
-      { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'New solutions', href: '/syntheses' }, { label: 'Problems', href: '/problems' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }] },
+      { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'New solutions', href: '/syntheses' }, { label: 'Problems', href: '/problems' }, { label: 'Problem catalogue', href: '/catalogue' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }] },
       { title: 'Who it is for', links: AUDIENCES.map(a => ({ label: a.name, href: '/for/' + a.id })) },
       { title: 'Trust', links: [{ label: 'About', href: '/about' }, { label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
       { title: 'Ultrastable family', links: [{ label: 'Ultrastable for good (.org)', href: 'https://ultrastable.org/' }, { label: 'Platform and product (.io)', href: 'https://ultrastable.io/' }, { label: 'How it is built', href: 'https://ultrastable.io/how' }, { label: 'Live proof', href: 'https://ultrastable.io/proof' }, { label: 'Contact', href: 'https://ultrastable.io/contact' }] },
@@ -173,7 +173,7 @@ export function problemsIndex(c, u, o) {
   const { page, pages, items } = pageOf(list, q);
   const facets = ui.facets({ action: '/problems', reset: '/problems', groups: [{ name: 'domain', label: 'Domain', options: [opt('', 'Any'), ...c.domains.map(d => opt(d.slug, d.name))], value: dom },
     { name: 'coverage', label: 'Solutions', options: [opt('', 'Any'), opt('some', 'Has a listed solution'), opt('none', 'No solution yet')], value: cov }] });
-  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Problems' }])}<h1>Problems</h1><p class="lede">Ranked by the gap between the latest world value and its international target (World Bank open data). ${list.length} shown.</p>${facets}
+  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Problems' }])}<h1>Problems</h1><p class="lede">Ranked by the gap between the latest world value and its international target (World Bank open data). ${list.length} shown. <a href="/catalogue">Browse the wider problem catalogue</a>.</p>${facets}
 ${ui.cardGrid(items.map(p => ui.card({ title: p.title, href: pUrl(p), meta: p.domain, body: p.ranked ? `${gapText(p)}` : 'No usable world figure yet.', hue: domainHue(c, p.domain), badges: [p.ranked ? ui.badge(`gap ${gapPct(p)}%`, gapPct(p) > 50 ? 'warn' : 'info') : ui.badge('unranked'), ui.badge(`${(c.byProblem[p.id] || []).length} solution(s)`)] })), 2)}
 ${list.length ? '' : ui.callout({ tone: 'warn', title: 'Nothing matches', body: '<p><a href="/problems">Clear the filters</a>.</p>' })}${ui.pagination({ page, pages, href: n => withParam('/problems', q, n) })}`;
   return render('/problems', o, { title: `Problems | ${SITE}`, description: 'Problems ranked by gap to an international target.', body, noindex: q.toString() !== '' && !/^page=\d+$/.test(q.toString()) });
@@ -196,7 +196,7 @@ ${ui.section({ id: 'solutions', title: 'Solutions', body: d.solutions.length ? u
 export function home(c, o) {
   const open = c.probs.filter(p => !(c.byProblem[p.id] || []).length), ready = c.sols.filter(s => s.impl && s.impl.score >= 7).slice(0, 6), top = c.probs.filter(p => p.ranked).slice(0, 5);
   const body = `${ui.hero({ title: 'What actually works, and how to do it', lede: 'An evidence-based encyclopedia of practical solutions to pressing problems. Every entry shows its sources, how strong the evidence is, what it costs and who can deliver it. Written and kept current by an automated loop, in the open.',
-    search: SHELL.search, actions: [{ href: '/solutions?ready=ready', label: 'See solutions ready to implement' }, { href: '/method', label: 'How we know', alt: true }] })}
+    search: SHELL.search, actions: [{ href: '/solutions?ready=ready', label: 'See solutions ready to implement' }, { href: '/catalogue', label: 'Browse the problem catalogue', alt: true }, { href: '/method', label: 'How we know', alt: true }] })}
 ${ui.stats([{ value: c.sols.length, label: 'solutions' }, { value: c.probs.length, label: 'problems' }, { value: c.domains.length, label: 'domains' }, { value: c.sols.filter(s => s.impl && s.impl.score >= 7).length, label: 'ready to implement' }, { value: open.length, label: 'problems with no solution yet' }])}
 ${ui.section({ id: 'who', title: 'Start from who you are', body: ui.cardGrid(AUDIENCES.map(a => ui.card({ title: a.name, href: '/for/' + a.id, body: a.goal, meta: a.who, hue: a.hue }))) })}
 ${ui.section({ id: 'ready', title: 'Ready to implement', body: `<p class="m">High evidence is not enough; these also have low cost, real-world scale and an existing way to deliver them.</p>${ui.cardGrid(ready.map(s => solCard(s, c)))}<p><a href="/solutions?ready=ready">All solutions ready to implement</a></p>` })}

@@ -13,7 +13,7 @@ import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 
 export const LEDGER = 'ledger/releases.json', GEN = 'worker/src/releases.gen.js', BANK = 'ledger/problem-bank.json', PROBLEMS_FILE = 'worker/src/problems.js';
-export const CONFIG = { min_days: 7, max_gap_days: 21, heal: ['discover.yml', 'redteam.yml'] };
+export const CONFIG = { min_days: 7, max_gap_days: 21, heal: ['discover.yml', 'redteam.yml', 'problemscan.yml'] };
 const KINDS = ['problems', 'solutions', 'syntheses', 'insights'];
 const day = d => new Date(d).toISOString().slice(0, 10), days = (a, b) => Math.floor((Date.parse(b) - Date.parse(a)) / 864e5);
 const read = (f, fb) => existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : fb;
