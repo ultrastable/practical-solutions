@@ -133,6 +133,26 @@
       "core": "core/format/numfmt.js",
       "hold": "queued: dependency-free number formatter (NUMFMT-1) lifts to core for every tenant",
       "item": "Q-LIFT-TENANT-1"
+    },
+    "ps/references.js": {
+      "core": "core/references/index.js",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
+    },
+    "tools/references.mjs": {
+      "core": "core/references/runner.mjs",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
+    },
+    ".github/workflows/references.yml": {
+      "core": "core/references/templates/references.yml",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
+    },
+    "worker/src/references.js": {
+      "core": "core/references/page.js",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
     }
   },
   "min_lines": 8,
