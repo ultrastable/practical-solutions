@@ -7,7 +7,7 @@ import { trendSvg } from './views.js';
 import { SCAN } from './problem-scan.gen.js';
 import { slug } from './catalog.js';
 import { figure, rate, machine } from './numfmt.js';
-import { section as uiaSection } from './uia-links.js';
+import { section as uiaSection } from './references.js';
 
 const { esc } = ui, PAGE_SIZE = 24, SRC = SCAN.sources;
 export const entries = (c, scan = SCAN) => scan.entries.map(e => ({ ...e, dslug: slug(e.domain), sought: !(c && c.sols || []).some(s => (s.problem_ids || []).includes(e.id)) }));
