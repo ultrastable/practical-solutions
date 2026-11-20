@@ -23,7 +23,7 @@ export function countryIndex(c, u, o) {
   let results = '';
   if (q) results = found.length ? `<h2>${found.length} match${found.length > 1 ? 'es' : ''}</h2>${ui.list(found.slice(0, 20).map(x => `<a href="/country/${esc(x.iso3)}">${esc(x.name)}</a> <span class="m">${esc(levelName(x.level) || 'no income group')}${x.hdi ? ' · HDI ' + esc(x.hdi.tier) : ''}</span>`))}` : ui.callout({ tone: 'warn', title: 'No country matches', body: `<p>Nothing matched "${esc(q)}". Try fewer letters, or choose an income group below.</p>` });
   const groups = LEVELS.map(l => `<a href="/levels/${l.id}">${esc(l.name)}</a>`);
-  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'By country' }])}<h1>Find what fits a country</h1><p class="lede">Type a country to see its income group, its Human Development Index tier and how much infrastructure people have, then the problems and solutions that fit that context. Or start from an income group: ${groups.join(' · ')}.</p>
+  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'By country' }])}<h1>Find what fits a country</h1><p class="lede">Type a country to see its income group, its Human Development Index tier and how much infrastructure people have, then the problems and solutions that fit that context. Or start from an income group: ${groups.join(' · ')}. <a href="/country/compare">Compare countries side by side</a>.</p>
 ${form}${loaded(c) ? '' : empty()}${results}${stale(ctx)}`;
   return render('/country', o, { title: `By country | ${SITE}`, description: 'Look up a country to see which problems and solutions fit its income group, HDI tier and infrastructure.', body, noindex: !!q });
 }

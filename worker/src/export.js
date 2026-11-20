@@ -58,6 +58,7 @@ export const OPENAPI_PATHS = {
   '/oembed': { get: { operationId: 'oembed', summary: 'oEmbed for a solution URL', parameters: [{ name: 'url', in: 'query', required: true, schema: { type: 'string' } }], responses: ok('oEmbed rich') } },
   '/search.json': { get: { operationId: 'search', summary: 'Search', parameters: [{ name: 'q', in: 'query', schema: { type: 'string' } }], responses: ok('Results') } },
   '/catalogue.json': { get: { operationId: 'getCatalogueIndicators', summary: 'Catalogued indicators', responses: ok('Indicators') } },
+  '/datapackage.json': { get: { operationId: 'getDatapackage', summary: 'Frictionless data package for the CSV files', responses: ok('Data package') } },
   '/releases.json': { get: { operationId: 'getReleases', summary: 'Dated releases', responses: ok('Releases') } },
 };
 export const openapi = o => ({ openapi: '3.1.0', info: { title: SITE + ' data', version: '1', description: 'Read-only, no key. Keep each solution\'s label and limits when reusing a claim.' }, servers: [{ url: o }], paths: OPENAPI_PATHS });

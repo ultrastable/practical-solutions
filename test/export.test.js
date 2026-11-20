@@ -43,8 +43,15 @@ test('every path in the OpenAPI description is served by the real router', async
 test('gap analysis: shipped capabilities pass their probe, gaps have none, issues are planned without duplicates', async () => {
   const reg = JSON.parse(readFileSync(new URL('../org/capabilities.json', import.meta.url), 'utf8'));
   const r = await scan(reg, async p => get(p));
-  assert.ok(r.shipped >= 18 && r.gaps.length >= 3 && r.deferred.length >= 3);
+  assert.ok(r.shipped >= 22 && r.gaps.length >= 3 && r.deferred.length >= 3);
   for (const g of [...r.gaps, ...r.deferred]) assert.equal(reg.capabilities.find(x => x.id === g.id).probe, null, g.id + ' has a probe that fails');
   const plan = planIssues(r.gaps, [issueTitle(r.gaps[0])], 2);
   assert.equal(plan.length, 2); assert.ok(!plan.some(i => i.id === r.gaps[0].id)); assert.ok(plan[0].labels.includes('idea'));
+});
+test('glossary, accessibility, data package and country compare render from data', async () => {
+  assert.ok((await get('/glossary').text()).includes('DefinedTermSet'));
+  const dp = await get('/datapackage.json').json(); assert.deepEqual(dp.resources.map(r => r.name), ['solutions', 'problems', 'catalogue']); assert.ok(dp.resources[1].schema.fields.some(f => f.name === 'gap_share'));
+  const cc = buildCatalog({ problems: null, solutions: SOLUTIONS, context: { at: '2026-01-01', countries: { KEN: { iso3: 'KEN', name: 'Kenya', region: 'Sub-Saharan Africa', level: 'lower-middle', infra: {} }, UGA: { iso3: 'UGA', name: 'Uganda', region: 'Sub-Saharan Africa', level: 'low', infra: {} } }, levels: {} } });
+  const html = await route(new URL('https://x/country/compare?c=KEN,UGA,ZZZ'), cc).text();
+  assert.ok(html.includes('Kenya') && html.includes('Uganda') && html.includes('No data for: ZZZ') && html.includes('Solutions that fit all of them'));
 });
