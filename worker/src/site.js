@@ -54,9 +54,16 @@ ${ui.list(withLeads.map(p => { const L = c.leads[p.id]; return `<a href="/proble
 }
 const page = (path, o, title, description, body, extra = {}) => ui.renderPage(P.SHELL, { path, title: `${title} | ${P.SITE}`, description, body, ...extra }, o);
 
-function changesPage(c, o) {
-  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Changes' }])}<h1>Changes</h1><p class="lede">Every change the loop made, newest first. <a href="/feed.xml">RSS</a> · <a href="/feed.json">JSON Feed</a></p>
-${ui.list(c.changes.map(x => `${esc(String(x.kind).replace(/_/g, ' '))}: ${esc(x.id || x.title || x.problem || '')} <span class="m">${esc(String(x.at).slice(0, 16).replace('T', ' '))}</span>`)) || ''}${c.changes.length ? '' : '<p>No changes yet.</p>'}`;
+// PROGRESS-1: a returning reader picks how far back to look (a day, a week, a month). The page runs no script and stores nothing about the
+// reader; the counts are of the loop's recorded changes, nothing else.
+const SINCE = { day: ['the last 24 hours', 24], week: ['the last 7 days', 168], month: ['the last 30 days', 720] };
+function changesPage(c, o, u, now = Date.now()) {
+  const n = P.changeCounts(c, now), since = u && SINCE[u.searchParams.get('since')] ? u.searchParams.get('since') : null;
+  const shown = since ? c.changes.filter(x => { const t = Date.parse(x.at); return !isNaN(t) && now - t <= SINCE[since][1] * 3600e3; }) : c.changes;
+  const tab = (k, label) => k === since ? `<b>${label}</b>` : `<a href="/changes${k ? '?since=' + k : ''}">${label}</a>`;
+  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Changes' }])}<h1>Changes</h1><p class="lede">Every change the loop made, newest first. <a href="/feed.xml">RSS</a> · <a href="/feed.json">JSON Feed</a> · <a href="/releases">Releases</a></p>
+<p>Show: ${tab(null, 'all')} · ${tab('day', `last 24 hours (${n.day})`)} · ${tab('week', `last 7 days (${n.week})`)} · ${tab('month', `last 30 days (${n.month})`)}</p>
+${ui.list(shown.map(x => `${esc(String(x.kind).replace(/_/g, ' '))}: ${esc(x.id || x.title || x.problem || '')} <span class="m">${esc(String(x.at).slice(0, 16).replace('T', ' '))}</span>`)) || ''}${shown.length ? '' : `<p>${since ? 'The loop recorded no change in ' + SINCE[since][0] + '.' : 'No changes yet.'}</p>`}`;
   return page('/changes', o, 'Changes', 'Every automatic change.', body);
 }
 
@@ -64,7 +71,7 @@ ${ui.list(c.changes.map(x => `${esc(String(x.kind).replace(/_/g, ' '))}: ${esc(x
 const REL_KINDS = [['problems', 'problems', '/problems/'], ['solutions', 'solutions', '/solutions/'], ['syntheses', 'new combinations', '/syntheses/'], ['insights', 'red-team findings', null]];
 export function releasesPage(o, d = RELEASES) {
   const one = r => `<section><h2 id="r-${esc(r.version)}">${esc(r.version)}</h2><p class="m">${esc(r.date)}${r.first ? ' · first release: the whole catalogue as it stood' : ''}</p>${REL_KINDS.map(([k, label, href]) => r.counts[k] ? `<h3>${r.counts[k]} new ${esc(label)}</h3>${ui.list(r.added[k].map(x => href ? `<a href="${href}${esc(x.id)}">${esc(x.title)}</a>` : esc(x.title))) || ''}${r.counts[k] > r.added[k].length ? `<p class="m">and ${r.counts[k] - r.added[k].length} more in <a href="/releases.json">releases.json</a></p>` : ''}` : '').join('')}</section>`;
-  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Releases' }])}<h1>Releases</h1><p class="lede">What is new in each release, newest first. <a href="/releases.atom">Atom feed</a> · <a href="/releases.json">JSON</a></p>
+  const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Releases' }])}<h1>Releases</h1><p class="lede">What is new in each release, newest first. <a href="/releases.atom">Atom feed</a> · <a href="/releases.json">JSON</a> · <a href="/changes">Every change</a></p>
 ${d.releases.map(one).join('') || '<p>No release yet.</p>'}`;
   return page('/releases', o, 'Releases', 'New problems, solutions, combinations and findings in each release.', body);
 }
@@ -109,7 +116,7 @@ const json = (o, s = 200) => Response.json(o, { status: s, headers: { 'cache-con
 export function route(u, c) {
   const o = u.origin, p = u.pathname.replace(/\/$/, '') || '/';
   const table = { '/': () => P.home(c, o), '/problems': () => P.problemsIndex(c, u, o), '/solutions': () => P.solutionsIndex(c, u, o), '/domains': () => P.domainsIndex(c, o), '/for': () => P.forIndex(c, o), '/context': () => P.contextPage(c, o), '/country': () => CP.countryIndex(c, u, o), '/compare': () => P.comparePage(c, u, o),
-    '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o), '/method': () => methodPage(c, o), '/unknowns': () => page('/unknowns', o, 'What we do not know', 'Known unknowns, red-team findings and the new questions generated from them.', U.unknownsBody(c)), '/api': () => P.apiPage(c, o), '/about': () => P.aboutPage(c, o), '/search': () => P.searchPage(c, u, o) };
+    '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o, u), '/method': () => methodPage(c, o), '/unknowns': () => page('/unknowns', o, 'What we do not know', 'Known unknowns, red-team findings and the new questions generated from them.', U.unknownsBody(c)), '/api': () => P.apiPage(c, o), '/about': () => P.aboutPage(c, o), '/search': () => P.searchPage(c, u, o) };
   if (p === '/syntheses') return h(SY.synthesesIndex(o, page));
   if (p === '/syntheses.json') return json(SY.indexJson(o));
   { const sm = /^\/syntheses\/([a-z0-9-]+)(\.json)?$/.exec(p); if (sm) { const x = SY.find(sm[1]); return sm[2] ? (x ? json(SY.synthesisJson(x, o)) : json({ error: 'not found' }, 404)) : x ? h(SY.synthesisPage(x, o, page)) : h(P.notFound(c, o, p), 404); } }
