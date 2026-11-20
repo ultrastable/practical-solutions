@@ -46,10 +46,26 @@ export const coverage = (pages, dict) => { let a = 0, b = 0; for (const e of pag
 const GH = ['gpt-4.1-mini', 'llama-3.3-70b-gh', 'mistral-small-gh'].map(id => ENSEMBLE.github_models.find(m => m.id === id)).filter(Boolean);
 const LADDER = [...GH, ...['gemma-4', 'qwen3-30b', 'llama-3.3-70b', 'mistral-small-3.1'].map(id => ENSEMBLE.pool.find(m => m.id === id)).filter(Boolean)];
 const strikes = new Map();   // a model that fails three calls in a row is skipped for the rest of the run (a route that answers a bare "OK" costs a round trip every batch)
+// GitHub Models through the organization-scoped endpoint (usage billed to the org, which is where the free allowance lives); the plain endpoint answered a bare "OK" here.
+async function orgModels(spec, prompt, maxTokens) {
+  const tok = process.env.GITHUB_TOKEN, org = process.env.GITHUB_REPOSITORY_OWNER; if (!tok || !org) return { ok: false, error: 'no token or org' };
+  try {
+    const r = await fetch(`https://models.github.ai/orgs/${org}/inference/chat/completions`, { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/vnd.github+json', 'x-github-api-version': '2022-11-28', authorization: `Bearer ${tok}` }, body: JSON.stringify({ model: spec.model, messages: [{ role: 'user', content: prompt }], max_tokens: maxTokens, temperature: 0 }) });
+    const body = await r.text(); if (!r.ok) return { ok: false, error: `org HTTP ${r.status} ${body.replace(/\s+/g, ' ').slice(0, 80)}` };
+    let j; try { j = JSON.parse(body); } catch { return { ok: false, error: 'org non-JSON ' + body.slice(0, 20) }; }
+    const text = String(j.choices?.[0]?.message?.content || '').trim(); return text ? { ok: true, text } : { ok: false, error: 'org empty' };
+  } catch (e) { return { ok: false, error: 'org ' + String(e.message).slice(0, 60) }; }
+}
 const generator = () => async ({ system, user, maxTokens }) => {
-  const why = [];   // Workers AI free plan: a daily neuron quota (error 4006) that resets at 00:00 UTC; the run stops on it and the next daily run continues
-  for (const spec of LADDER) { if ((strikes.get(spec.id) || 0) >= 3) continue; const r = await askModel({ secrets: process.env, spec, prompt: system + '\n\n' + user, maxTokens }); if (r.ok && r.text) { strikes.set(spec.id, 0); return r.text.replace(/<think>[\s\S]*?<\/think>/g, ''); } strikes.set(spec.id, (strikes.get(spec.id) || 0) + 1); why.push(`${spec.id}: ${r.error || 'empty'}`); }
-  throw new Error('no model route answered (' + why.join('; ').slice(0, 400) + ')');   // the reasons ride in the run report, so a quota or plan error is data
+  const why = [], prompt = system + '\n\n' + user;   // Workers AI free plan: a daily neuron quota (error 4006) that resets at 00:00 UTC; the run stops on it and the next daily run continues
+  for (const spec of LADDER) {
+    if ((strikes.get(spec.id) || 0) >= 3) continue;
+    let r = spec.route === 'github-models' ? await orgModels(spec, prompt, maxTokens) : await askModel({ secrets: process.env, spec, prompt, maxTokens });
+    if (spec.route === 'github-models' && !r.ok) r = await askModel({ secrets: process.env, spec, prompt, maxTokens });
+    if (r.ok && r.text) { strikes.set(spec.id, 0); return r.text.replace(/<think>[\s\S]*?<\/think>/g, ''); }
+    strikes.set(spec.id, (strikes.get(spec.id) || 0) + 1); why.push(`${spec.id}: ${r.error || 'empty'}`);
+  }
+  throw new Error('no model route answered (' + why.join('; ').slice(0, 500) + ')');   // the reasons ride in the run report, so a quota or plan error is data
 };
 
 export async function run({ langs, calls = 30, batch = 25, generate = generator(), pages, now = new Date().toISOString(), dir = DIR, deadline = Infinity }) {
