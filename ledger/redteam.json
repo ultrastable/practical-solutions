@@ -1,6 +1,6 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-19T13:52:22.201Z",
+ "at": "2026-11-20T13:35:12.423Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
@@ -456,6 +456,174 @@
      "q": 15,
      "challenge": "Inadequate hospital resources or training",
      "falsifier": "Reports of hospitals lacking the resources or trained staff to effectively implement and maintain skin-to-skin contact protocols",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "mobile-money": {
+   "at": "2026-11-20T13:35:12.423Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Lack of agent network density does not hinder money transfer",
+     "falsifier": "Observation of low money transfer rates in areas with low agent density",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Households in areas with low agent density are not disadvantaged",
+     "falsifier": "Evidence of equal financial inclusion across areas with varying agent densities",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumption that agent density is the primary factor in poverty reduction",
+     "falsifier": "Discovery of other significant factors contributing to poverty reduction in studied areas",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Regulatory environment does not impact the effectiveness of mobile money services",
+     "falsifier": "Identification of regulatory barriers that limit the reach and impact of mobile money services",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "ors-zinc": {
+   "at": "2026-11-20T13:35:12.423Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Zinc does not shorten episodes or reduce repeat episodes",
+     "falsifier": "A randomized controlled trial showing no significant difference in episode duration or recurrence rates between zinc-treated and non-zinc-treated groups",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Delayed treatment due to reliance on zinc",
+     "falsifier": "An observational study finding increased mortality or morbidity in children who received zinc but delayed seeking medical care",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assuming caregivers can access and administer zinc correctly",
+     "falsifier": "A survey revealing low awareness or incorrect usage of zinc supplements among primary caregivers",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate supply chain or distribution of zinc supplements",
+     "falsifier": "An investigation uncovering stockouts or distribution issues of zinc supplements in areas with high diarrheal disease burden",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "rural-electrification": {
+   "at": "2026-11-20T13:35:12.423Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assuming subsidised connections have no effect on income or schooling",
+     "falsifier": "Observation of significant increase in income or schooling among rural households with subsidised grid connections",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Potential harm to taxpayers or other beneficiaries of alternative uses of subsidy funds",
+     "falsifier": "Evidence that subsidised grid connections benefit a significant proportion of rural households, justifying the cost",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assuming that short-run effects are representative of long-run outcomes",
+     "falsifier": "Longitudinal study showing significant positive effects on income or schooling after several years",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Potential flaws in study design or implementation",
+     "falsifier": "Replication study with improved methodology showing significant positive effects of subsidised grid connections",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "tarl": {
+   "at": "2026-11-20T13:35:12.423Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Sorting children by grade rather than skill leads to better outcomes",
+     "falsifier": "A study showing higher reading and arithmetic scores in grade-based classrooms",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Protected class time is not feasible or beneficial for certain student groups",
+     "falsifier": "Data showing that students with special needs or English language learners are negatively impacted by the program",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "The assumption that teachers can accurately assess student skills and adapt instruction accordingly",
+     "falsifier": "Observations of teachers struggling to implement the program due to inadequate training or support",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "The program's effectiveness is dependent on consistent implementation and quality control",
+     "falsifier": "Reports of inconsistent or poor program implementation leading to negligible or negative outcomes",
      "severity": 2,
      "source": "model",
      "family": "meta"
