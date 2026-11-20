@@ -4,29 +4,8 @@
   "tenant-ps-web": {
    "script": "tenant-ps-web",
    "found": true,
-   "sha256": "104dfec34ba51d45e80646646eab91b8bee7e120e128395d090c86dff3d1ba11",
-   "bindings": [
-    {
-     "type": "ai",
-     "name": "AI"
-    },
-    {
-     "type": "service",
-     "name": "CORE"
-    },
-    {
-     "type": "plain_text",
-     "name": "OPENALEX_MAILTO"
-    },
-    {
-     "type": "kv_namespace",
-     "name": "STATE"
-    },
-    {
-     "type": "secret_text",
-     "name": "TICK_TOKEN"
-    }
-   ],
+   "sha256": "5e698c3fe16b577600c4b66b1703be644b340dd2d4a171ca608998d2aceecc97",
+   "bindings": [],
    "crons": [
     "*/30 * * * *"
    ],
@@ -37,8 +16,8 @@
    "compat_date": "2026-10-01",
    "compat_flags": [],
    "deployment": {
-    "id": "3d7c08c4-107b-4d66-b19d-8b725d8326bf",
-    "created_on": "2026-11-20T17:43:53.677455Z"
+    "id": "4d504163-2645-4ce9-964b-e7a8b04765c0",
+    "created_on": "2026-11-20T18:07:57.498777Z"
    },
    "read_errors": []
   },
@@ -46,32 +25,7 @@
    "script": "tenant-ps-core",
    "found": true,
    "sha256": "bf84c204b411977d33c13913ad4eb8376942ada28206d1c0bc1dcdafad4e3b8a",
-   "bindings": [
-    {
-     "type": "d1",
-     "name": "DB"
-    },
-    {
-     "type": "plain_text",
-     "name": "MAIL_RELAY_URL"
-    },
-    {
-     "type": "secret_text",
-     "name": "MAIL_TOKEN"
-    },
-    {
-     "type": "plain_text",
-     "name": "OPERATOR_NAME"
-    },
-    {
-     "type": "plain_text",
-     "name": "OPERATOR_POSTAL"
-    },
-    {
-     "type": "secret_text",
-     "name": "PS_TICK_TOKEN"
-    }
-   ],
+   "bindings": [],
    "crons": [],
    "workers_dev": true,
    "domains": [],
