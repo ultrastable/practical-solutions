@@ -44,8 +44,9 @@ export const coverage = (pages, dict) => { let a = 0, b = 0; for (const e of pag
 // Models for translation: the multilingual-strong members of the pool first; the first that answers with passing lines wins.
 const LADDER = ['gemma-4', 'qwen3-30b', 'llama-3.3-70b', 'mistral-small-3.1'].map(id => ENSEMBLE.pool.find(m => m.id === id)).filter(Boolean);
 const generator = () => async ({ system, user, maxTokens }) => {
-  for (const spec of LADDER) { const r = await askModel({ secrets: process.env, spec, prompt: system + '\n\n' + user, maxTokens }); if (r.ok && r.text) return r.text.replace(/<think>[\s\S]*?<\/think>/g, ''); }
-  throw new Error('no model route answered');
+  const why = [];
+  for (const spec of LADDER) { const r = await askModel({ secrets: process.env, spec, prompt: system + '\n\n' + user, maxTokens }); if (r.ok && r.text) return r.text.replace(/<think>[\s\S]*?<\/think>/g, ''); why.push(`${spec.id}: ${r.error || 'empty'}`); }
+  throw new Error('no model route answered (' + why.join('; ').slice(0, 400) + ')');   // the reasons ride in the run report, so a quota or plan error is data
 };
 
 export async function run({ langs, calls = 30, batch = 25, generate = generator(), pages, now = new Date().toISOString(), dir = DIR, deadline = Infinity }) {
