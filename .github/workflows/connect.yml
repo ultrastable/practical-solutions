@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; about 2 minutes a run (only changed texts are embedded; 12 OpenAlex searches).
+# trigger: daily, and when the catalogue or the engine changes; the catalogue grows daily (problem scan), so faster adds no information.
+# free-alternative: none needed; embeddings come from GitHub Models on the run's GITHUB_TOKEN or Workers AI behind tenant-ps-llm on the run's
+#   OIDC token, with a word-overlap route that needs nothing; OpenAlex is a free public API.
+# CONNECT-1: the catalogue as a knowledge graph plus vectors (vendor core/connect). Ranks connections nobody has made, writes the ledger the
+# discovery loop seeds from (tools/discover.mjs), rebuilds /connections and dispatches the deploy, whose live check is the gate.
+name: connect
+on:
+  schedule: [{ cron: '17 3 * * *' }]
+  push: { branches: [main], paths: ['worker/src/solutions.js', 'worker/src/more-solutions.js', 'worker/src/problems.js', 'worker/src/problem-scan.gen.js', 'worker/src/syntheses-data.js', 'tools/connect.mjs', 'vendor/ultrastable/core/connect/**', '.github/workflows/connect.yml'] }
+  workflow_dispatch: {}
+concurrency: { group: connect, cancel-in-progress: false }
+permissions: { contents: write, actions: write, models: read, id-token: write }
+jobs:
+  connect:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
+      PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: embed, discover, check prior work
+        run: node --no-warnings tools/connect.mjs | tee connect.json
+      - run: npm test
+      - name: commit and deploy
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/connections.json ledger/connect-vectors.json worker/src/connections.gen.js
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "connections: engine run, ledger and generated module (CONNECT-1)"
+          for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+          bash tools/dispatch_deploy.sh

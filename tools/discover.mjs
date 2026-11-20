@@ -12,6 +12,7 @@ import { validate } from '../vendor/ultrastable/core/benefitcost/index.js';
 import { complete } from '../ps/llm.js';
 import { SYNTHESES } from '../worker/src/syntheses-data.js';
 import { DISCOVERED, loadDiscovered } from './synth.mjs';
+import { LEDGER as CONNECT_LEDGER, GEN as CONNECT_GEN, buildModule } from './connect.mjs';
 
 const REQUIRED = ['id', 'title', 'headline', 'domain', 'problem', 'transfer', 'components', 'mechanism', 'citations', 'novelty', 'who', 'takes', 'first_test', 'cost_note', 'limits', 'risks', 'model'];
 const KINDS = ['direct', 'multiplier', 'spillover', 'unintended'], UNITS = ['daly', 'death_averted', 'wellby', 'consumption_doubling_year'];
@@ -46,14 +47,31 @@ export function seedPair(n = 0, list = SOLUTIONS) {
   const a = list[n % list.length], rest = list.filter(s => !(s.problem_ids || []).some(p => (a.problem_ids || []).includes(p)) && s.id !== a.id), b = (rest.length ? rest : list.filter(s => s.id !== a.id))[Math.floor(n / list.length) % Math.max(1, (rest.length || list.length - 1))];
   return [a, b];
 }
-export const proposePrompt = (max, existing, papers = [], seed = null) => `You propose NEW practical solutions made by transferring or combining interventions that published studies support, to a context or combination that no published trial has tested. Do not invent papers: every citation must be a real, published paper whose exact title and year you are sure of.${papers.length ? ' Cite ONLY papers from the verified list below, copying each title and year exactly; an idea that needs a paper not on the list is left out.' : ''} Do not quote figures (leave "numbers" as an empty list). If you are not sure a paper exists, leave that idea out.
+// CONNECT-1: the seed is the connection engine's best unexplored lead (tools/connect.mjs), ranked by meaning and graph structure, instead of
+// a blind rotation. Only a lead from a model embedding route is used: a lexical-only run sees shared words, not shared meaning, so the
+// rotation stands in. The lead's outcome (a proposal survived the structure, model and red-team checks, or none did) is written back.
+export function leadFrom(ledger) {
+  if (!ledger || !Array.isArray(ledger.candidates) || String(ledger.route || '').startsWith('lexical')) return null;
+  const h = ledger.history || {};
+  const c = ledger.candidates.find(x => !(h[x.id] && h[x.id].status === 'handed'));
+  if (!c) return null;
+  const ids = [...new Set([c.a, c.b, ...(c.via || [])].map(x => x.id).filter(id => id.startsWith('solution:')).map(id => id.slice(9)))];
+  return { id: c.id, kind: c.kind, members: [c.a.id, c.b.id].sort(), components: ids,
+    text: `${c.question} (Lead ${c.id}, found by ${c.found_by.join(' and ')}; ${c.a.domain} to ${c.b.domain}.)${ids.length ? ` Use the catalogue id(s) ${ids.join(', ')} in "components".` : ''}` };
+}
+export function recordLead(ledger, lead, { accepted = [], at }) {
+  const h = { ...(ledger.history || {}) };
+  h[lead.id] = { ...(h[lead.id] || {}), members: lead.members, status: 'handed', handed_at: at, outcome: accepted.length ? 'accepted' : 'rejected', synthesis: accepted[0] || null };
+  return { ...ledger, history: h };
+}
+export const proposePrompt = (max, existing, papers = [], seed = null, lead = null) => `You propose NEW practical solutions made by transferring or combining interventions that published studies support, to a context or combination that no published trial has tested. Do not invent papers: every citation must be a real, published paper whose exact title and year you are sure of.${papers.length ? ' Cite ONLY papers from the verified list below, copying each title and year exactly; an idea that needs a paper not on the list is left out.' : ''} Do not quote figures (leave "numbers" as an empty list). If you are not sure a paper exists, leave that idea out.
 
 ${papers.length ? 'Verified papers (found in Crossref):\n' + papers.map(p => `- ${p.title} (${p.year})`).join('\n') + '\n\n' : ''}Catalogue entries you may build on (use their ids in "components"):
 ${SOLUTIONS.slice(0, 30).map(s => `- ${s.id}: ${s.title}`).join('\n')}
 
 Pressing problems with a measured gap to target: ${PROBLEMS.map(p => p.title).join('; ')}.
 Already proposed (do not repeat): ${existing.join(', ')}.
-Standard programmes (a proposal that is a rewording of any of these, or of any catalogue entry above, is rejected by the reviewer): ${STANDARD.join('; ')}.${seed ? `\nStart from this cross-sector pairing and ask what one lends the other that neither has been tried with: "${seed[0].title}" and "${seed[1].title}". The novelty must be a mechanism or delivery channel carried from one setting into another, not a bundle of two programmes.` : ''}
+Standard programmes (a proposal that is a rewording of any of these, or of any catalogue entry above, is rejected by the reviewer): ${STANDARD.join('; ')}.${lead ? `\nStart from this lead, which the connection engine found by comparing what the catalogue's problems and solutions mean with what is already linked: ${lead.text} The novelty must be a mechanism or delivery channel carried into a setting where it has not been tried, not a bundle of two programmes. If the lead does not hold up, propose nothing.` : seed ? `\nStart from this cross-sector pairing and ask what one lends the other that neither has been tried with: "${seed[0].title}" and "${seed[1].title}". The novelty must be a mechanism or delivery channel carried from one setting into another, not a bundle of two programmes.` : ''}
 
 Return a JSON array of at most ${max} objects, nothing else. Each object has exactly these fields: id (kebab-case), title, headline (one sentence an implementer can act on), domain, problem, transfer {from, to}, components (catalogue ids), mechanism (why the parts should combine), citations (3 to 5 of {id, role, cite, q (exact paper title), year (integer), numbers: [], supports (what the paper shows)}), novelty {statement, queries: [{label, q, must: [words that would appear in the title of a paper that already tested this]}]}, who, takes, first_test (a cheap randomised pilot that states a stop rule: when it counts as failed), cost_note, limits, risks (at least 2), model {cost: {upfront: USD, years: 1}, nodes: [{id, label, kind: "direct"|"multiplier"|"spillover"|"unintended", parent (for non-direct), amount: {kind: "ci90", low, high, shape: "lognormal"}, unit: "daly"|"death_averted"|"wellby"|"consumption_doubling_year", years, source: "assumption: show the arithmetic"}]}.`;
 export const redTeamPrompt = c => `You are a hostile reviewer. A proposal says: "${c.title}": ${c.headline} It combines: ${c.transfer.from} -> ${c.transfer.to}. Cited papers: ${c.citations.map(x => `${x.q} (${x.year})`).join('; ')}.
@@ -79,10 +97,11 @@ export async function groundPapers({ f = globalThis.fetch, n = 8, now = Date.now
 export const repairCitations = c => !c || !Array.isArray(c.citations) ? c : { ...c, citations: c.citations.map((x, i) => { if (!x || typeof x !== 'object') return x; const q = x.q || x.title, year = typeof x.year === 'string' && /^\d{4}$/.test(x.year) ? Number(x.year) : x.year;
   return { ...x, q, year, id: x.id || String(i + 1), role: x.role || 'Supporting study', cite: x.cite || (q ? `${q} (${year})` : x.cite), numbers: Array.isArray(x.numbers) ? x.numbers : [] }; }) };
 
-export async function discover({ ask, ground = null, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString() }) {
+export async function discover({ ask, ground = null, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString(), lead = null }) {
   const existing = [...SYNTHESES.map(s => s.id), ...prev.entries.map(s => s.id)], log = [...prev.log], entries = [...prev.entries];
   const papers = ground ? await ground().catch(e => { log.push({ at: now(), event: 'grounding failed', detail: String(e.message || e).slice(0, 120) }); return []; }) : [], seen = new Set(papers.map(p => norm(p.title)));
-  const out = await ask(proposePrompt(max, existing, papers, seedPair(Math.floor(Date.parse(now()) / 1000) % 997))), list = json(out);
+  const out = await ask(proposePrompt(max, existing, papers, seedPair(Math.floor(Date.parse(now()) / 1000) % 997), lead)), list = json(out);
+  if (lead) log.push({ at: now(), event: 'seeded by connection lead', detail: lead.id });
   if (!Array.isArray(list)) { log.push({ at: now(), event: 'no usable proposal', detail: String(out || '').slice(0, 120) }); return { schema: 'ps-synth-discovered/1', at: now(), entries, log: log.slice(-100) }; }
   for (const raw0 of list.slice(0, max)) {
     let raw = repairCitations(raw0), errs = validateCandidate(raw);
@@ -104,7 +123,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const i = process.argv.indexOf('--max'), max = i > 0 ? Number(process.argv[i + 1]) : 2;
   const ask = async prompt => { const r = await complete({ secrets: process.env, prompt: 'Reply with JSON only.\n\n' + prompt, maxTokens: 6000 }); return r.ok ? r.text : ''; };
   const prev = existsSync(DISCOVERED) ? JSON.parse(readFileSync(DISCOVERED, 'utf8')) : { entries: [], log: [] };
-  const r = await discover({ ask, max, prev, ground: () => groundPapers() });
+  const cons = existsSync(CONNECT_LEDGER) ? JSON.parse(readFileSync(CONNECT_LEDGER, 'utf8')) : null, lead = leadFrom(cons);
+  const r = await discover({ ask, max, prev, ground: () => groundPapers(), lead });
   writeFileSync(DISCOVERED, JSON.stringify(r, null, 1) + '\n');
+  if (lead) { // the outcome goes back to the engine, which re-weights its generators on its next run (core/connect calibrate)
+    const before = new Set(prev.entries.map(e => e.id)), accepted = r.entries.filter(e => !before.has(e.id)).map(e => e.id);
+    const next = recordLead(cons, lead, { accepted, at: new Date().toISOString() });
+    writeFileSync(CONNECT_LEDGER, JSON.stringify(next, null, 1) + '\n'); writeFileSync(CONNECT_GEN, buildModule(next));
+    console.error(`connection lead ${lead.id}: ${accepted.length ? 'accepted as ' + accepted.join(', ') : 'no proposal survived'}`);
+  }
   console.log(JSON.stringify({ entries: r.entries.length, last: r.log.slice(-3) }));
 }
