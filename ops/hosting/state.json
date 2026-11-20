@@ -37,8 +37,8 @@
    "compat_date": "2026-10-01",
    "compat_flags": [],
    "deployment": {
-    "id": "8aefd6e8-7cb3-4abf-b4bd-ff569576fe60",
-    "created_on": "2026-11-20T20:50:23.965007Z"
+    "id": "be712a1d-5ce7-4754-beb6-082b7a28dd03",
+    "created_on": "2026-11-20T20:38:02.570986Z"
    },
    "read_errors": []
   },
@@ -105,8 +105,8 @@
    "compat_date": "2026-10-01",
    "compat_flags": [],
    "deployment": {
-    "id": "f2080945-5385-485a-b09f-5792664a72da",
-    "created_on": "2026-11-20T20:41:37.513659Z"
+    "id": "bcbb57d7-5534-428d-aa55-c6c5a40705be",
+    "created_on": "2026-11-20T20:38:14.996492Z"
    },
    "read_errors": []
   }
