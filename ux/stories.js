@@ -36,7 +36,7 @@ export const STORIES = [
   { id: 'RES-3', who: 'researchers', want: 'download the catalogue as JSON or CSV', so: 'I can analyse it in my own tools', covers: ['json-entity', 'csv'],
     steps: [v('/index.json'), x({ type: 'json', json: { path: 'solutions.length', min: 10 } }), v('/solutions.csv'), x({ type: 'csv', text: '^id,title,domains,label' })] },
   { id: 'RES-4', who: 'researchers', want: 'find where evidence is thin or disputed', so: 'I know what to study next', covers: ['forPage'],
-    steps: [v('/for/researchers'), x({ heading: 'Where the evidence is thin or disputed', link: '^/problems/' })] },
+    steps: [v('/for/researchers'), x({ heading: 'Where the evidence is thin or disputed', link: '^/(problems|solutions)/' })] },
   { id: 'RES-5', who: 'researchers', want: 'see what each entry does not know and the strongest challenge against it', so: 'I know what to test or study next, and I do not over-trust a claim', covers: ['solutionPage', 'section', 'table'],
     steps: [v('/solutions/kmc'), x({ heading: 'What we do not know, and the red team' }), v('/unknowns'), x({ heading: 'What we do not know', text: ['Universal Ignorance Audit', 'We do not know'] }), v('/unknowns.json'), x({ type: 'json', json: { path: 'instrument.questions.length', min: 15 } })] },
   { id: 'JOU-1', who: 'journalists', want: 'copy an accurate citation with a stable link', so: 'my readers can find the source', covers: ['solutionPage', 'cite'],

@@ -57,10 +57,14 @@ test('search needs every word and ranks title hits first', () => {
   assert.deepEqual(search(ix, ''), []);
 });
 
-test('a problem without a solution says so and gets open questions; sanitation is one today', () => {
-  const tb = c.probs.find(p => p.id === 'sanitation');
-  assert.equal((c.byProblem.sanitation || []).length, 0);
-  assert.ok(openQuestions(tb, c)[0].startsWith('No reviewed solution'));
+test('a problem without a solution says so and gets open questions; every problem has a solution today', async () => {
+  for (const p of c.probs) assert.ok((c.byProblem[p.id] || []).length, p.id + ' has no solution');
+  const c0 = buildCatalog({ problems: null, solutions: SOLUTIONS.filter(s => !s.problem_ids.includes('sanitation')) });
+  const tb = c0.probs.find(p => p.id === 'sanitation');
+  assert.equal((c0.byProblem.sanitation || []).length, 0);
+  assert.ok(openQuestions(tb, c0)[0].startsWith('No reviewed solution'));
+  assert.ok((await route(new URL('https://x/for/researchers'), c0).text()).includes('/problems/sanitation'));
+  assert.ok((await route(new URL('https://x/for/researchers'), c).text()).includes('/problems/internet'), 'a problem with only mixed evidence is listed for researchers');
 });
 
 test('sitemap and JSON index cover every entry and carry sources', () => {

@@ -5,16 +5,18 @@ import { SOLUTIONS } from '../worker/src/solutions.js';
 import { PROBLEMS } from '../worker/src/problems.js';
 import { tick } from '../worker/src/improve.js';
 
+const UNSOLVED = SOLUTIONS.filter(s => !s.problem_ids.includes('sanitation')); // a catalogue with one problem left open: every listed problem has a solution today
 const AG = { nodes: [{ id: 'agency:gh-moh', kind: 'agency', name: 'Ministry of Health, Ghana', country: 'GH', sectors: ['health'], level: 'national', url: 'https://moh.gov.gh/contact' }],
   edges: [{ src: 'solution:kmc', rel: 'implementable_by', dst: 'agency:gh-moh', why: 'newborn programmes' }, { src: 'solution:nope', rel: 'implementable_by', dst: 'agency:gh-moh', why: 'x' }] };
 
-test('Sanitation has no solution, so the graph asks for one; a solved problem does not', async () => {
-  const open = await unsolvedProblemIds(SOLUTIONS);
+test('a problem with no solution makes the graph ask for one; a solved problem does not; today none is open', async () => {
+  assert.deepEqual(await unsolvedProblemIds(SOLUTIONS), []);
+  const open = await unsolvedProblemIds(UNSOLVED);
   assert.ok(open.includes('sanitation')); assert.ok(!open.includes('neonatal'));
 });
 
 test('every graph fact carries provenance and agency edges stay proposed leads', async () => {
-  const g = await buildGraph({ solutions: SOLUTIONS, agencies: AG });
+  const g = await buildGraph({ solutions: UNSOLVED, agencies: AG });
   assert.deepEqual(await g.validate(), []);
   assert.equal((await g.edges({ rel: 'implementable_by' })).length, 0);
   assert.equal((await g.edges({ rel: 'implementable_by', status: 'proposed' })).length, 1);
@@ -26,7 +28,7 @@ test('every graph fact carries provenance and agency edges stay proposed leads',
 
 test('a tick stores the graph and its questions, and a problem with no solution joins the search rotation', async () => {
   const m = new Map(); const store = { get: async k => m.get(k) ?? null, put: async (k, v) => { m.set(k, v); } };
-  await store.put('solutions', JSON.stringify(SOLUTIONS));
+  await store.put('solutions', JSON.stringify(UNSOLVED));
   const urls = [];
   const f = async u => { urls.push(String(u)); if (String(u).includes('/agencies.json')) return { ok: true, json: async () => AG }; return { ok: true, json: async () => ({ resultList: { result: [] } }) }; };
   const rank = async () => ({ basis: 'b', problems: [{ id: 'neonatal', rank: 1, year: 2023, title: 'n' }, { id: 'sanitation', rank: 9, year: 2023, title: 'Sanitation' }], unranked: [] });
