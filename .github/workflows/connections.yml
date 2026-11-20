@@ -28,6 +28,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - name: embed, discover, settle, tune
+        shell: bash   # pipefail on: a failed embedding must fail the run, not hide behind tee
         run: node --no-warnings tools/connections.mjs | tee connections.json
       - run: npm test
       - name: commit and deploy

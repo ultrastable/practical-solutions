@@ -44,7 +44,7 @@ test('a run embeds, finds and screens connections; the next run reuses every vec
 
 test('offline with no cache publishes nothing invented and says why', async () => {
   const r = await run({ embed: null, now: 0, cache: {}, ledger: null });
-  assert.ok(r.errors.length > 0); assert.equal(r.run.candidates, 0);
+  assert.ok(r.errors.length > 0); assert.equal(r.skipped, true); assert.equal(r.run, null); assert.equal(r.ledger, null);
 });
 
 test('a model-written rationale is kept only when it invents no figure', () => {
