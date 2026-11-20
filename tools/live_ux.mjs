@@ -12,11 +12,12 @@ if (!base) { console.error('usage: live_ux.mjs <base url>'); process.exit(2); }
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 const get = async path => {
   let r;
-  await sleep(100); for (let i = 0; i < 8; i++) { try { r = await fetch(base + path, { redirect: 'follow' }); } catch (e) { if (i === 7) throw e; await sleep(Math.min(15000, 1000 * 2 ** i)); continue; } /* a dropped connection is retried like a throttle */ if (![429, 502, 503].includes(r.status) || i === 7) break; await r.text(); await sleep(Math.min(15000, 1000 * 2 ** i)); }
+  await sleep(100); for (let i = 0; i < 8; i++) { try { r = await fetch(base + path, { redirect: 'follow', signal: AbortSignal.timeout(20000) }); /* a stalled connection is aborted and retried, never left to run out the job */ } catch (e) { if (i === 7) throw e; await sleep(Math.min(15000, 1000 * 2 ** i)); continue; } /* a dropped connection is retried like a throttle */ if (![429, 502, 503].includes(r.status) || i === 7) break; await r.text(); await sleep(Math.min(15000, 1000 * 2 ** i)); }
   return { status: r.status, type: r.headers.get('content-type') || '', text: await r.text() };
 };
 
 // the stories visit the new routes too, so a 5xx on them fails the deploy with the path and status in the log
+console.log(`running ${STORIES.length} stories against ${base}`);
 let results = await runAll(STORIES, get);
 // a story that failed only on edge throttling (status 429/502/503) runs again after a cool-down before it is judged
 const throttledStory = r => !r.ok && r.failures.some(f => /status (429|502|503)\b/.test(f));
