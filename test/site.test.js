@@ -57,9 +57,9 @@ test('search needs every word and ranks title hits first', () => {
   assert.deepEqual(search(ix, ''), []);
 });
 
-test('a problem without a solution says so and gets open questions; TB is one today', () => {
-  const tb = c.probs.find(p => p.id === 'tb');
-  assert.equal((c.byProblem.tb || []).length, 0);
+test('a problem without a solution says so and gets open questions; sanitation is one today', () => {
+  const tb = c.probs.find(p => p.id === 'sanitation');
+  assert.equal((c.byProblem.sanitation || []).length, 0);
   assert.ok(openQuestions(tb, c)[0].startsWith('No reviewed solution'));
 });
 
