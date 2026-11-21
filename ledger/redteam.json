@@ -1,6 +1,6 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-20T13:35:12.423Z",
+ "at": "2026-11-21T12:59:19.105Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
@@ -624,6 +624,165 @@
      "q": 15,
      "challenge": "The program's effectiveness is dependent on consistent implementation and quality control",
      "falsifier": "Reports of inconsistent or poor program implementation leading to negligible or negative outcomes",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "cash-birth-certificate": {
+   "at": "2026-11-21T12:59:19.105Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "No increase in registration",
+     "falsifier": "A significant number of households receiving unconditional cash transfers registering their children at the same rate as those with conditional transfers",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Exclusion of vulnerable families",
+     "falsifier": "Data showing that the majority of families excluded from the cash transfer due to lack of birth certificate are from the most disadvantaged groups",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Accessibility of registration services",
+     "falsifier": "Evidence that a significant proportion of families in the province have difficulty accessing registration offices due to distance, cost, or other barriers",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inequitable distribution of benefits",
+     "falsifier": "Analysis revealing that the conditional cash transfer program disproportionately benefits families who already have access to registration services, rather than the most needy",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "cytisine": {
+   "at": "2026-11-21T12:59:19.105Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Ineffective treatment",
+     "falsifier": "A randomized controlled trial showing no significant difference in quit rates between cytisine and placebo",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Overestimation of efficacy",
+     "falsifier": "A study demonstrating that the self-reported abstinence rates are significantly lower when objectively verified with biomarkers",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Lack of long-term efficacy",
+     "falsifier": "Follow-up data showing that the quit rates among cytisine users decrease significantly over time, returning to baseline levels within a year",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "latrine-subsidy": {
+   "at": "2026-11-21T12:59:19.105Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Subsidies have no effect on latrine ownership",
+     "falsifier": "A randomized controlled trial showing no significant increase in latrine ownership among subsidized households",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Subsidies benefit only the wealthy",
+     "falsifier": "Data showing that the majority of subsidy recipients are non-poor households",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Latrine ownership equals safely managed waste",
+     "falsifier": "A study demonstrating a significant gap between latrine ownership and proper waste management practices",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Community mobilization alone is sufficient for behavior change",
+     "falsifier": "A trial showing that community mobilization without subsidies leads to significant and sustained increases in latrine ownership and use",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "pph-bundle": {
+   "at": "2026-11-21T12:59:19.105Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Ineffective treatment",
+     "falsifier": "Increased incidence of severe bleeding, surgery for bleeding, and death from bleeding",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate supply chain",
+     "falsifier": "Reports of treatment delays or failures due to shortages of calibrated drapes or essential drugs",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumed universal access to hospitals",
+     "falsifier": "Higher rates of severe bleeding, surgery for bleeding, and death from bleeding in non-hospital settings, such as home births",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate training or protocol adherence",
+     "falsifier": "Instances of incorrect drape calibration, improper administration of first-response treatments, or failure to recognize heavy bleeding",
      "severity": 2,
      "source": "model",
      "family": "meta"
