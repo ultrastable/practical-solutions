@@ -84,6 +84,18 @@
   "tb-community-screening": {
    "at": "2026-11-20T13:59:08.078Z",
    "outcome": "rejected"
+  },
+  "cash-birth-certificate": {
+   "at": "2026-11-21T13:27:22.746Z",
+   "outcome": "no change proposed: No source provides evidence contradicting or updating any field of the entry."
+  },
+  "latrine-subsidy": {
+   "at": "2026-11-21T13:27:22.746Z",
+   "outcome": "rejected"
+  },
+  "smartphones-for-women": {
+   "at": "2026-11-21T13:27:22.746Z",
+   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, which do not contain data relevant to the fields in the entry."
   }
  },
  "proposals": [
@@ -402,6 +414,34 @@
    "status": "rejected",
    "reason": "evidence check failed: the old text is not found exactly once in the source file",
    "at": "2026-11-20T13:59:08.078Z"
+  },
+  {
+   "id": "1081f1d0bfbf",
+   "entry": "latrine-subsidy",
+   "field": "limits",
+   "old": "The two trials disagree on whether mobilisation alone is enough, so the answer depends on the place. Both measure latrines, not safely managed waste, and neither showed less diarrhoea; other large sanitation trials found no effect on child growth.",
+   "new": "Both measure latrines, not safely managed waste, and neither showed less diarrhoea; other large sanitation trials found mixed effects on child growth and diarrhoea prevalence.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/36697370",
+    "title": "Interventions to improve sanitation for preventing diarrhoea."
+   },
+   "quote": "There is evidence that sanitation interventions are effective at preventing diarrhoea, both for young children and all age populations.",
+   "why": "Source 3 provides a more nuanced view of the effects of sanitation interventions on diarrhoea prevalence and child growth.",
+   "proposer": {
+    "id": "llama-3.3-70b",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-21T13:27:22.746Z"
   }
  ],
  "health": {
@@ -440,7 +480,7 @@
    "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "mistral-small-3.1": {
-   "calls": 4,
+   "calls": 5,
    "errors": 0
   },
   "gemma-4": {
@@ -474,12 +514,12 @@
    "last": "worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
   },
   "gpt-oss-120b": {
-   "calls": 8,
+   "calls": 9,
    "errors": 2,
    "last": "empty"
   },
   "llama-3.3-70b": {
-   "calls": 4,
+   "calls": 5,
    "errors": 0
   }
  },
@@ -671,11 +711,23 @@
    "failures": [
     "nemotron-3: worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
    ]
+  },
+  {
+   "at": "2026-11-21T13:27:22.746Z",
+   "examined": 3,
+   "proposed": 1,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 1,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": []
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-20T13:59:08.078Z"
+ "at": "2026-11-21T13:27:22.746Z"
 }
