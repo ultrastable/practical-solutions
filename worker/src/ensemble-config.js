@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 // The model ensemble's configuration: the one place that says which models may be asked, in which roles, and by what rule their answers count.
 // /method states it from this data (method-claims.js), tools/ensemble.mjs runs it, and ps/ensemble.js enforces it. Every route is free and keyless:
-// GitHub Models on the Action's own token, and Workers AI through the tenant's model Worker. Lessons carried from the QNFO fleet's ensemble policy
+// GitHub Models on the Action's own token, and Workers AI through the tenant's model Worker. Lessons carried from an earlier fleet's ensemble policy
 // (ENSEMBLE-POLICY-1): errors of one model family are correlated, so a panel is worth fewer votes than it has members; judges must come from
 // families other than the writer's, a vendor appears once per panel, and the correlation is measured rather than assumed.
 export const ENSEMBLE = {
