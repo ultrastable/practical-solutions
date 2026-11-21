@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 # Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 name: ci
+# LANE-FAST-1 (mirrors ultrastable checks.yml): merge in this run the moment every job passes, no second workflow or runner.
 on:
   push: { branches: [main] }
   pull_request:
@@ -50,3 +51,18 @@ jobs:
       - name: the Python prototype stays a runnable behaviour reference
         working-directory: reference/python
         run: python -m unittest discover -s tests -t . -v
+  lane:
+    # LANE-FAST-1: merge this PR as soon as test, access and reference-python pass. Same-repository, non-draft PRs only; a PR the token cannot merge
+    # (it changes .github/workflows/**) is left to the platform lane, which holds the workflow-capable credential.
+    needs: [test, access, reference-python]
+    if: ${{ vars.HALT != '1' && github.event_name == 'pull_request' && github.event.pull_request.draft != true && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions: { contents: write, pull-requests: write }
+    steps:
+      - name: Squash-merge this PR now
+        env:
+          GH_TOKEN: ${{ secrets.LANE_PAT || secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: gh pr merge "$PR" --repo "$GITHUB_REPOSITORY" --squash --match-head-commit "$SHA" || echo "not merged here, the platform lane takes it"
