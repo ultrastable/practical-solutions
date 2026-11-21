@@ -45,7 +45,7 @@
   "tenant-ps-core": {
    "script": "tenant-ps-core",
    "found": true,
-   "sha256": "d3fb23ef3eb070c23983904b8a1d056053abb82a11c75b9c0db6fe4bf919e9dc",
+   "sha256": "06a4df486ebaef78d7e3eac81f659740139a13319ff12c97bbfff235dab1239c",
    "bindings": [
     {
      "type": "d1",
@@ -82,8 +82,8 @@
     "nodejs_compat"
    ],
    "deployment": {
-    "id": "c19094f2-6c64-4050-8c67-bc84d6d49f96",
-    "created_on": "2026-11-21T10:59:08.983393Z"
+    "id": "35dfd251-1d3e-4c3e-b025-7472cfe1f9a2",
+    "created_on": "2026-11-21T18:54:06.329863Z"
    },
    "read_errors": []
   },
