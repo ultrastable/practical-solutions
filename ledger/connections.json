@@ -1,0 +1,2049 @@
+{
+ "schema": "ps-connections/1",
+ "v": 1,
+ "runs": [
+  {
+   "at": "2026-11-21T07:39:51.305Z",
+   "tau": 0.9219,
+   "nodes": 814,
+   "candidates": 95,
+   "new": 95,
+   "confirmed": 0,
+   "dropped": 0,
+   "open": 95
+  }
+ ],
+ "entries": {
+  "transfer:2b9f3f0f": {
+   "id": "transfer:2b9f3f0f",
+   "type": "transfer",
+   "members": [
+    "s:chlorine",
+    "p:who-wsh-water-safely-managed"
+   ],
+   "via": "p:water",
+   "score": 0.9925,
+   "sims": {
+    "problems": 0.8662546689485773,
+    "solution_to_target": 0.6856089133008666
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9925
+  },
+  "transfer:a8ce6cf4": {
+   "id": "transfer:a8ce6cf4",
+   "type": "transfer",
+   "members": [
+    "s:chlorine",
+    "p:sdg-6-1-1"
+   ],
+   "via": "p:water",
+   "score": 0.9815,
+   "sims": {
+    "problems": 0.8522272398266922,
+    "solution_to_target": 0.6845805407119658
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9815
+  },
+  "transfer:7f1c5d8a": {
+   "id": "transfer:7f1c5d8a",
+   "type": "transfer",
+   "members": [
+    "s:tb-community-screening",
+    "p:who-mdg-0000000020"
+   ],
+   "via": "p:tb",
+   "score": 0.9635,
+   "sims": {
+    "problems": 0.8391001844844976,
+    "solution_to_target": 0.6682778222709888
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9635
+  },
+  "transfer:6d1e2881": {
+   "id": "transfer:6d1e2881",
+   "type": "transfer",
+   "members": [
+    "s:tb-community-screening",
+    "p:sdg-3-3-2"
+   ],
+   "via": "p:tb",
+   "score": 0.9567,
+   "sims": {
+    "problems": 0.8380014802955764,
+    "solution_to_target": 0.6563355333462823
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9567
+  },
+  "transfer:c306b9d4": {
+   "id": "transfer:c306b9d4",
+   "type": "transfer",
+   "members": [
+    "s:kmc",
+    "p:wb-sh-dth-nmrt"
+   ],
+   "via": "p:neonatal",
+   "score": 0.9558,
+   "sims": {
+    "problems": 0.8144713452771646,
+    "solution_to_target": 0.6899652045450331
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9558
+  },
+  "transfer:aad8c3f9": {
+   "id": "transfer:aad8c3f9",
+   "type": "transfer",
+   "members": [
+    "s:latrine-subsidy",
+    "p:who-wsh-sanitation-safely-managed"
+   ],
+   "via": "p:sanitation",
+   "score": 0.955,
+   "sims": {
+    "problems": 0.8604480590563143,
+    "solution_to_target": 0.6192948953756067
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.955
+  },
+  "transfer:c8ec85b3": {
+   "id": "transfer:c8ec85b3",
+   "type": "transfer",
+   "members": [
+    "s:tb-community-screening",
+    "p:who-tb-e-inc-tbhiv-100k"
+   ],
+   "via": "p:tb",
+   "score": 0.9539,
+   "sims": {
+    "problems": 0.835673784960479,
+    "solution_to_target": 0.6543820470857589
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9539
+  },
+  "transfer:45fde8be": {
+   "id": "transfer:45fde8be",
+   "type": "transfer",
+   "members": [
+    "s:kmc",
+    "p:maternal"
+   ],
+   "via": "p:neonatal",
+   "score": 0.9505,
+   "sims": {
+    "problems": 0.8296533877891344,
+    "solution_to_target": 0.6564278181979388
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9505
+  },
+  "transfer:3b9fb30d": {
+   "id": "transfer:3b9fb30d",
+   "type": "transfer",
+   "members": [
+    "s:vita",
+    "p:wb-sh-dyn-0509"
+   ],
+   "via": "p:under5",
+   "score": 0.9493,
+   "sims": {
+    "problems": 0.8151931457724153,
+    "solution_to_target": 0.6758399736846538
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9493
+  },
+  "transfer:e394a621": {
+   "id": "transfer:e394a621",
+   "type": "transfer",
+   "members": [
+    "s:chlorine",
+    "p:wb-sh-dyn-0509"
+   ],
+   "via": "p:under5",
+   "score": 0.9488,
+   "sims": {
+    "problems": 0.8151931457724153,
+    "solution_to_target": 0.6747126798824686
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9488
+  },
+  "transfer:7bb6c18b": {
+   "id": "transfer:7bb6c18b",
+   "type": "transfer",
+   "members": [
+    "s:kmc",
+    "p:wb-sh-dth-imrt"
+   ],
+   "via": "p:neonatal",
+   "score": 0.9444,
+   "sims": {
+    "problems": 0.7996943386597568,
+    "solution_to_target": 0.6892496387447787
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9444
+  },
+  "transfer:ce9bc169": {
+   "id": "transfer:ce9bc169",
+   "type": "transfer",
+   "members": [
+    "s:latrine-subsidy",
+    "p:wb-sh-sta-smss-ru-zs"
+   ],
+   "via": "p:sanitation",
+   "score": 0.9444,
+   "sims": {
+    "problems": 0.8085045484432667,
+    "solution_to_target": 0.6759899049813509
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9444
+  },
+  "transfer:6d997a68": {
+   "id": "transfer:6d997a68",
+   "type": "transfer",
+   "members": [
+    "s:helmets",
+    "p:sdg-3-6-1"
+   ],
+   "via": "p:road",
+   "score": 0.9372,
+   "sims": {
+    "problems": 0.8013804595706157,
+    "solution_to_target": 0.67239601042661
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9372
+  },
+  "transfer:8a9bee63": {
+   "id": "transfer:8a9bee63",
+   "type": "transfer",
+   "members": [
+    "s:latrine-subsidy",
+    "p:wb-sh-sta-smss-ur-zs"
+   ],
+   "via": "p:sanitation",
+   "score": 0.9318,
+   "sims": {
+    "problems": 0.8230272980733604,
+    "solution_to_target": 0.6291379897440882
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9318
+  },
+  "transfer:7cc49bec": {
+   "id": "transfer:7cc49bec",
+   "type": "transfer",
+   "members": [
+    "s:helmets",
+    "p:who-rs-198"
+   ],
+   "via": "p:road",
+   "score": 0.9296,
+   "sims": {
+    "problems": 0.8481299610026163,
+    "solution_to_target": 0.587081163138361
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9296
+  },
+  "transfer:51c62f68": {
+   "id": "transfer:51c62f68",
+   "type": "transfer",
+   "members": [
+    "s:deworming",
+    "p:wb-sh-sta-stnt-me-zs"
+   ],
+   "via": "p:stunting",
+   "score": 0.9272,
+   "sims": {
+    "problems": 0.8263229384913497,
+    "solution_to_target": 0.6148542226786627
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9272
+  },
+  "transfer:9fd4c018": {
+   "id": "transfer:9fd4c018",
+   "type": "transfer",
+   "members": [
+    "s:women-leaders",
+    "p:who-wsh-water-safely-managed"
+   ],
+   "via": "p:water",
+   "score": 0.9269,
+   "sims": {
+    "problems": 0.8662546689485773,
+    "solution_to_target": 0.5543818388440547
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9269
+  },
+  "transfer:c8c0f540": {
+   "id": "transfer:c8c0f540",
+   "type": "transfer",
+   "members": [
+    "s:pph-bundle",
+    "p:who-mdg-0000000026"
+   ],
+   "via": "p:maternal",
+   "score": 0.9255,
+   "sims": {
+    "problems": 0.8312121989370211,
+    "solution_to_target": 0.6040831647300245
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9255
+  },
+  "transfer:23043f4a": {
+   "id": "transfer:23043f4a",
+   "type": "transfer",
+   "members": [
+    "s:pph-bundle",
+    "p:who-mort-maternalnum"
+   ],
+   "via": "p:maternal",
+   "score": 0.9244,
+   "sims": {
+    "problems": 0.8284562270139506,
+    "solution_to_target": 0.6060244257348388
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9244
+  },
+  "transfer:5716447e": {
+   "id": "transfer:5716447e",
+   "type": "transfer",
+   "members": [
+    "s:pph-bundle",
+    "p:wb-sh-mmr-dths"
+   ],
+   "via": "p:maternal",
+   "score": 0.9244,
+   "sims": {
+    "problems": 0.8284562270139506,
+    "solution_to_target": 0.6060244257348388
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9244
+  },
+  "transfer:77c6d69d": {
+   "id": "transfer:77c6d69d",
+   "type": "transfer",
+   "members": [
+    "s:graduation",
+    "p:wb-sn-itk-msfi-zs"
+   ],
+   "via": "p:hunger",
+   "score": 0.9238,
+   "sims": {
+    "problems": 0.8070605362086266,
+    "solution_to_target": 0.6369498510110495
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9238
+  },
+  "transfer:5fb390b5": {
+   "id": "transfer:5fb390b5",
+   "type": "transfer",
+   "members": [
+    "s:women-leaders",
+    "p:sdg-6-1-1"
+   ],
+   "via": "p:water",
+   "score": 0.9234,
+   "sims": {
+    "problems": 0.8522272398266922,
+    "solution_to_target": 0.5684694980814523
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9234
+  },
+  "transfer:d0e6ccf3": {
+   "id": "transfer:d0e6ccf3",
+   "type": "transfer",
+   "members": [
+    "s:deworming",
+    "p:who-nutstuntingnum"
+   ],
+   "via": "p:stunting",
+   "score": 0.9227,
+   "sims": {
+    "problems": 0.827400491143246,
+    "solution_to_target": 0.6042614278073118
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9227
+  },
+  "transfer:9de75d90": {
+   "id": "transfer:9de75d90",
+   "type": "transfer",
+   "members": [
+    "s:cash-birth-certificate",
+    "p:sdg-16-9-1"
+   ],
+   "via": "p:birthreg",
+   "score": 0.922,
+   "sims": {
+    "problems": 0.7676165010513929,
+    "solution_to_target": 0.6924935553967394
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.922
+  },
+  "transfer:461b71a6": {
+   "id": "transfer:461b71a6",
+   "type": "transfer",
+   "members": [
+    "s:graduation",
+    "p:wb-sn-itk-svfi-zs"
+   ],
+   "via": "p:hunger",
+   "score": 0.9178,
+   "sims": {
+    "problems": 0.8094785081224554,
+    "solution_to_target": 0.6213635653859837
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9178
+  },
+  "combination:d10411a5": {
+   "id": "combination:d10411a5",
+   "type": "combination",
+   "members": [
+    "s:chlorine",
+    "s:women-leaders"
+   ],
+   "via": "p:water",
+   "score": 1.1132,
+   "sims": {
+    "solutions": 0.5547158759368427,
+    "problems": 1
+   },
+   "cross": true,
+   "novelty": "partial",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1132,
+   "why_model": {
+    "text": "\"Chlorinate water at the point where people collect it\" and \"Reserve leadership seats for women\" might work better together because reserving leadership seats for women could lead to increased investment in drinking water infrastructure, making chlorination more effective. A cheap first test would measure whether villages with reserved women leaders are more likely to have functional community water points where chlorination can be implemented. This test could help determine if the two solutions are synergistic in improving access to safely managed water.",
+    "at": "2026-11-21T07:39:51.305Z",
+    "note": "Written by a model from the two entries only and checked for invented figures; a hypothesis, not evidence."
+   },
+   "why_model_tried": "2026-11-21T07:39:51.305Z"
+  },
+  "combination:35d28123": {
+   "id": "combination:35d28123",
+   "type": "combination",
+   "members": [
+    "s:helmets",
+    "s:kmc"
+   ],
+   "via": "p:road ~ p:neonatal",
+   "score": 1.0824,
+   "sims": {
+    "solutions": 0.43412104829236803,
+    "problems": 0.7650826197489058
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.0824,
+   "why_model": null,
+   "why_model_tried": "2026-11-21T07:39:51.305Z"
+  },
+  "combination:9d63ae49": {
+   "id": "combination:9d63ae49",
+   "type": "combination",
+   "members": [
+    "s:helmets",
+    "s:ors-zinc"
+   ],
+   "via": "p:road ~ p:under5",
+   "score": 1.0782,
+   "sims": {
+    "solutions": 0.39639264854249534,
+    "problems": 0.7144801148345121
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.0782,
+   "why_model": null,
+   "why_model_tried": "2026-11-21T07:39:51.305Z"
+  },
+  "combination:e2e695c5": {
+   "id": "combination:e2e695c5",
+   "type": "combination",
+   "members": [
+    "s:friendship-bench",
+    "s:helmets"
+   ],
+   "via": "p:suicide ~ p:road",
+   "score": 1.0474,
+   "sims": {
+    "solutions": 0.47589394122571926,
+    "problems": 0.7993710137725437
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.0474
+  },
+  "combination:21cf2a82": {
+   "id": "combination:21cf2a82",
+   "type": "combination",
+   "members": [
+    "s:friendship-bench",
+    "s:pph-bundle"
+   ],
+   "via": "p:suicide ~ p:maternal",
+   "score": 1.0146,
+   "sims": {
+    "solutions": 0.4734447632836786,
+    "problems": 0.7707306447761186
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.0146
+  },
+  "combination:a8bcc5b0": {
+   "id": "combination:a8bcc5b0",
+   "type": "combination",
+   "members": [
+    "s:latrine-subsidy",
+    "s:women-leaders"
+   ],
+   "via": "p:sanitation ~ p:water",
+   "score": 1.001,
+   "sims": {
+    "solutions": 0.5757790846701579,
+    "problems": 0.9438443911096348
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.001
+  },
+  "combination:15b21a73": {
+   "id": "combination:15b21a73",
+   "type": "combination",
+   "members": [
+    "s:chlorine",
+    "s:ors-zinc"
+   ],
+   "via": "p:under5",
+   "score": 0.9835,
+   "sims": {
+    "solutions": 0.6065804310249626,
+    "problems": 1
+   },
+   "cross": true,
+   "novelty": "partial",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9835
+  },
+  "combination:c9dbed40": {
+   "id": "combination:c9dbed40",
+   "type": "combination",
+   "members": [
+    "s:kmc",
+    "s:women-leaders"
+   ],
+   "via": "p:neonatal ~ p:water",
+   "score": 0.9825,
+   "sims": {
+    "solutions": 0.41790910141235066,
+    "problems": 0.6751537855377888
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9825
+  },
+  "combination:d647842c": {
+   "id": "combination:d647842c",
+   "type": "combination",
+   "members": [
+    "s:itn",
+    "s:pph-bundle"
+   ],
+   "via": "p:under5 ~ p:maternal",
+   "score": 0.9728,
+   "sims": {
+    "solutions": 0.5070344268135126,
+    "problems": 0.789319282169756
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9728
+  },
+  "combination:59f5c5ec": {
+   "id": "combination:59f5c5ec",
+   "type": "combination",
+   "members": [
+    "s:immunisation",
+    "s:pph-bundle"
+   ],
+   "via": "p:under5 ~ p:maternal",
+   "score": 0.9511,
+   "sims": {
+    "solutions": 0.5180166685509718,
+    "problems": 0.789319282169756
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9511
+  },
+  "combination:0d610034": {
+   "id": "combination:0d610034",
+   "type": "combination",
+   "members": [
+    "s:itn",
+    "s:kmc"
+   ],
+   "via": "p:under5",
+   "score": 0.9508,
+   "sims": {
+    "solutions": 0.5246100184490394,
+    "problems": 1
+   },
+   "cross": false,
+   "novelty": "partial",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9508
+  },
+  "combination:95c510dd": {
+   "id": "combination:95c510dd",
+   "type": "combination",
+   "members": [
+    "s:chlorine",
+    "s:itn"
+   ],
+   "via": "p:under5",
+   "score": 0.943,
+   "sims": {
+    "solutions": 0.6227890935740389,
+    "problems": 1
+   },
+   "cross": true,
+   "novelty": "partial",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.943
+  },
+  "combination:f72e24b4": {
+   "id": "combination:f72e24b4",
+   "type": "combination",
+   "members": [
+    "s:immunisation",
+    "s:ors-zinc"
+   ],
+   "via": "p:under5",
+   "score": 0.9173,
+   "sims": {
+    "solutions": 0.5413435291381092,
+    "problems": 1
+   },
+   "cross": false,
+   "novelty": "partial",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.9173
+  },
+  "combination:6846a005": {
+   "id": "combination:6846a005",
+   "type": "combination",
+   "members": [
+    "s:cash",
+    "s:deworming"
+   ],
+   "via": "p:hunger ~ p:stunting",
+   "score": 0.8941,
+   "sims": {
+    "solutions": 0.5182428786910528,
+    "problems": 0.7424052161980623
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.8941
+  },
+  "combination:4acff686": {
+   "id": "combination:4acff686",
+   "type": "combination",
+   "members": [
+    "s:cash",
+    "s:friendship-bench"
+   ],
+   "via": "p:poverty ~ p:suicide",
+   "score": 0.8934,
+   "sims": {
+    "solutions": 0.4786083783147848,
+    "problems": 0.685370641726677
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.8934
+  },
+  "combination:8b1749b9": {
+   "id": "combination:8b1749b9",
+   "type": "combination",
+   "members": [
+    "s:hypertension",
+    "s:immunisation"
+   ],
+   "via": "p:ncd ~ p:under5",
+   "score": 0.8694,
+   "sims": {
+    "solutions": 0.5307105004505769,
+    "problems": 0.741061024930446
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.8694
+  },
+  "combination:6116876c": {
+   "id": "combination:6116876c",
+   "type": "combination",
+   "members": [
+    "s:cytisine",
+    "s:hypertension"
+   ],
+   "via": "p:tobacco ~ p:ncd",
+   "score": 0.8487,
+   "sims": {
+    "solutions": 0.5081213199992756,
+    "problems": 0.6901669298121527
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.8487
+  },
+  "combination:36bba803": {
+   "id": "combination:36bba803",
+   "type": "combination",
+   "members": [
+    "s:cash",
+    "s:hypertension"
+   ],
+   "via": "p:hunger ~ p:ncd",
+   "score": 0.8395,
+   "sims": {
+    "solutions": 0.47408148129441235,
+    "problems": 0.63851983284574
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.8395
+  },
+  "combination:583e6d2a": {
+   "id": "combination:583e6d2a",
+   "type": "combination",
+   "members": [
+    "s:latrine-subsidy",
+    "s:tarl"
+   ],
+   "via": "p:sanitation ~ p:education",
+   "score": 0.8348,
+   "sims": {
+    "solutions": 0.4886740389957438,
+    "problems": 0.65304030046695
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.8348
+  },
+  "combination:966aae18": {
+   "id": "combination:966aae18",
+   "type": "combination",
+   "members": [
+    "s:graduation",
+    "s:vita"
+   ],
+   "via": "p:hunger ~ p:under5",
+   "score": 0.8184,
+   "sims": {
+    "solutions": 0.5153622527768292,
+    "problems": 0.675467569642273
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.8184
+  },
+  "combination:86d4dd66": {
+   "id": "combination:86d4dd66",
+   "type": "combination",
+   "members": [
+    "s:mobile-money",
+    "s:tarl"
+   ],
+   "via": "p:poverty ~ p:education",
+   "score": 0.7949,
+   "sims": {
+    "solutions": 0.4938159456369926,
+    "problems": 0.6281203398112647
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.7949
+  },
+  "combination:1ca6f06c": {
+   "id": "combination:1ca6f06c",
+   "type": "combination",
+   "members": [
+    "s:cash-birth-certificate",
+    "s:tarl"
+   ],
+   "via": "p:birthreg ~ p:education",
+   "score": 0.7888,
+   "sims": {
+    "solutions": 0.5842168152218271,
+    "problems": 0.7588258270595554
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.7888
+  },
+  "combination:50d1a890": {
+   "id": "combination:50d1a890",
+   "type": "combination",
+   "members": [
+    "s:deworming",
+    "s:graduation"
+   ],
+   "via": "p:stunting ~ p:hunger",
+   "score": 0.7863,
+   "sims": {
+    "solutions": 0.5763501391810846,
+    "problems": 0.7424052161980623
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.7863
+  },
+  "combination:3f6fc211": {
+   "id": "combination:3f6fc211",
+   "type": "combination",
+   "members": [
+    "s:graduation",
+    "s:mobile-money"
+   ],
+   "via": "p:poverty",
+   "score": 0.7848,
+   "sims": {
+    "solutions": 0.6076048538358135,
+    "problems": 1
+   },
+   "cross": false,
+   "novelty": "partial",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.7848
+  },
+  "combination:e3ad312d": {
+   "id": "combination:e3ad312d",
+   "type": "combination",
+   "members": [
+    "s:emissions-market",
+    "s:vita"
+   ],
+   "via": "p:air ~ p:under5",
+   "score": 0.7681,
+   "sims": {
+    "solutions": 0.513469400087147,
+    "problems": 0.6314811365730659
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.7681
+  },
+  "bridge:2fc87499": {
+   "id": "bridge:2fc87499",
+   "type": "bridge",
+   "members": [
+    "p:who-ncd-hyp-control-a",
+    "p:who-ncd-hyp-treatment-a"
+   ],
+   "score": 1.1828,
+   "sims": {
+    "pair": 0.9462272754200899
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1828
+  },
+  "bridge:ed674949": {
+   "id": "bridge:ed674949",
+   "type": "bridge",
+   "members": [
+    "p:who-ncd-hyp-control-c",
+    "p:who-ncd-hyp-treatment-c"
+   ],
+   "score": 1.1814,
+   "sims": {
+    "pair": 0.9450865690497241
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1814
+  },
+  "bridge:a5ce25f6": {
+   "id": "bridge:a5ce25f6",
+   "type": "bridge",
+   "members": [
+    "p:who-ncd-hyp-treatment-a",
+    "p:who-ncd-hyp-treatment-c"
+   ],
+   "score": 1.1774,
+   "sims": {
+    "pair": 0.9418955653497622
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1774
+  },
+  "bridge:80554d06": {
+   "id": "bridge:80554d06",
+   "type": "bridge",
+   "members": [
+    "p:who-ncd-hyp-diagnosis-a",
+    "p:who-ncd-hyp-diagnosis-c"
+   ],
+   "score": 1.1773,
+   "sims": {
+    "pair": 0.9418610304237949
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1773
+  },
+  "bridge:94dfb6aa": {
+   "id": "bridge:94dfb6aa",
+   "type": "bridge",
+   "members": [
+    "p:wb-se-adt-litr-fe-zs",
+    "p:wb-se-adt-litr-zs"
+   ],
+   "score": 1.1758,
+   "sims": {
+    "pair": 0.9406642679776841
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1758
+  },
+  "bridge:6926deea": {
+   "id": "bridge:6926deea",
+   "type": "bridge",
+   "members": [
+    "p:wb-se-adt-1524-lt-fe-zs",
+    "p:wb-se-adt-1524-lt-zs"
+   ],
+   "score": 1.1694,
+   "sims": {
+    "pair": 0.9355487883614503
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1694
+  },
+  "bridge:ddc8faef": {
+   "id": "bridge:ddc8faef",
+   "type": "bridge",
+   "members": [
+    "p:who-finprotection-imp-p-215-level-sh",
+    "p:who-finprotection-imp-p190-level-sh"
+   ],
+   "score": 1.1619,
+   "sims": {
+    "pair": 0.9295408314675664
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1619
+  },
+  "bridge:a7fdbb3d": {
+   "id": "bridge:a7fdbb3d",
+   "type": "bridge",
+   "members": [
+    "p:who-finprotection-imp-p-215-level-million",
+    "p:who-finprotection-imp-p190-level-million"
+   ],
+   "score": 1.1617,
+   "sims": {
+    "pair": 0.9293428381956145
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1617
+  },
+  "bridge:9692d696": {
+   "id": "bridge:9692d696",
+   "type": "bridge",
+   "members": [
+    "p:wb-sh-h2o-smdw-ru-zs",
+    "p:wb-sh-sta-smss-ru-zs"
+   ],
+   "score": 1.1602,
+   "sims": {
+    "pair": 0.9281325390717678
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1602
+  },
+  "bridge:510f17c5": {
+   "id": "bridge:510f17c5",
+   "type": "bridge",
+   "members": [
+    "p:wb-en-ghg-ch4-ic-mt-ce-ar5",
+    "p:wb-en-ghg-co2-ic-mt-ce-ar5"
+   ],
+   "score": 1.1584,
+   "sims": {
+    "pair": 0.926730361535019
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1584
+  },
+  "bridge:1f4eb5e0": {
+   "id": "bridge:1f4eb5e0",
+   "type": "bridge",
+   "members": [
+    "p:wb-sh-dyn-aids-zs",
+    "p:wb-sh-hiv-1524-ma-zs"
+   ],
+   "score": 1.1583,
+   "sims": {
+    "pair": 0.9266741456702955
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1583
+  },
+  "bridge:ac064e50": {
+   "id": "bridge:ac064e50",
+   "type": "bridge",
+   "members": [
+    "p:who-finprotection-imp-p-215-level-sh",
+    "p:who-finprotection-imp-p190-level-million"
+   ],
+   "score": 1.1565,
+   "sims": {
+    "pair": 0.9252014193399064
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1565
+  },
+  "bridge:cdbc452e": {
+   "id": "bridge:cdbc452e",
+   "type": "bridge",
+   "members": [
+    "p:wb-sh-sta-bass-ru-zs",
+    "p:wb-sh-sta-bass-zs"
+   ],
+   "score": 1.1563,
+   "sims": {
+    "pair": 0.9250111254813321
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1563
+  },
+  "bridge:9e0d26bc": {
+   "id": "bridge:9e0d26bc",
+   "type": "bridge",
+   "members": [
+    "p:who-ncd-hyp-diagnosis-a",
+    "p:who-ncd-hyp-prevalence-a"
+   ],
+   "score": 1.1562,
+   "sims": {
+    "pair": 0.9249727694493871
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1562
+  },
+  "bridge:3399de1b": {
+   "id": "bridge:3399de1b",
+   "type": "bridge",
+   "members": [
+    "p:wb-en-ghg-n2o-ag-mt-ce-ar5",
+    "p:wb-en-ghg-n2o-ip-mt-ce-ar5"
+   ],
+   "score": 1.1554,
+   "sims": {
+    "pair": 0.9243059215936635
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1554
+  },
+  "bridge:8e96e63c": {
+   "id": "bridge:8e96e63c",
+   "type": "bridge",
+   "members": [
+    "p:who-finprotection-imp-p-215-level-million",
+    "p:who-finprotection-imp-p190-level-sh"
+   ],
+   "score": 1.1551,
+   "sims": {
+    "pair": 0.9240447835708209
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1551
+  },
+  "bridge:80181063": {
+   "id": "bridge:80181063",
+   "type": "bridge",
+   "members": [
+    "p:who-finprotection-imp-p-215-level-million",
+    "p:who-finprotection-imp-p310-level-million"
+   ],
+   "score": 1.1539,
+   "sims": {
+    "pair": 0.9231005000808442
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1539
+  },
+  "bridge:658ad781": {
+   "id": "bridge:658ad781",
+   "type": "bridge",
+   "members": [
+    "p:who-finprotection-imp-p-215-level-sh",
+    "p:who-finprotection-imp-p310-level-sh"
+   ],
+   "score": 1.1536,
+   "sims": {
+    "pair": 0.9228981680885859
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1536
+  },
+  "bridge:df992511": {
+   "id": "bridge:df992511",
+   "type": "bridge",
+   "members": [
+    "p:wb-sh-h2o-basw-ru-zs",
+    "p:wb-sh-sta-bass-ru-zs"
+   ],
+   "score": 1.1533,
+   "sims": {
+    "pair": 0.9226168375525086
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1533
+  },
+  "bridge:02c928a3": {
+   "id": "bridge:02c928a3",
+   "type": "bridge",
+   "members": [
+    "p:wb-en-ghg-ch4-fe-mt-ce-ar5",
+    "p:wb-en-ghg-co2-fe-mt-ce-ar5"
+   ],
+   "score": 1.1532,
+   "sims": {
+    "pair": 0.9225746484836478
+   },
+   "cross": true,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 1.1532
+  },
+  "frontier:cb2c0936": {
+   "id": "frontier:cb2c0936",
+   "type": "frontier",
+   "members": [
+    "p:sdg-16-10-1"
+   ],
+   "via": "s:tb-community-screening",
+   "score": 0.5338,
+   "sims": {
+    "nearest_solution": 0.4662072773371759
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5338
+  },
+  "frontier:ca410435": {
+   "id": "frontier:ca410435",
+   "type": "frontier",
+   "members": [
+    "p:sdg-16-3-2"
+   ],
+   "via": "s:chlorine",
+   "score": 0.5302,
+   "sims": {
+    "nearest_solution": 0.4697856795158601
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5302
+  },
+  "frontier:9547a779": {
+   "id": "frontier:9547a779",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe031"
+   ],
+   "via": "s:pph-bundle",
+   "score": 0.5233,
+   "sims": {
+    "nearest_solution": 0.4767345808769171
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5233
+  },
+  "frontier:38b076d4": {
+   "id": "frontier:38b076d4",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe115"
+   ],
+   "via": "s:hypertension",
+   "score": 0.5209,
+   "sims": {
+    "nearest_solution": 0.4790892371511282
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5209
+  },
+  "frontier:d4f40cfd": {
+   "id": "frontier:d4f40cfd",
+   "type": "frontier",
+   "members": [
+    "p:sdg-11-7-1"
+   ],
+   "via": "s:latrine-subsidy",
+   "score": 0.5177,
+   "sims": {
+    "nearest_solution": 0.48229516598868655
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5177
+  },
+  "frontier:a643450e": {
+   "id": "frontier:a643450e",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe016"
+   ],
+   "via": "s:ors-zinc",
+   "score": 0.5142,
+   "sims": {
+    "nearest_solution": 0.48580652888742354
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5142
+  },
+  "frontier:9947adc5": {
+   "id": "frontier:9947adc5",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe035"
+   ],
+   "via": "s:vita",
+   "score": 0.5137,
+   "sims": {
+    "nearest_solution": 0.48633518045883817
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5137
+  },
+  "frontier:b4ba3464": {
+   "id": "frontier:b4ba3464",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe159"
+   ],
+   "via": "s:helmets",
+   "score": 0.5093,
+   "sims": {
+    "nearest_solution": 0.49067062891892854
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5093
+  },
+  "frontier:adba295f": {
+   "id": "frontier:adba295f",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe150"
+   ],
+   "via": "s:pph-bundle",
+   "score": 0.5022,
+   "sims": {
+    "nearest_solution": 0.49783821484179064
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5022
+  },
+  "frontier:9f1bbc00": {
+   "id": "frontier:9f1bbc00",
+   "type": "frontier",
+   "members": [
+    "p:sdg-16-4-2"
+   ],
+   "via": "s:emissions-market",
+   "score": 0.5017,
+   "sims": {
+    "nearest_solution": 0.4982536063107161
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5017
+  },
+  "frontier:a8ba2180": {
+   "id": "frontier:a8ba2180",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe155"
+   ],
+   "via": "s:chlorine",
+   "score": 0.5016,
+   "sims": {
+    "nearest_solution": 0.49838447855409346
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5016
+  },
+  "frontier:abb7e7a2": {
+   "id": "frontier:abb7e7a2",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe144"
+   ],
+   "via": "s:vita",
+   "score": 0.5007,
+   "sims": {
+    "nearest_solution": 0.4993183959242952
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.5007
+  },
+  "frontier:046ef316": {
+   "id": "frontier:046ef316",
+   "type": "frontier",
+   "members": [
+    "p:sdg-12-5-1"
+   ],
+   "via": "s:emissions-market",
+   "score": 0.4996,
+   "sims": {
+    "nearest_solution": 0.5004293129546263
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4996
+  },
+  "frontier:bc48e07e": {
+   "id": "frontier:bc48e07e",
+   "type": "frontier",
+   "members": [
+    "p:wb-sh-alc-pcap-ma-li"
+   ],
+   "via": "s:graduation",
+   "score": 0.4995,
+   "sims": {
+    "nearest_solution": 0.5012821286561857
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4995
+  },
+  "frontier:a9b7e47c": {
+   "id": "frontier:a9b7e47c",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe146"
+   ],
+   "via": "s:cash-birth-certificate",
+   "score": 0.4982,
+   "sims": {
+    "nearest_solution": 0.5018296532270413
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4982
+  },
+  "frontier:a7a400c7": {
+   "id": "frontier:a7a400c7",
+   "type": "frontier",
+   "members": [
+    "p:sdg-15-5-1"
+   ],
+   "via": "s:pph-bundle",
+   "score": 0.4941,
+   "sims": {
+    "nearest_solution": 0.506083214011142
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4941
+  },
+  "frontier:a64583a5": {
+   "id": "frontier:a64583a5",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe008"
+   ],
+   "via": "s:itn",
+   "score": 0.4939,
+   "sims": {
+    "nearest_solution": 0.506133019932574
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4939
+  },
+  "frontier:4cd8ca27": {
+   "id": "frontier:4cd8ca27",
+   "type": "frontier",
+   "members": [
+    "p:sdg-16-5-2"
+   ],
+   "via": "s:tb-community-screening",
+   "score": 0.4934,
+   "sims": {
+    "nearest_solution": 0.5065641121755516
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4934
+  },
+  "frontier:acb7e935": {
+   "id": "frontier:acb7e935",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe145"
+   ],
+   "via": "s:vita",
+   "score": 0.4928,
+   "sims": {
+    "nearest_solution": 0.5071746094547408
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4928
+  },
+  "frontier:a5458212": {
+   "id": "frontier:a5458212",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe009"
+   ],
+   "via": "s:immunisation",
+   "score": 0.491,
+   "sims": {
+    "nearest_solution": 0.5089866664516585
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.491
+  },
+  "frontier:6de38fc5": {
+   "id": "frontier:6de38fc5",
+   "type": "frontier",
+   "members": [
+    "p:sdg-15-c-1"
+   ],
+   "via": "s:emissions-market",
+   "score": 0.4893,
+   "sims": {
+    "nearest_solution": 0.5106994202645156
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4893
+  },
+  "frontier:ca9c7641": {
+   "id": "frontier:ca9c7641",
+   "type": "frontier",
+   "members": [
+    "p:sdg-15-7-1"
+   ],
+   "via": "s:emissions-market",
+   "score": 0.4893,
+   "sims": {
+    "nearest_solution": 0.5106994202645156
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4893
+  },
+  "frontier:a7458538": {
+   "id": "frontier:a7458538",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe007"
+   ],
+   "via": "s:ors-zinc",
+   "score": 0.489,
+   "sims": {
+    "nearest_solution": 0.5110450933464139
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.489
+  },
+  "frontier:afba2c85": {
+   "id": "frontier:afba2c85",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe152"
+   ],
+   "via": "s:friendship-bench",
+   "score": 0.4889,
+   "sims": {
+    "nearest_solution": 0.5111072138393967
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4889
+  },
+  "frontier:243dfb3a": {
+   "id": "frontier:243dfb3a",
+   "type": "frontier",
+   "members": [
+    "p:ghe-ghe078"
+   ],
+   "via": "s:tb-community-screening",
+   "score": 0.4887,
+   "sims": {
+    "nearest_solution": 0.5112553057143958
+   },
+   "cross": false,
+   "novelty": "none",
+   "status": "new",
+   "first_seen": "2026-11-21T07:39:51.305Z",
+   "last_seen": "2026-11-21T07:39:51.305Z",
+   "runs": 1,
+   "missed": 0,
+   "best": 0.4887
+  }
+ },
+ "retired": {},
+ "params": {
+  "pct": 0.91
+ },
+ "decisions": [
+  {
+   "at": "2026-11-21T07:39:51.305Z",
+   "knob": "pct",
+   "from": 0.9,
+   "to": 0.91,
+   "why": "95 new candidates is above 40",
+   "prediction": "new_candidates <= 40 within 24 h"
+  }
+ ],
+ "totals": {
+  "entered": 95,
+  "confirmed": 0,
+  "dropped": 0,
+  "open": 95,
+  "hit_rate": null
+ }
+}
