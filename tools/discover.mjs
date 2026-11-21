@@ -86,8 +86,8 @@ export const repairCitations = c => !c || !Array.isArray(c.citations) ? c : { ..
 // is published, the graph confirms its own lead. Falls back to the rotating pairing when the graph has no open combination.
 export function graphSeed(ledger, list = SOLUTIONS) {
   const by = new Map(list.map(s => [s.id, s]));
-  const open = Object.values((ledger && ledger.entries) || {}).filter(e => e.type === 'combination' && (e.status === 'new' || e.status === 'standing') && !e.seeded)
-    .map(e => ({ e, pair: e.members.map(m => by.get(String(m).replace(/^s:/, ''))) })).filter(x => x.pair.every(Boolean)).sort((a, b) => b.e.score - a.e.score);
+  const open = Object.values((ledger && ledger.entries) || {}).filter(e => e.type === 'combination' && (e.status === 'new' || e.status === 'standing') && !e.seeded && e.justification)
+    .map(e => ({ e, pair: e.members.map(m => by.get(String(m).replace(/^s:/, ''))) })).filter(x => x.pair.every(Boolean)).sort((a, b) => b.e.justification.value - a.e.justification.value);
   return open.length ? { id: open[0].e.id, pair: open[0].pair } : null;
 }
 // PIPELINE-1: on alternate days the proposal starts from the advocate queue's top problem with no solution (and the graph's suggested solution for it)
