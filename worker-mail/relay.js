@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
-// tenant-ps-mail: a tiny stateless mail relay. The mail domain lives in the ultrastable account and Email Routing and Sending only
+// tenant-ps-mail: a tiny stateless mail relay. Email Routing and Sending only
 // work for Workers in the domain's own account, so this Worker sits next to the domain and talks to the backend over authenticated HTTPS.
 //   inbound:  email() -> POST {BACKEND_URL}/internal/mail            (header x-ps-token = MAIL_TOKEN)
 //   outbound: POST /send {to, from, reply_to, subject, text}         (header x-ps-token = MAIL_TOKEN) -> EMAIL.send
