@@ -1,0 +1,29 @@
+{
+ "_note": "Outside reference sources the catalogue links to. posture 'link_only' means: store only a title and URL we verified by fetching the page, never the source's text; cite the source and retrieval date. A source joins by one row here; ps/references.js and tools/references.mjs do the rest. Terms were read from the source's own terms page on the date given.",
+ "sources": [
+  {
+   "id": "uia",
+   "name": "Encyclopedia of World Problems and Human Potential",
+   "publisher": "Union of International Associations (UIA)",
+   "home": "https://encyclopedia.uia.org/",
+   "terms": "https://uia.org/terms",
+   "terms_read": "2026-11-20",
+   "posture": "link_only",
+   "posture_reason": "Links are permitted and reproduction needs the source acknowledged, but no licence is named for the data and UIA reserves the right to refuse extensive redistribution.",
+   "attribution": "© Union of International Associations 1997 - present",
+   "url": "https://encyclopedia.uia.org/problem/{slug}",
+   "per_run_budget": 40,
+   "delay_ms": 1500,
+   "miss_ttl_days": 45,
+   "aliases": {
+    "malaria": ["malaria"],
+    "undernourishment": ["hunger", "malnutrition"],
+    "suicide": ["suicide"],
+    "drinking water": ["polluted-drinking-water", "long-term-shortage-water"],
+    "poverty": ["extreme-poverty"],
+    "illiteracy": ["illiteracy"],
+    "hypertension": ["hypertension"]
+   }
+  }
+ ]
+}

@@ -163,6 +163,23 @@
    "domain": "unicef.org",
    "contact_page": "https://www.unicef.org/esa/contact-us",
    "remit": "implements"
+  },
+  {
+   "id": "uia",
+   "name": "Union of International Associations",
+   "country": "INT",
+   "sectors": [
+    "health",
+    "nutrition",
+    "wash",
+    "education",
+    "social-protection"
+   ],
+   "level": "international",
+   "domain": "uia.org",
+   "contact_page": "https://uia.org/contact-uia",
+   "remit": "researches",
+   "audience": "reference"
   }
  ]
 }

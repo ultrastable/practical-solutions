@@ -109,7 +109,8 @@
   "ngo_foundation": 3,
   "researcher": 3,
   "media": 3,
-  "community": 2
+  "community": 2,
+  "reference": 1
  },
  "framing": {
   "agency": {
@@ -131,6 +132,10 @@
   "community": {
    "intro": "We are writing because {reason}. If your readers or members collect practical, evidence-based solutions, this entry may fit a roundup: \"{title}\".",
    "ask": "If this is not a fit, no action is needed, and replying \"stop\" ensures you hear nothing further."
+  },
+  "reference": {
+   "intro": "We are writing because {reason}. Our catalogue of public problems links out to your Encyclopedia of World Problems where an entry matches, citing it as your terms ask, and this evidence entry may be a useful pointer in return: \"{title}\".",
+   "ask": "If you would rather we link differently, or not at all, a reply is read by a person and we will change it. Replying \"stop\" ensures you hear nothing further."
   }
  }
 }

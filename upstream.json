@@ -45,7 +45,8 @@
     "worker/src/ask-index.gen.js": "generated from this tenant's catalogue",
     ".github/workflows/translate.yml": "tenant trigger for its own translation loop",
     "tools/push_main.py": "copy of core's MAIN-WRITER-1 pusher that vendor/ultrastable/tools/hostsync_commit.sh calls as tools/push_main.py; core does not ship it in the vendor tree yet",
-    ".github/workflows/deploy-lag.yml": "this tenant's deploy-lag probe over its own deploy workflows"
+    ".github/workflows/deploy-lag.yml": "this tenant's deploy-lag probe over its own deploy workflows",
+    "worker/src/connections.js": "the /connections page of this tenant: renders its own catalogue graph with its UI kit; the generic engine is core/discover"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",
@@ -133,6 +134,26 @@
       "core": "core/format/numfmt.js",
       "hold": "queued: dependency-free number formatter (NUMFMT-1) lifts to core for every tenant",
       "item": "Q-LIFT-TENANT-1"
+    },
+    "ps/references.js": {
+      "core": "core/references/index.js",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
+    },
+    "tools/references.mjs": {
+      "core": "core/references/runner.mjs",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
+    },
+    ".github/workflows/references.yml": {
+      "core": "core/references/templates/references.yml",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
+    },
+    "worker/src/references.js": {
+      "core": "core/references/page.js",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
     }
   },
   "min_lines": 8,

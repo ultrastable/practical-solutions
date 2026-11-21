@@ -1,0 +1,18 @@
+{
+ "schema": "reference-links/1",
+ "at": "2026-11-20T21:30:00.000Z",
+ "results": {
+  "uia": {
+   "found": {
+    "https://encyclopedia.uia.org/problem/malaria": "Malaria",
+    "https://encyclopedia.uia.org/problem/hunger": "Hunger",
+    "https://encyclopedia.uia.org/problem/suicide": "Suicide",
+    "https://encyclopedia.uia.org/problem/polluted-drinking-water": "Polluted drinking water",
+    "https://encyclopedia.uia.org/problem/long-term-shortage-water": "Long-term shortage of water",
+    "https://encyclopedia.uia.org/problem/extreme-poverty": "Extreme poverty"
+   },
+   "misses": {},
+   "checked": {}
+  }
+ }
+}
