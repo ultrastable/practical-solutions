@@ -1,0 +1,505 @@
+{
+ "schema": "ps-evidence-leads/1",
+ "at": "2026-11-21T11:38:05.478Z",
+ "note": "Titles Europe PMC returned for a problem-wording query. A hit is a lead to read, not evidence that an intervention works.",
+ "items": {
+  "wb-sn-itk-svfi-zs": {
+   "at": "2026-11-21T11:37:44.088Z",
+   "query": "Prevalence severe food insecurity population",
+   "total": 1253,
+   "hits": [
+    {
+     "title": "Poverty and common mental disorders in low and middle income countries: A systematic review",
+     "year": 2010,
+     "id": "doi:10.1016/j.socscimed.2010.04.027",
+     "source": "europepmc",
+     "cited_by": 744
+    },
+    {
+     "title": "Effects of water quality, sanitation, handwashing, and nutritional interventions on diarrhoea and child growth in rural Bangladesh: a cluster randomised controlled trial",
+     "year": 2018,
+     "id": "doi:10.1016/s2214-109x(17)30490-4",
+     "source": "europepmc",
+     "cited_by": 530
+    },
+    {
+     "title": "Biological and psychosocial predictors of postpartum depression: systematic review and call for integration",
+     "year": 2015,
+     "id": "doi:10.1146/annurev-clinpsy-101414-020426",
+     "source": "europepmc",
+     "cited_by": 502
+    },
+    {
+     "title": "The Impact of Climate Change on Mental Health: A Systematic Descriptive Review",
+     "year": 2020,
+     "id": "doi:10.3389/fpsyt.2020.00074",
+     "source": "europepmc",
+     "cited_by": 482
+    },
+    {
+     "title": "Effects of water quality, sanitation, handwashing, and nutritional interventions on diarrhoea and child growth in rural Kenya: a cluster-randomised controlled trial",
+     "year": 2018,
+     "id": "doi:10.1016/s2214-109x(18)30005-6",
+     "source": "europepmc",
+     "cited_by": 470
+    }
+   ]
+  },
+  "wb-sn-itk-msfi-zs": {
+   "at": "2026-11-21T11:37:44.447Z",
+   "query": "Prevalence moderate severe food insecurity population",
+   "total": 859,
+   "hits": [
+    {
+     "title": "Poverty and common mental disorders in low and middle income countries: A systematic review",
+     "year": 2010,
+     "id": "doi:10.1016/j.socscimed.2010.04.027",
+     "source": "europepmc",
+     "cited_by": 744
+    },
+    {
+     "title": "Effects of water quality, sanitation, handwashing, and nutritional interventions on diarrhoea and child growth in rural Bangladesh: a cluster randomised controlled trial",
+     "year": 2018,
+     "id": "doi:10.1016/s2214-109x(17)30490-4",
+     "source": "europepmc",
+     "cited_by": 530
+    },
+    {
+     "title": "Biological and psychosocial predictors of postpartum depression: systematic review and call for integration",
+     "year": 2015,
+     "id": "doi:10.1146/annurev-clinpsy-101414-020426",
+     "source": "europepmc",
+     "cited_by": 502
+    },
+    {
+     "title": "Effects of water quality, sanitation, handwashing, and nutritional interventions on diarrhoea and child growth in rural Kenya: a cluster-randomised controlled trial",
+     "year": 2018,
+     "id": "doi:10.1016/s2214-109x(18)30005-6",
+     "source": "europepmc",
+     "cited_by": 470
+    },
+    {
+     "title": "Exercise-based cardiac rehabilitation for coronary heart disease",
+     "year": 2016,
+     "id": "doi:10.1002/14651858.cd001800.pub3",
+     "source": "europepmc",
+     "cited_by": 426
+    }
+   ]
+  },
+  "sdg-15-5-1": {
+   "at": "2026-11-21T11:37:44.790Z",
+   "query": "Red List Index",
+   "total": 9629,
+   "hits": [
+    {
+     "title": "Genetic studies of body mass index yield new insights for obesity biology",
+     "year": 2015,
+     "id": "doi:10.1038/nature14177",
+     "source": "europepmc",
+     "cited_by": 3796
+    },
+    {
+     "title": "Safety and efficacy of the ChAdOx1 nCoV-19 vaccine (AZD1222) against SARS-CoV-2: an interim analysis of four randomised controlled trials in Brazil, South Africa, and the UK",
+     "year": 2021,
+     "id": "doi:10.1016/s0140-6736(20)32661-1",
+     "source": "europepmc",
+     "cited_by": 3790
+    },
+    {
+     "title": "Genetic meta-analysis of diagnosed Alzheimer's disease identifies new risk loci and implicates Aβ, tau, immunity and lipid processing",
+     "year": 2019,
+     "id": "doi:10.1038/s41588-019-0358-2",
+     "source": "europepmc",
+     "cited_by": 2873
+    },
+    {
+     "title": "Genome-wide association analyses identify 44 risk variants and refine the genetic architecture of major depression",
+     "year": 2018,
+     "id": "doi:10.1038/s41588-018-0090-3",
+     "source": "europepmc",
+     "cited_by": 2578
+    },
+    {
+     "title": "Identification of novel risk loci, causal insights, and heritable risk for Parkinson's disease: a meta-analysis of genome-wide association studies",
+     "year": 2019,
+     "id": "doi:10.1016/s1474-4422(19)30320-5",
+     "source": "europepmc",
+     "cited_by": 2339
+    }
+   ]
+  },
+  "wb-sm-pop-opip-ea": {
+   "at": "2026-11-21T11:37:45.373Z",
+   "query": "Other people need international protection country territory",
+   "total": 255,
+   "hits": [
+    {
+     "title": "Global prevalence of injecting drug use and sociodemographic characteristics and prevalence of HIV, HBV, and HCV in people who inject drugs: a multistage systematic review",
+     "year": 2017,
+     "id": "doi:10.1016/s2214-109x(17)30375-3",
+     "source": "europepmc",
+     "cited_by": 1129
+    },
+    {
+     "title": "The Impact of Climate Change on Mental Health: A Systematic Descriptive Review",
+     "year": 2020,
+     "id": "doi:10.3389/fpsyt.2020.00074",
+     "source": "europepmc",
+     "cited_by": 482
+    },
+    {
+     "title": "Infection and mortality of healthcare workers worldwide from COVID-19: a systematic review",
+     "year": 2020,
+     "id": "doi:10.1136/bmjgh-2020-003097",
+     "source": "europepmc",
+     "cited_by": 441
+    },
+    {
+     "title": "Evaluating the impact of immigration policies on health status among undocumented immigrants: a systematic review",
+     "year": 2015,
+     "id": "doi:10.1007/s10903-013-9968-4",
+     "source": "europepmc",
+     "cited_by": 301
+    },
+    {
+     "title": "Physical rehabilitation approaches for the recovery of function and mobility following stroke",
+     "year": 2014,
+     "id": "doi:10.1002/14651858.cd001920.pub3",
+     "source": "europepmc",
+     "cited_by": 300
+    }
+   ]
+  },
+  "wb-sm-pop-idpc": {
+   "at": "2026-11-21T11:37:45.690Z",
+   "query": "Internally displaced people country territory asylum origin",
+   "total": 16,
+   "hits": [
+    {
+     "title": "Intergenerational Trauma in Refugee Families: A Systematic Review",
+     "year": 2017,
+     "id": "doi:10.1007/s10903-016-0499-7",
+     "source": "europepmc",
+     "cited_by": 117
+    },
+    {
+     "title": "Primary-level worker interventions for the care of people living with mental disorders and distress in low- and middle-income countries",
+     "year": 2021,
+     "id": "doi:10.1002/14651858.cd009149.pub3",
+     "source": "europepmc",
+     "cited_by": 95
+    },
+    {
+     "title": "An overview of systematic reviews on mental health promotion, prevention, and treatment of common mental disorders for refugees, asylum seekers, and internally displaced persons",
+     "year": 2020,
+     "id": "doi:10.1002/14651858.cd013458.pub2",
+     "source": "europepmc",
+     "cited_by": 83
+    },
+    {
+     "title": "Systematic review on chronic non-communicable disease in disaster settings",
+     "year": 2022,
+     "id": "doi:10.1186/s12889-022-13399-z",
+     "source": "europepmc",
+     "cited_by": 39
+    },
+    {
+     "title": "Suicide rates and suicidal behaviour in displaced people: A systematic review",
+     "year": 2022,
+     "id": "doi:10.1371/journal.pone.0263797",
+     "source": "europepmc",
+     "cited_by": 25
+    }
+   ]
+  },
+  "wb-se-sec-tcaq-up-zs": {
+   "at": "2026-11-21T11:37:51.235Z",
+   "query": "Trained teachers upper secondary education",
+   "total": 660,
+   "hits": [
+    {
+     "title": "The World Federation of ADHD International Consensus Statement: 208 Evidence-based conclusions about the disorder",
+     "year": 2021,
+     "id": "doi:10.1016/j.neubiorev.2021.01.022",
+     "source": "europepmc",
+     "cited_by": 1048
+    },
+    {
+     "title": "Rapid, point-of-care antigen and molecular-based tests for diagnosis of SARS-CoV-2 infection",
+     "year": 2021,
+     "id": "doi:10.1002/14651858.cd013705.pub2",
+     "source": "europepmc",
+     "cited_by": 537
+    },
+    {
+     "title": "Clinical practice guidelines on the evidence-based use of integrative therapies during and after breast cancer treatment",
+     "year": 2017,
+     "id": "doi:10.3322/caac.21397",
+     "source": "europepmc",
+     "cited_by": 537
+    },
+    {
+     "title": "School-based physical activity programs for promoting physical activity and fitness in children and adolescents aged 6 to 18",
+     "year": 2013,
+     "id": "doi:10.1002/14651858.cd007651.pub2",
+     "source": "europepmc",
+     "cited_by": 487
+    },
+    {
+     "title": "Interventions for preventing obesity in children",
+     "year": 2019,
+     "id": "doi:10.1002/14651858.cd001871.pub4",
+     "source": "europepmc",
+     "cited_by": 473
+    }
+   ]
+  },
+  "wb-en-ghg-ch4-zg-ar5": {
+   "at": "2026-11-21T11:37:57.144Z",
+   "query": "Methane emissions excluding LULUCF",
+   "total": 1,
+   "hits": [
+    {
+     "title": "Effects of converting cropland to grassland on greenhouse gas emissions from peat and organic-rich soils in temperate and boreal climates: a systematic review",
+     "year": 2025,
+     "id": "doi:10.1186/s13750-024-00354-1",
+     "source": "europepmc",
+     "cited_by": 1
+    }
+   ]
+  },
+  "wb-en-ghg-n2o-zg-ar5": {
+   "at": "2026-11-21T11:37:58.244Z",
+   "query": "Nitrous oxide emissions excluding LULUCF",
+   "total": 1,
+   "hits": [
+    {
+     "title": "Effects of converting cropland to grassland on greenhouse gas emissions from peat and organic-rich soils in temperate and boreal climates: a systematic review",
+     "year": 2025,
+     "id": "doi:10.1186/s13750-024-00354-1",
+     "source": "europepmc",
+     "cited_by": 1
+    }
+   ]
+  },
+  "wb-en-ghg-fgas-ip-mt-ce-ar5": {
+   "at": "2026-11-21T11:37:59.883Z",
+   "query": "F gases emissions from Industrial Processes",
+   "total": 41,
+   "hits": [
+    {
+     "title": "Systematic review of potential health risks posed by pharmaceutical, occupational and consumer exposures to metallic and nanoscale aluminum, aluminum oxides, aluminum hydroxide and its soluble salts",
+     "year": 2014,
+     "id": "doi:10.3109/10408444.2014.934439",
+     "source": "europepmc",
+     "cited_by": 263
+    },
+    {
+     "title": "Air pollution, depressive and anxiety disorders, and brain effects: A systematic review",
+     "year": 2022,
+     "id": "doi:10.1016/j.neuro.2022.10.011",
+     "source": "europepmc",
+     "cited_by": 166
+    },
+    {
+     "title": "Knowns and unknowns on burden of disease due to chemicals: a systematic review",
+     "year": 2011,
+     "id": "doi:10.1186/1476-069x-10-9",
+     "source": "europepmc",
+     "cited_by": 162
+    },
+    {
+     "title": "Welding Fumes, a Risk Factor for Lung Diseases",
+     "year": 2020,
+     "id": "doi:10.3390/ijerph17072552",
+     "source": "europepmc",
+     "cited_by": 58
+    },
+    {
+     "title": "Gaseous emissions from management of solid waste: a systematic review",
+     "year": 2015,
+     "id": "doi:10.1111/gcb.12806",
+     "source": "europepmc",
+     "cited_by": 56
+    }
+   ]
+  },
+  "wb-en-ghg-ch4-pi-mt-ce-ar5": {
+   "at": "2026-11-21T11:38:00.123Z",
+   "query": "Methane emissions from Power Industry",
+   "total": 43,
+   "hits": [
+    {
+     "title": "Indoor Particulate Matter in Urban Households: Sources, Pathways, Characteristics, Health Effects, and Exposure Mitigation",
+     "year": 2021,
+     "id": "doi:10.3390/ijerph182111055",
+     "source": "europepmc",
+     "cited_by": 56
+    },
+    {
+     "title": "Strategies and tactics to reduce the impact of healthcare on climate change: systematic review",
+     "year": 2024,
+     "id": "doi:10.1136/bmj-2024-081284",
+     "source": "europepmc",
+     "cited_by": 55
+    },
+    {
+     "title": "Indoor Air Quality Monitoring Systems Based on Internet of Things: A Systematic Review",
+     "year": 2020,
+     "id": "doi:10.3390/ijerph17144942",
+     "source": "europepmc",
+     "cited_by": 53
+    },
+    {
+     "title": "Systematic review of the association between oil and natural gas extraction processes and human reproduction",
+     "year": 2016,
+     "id": "doi:10.1016/j.fertnstert.2016.07.1099",
+     "source": "europepmc",
+     "cited_by": 50
+    },
+    {
+     "title": "Reducing the environmental impact of trials: a comparison of the carbon footprint of the CRASH-1 and CRASH-2 clinical trials",
+     "year": 2011,
+     "id": "doi:10.1186/1745-6215-12-31",
+     "source": "europepmc",
+     "cited_by": 48
+    }
+   ]
+  },
+  "who-finprotection-imp-np-rel-level-million": {
+   "at": "2026-11-21T11:38:05.200Z",
+   "query": "Total population pushed below relative poverty line",
+   "total": 41,
+   "hits": [
+    {
+     "title": "Global vascular guidelines on the management of chronic limb-threatening ischemia",
+     "year": 2019,
+     "id": "doi:10.1016/j.jvs.2019.02.016",
+     "source": "europepmc",
+     "cited_by": 1021
+    },
+    {
+     "title": "Improving immunisation coverage in rural India: clustered randomised controlled evaluation of immunisation campaigns with and without incentives",
+     "year": 2010,
+     "id": "doi:10.1136/bmj.c2220",
+     "source": "europepmc",
+     "cited_by": 214
+    },
+    {
+     "title": "Equity in Health Care Financing in Low- and Middle-Income Countries: A Systematic Review of Evidence from Studies Using Benefit and Financing Incidence Analyses",
+     "year": 2016,
+     "id": "doi:10.1371/journal.pone.0152866",
+     "source": "europepmc",
+     "cited_by": 124
+    },
+    {
+     "title": "Provision and uptake of routine antenatal services: a qualitative evidence synthesis",
+     "year": 2019,
+     "id": "doi:10.1002/14651858.cd012392.pub2",
+     "source": "europepmc",
+     "cited_by": 111
+    },
+    {
+     "title": "Household food insecurity: a systematic review of the measuring instruments used in epidemiological studies",
+     "year": 2015,
+     "id": "doi:10.1017/s1368980014001050",
+     "source": "europepmc",
+     "cited_by": 103
+    }
+   ]
+  },
+  "wb-se-pre-tcaq-zs": {
+   "at": "2026-11-21T11:38:05.478Z",
+   "query": "Trained teachers preprimary education",
+   "total": 7,
+   "hits": [
+    {
+     "title": "Social and Emotional Learning Associated With Universal Curriculum-Based Interventions in Early Childhood Education and Care Centers: A Systematic Review and Meta-analysis",
+     "year": 2018,
+     "id": "doi:10.1001/jamanetworkopen.2018.5727",
+     "source": "europepmc",
+     "cited_by": 61
+    },
+    {
+     "title": "Centre-based day care for children younger than five years of age in low- and middle-income countries",
+     "year": 2014,
+     "id": "doi:10.1002/14651858.cd010543.pub2",
+     "source": "europepmc",
+     "cited_by": 26
+    },
+    {
+     "title": "Improving maternal, newborn and child health outcomes through a community-based women's health education program: a cluster randomised controlled trial in western Kenya",
+     "year": 2020,
+     "id": "doi:10.1136/bmjgh-2020-003370",
+     "source": "europepmc",
+     "cited_by": 23
+    },
+    {
+     "title": "Effects of music training on executive functions in preschool children aged 3-6 years: systematic review and meta-analysis",
+     "year": 2024,
+     "id": "doi:10.3389/fpsyg.2024.1522962",
+     "source": "europepmc",
+     "cited_by": 5
+    },
+    {
+     "title": "Learning English vocabulary from word cards: A research synthesis",
+     "year": 2022,
+     "id": "doi:10.3389/fpsyg.2022.984211",
+     "source": "europepmc",
+     "cited_by": 4
+    }
+   ]
+  }
+ },
+ "log": [
+  {
+   "id": "wb-sn-itk-svfi-zs",
+   "event": "found 5 of 1253"
+  },
+  {
+   "id": "wb-sn-itk-msfi-zs",
+   "event": "found 5 of 859"
+  },
+  {
+   "id": "sdg-15-5-1",
+   "event": "found 5 of 9629"
+  },
+  {
+   "id": "wb-sm-pop-opip-ea",
+   "event": "found 5 of 255"
+  },
+  {
+   "id": "wb-sm-pop-idpc",
+   "event": "found 5 of 16"
+  },
+  {
+   "id": "wb-se-sec-tcaq-up-zs",
+   "event": "found 5 of 660"
+  },
+  {
+   "id": "wb-en-ghg-ch4-zg-ar5",
+   "event": "found 1 of 1"
+  },
+  {
+   "id": "wb-en-ghg-n2o-zg-ar5",
+   "event": "found 1 of 1"
+  },
+  {
+   "id": "wb-en-ghg-fgas-ip-mt-ce-ar5",
+   "event": "found 5 of 41"
+  },
+  {
+   "id": "wb-en-ghg-ch4-pi-mt-ce-ar5",
+   "event": "found 5 of 43"
+  },
+  {
+   "id": "who-finprotection-imp-np-rel-level-million",
+   "event": "found 5 of 41"
+  },
+  {
+   "id": "wb-se-pre-tcaq-zs",
+   "event": "found 5 of 7"
+  }
+ ]
+}
