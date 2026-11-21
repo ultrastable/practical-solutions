@@ -14,7 +14,7 @@ const axeSrc = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 // the index read rides out edge throttling too (run 41 died parsing a Cloudflare 503 page as JSON)
 let idx; for (let i = 0; ; i++) { const r = await fetch(base + '/index.json'); if (r.ok) { idx = await r.json(); break; } await r.text(); if (i === 11) throw new Error(`/index.json HTTP ${r.status}`); await new Promise(res => setTimeout(res, Math.min(30000, 1000 * 2 ** i))); }
 const paths = ['/', '/for', '/for/implementers', '/solutions', '/problems', '/domains', '/compare?ids=' + idx.solutions.slice(0, 2).map(s => s.id).join('&ids='), '/search?q=water', '/method', '/api', '/about', '/impact',
-  ...idx.solutions.slice(0, 4).map(s => '/solutions/' + s.id), '/problems/' + idx.problems[0].id, '/domains/' + idx.domains[0].slug, '/solutions/nope', '/country', '/levels/low'];
+  ...idx.solutions.slice(0, 4).map(s => '/solutions/' + s.id), '/problems/' + idx.problems[0].id, '/domains/' + idx.domains[0].slug, '/solutions/nope', '/country', '/levels/low', '/graph', '/graph?domain=water', '/graph?node=s%3A' + idx.solutions[0].id];
 const browser = await chromium.launch(); const bad = [];
 for (const scheme of ['light', 'dark']) for (const [name, viewport] of [['desktop', { width: 1280, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
   const page = await (await browser.newContext({ viewport, colorScheme: scheme })).newPage(); const errors = []; let skipErrors = false; page.on('console', m => m.type() === 'error' && !skipErrors && errors.push(m.text())); page.on('pageerror', e => errors.push(String(e)));

@@ -91,10 +91,16 @@ export const STORIES = [
     steps: [v('/solutions/kmc'), x({ text: ['name="viewport"', '@media print', 'prefers-color-scheme:dark'] })] },
   { id: 'ALL-3', who: 'everyone', want: 'always know where I am and how to go back', so: 'I never feel lost', covers: ['breadcrumbs', 'siteHeader'],
     steps: [v('/solutions/kmc'), x({ text: ['aria-label="Breadcrumb"', 'aria-current="page"'], link: '^/solutions$' })] },
+  { id: 'RES-GRAPH-1', who: 'researchers', want: 'see what a solution is connected to and follow the links hop by hop', so: 'I find related problems, shared solutions and other domains without searching', covers: ['solutionPage', 'connectionsBlock', 'graphPage', 'section'],
+    steps: [v('/solutions/chlorine'), x({ heading: 'Connections', link: '^/graph\\?node=', text: ['linked in the catalogue', 'alike in meaning'] }), v('/graph?node=s%3Achlorine'), x({ text: ['connected entries', 'its connections'], link: '^/problems/' }), v('/links.json'), x({ json: { path: 'nodes.length', min: 100 } })] },
+  { id: 'PUB-GRAPH-2', who: 'public', want: 'open one map of how the domains connect', so: 'I see that water, health and poverty problems are linked, not separate lists', covers: ['graphPage', 'siteHeader'],
+    steps: [v('/'), x({ link: '^/graph$' }), v('/graph'), x({ heading: 'The knowledge graph', text: ['Domains and the links between them', 'Most connected entries'], link: '^/graph\\?domain=' }), { follow: { href: '^/graph\\?domain=' } }, x({ heading: 'Most connected entries' })] },
+  { id: 'RES-GRAPH-3', who: 'researchers', want: 'see the connections of a problem from the catalogue', so: 'I learn which solutions and similar problems exist for it', covers: ['catalogueEntry', 'connectionsBlock'],
+    steps: [v('/problems/water'), x({ heading: 'Connections', link: '^/graph\\?node=' })] },
   { id: 'RES-AUT-1', who: 'researchers', want: 'see what the self-running loop has actually done and what that does not prove', so: 'I can test the claim that a bounded autonomous system does useful work, and say where it is wrong', covers: ['autonomyPage', 'callout'],
     steps: [v('/autonomy'), x({ heading: 'Autonomy record', text: 'What this does not show', link: '^/changes$' }), v('/autonomy.json'), x({ json: { path: 'recorded_changes', min: 0 } })] },
 ];
 export const storiesFor = who => STORIES.filter(s => s.who === who);
 // Every template, route and component a story may claim to cover. A story that names something else fails the traceability test.
-export const TEMPLATES = ['askPage', 'autonomyPage', 'catalogueIndex', 'catalogueEntry', 'home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
+export const TEMPLATES = ['askPage', 'autonomyPage', 'graphPage', 'connectionsBlock', 'catalogueIndex', 'catalogueEntry', 'home', 'forIndex', 'forPage', 'contextPage', 'solutionsIndex', 'solutionPage', 'problemsIndex', 'problemPage', 'domainsIndex', 'domainPage', 'comparePage', 'searchPage', 'notFound', 'apiPage', 'methodPage', 'aboutPage', 'countryIndex', 'countryPage', 'levelPage'];
 export const ROUTES = ['json-entity', 'catalogue-json', 'csv', 'llms', 'sitemap'];

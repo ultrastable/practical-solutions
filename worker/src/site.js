@@ -19,6 +19,7 @@ import { RELEASES } from './releases.gen.js';
 import * as CAT from './catalogue-pages.js';
 import { SCAN } from './problem-scan.gen.js';
 import { askPage } from './ask.js';
+import { graphPage, linksJson } from './links.js';  // LINKS-1
 import { connectionsPage, connectionsJson } from './connections.js';  // DISCOVER-1
 import * as X from './export.js';
 import { autonomyPage, autonomyData } from './autonomy.js';  // AUTONOMY-1
@@ -29,7 +30,7 @@ import { INFRA, solutionsFor } from './countries.js';
 const { esc } = ui;
 export const HEADERS = { ...SECURITY_HEADERS, 'cache-control': 'public, max-age=300' };
 export const legend = P.legend;
-const SITE_PATHS = ['/', '/ask', '/problems', '/catalogue', '/solutions', '/syntheses', '/connections', '/evidence-map', '/ranking', '/glossary', '/accessibility', '/country/compare', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/autonomy', '/releases', '/api', '/about', '/privacy'];
+const SITE_PATHS = ['/', '/ask', '/problems', '/catalogue', '/solutions', '/syntheses', '/connections', '/graph', '/evidence-map', '/ranking', '/glossary', '/accessibility', '/country/compare', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/impact', '/changes', '/autonomy', '/releases', '/api', '/about', '/privacy'];
 
 const solutionJson = (s, c, o) => ({ id: s.id, title: s.title, claim: s.claim, label: s.label, implementability: s.impl, design: s.design, verdict: s.verdict, problems: s.problem_ids, domains: s.domains, verified: s.verified,
   works_where: s.works_where, takes: s.takes, who: s.who, first_test: s.first_test, limits: s.limits, sources: s.links.map(l => ({ cite: l.cite, finding: l.finding, links: [...l.direct.map(d => d.url), l.search] })), url: o + '/solutions/' + s.id, cite: P.citation(s.title, '/solutions/' + s.id, o) });
@@ -143,6 +144,8 @@ export function route(u, c) {
     '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o, u), '/method': () => methodPage(c, o), '/unknowns': () => page('/unknowns', o, 'What we do not know', 'Known unknowns, red-team findings and the new questions generated from them.', U.unknownsBody(c)), '/api': () => P.apiPage(c, o), '/about': () => P.aboutPage(c, o), '/privacy': () => P.privacyPage(c, o), '/search': () => P.searchPage(c, u, o), '/ask': () => askPage('', null, o) };
   if (p === '/connections') return h(connectionsPage(undefined, o, page));  // DISCOVER-1 (a ?q= search is served by the Worker, which has the model)
   if (p === '/connections.json') return json(connectionsJson(undefined, o));
+  if (p === '/graph') { const g = graphPage(c, u, o, page); return g ? h(g) : h(P.notFound(c, o, p), 404); }  // LINKS-1
+  if (p === '/links.json') return json(linksJson(c, o));
   if (p === '/syntheses') return h(SY.synthesesIndex(o, page));
   if (p === '/syntheses.json') return json(SY.indexJson(o));
   { const sm = /^\/syntheses\/([a-z0-9-]+)(\.json)?$/.exec(p); if (sm) { const x = SY.find(sm[1]); return sm[2] ? (x ? json(SY.synthesisJson(x, o)) : json({ error: 'not found' }, 404)) : x ? h(SY.synthesisPage(x, o, page)) : h(P.notFound(c, o, p), 404); } }

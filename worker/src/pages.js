@@ -17,6 +17,7 @@ import { embedSnippet, datasetLd } from './export.js';
 import { argumentBlock } from './views.js';
 import { STORIES, storiesFor } from '../../ux/stories.js';
 import { sig } from './numfmt.js';
+import { connectionsBlock } from './links.js';  // LINKS-1
 
 const { esc } = ui;
 export const SITE = 'Practical Solutions';
@@ -28,13 +29,13 @@ export const SHELL = {
   // FAMILY-1: the .org home of the Ultrastable family (public-benefit demos); accent colours come from https://ultrastable.io/family.json tokens.
   theme: { light: { accent: '#b83800' }, dark: { accent: '#ff7f4d' } },
   family: { label: 'Ultrastable for good: public-benefit demos built on Ultrastable', links: [{ label: 'About this project', href: 'https://ultrastable.io/showcase/practical-solutions' }, { label: 'ultrastable.io', href: 'https://ultrastable.io/' }] },
-  nav: [{ label: 'Ask', href: '/ask', match: /^\/ask/ }, { label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'New solutions', href: '/syntheses', match: /^\/syntheses/ }, { label: 'Connections', href: '/connections', match: /^\/connections/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Catalogue', href: '/catalogue', match: /^\/catalogue/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ }, { label: 'By country', href: '/country', match: /^\/(country|levels|context)/ },
+  nav: [{ label: 'Ask', href: '/ask', match: /^\/ask/ }, { label: 'Solutions', href: '/solutions', match: /^\/solutions/ }, { label: 'New solutions', href: '/syntheses', match: /^\/syntheses/ }, { label: 'Connections', href: '/connections', match: /^\/connections/ }, { label: 'Graph', href: '/graph', match: /^\/graph/ }, { label: 'Problems', href: '/problems', match: /^\/problems/ }, { label: 'Catalogue', href: '/catalogue', match: /^\/catalogue/ }, { label: 'Domains', href: '/domains', match: /^\/domains/ }, { label: 'By country', href: '/country', match: /^\/(country|levels|context)/ },
     { label: 'For you', href: '/for', match: /^\/for/ }, { label: 'Method', href: '/method', match: /^\/method/ }, { label: 'Data', href: '/api', match: /^\/api/ }],
   search: { action: '/search', name: 'q', label: 'Search solutions and problems', placeholder: 'Search, for example water' },
   feeds: [{ type: 'application/rss+xml', href: '/feed.xml', title: 'What changed' }],
   footer: {
     columns: [
-      { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'New solutions', href: '/syntheses' }, { label: 'Problems', href: '/problems' }, { label: 'Problem catalogue', href: '/catalogue' }, { label: 'Domains', href: '/domains' }, { label: 'Compare solutions', href: '/compare' }, { label: 'Benefit-cost ranking', href: '/ranking' }, { label: 'Evidence map', href: '/evidence-map' }] },
+      { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'New solutions', href: '/syntheses' }, { label: 'Problems', href: '/problems' }, { label: 'Problem catalogue', href: '/catalogue' }, { label: 'Domains', href: '/domains' }, { label: 'Knowledge graph', href: '/graph' }, { label: 'Compare solutions', href: '/compare' }, { label: 'Benefit-cost ranking', href: '/ranking' }, { label: 'Evidence map', href: '/evidence-map' }] },
       { title: 'Who it is for', links: AUDIENCES.map(a => ({ label: a.name, href: '/for/' + a.id })) },
       { title: 'Trust', links: [{ label: 'About', href: '/about' }, { label: 'Privacy', href: '/privacy' }, { label: 'Accessibility', href: '/accessibility' }, { label: 'Glossary', href: '/glossary' }, { label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
       { title: 'Ultrastable family', links: [{ label: 'Ultrastable for good (.org)', href: 'https://ultrastable.org/' }, { label: 'Platform and product (.io)', href: 'https://ultrastable.io/' }, { label: 'How it is built', href: 'https://ultrastable.io/how' }, { label: 'Live proof', href: 'https://ultrastable.io/proof' }, { label: 'Contact', href: 'https://ultrastable.io/contact' }] },
@@ -91,6 +92,7 @@ registerSection('solution', { id: 'evidence', title: 'Evidence and sources', ord
 registerSection('solution', { id: 'arguments', title: 'Arguments for and against', order: 58, render: (s, c) => argumentBlock(s, c) });
 registerSection('solution', { id: 'limits', title: 'Limits', order: 60, render: s => `<p>${esc(s.limits)}</p>` });
 registerSection('solution', { id: 'related', title: 'See also', order: 70, render: (s, c) => { const r = c.related(s); return r.length ? ui.cardGrid(r.map(x => solCard(x, c))) : ''; } });
+registerSection('solution', { id: 'connections', title: 'Connections', order: 72, render: (s, c) => connectionsBlock('solution', s.id, c) });
 registerSection('solution', { id: 'reuse', title: 'Cite, export and embed', order: 95, render: (s, c, o) => `<p>Cite it in your reference manager: <a href="${esc(sUrl(s))}.bib">BibTeX</a> · <a href="${esc(sUrl(s))}.ris">RIS</a> · <a href="${esc(sUrl(s))}.csl.json">CSL-JSON</a>.</p><p>Embed a card with the label and main limit on your own page:</p>${ui.cite(embedSnippet(s, o))}` });
 registerSection('solution', { id: 'use', title: 'Use and cite this entry', order: 90, render: (s, c, o) => `<p>Permanent link: <a href="${esc(sUrl(s))}">${esc(o + sUrl(s))}</a></p>${ui.cite(citation(s.title, sUrl(s), o))}
 <p><a href="${esc(sUrl(s))}.json">This entry as JSON</a> · <a href="/compare?ids=${esc(s.id)}">Compare with others</a> · <a href="${esc(correctionHref(s.title, sUrl(s)))}">Report an error or suggest a correction</a></p>` });
@@ -105,6 +107,7 @@ registerSection('problem', { id: 'leads', title: 'Leads found by the loop', orde
   return ui.callout({ tone: 'warn', body: '<b>Lead, not finding.</b> Everything in this section was found automatically and checked only mechanically. It is a place to look.' }) + (out.join('') || '<p class="m">Nothing found yet.</p>'); } });
 registerSection('problem', { id: 'questions', title: 'Open questions', order: 40, render: (p, c) => ui.list(openQuestions(p, c).map(esc)) });
 registerSection('problem', { id: 'related', title: 'Related problems', order: 70, render: (p, c) => { const r = c.probs.filter(x => x.domain === p.domain && x.id !== p.id); return r.length ? ui.cardGrid(r.map(x => probCard(x, c))) : ''; } });
+registerSection('problem', { id: 'connections', title: 'Connections', order: 72, render: (p, c) => connectionsBlock('problem', p.id, c) });
 registerSection('problem', { id: 'unknowns', title: 'What we do not know', order: 80, render: (p, c) => unknownsBlock(p.id, c) });
 registerSection('problem', { id: 'use', title: 'Use and cite this entry', order: 90, render: (p, c, o) => `${ui.cite(citation(p.title, pUrl(p), o))}<p><a href="${esc(pUrl(p))}.json">This entry as JSON</a> · <a href="${esc(correctionHref(p.title, pUrl(p)))}">Report an error or suggest a correction</a></p>` });
 
@@ -195,7 +198,7 @@ export function domainPage(d, c, o) {
   const m = dMeta(d), secs = [...sectionsFor('domain').map(s => ({ ...s, html: s.render(d, c, o) })).filter(s => s.html)];
   const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Domains', href: '/domains' }, { label: d.name }])}<h1>${esc(d.name)}</h1><p class="lede">${esc(m.blurb)}</p>
 ${ui.section({ id: 'problems', title: 'Problems', body: ui.cardGrid(d.problems.map(p => probCard(p, c))) })}
-${ui.section({ id: 'solutions', title: 'Solutions', body: d.solutions.length ? ui.cardGrid(d.solutions.map(s => solCard(s, c))) : '<p>None yet. The loop is searching.</p>' })}${secs.map(s => ui.section({ id: s.id, title: s.title, body: s.html })).join('')}`;
+${ui.section({ id: 'solutions', title: 'Solutions', body: d.solutions.length ? ui.cardGrid(d.solutions.map(s => solCard(s, c))) : '<p>None yet. The loop is searching.</p>' })}${secs.map(s => ui.section({ id: s.id, title: s.title, body: s.html })).join('')}<p><a href="/graph?domain=${esc(d.slug)}">See how ${esc(d.name)} connects to other domains in the graph</a></p>`;
   return render('/domains/' + d.slug, o, { title: `${d.name} | ${SITE}`, description: `Problems and solutions in ${d.name}.`, body, current: '/domains' });
 }
 

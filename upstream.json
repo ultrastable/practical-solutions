@@ -4,6 +4,8 @@
     "repo": "ultrastable/ultrastable"
   },
   "keep": {
+  "worker/src/ask-intents.js": "answers the tenant's suggested questions from its own catalogue (solutions, problems, trends); the intents are this catalogue's vocabulary, so lifting needs a core ask-intents interface first",
+  "tools/live_ask.mjs": "live probe of this tenant's suggested questions (imports EXAMPLES from the tenant ask module); tenant-specific by construction",
     ".github/workflows/branch-sweep.yml": "tenant trigger for branch_sweep; generic merge-and-delete of this repository branches, lifting queued upstream",
     "tools/branch_sweep.mjs": "merges feature branches and deletes merged ones for this repository; lifting queued upstream",
     ".github/workflows/bootstrap.yml": "boots the tenant's own organisation",
