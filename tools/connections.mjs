@@ -15,7 +15,9 @@ import { SOLUTIONS } from '../worker/src/solutions.js';
 import { SCAN } from '../worker/src/problem-scan.gen.js';
 import { SYNTHESES } from '../worker/src/syntheses-data.js';
 import { ASK_INDEX } from '../worker/src/ask-index.gen.js';
-import { complete } from '../ps/llm.js';
+import { askModel } from '../ps/llm.js';
+import { ENSEMBLE } from '../worker/src/ensemble-config.js';
+import * as J from '../worker/src/justify.js';
 
 export const EMBED_MODEL = '@cf/baai/bge-small-en-v1.5';
 export const FILES = { links: 'worker/src/links.gen.js', cache: 'ledger/embeddings.json', ledger: 'ledger/connections.json', gen: 'worker/src/connections.gen.js', ask: 'worker/src/ask-vectors.gen.js', synth: 'ledger/synth-discovered.json' };
@@ -65,22 +67,93 @@ export function checkRationale(text, sources) {
 }
 const rationalePrompt = (c, nodes) => `Two items from a catalogue of practical solutions to global problems:\n${c.members.concat(c.via && !String(c.via).includes(' ~ ') ? [c.via] : []).map(id => { const n = nodes.get(id); return n ? `- ${n.kind} "${n.label}": ${String(n.text || '').slice(0, 500)}` : ''; }).join('\n')}\n\nIn at most three sentences, say through which mechanism ${c.type === 'transfer' ? `the solution "${nodes.get(c.members[0]).label}" might also reduce "${nodes.get(c.members[1]).label}"` : `"${nodes.get(c.members[0]).label}" and "${nodes.get(c.members[1]).label}" might work better together`}, and what a cheap first test would measure. Use only the text above; do not quote any figure that is not in it. If there is no plausible mechanism, reply NO_ANSWER.`;
 
+// ---- JUSTIFY-1: every connection must say why, from the catalogue's own data; code decides, a model panel may veto ----------------------------
+// Similarity only proposes. A candidate is kept when a stated mechanism exists (worker/src/justify.js), with its sources, and dropped otherwise with the
+// reason on the ledger. Combinations are also originated here from the rules, so the list is ranked by value (outcome, delivery, population, evidence),
+// not by how alike two texts read.
+export function screen(L, input, { solutions = SOLUTIONS, problems = PROBLEMS, scan = SCAN, now = Date.now() } = {}) {
+  const at = new Date(now).toISOString(), pb = new Map(problems.map(p => [p.id, p]));
+  const prof = new Map(solutions.map(s => [ 's:' + s.id, J.profile(s, pb) ]));
+  const info = new Map(input.nodes.map(n => [n.id, { id: n.id, label: n.label, domain: n.domain, kind: n.kind }]));
+  for (const e of scan.entries || []) { const i = info.get('p:' + e.id); if (i) { i.m = e.m; i.note = e.note; } }
+  const addressed = new Map(); for (const e of input.edges) if (e.rel === 'addresses') (addressed.get(e.src) || addressed.set(e.src, []).get(e.src)).push(info.get(e.dst));
+  const linked = new Set(input.edges.map(e => [e.src, e.dst].sort().join('|')));
+  const combined = new Set(); for (const set of input.known) { const x = [...new Set(set)].sort(); for (let i = 0; i < x.length; i++) for (let j = i + 1; j < x.length; j++) combined.add(x[i] + '|' + x[j]); }
+  // originate what the rules justify, ranked later by value
+  const ids = [...prof.keys()].sort();
+  for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) {
+    const key = ids[i] + '|' + ids[j], id = 'combination:' + D.hash('combination|' + key);
+    if (combined.has(key) || linked.has(key) || L.entries[id]) continue;
+    const r = J.judgeCombination(prof.get(ids[i]), prof.get(ids[j]), pb);
+    if (r.ok) L.entries[id] = { id, type: 'combination', members: [ids[i], ids[j]], via: null, score: r.value / 100, sims: {}, cross: false, novelty: 'none', status: 'new', first_seen: at, last_seen: at, runs: 1, missed: 0, best: r.value / 100, origin: 'rules' };
+  }
+  let kept = 0, dropped = 0;
+  for (let [id, e] of Object.entries(L.entries)) {
+    if (e.origin === 'rules' && e.status === 'dropped' && /^not ranked/.test(e.reason || '')) { L.entries[id] = { ...e, status: 'standing', missed: 0, reason: undefined, settled: undefined }; } // the rules, not the vector run, keep this one alive
+    const e0 = L.entries[id];
+    if (e0.status === 'confirmed' || e0.status === 'dropped') continue; // settled for a reason already on record
+    e = e0; if (e.origin === 'rules') e.missed = 0;
+    let r;
+    if (e.type === 'combination') r = J.judgeCombination(prof.get(e.members[0]) || { outcomes: [], pops: [], channels: [], narrowChannels: [], sources: [], title: e.members[0], strength: 0 }, prof.get(e.members[1]) || { outcomes: [], pops: [], channels: [], narrowChannels: [], sources: [], title: e.members[1], strength: 0 }, pb);
+    else if (e.type === 'transfer') r = J.judgeTransfer({ title: (info.get(e.members[0]) || {}).label }, info.get(e.members[1]) || {}, (addressed.get(e.members[0]) || []).filter(Boolean));
+    else if (e.type === 'bridge') r = J.judgeBridge(info.get(e.members[0]) || {}, info.get(e.members[1]) || {});
+    else r = J.judgeFrontier(info.get(e.members[0]) || {});
+    if (!r.ok) { L.entries[id] = { ...e, status: 'dropped', settled: at, reason: 'unjustified: ' + r.code, rejected: r.reason, justification: null }; dropped++; continue; }
+    kept++;
+    const sources = r.sources || [];
+    L.entries[id] = { ...e, reason: undefined, rejected: undefined, justification: { why: r.why, tier: r.tier, value: r.value, how: r.how, sources, needs_model: !!r.needsModel, rated: at } };
+  }
+  recount(L);
+  return { kept, dropped };
+}
+export function recount(L) {
+  const count = s => Object.values(L.entries).filter(e => e.status === s).length + ((L.retired || {})[s] || 0);
+  const open = Object.values(L.entries).filter(e => e.status === 'new' || e.status === 'standing').length, unj = Object.values(L.entries).filter(e => /^unjustified/.test(e.reason || '')).length;
+  const noise = Math.min(unj, count('dropped')), settled = count('confirmed') + count('dropped') - noise; // a lead rejected for having no reason is not a missed hit
+  L.totals = { entered: Object.keys(L.entries).length + Object.values(L.retired || {}).reduce((a, b) => a + b, 0), confirmed: count('confirmed'), dropped: count('dropped'), unjustified: unj, open, hit_rate: settled ? Number((count('confirmed') / settled).toFixed(4)) : null };
+}
+
+/** The model panel: two members from different vendors read each justified lead as sceptics. Both must keep it; silence keeps nothing that needs a model. */
+export async function panelReview(L, nodes, ask, { max = 20, now = Date.now() } = {}) {
+  const at = new Date(now).toISOString(), errors = [];
+  const todo = Object.values(L.entries).filter(e => (e.status === 'new' || e.status === 'standing') && e.justification && e.type !== 'frontier'
+    && !(e.panel && e.panel.why === D.hash(e.justification.why) && e.panel.decided)).sort((a, b) => b.justification.value - a.justification.value).slice(0, max);
+  for (const e of todo) {
+    const items = e.members.map(id => nodes.get(id)).filter(Boolean).map(n => ({ kind: n.kind, label: n.label, text: n.text }));
+    const sources = items.map(i => i.label + ' ' + i.text).concat(e.justification.why);
+    try {
+      const votes = [];
+      for (let i = 0; i < 2; i++) { const t = await ask(J.judgePrompt(i ? 'strictly evidence-based' : 'sceptical, implementation-minded', { items, why: e.justification.why }), i); const v = J.parseVerdict(t); votes.push(v && { ...v, member: i, reason: J.digitsIn(v.reason).every(d => sources.join(' ').includes(d)) ? v.reason : '' }); }
+      const p = J.panel(votes, 2), why = D.hash(e.justification.why);
+      L.entries[e.id] = { ...e, panel: { at, why, decided: p.decided, keep: p.decided ? p.keep : null, votes: p.votes.map(v => ({ verdict: v.verdict, reason: v.reason })) } };
+      if (p.decided && !p.keep) L.entries[e.id] = { ...L.entries[e.id], status: 'dropped', settled: at, reason: 'unjustified: panel', rejected: p.votes.filter(v => v.verdict === 'drop').map(v => v.reason).filter(Boolean)[0] || 'the model panel found no real mechanism' };
+    } catch (x) { errors.push({ step: 'panel', id: e.id, error: String(x.message || x).slice(0, 160) }); }
+  }
+  recount(L);
+  return { reviewed: todo.length, errors };
+}
+
 // ---- the site's view: small, labelled, linked --------------------------------------------------------------------------------------------
 export function view({ result, ledger, nodes, url, decision, scored, at }) {
   const label = id => (nodes.get(id) || {}).label || id;
-  const show = e => ({ id: e.id, type: e.type, status: e.status, novelty: e.novelty, score: e.score, cross: e.cross, first_seen: e.first_seen,
+  // only a lead that justifies itself is shown; one that needs a model's agreement (a transfer or a bridge) waits for it
+  const shown = e => e.justification && (!e.justification.needs_model || (e.panel && e.panel.decided && e.panel.keep));
+  const show = e => ({ id: e.id, type: e.type, status: e.status, novelty: e.novelty, cross: e.cross, first_seen: e.first_seen,
+    tier: e.justification.tier, value: e.justification.value, how: e.justification.how,
     members: e.members.map(id => ({ id, label: label(id), kind: (nodes.get(id) || {}).kind, domain: (nodes.get(id) || {}).domain, url: url.get(id) || null })),
     via: e.via && !String(e.via).includes(' ~ ') ? { id: e.via, label: label(e.via), url: url.get(e.via) || null } : null,
-    why: D.explain(e, label), why_model: e.why_model || null });
+    why: e.justification.why, sources: e.justification.sources || [],
+    review: e.panel && e.panel.decided ? { models: e.panel.votes.length, kept: !!e.panel.keep, reasons: e.panel.votes.map(v => v.reason).filter(Boolean).slice(0, 2) } : null });
   const entries = Object.values(ledger.entries);
-  const open = entries.filter(e => e.status === 'new' || e.status === 'standing').sort((a, b) => b.score - a.score);
+  const open = entries.filter(e => (e.status === 'new' || e.status === 'standing') && shown(e)).sort((a, b) => b.justification.value - a.justification.value || b.score - a.score);
   const byType = t => open.filter(e => e.type === t).slice(0, 12).map(show);
   const sizes = Object.entries(result.community_sizes).sort((a, b) => b[1] - a[1]).slice(0, 8)
     .map(([c, n]) => ({ size: n, sample: Object.entries(result.communities).filter(([, x]) => x === c).map(([id]) => id).filter(id => nodes.get(id)).slice(0, 4).map(id => ({ label: label(id), url: url.get(id) || null })) }));
+  const held = entries.filter(e => (e.status === 'new' || e.status === 'standing') && e.justification && !shown(e)).length;
   return {
-    at, model: EMBED_MODEL, tau: result.tau, stats: result.stats, totals: ledger.totals, params: ledger.params,
+    at, model: EMBED_MODEL, tau: result.tau, stats: result.stats, totals: { ...ledger.totals, open: open.length, awaiting_review: held }, params: ledger.params,
     transfer: byType('transfer'), combination: byType('combination'), bridge: byType('bridge'), frontier: byType('frontier'),
-    confirmed: entries.filter(e => e.status === 'confirmed').sort((a, b) => String(b.settled).localeCompare(String(a.settled))).slice(0, 8).map(show),
+    confirmed: entries.filter(e => e.status === 'confirmed' && e.justification).sort((a, b) => String(b.settled).localeCompare(String(a.settled))).slice(0, 8).map(show),
     hubs: result.hubs.slice(0, 8).map(h => ({ label: label(h.id), url: url.get(h.id) || null, reach: h.reach })),
     communities: sizes, runs: ledger.runs.slice(-30), decisions: (ledger.decisions || []).slice(-10), scored: scored || null, decision: decision || null,
   };
@@ -90,18 +163,21 @@ export function view({ result, ledger, nodes, url, decision, scored, at }) {
 // Small and static: {nodes: id -> [label, url, domain], near: id -> [[id, score 0..100]], leads: id -> [[type, other id, score, via id]]}. Pages
 // add the edges the catalogue itself holds (a solution's problems, a problem's solutions) at render time, so the two kinds are never mixed.
 export function buildLinks({ nodes, M, ledger, url, at, k = 3, floor = 0.72, crossFloor = 0.6 }) {
-  const kind = new Map(nodes.map(n => [n.id, n.kind])), out = { at, model: EMBED_MODEL, floor, crossFloor, nodes: {}, near: {}, leads: {} };
+  const kind = new Map(nodes.map(n => [n.id, n.kind])), byId = new Map(nodes.map(n => [n.id, n])), out = { at, model: EMBED_MODEL, floor, crossFloor, nodes: {}, near: {}, leads: {} };
   for (const n of nodes) {
     out.nodes[n.id] = [n.label, url.get(n.id) || null, n.domain || ''];
     const i = M.at.get(n.id); if (i == null) continue;
     const v = Array.from(M.m.subarray(i * M.dim, (i + 1) * M.dim)), rows = [];
     for (const want of ['problem', 'solution']) rows.push(...D.nearest(M, v, { k, exclude: n.id, filter: id => kind.get(id) === want }).filter(h => h.score >= (want === n.kind ? floor : crossFloor)));
-    if (rows.length) out.near[n.id] = rows.sort((a, b) => b.score - a.score).map(h => [h.id, Math.round(h.score * 100)]);
+    // JUSTIFY-1: a link by meaning is kept only inside a field or with shared terms; the reader sees a band, never a percentage
+    const keep = rows.filter(h => { const o = byId.get(h.id); return o && J.judgeNear(n, o, h.score).ok; });
+    if (keep.length) out.near[n.id] = keep.sort((a, b) => b.score - a.score).map(h => [h.id, J.band(h.score)]);
   }
   for (const e of Object.values((ledger && ledger.entries) || {})) {
     if (e.status !== 'new' && e.status !== 'standing') continue;
+    if (!e.justification || (e.justification.needs_model && !(e.panel && e.panel.decided && e.panel.keep))) continue; // only a lead that justifies itself
     const via = e.via && !String(e.via).includes(' ~ ') && out.nodes[e.via] ? e.via : null, ms = e.members.filter(id => out.nodes[id]);
-    for (const id of ms) (out.leads[id] ||= []).push([e.type, ms.find(x => x !== id) || null, Math.round(e.score * 100), via]);
+    for (const id of ms) (out.leads[id] ||= []).push([e.type, ms.find(x => x !== id) || null, e.justification.value, via]);
   }
   for (const id of Object.keys(out.leads)) out.leads[id].sort((a, b) => b[2] - a[2]);
   return out;
@@ -109,7 +185,7 @@ export function buildLinks({ nodes, M, ledger, url, at, k = 3, floor = 0.72, cro
 const linksText = l => HEADER('tools/connections.mjs from ledger/embeddings.json and ledger/connections.json') + 'export const LINKS = ' + JSON.stringify(l) + ';\n';
 
 // ---- one run -------------------------------------------------------------------------------------------------------------------------
-export async function run({ embed = null, ask = null, now = Date.now(), maxEmbed = 3000, cache = readJson(FILES.cache, {}), ledger = readJson(FILES.ledger, null), input = corpus(), askDocs = ASK_INDEX.docs, modelCalls = 3 } = {}) {
+export async function run({ embed = null, ask = null, now = Date.now(), maxEmbed = 3000, cache = readJson(FILES.cache, {}), ledger = readJson(FILES.ledger, null), input = corpus(), askDocs = ASK_INDEX.docs, modelCalls = 20 } = {}) {
   const at = new Date(now).toISOString(), errors = [];
   const noEmbed = async () => { throw new Error('embedding skipped (offline)'); };
   const g = await D.refreshEmbeddings({ nodes: input.nodes, cache: cache.graph || {}, embed: embed || noEmbed, model: EMBED_MODEL, max: maxEmbed });
@@ -129,19 +205,12 @@ export async function run({ embed = null, ask = null, now = Date.now(), maxEmbed
   if (scored) L.decisions = L.decisions.map(d => (d === pending ? scored : d));
   const t = D.tune(L, params);
   if (t.decision) { L.params = t.params; L.decisions = [...L.decisions, t.decision].slice(-50); }
-  // a model words the top new connections (bounded calls; failures and empty replies leave the code's own sentence)
+  // JUSTIFY-1: drop what cannot say why, originate what the rules justify, then let a model panel veto (bounded; failures leave the code's verdict)
   const nodes = new Map(input.nodes.map(n => [n.id, n]));
-  if (ask && modelCalls > 0) {
-    const todo = Object.values(L.entries).filter(e => (e.type === 'transfer' || e.type === 'combination') && (e.status === 'new' || e.status === 'standing') && !e.why_model).sort((x, y) => y.score - x.score).slice(0, modelCalls);
-    for (const e of todo) {
-      try {
-        const srcs = e.members.concat(e.via ? [e.via] : []).map(id => nodes.get(id)).filter(Boolean).map(n => n.label + ' ' + (n.text || ''));
-        const r = await ask(rationalePrompt(e, nodes));
-        const ok = checkRationale(r, srcs);
-        L.entries[e.id] = { ...L.entries[e.id], why_model: ok ? { text: ok, at, note: 'Written by a model from the two entries only and checked for invented figures; a hypothesis, not evidence.' } : null, why_model_tried: at };
-      } catch (x) { errors.push({ step: 'rationale', id: e.id, error: String(x.message || x).slice(0, 160) }); }
-    }
-  }
+  const sc = screen(L, input, { now });
+  const pr = ask && modelCalls > 0 ? await panelReview(L, nodes, ask, { max: modelCalls, now }) : { reviewed: 0, errors: [] };
+  errors.push(...pr.errors);
+  merged.run.open = L.totals.open; merged.run.dropped += sc.dropped;
   const v = view({ result, ledger: L, nodes, url: input.url, decision: t.decision, scored, at });
   return { at, errors, run: merged.run, embedded: g.embedded + a.embedded, pending: g.pending + a.pending, cache: { graph: g.cache, ask: a.cache }, ledger: L, view: v, askPacked: D.packCache(a.cache, askDocs.map(d => d.id)), links: buildLinks({ nodes: input.nodes, M, ledger: L, url: input.url, at }) };
 }
@@ -167,7 +236,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   if (process.argv.includes('--links-only')) { writeFileSync(FILES.links, linksText(linksOnly())); console.log('links written'); process.exit(); }
   const arg = n => process.argv.includes(n), val = (n, d) => { const i = process.argv.indexOf(n); return i > 0 ? Number(process.argv[i + 1]) : d; };
   const embed = arg('--offline') ? null : embedVia();
-  const ask = arg('--no-model') || arg('--offline') ? null : async prompt => { const r = await complete({ secrets: process.env, prompt, maxTokens: 300 }); return r.ok ? r.text : ''; };
+  const ask = arg('--no-model') || arg('--offline') ? null : async (prompt, i = 0) => { const spec = ENSEMBLE.pool[i % 2]; const r = await askModel({ secrets: process.env, spec, prompt, maxTokens: 300 }); return r.ok ? r.text : ''; };
   const r = await run({ embed, ask, maxEmbed: val('--max-embed', 3000) });
   write(r);
   if (r.skipped) { console.log(JSON.stringify({ at: r.at, skipped: true, errors: r.errors.slice(0, 5) })); process.exitCode = 2; process.exit(); }

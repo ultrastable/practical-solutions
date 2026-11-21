@@ -41,8 +41,8 @@ test('the generator builds links from vectors and the ledger, and a new item get
   const input = corpus(), DIM = 64, words = t => String(t).toLowerCase().match(/[a-z]{4,}/g) || [];
   const rows = input.nodes.map(n => { const v = new Array(DIM).fill(0); for (const w of words(n.label + ' ' + n.text)) v[parseInt(D.hash(w), 16) % DIM] += 1; return { id: n.id, q: Int8Array.from(v.map(x => Math.min(100, x * 10))) }; });
   const M = D.unpack(D.pack(rows));
-  const L = buildLinks({ nodes: input.nodes, M, ledger: { entries: { x: { id: 'x', type: 'transfer', status: 'new', members: ['s:chlorine', 'p:water'], via: 'p:water', score: 0.9 } } }, url: input.url, at: 'now', floor: 0.3, crossFloor: 0.2 });
+  const L = buildLinks({ nodes: input.nodes, M, ledger: { entries: { x: { id: 'x', type: 'transfer', status: 'new', members: ['s:chlorine', 'p:water'], via: 'p:water', score: 0.9, justification: { value: 90, needs_model: false } } } }, url: input.url, at: 'now', floor: 0.3, crossFloor: 0.2 });
   assert.equal(Object.keys(L.nodes).length, input.nodes.length);
   assert.ok(Object.keys(L.near).length > 100); assert.deepEqual(L.leads['s:chlorine'], [['transfer', 'p:water', 90, 'p:water']]);
-  for (const [id, l] of Object.entries(L.near)) for (const [o, pct] of l) { assert.notEqual(o, id); assert.ok(pct <= 100 && L.nodes[o]); }
+  for (const [id, l] of Object.entries(L.near)) for (const [o, pct] of l) { assert.notEqual(o, id); assert.ok(['very close', 'close', 'related'].includes(pct) && L.nodes[o]); }
 });
