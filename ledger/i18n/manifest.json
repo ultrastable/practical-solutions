@@ -68,23 +68,42 @@
     "ca3d163bab055381"
    ],
    "at": "2026-11-20T18:22:20.281Z"
+  },
+  "hi": {
+   "live": false,
+   "coverage": 0.083,
+   "segments": 239,
+   "of": 9590,
+   "shards": [
+    "9e55f95aad9ab4bb",
+    "c1707f5d908659b0",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-21T13:04:06.745Z"
   }
  },
  "source": "en",
- "at": "2026-11-20T18:22:20.281Z",
- "total_segments": 7146,
+ "at": "2026-11-21T13:04:06.745Z",
+ "total_segments": 9590,
  "last_run": {
-  "at": "2026-11-20T18:22:20.281Z",
+  "at": "2026-11-21T13:04:06.745Z",
   "report": {
-   "es": {
-    "before": 74,
+   "hi": {
+    "before": 0,
     "rejected": {
-     "model error: no model route answered (gpt-4.1-mini: github-models returned a non-JSON body (O": 50
+     "wrong script": 36,
+     "length out of range": 1,
+     "missing": 23,
+     "numbers changed": 1
     },
-    "calls": 2,
-    "error": "two batches with no accepted translation",
-    "after": 74,
-    "coverage": 0.067,
+    "calls": 12,
+    "after": 239,
+    "coverage": 0.083,
     "live": false
    }
   }
