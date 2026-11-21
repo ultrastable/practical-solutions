@@ -6,7 +6,12 @@ import * as ui from './kit/index.js';
 import { answer, chatPort, allow, callerId } from '../../vendor/ultrastable/core/ask/index.js';
 import { ASK_INDEX } from './ask-index.gen.js';
 import { SHELL, SITE } from './pages.js';
-import { semanticFor } from './connections.js';  // DISCOVER-1: vector retrieval alongside keywords
+import { semanticFor } from './connections.js';
+import { gapAnswer, solutionAnswer, relatedAnswer, expand } from './ask-intents.js';
+import { SCAN } from './problem-scan.gen.js';
+import { buildCatalog } from './catalog.js';
+import { SOLUTIONS } from './solutions.js';
+let CAT; const catalog = () => CAT ||= buildCatalog({ problems: null, solutions: SOLUTIONS });  // DISCOVER-1: vector retrieval alongside keywords
 
 const { esc } = ui;
 export const ASK_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
@@ -20,8 +25,16 @@ export async function run(question, { env, request, lang = 'en', index = ASK_IND
   let gate;
   try { gate = await allow(env && env.STATE, { caller: await callerId(request), ...limits }); } catch { gate = { ok: true, model: false }; }
   if (!gate.ok) return { ok: false, error: 'rate_limited' };
-  try { return await answer(question, { index, generate: gate.model ? generate : undefined, semantic: gate.model ? semantic(env) : undefined, lang, defaultLang: 'en' }); }
-  catch { return answer(question, { index, generate: undefined, lang, defaultLang: 'en' }); }
+  const q = String(question || '').replace(/\s+/g, ' ').trim().slice(0, 300), plain = { ok: true, lang, question: q };
+  const gap = gapAnswer(q, SCAN, catalog()); if (gap) return { ...plain, ...gap };
+  let r;
+  try { r = await answer(expand(q), { index, generate: gate.model ? generate : undefined, lang, defaultLang: 'en' }); }
+  catch { try { r = await answer(expand(q), { index, generate: undefined, lang, defaultLang: 'en' }); } catch { r = { mode: 'none' }; } }
+  if (r.mode === 'generated') return { ...r, question: q };
+  // ASK-2: a model that says "no answer", or no model at all, still gets a useful result: the matching solutions, else the closest pages.
+  const sol = solutionAnswer(q, index, catalog()); if (sol) return { ...plain, ...sol };
+  if (r.mode === 'extractive') return { ...r, question: q };
+  return { ...plain, ...relatedAnswer(q, index, catalog()) };
 }
 
 const cite = (text, n) => esc(text).replace(/\[(\d{1,2})\]/g, (m, i) => Number(i) <= n ? `<a href="#src-${i}">[${i}]</a>` : m);
@@ -29,7 +42,10 @@ export function askPage(q, r, o, lang = 'en') {
   const form = `<form class="facets" action="/ask" method="get" role="search" aria-label="Ask"><div><label for="ask-q">Your question</label><input id="ask-q" type="search" name="q" value="${esc(q)}" maxlength="300" autocomplete="off"></div><button type="submit">Ask</button></form>`;
   let result = '';
   if (r && r.ok === false) result = ui.callout({ tone: 'warn', title: 'Too many questions', body: '<p>Please wait a minute and ask again. You can also <a href="/search">search the site</a>.</p>' });
-  else if (r && r.mode === 'none') result = ui.callout({ tone: 'warn', title: 'Not found on this site', body: '<p>No page here answers that, so no answer is given. Try other words, <a href="/search">search</a>, or <a href="/catalogue">browse the problem catalogue</a>. If it is a real gap, it is a problem we have not covered yet.</p>' });
+  else if (r && (r.mode === 'structured' || r.mode === 'related')) {
+    const cards = ui.list(r.items.map(x => `<a href="${esc(x.url)}">${esc(x.title)}</a> ${ui.badge(x.type)}<br><span class="m">${esc(x.detail)}</span>`));
+    result = `<section id="answer" aria-labelledby="answer-h" role="status"><h2 id="answer-h">${r.mode === 'related' ? 'Closest pages' : 'Answer'}</h2><p>${esc(r.answer)}</p>${cards}${r.more ? `<p><a href="${esc(r.more.href)}">${esc(r.more.label)}</a> · <a href="/search">Search the site</a></p>` : ''}${ui.callout({ tone: 'info', body: '<p>Taken directly from the site\'s own pages, with no AI model guessing. Open a page for the full evidence.</p>' })}</section>`;
+  } else if (r && r.mode === 'none') result = ui.callout({ tone: 'warn', title: 'Not found on this site', body: '<p>No page here answers that, so no answer is given. Try other words, <a href="/search">search</a>, or <a href="/catalogue">browse the problem catalogue</a>. If it is a real gap, it is a problem we have not covered yet.</p>' });
   else if (r) {
     const src = ui.list(r.sources.map(s => `<span id="src-${s.n}">[${s.n}] <a href="${esc(s.url)}">${esc(s.title)}</a> ${ui.badge(s.type)}</span>`));
     result = r.mode === 'generated'

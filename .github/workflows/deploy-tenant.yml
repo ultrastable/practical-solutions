@@ -43,6 +43,8 @@ jobs:
           bash vendor/ultrastable/tools/hostsync_commit.sh "host-sync - record deployed tenant-ps-web"
       - name: user stories and structural audit against the live site
         run: node tools/live_ux.mjs https://tenant-ps-web.ultrastable.workers.dev
+      - name: every suggested Ask question answers well against the live site (ASK-2)
+        run: node tools/live_ask.mjs https://tenant-ps-web.ultrastable.workers.dev
       - name: real-browser accessibility check (axe, light and dark, desktop and phone)
         run: |
           npm i --no-save --no-audit --no-fund playwright@1.49.1 axe-core@4.10.2
