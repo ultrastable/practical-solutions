@@ -10,7 +10,7 @@
 name: connections
 on:
   schedule: [{ cron: '17 5 * * *' }, { cron: '41 0 * * *' }]   # 00:41 UTC is just after the free model allowance resets; 05:17 retries and picks up where a short allowance stopped
-  push: { branches: [main], paths: ['worker/src/solutions.js', 'worker/src/problems.js', 'worker/src/problem-scan.gen.js', 'worker/src/syntheses.gen.js', 'worker/src/ask-index.gen.js', 'worker/src/more-solutions.js', 'tools/connections.mjs', 'vendor/ultrastable/core/discover/**', '.github/workflows/connections.yml'] }
+  push: { branches: [main], paths: ['worker/src/solutions.js', 'worker/src/problems.js', 'worker/src/problem-scan.gen.js', 'worker/src/syntheses.gen.js', 'worker/src/ask-index.gen.js', 'worker/src/more-solutions.js', 'tools/connections.mjs', 'worker/src/justify.js', 'vendor/ultrastable/core/discover/**', '.github/workflows/connections.yml'] }
   workflow_dispatch: {}
 concurrency: { group: connections, cancel-in-progress: false }
 permissions: { contents: write, actions: write, id-token: write }

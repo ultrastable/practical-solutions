@@ -57,7 +57,7 @@ export function mapSvg(self, items, title) {
 }
 const keyLine = `<p class="m s">Round: a problem. Square: a solution. <b>Solid line</b>: the catalogue links them (a solution cites evidence against a problem). <b>Dashed line</b>: they read alike. <b>Dotted line</b>: an open lead from the daily discovery run. The last two are places to look, not evidence.</p>`;
 const itemRow = (it, i) => {
-  const n = it.node, why = it.kind === 'est' ? 'linked in the catalogue' : it.kind === 'near' ? `${it.pct}% alike in meaning` : `${TYPE_WORDS[it.type] || it.type}${it.via ? `, through ${esc(it.via.label)}` : ''}`;
+  const n = it.node, why = it.kind === 'est' ? 'linked in the catalogue' : it.kind === 'near' ? `alike in meaning (${it.pct})` : `${TYPE_WORDS[it.type] || it.type}${it.via ? `, through ${esc(it.via.label)}` : ''}`;
   return `<li><b>${i + 1}.</b> ${ui.badge(KIND[n.kind])} ${n.url ? `<a href="${esc(n.url)}">${esc(n.label)}</a>` : esc(n.label)} <span class="m">${n.domain ? esc(n.domain) + ' · ' : ''}${why}</span> · <a href="${esc(graphHref(n.id))}">its connections</a></li>`;
 };
 export function listOf(k) {
@@ -144,7 +144,7 @@ export function graphPage(c, u, o, page) {
 /** /links.json: the whole graph for people who want to use it. */
 export function linksJson(c, o = '') {
   const est = []; for (const s of (c && c.sols) || []) for (const p of s.problem_ids || []) if (N['p:' + p]) est.push({ from: 's:' + s.id, to: 'p:' + p, kind: 'cited' });
-  const alike = []; for (const [id, l] of Object.entries(LINKS.near)) for (const [x, pct] of l) if (id < x || !(LINKS.near[x] || []).some(([y]) => y === id)) alike.push({ from: id, to: x, kind: 'alike', similarity: pct / 100 });
+  const alike = []; for (const [id, l] of Object.entries(LINKS.near)) for (const [x, pct] of l) if (id < x || !(LINKS.near[x] || []).some(([y]) => y === id)) alike.push({ from: id, to: x, kind: 'alike', closeness: pct });
   const leads = []; for (const [id, l] of Object.entries(LINKS.leads)) for (const [type, x, score, via] of l) if (x && id < x) leads.push({ from: id, to: x, kind: 'lead', type, via, score: score / 100 });
   return { schema: 'ps-links/1', at: LINKS.at, model: LINKS.model, note: 'cited: the catalogue links them. alike: they read alike (a lead). lead: proposed by the daily discovery run, not confirmed.',
     nodes: Object.entries(N).map(([id, [label, url, domain]]) => ({ id, kind: id[0] === 's' ? 'solution' : 'problem', label, domain, url: url ? o + url : null })), edges: [...est, ...alike, ...leads] };

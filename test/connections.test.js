@@ -28,7 +28,8 @@ test('a run embeds, finds and screens connections; the next run reuses every vec
   assert.equal(r1.errors.length, 0, JSON.stringify(r1.errors));
   assert.ok(r1.embedded > 1000, String(r1.embedded));
   assert.ok(r1.run.candidates > 0 && r1.run.new === r1.run.candidates);
-  for (const t of ['transfer', 'frontier']) assert.ok(r1.view[t].length > 0, t + ' found');
+  assert.ok(r1.view.combination.length > 0, 'justified combinations are found');
+  for (const t of ['transfer', 'bridge', 'frontier']) for (const c of r1.view[t]) assert.ok(c.why && c.tier, t + ' shows only with a reason');
   for (const c of [...r1.view.transfer, ...r1.view.combination, ...r1.view.bridge]) assert.notEqual(c.novelty, 'duplicate');
   const before = calls;
   const r2 = await run({ embed, now: Date.parse('2026-11-21T00:00:00Z'), cache: r1.cache, ledger: r1.ledger });
@@ -56,9 +57,9 @@ test('a model-written rationale is kept only when it invents no figure', () => {
 test('the page and JSON render from the generated view', async () => {
   const r = await run({ embed: async ts => bow(ts), now: Date.parse('2026-11-20T00:00:00Z'), cache: {}, ledger: null });
   const html = connectionsPage(r.view);
-  assert.match(html, /<h1>Connections<\/h1>/); assert.match(html, /href="\/solutions\//);
+  assert.match(html, /<h1>Connections<\/h1>/); assert.match(html, /href="\/solutions\//); assert.match(html, /Why: /);
   const j = connectionsJson(r.view, 'https://x');
-  assert.ok(j.transfer.length && j.transfer[0].members[0].url.startsWith('https://x/'));
+  assert.ok(j.combination.length && j.combination[0].members[0].url.startsWith('https://x/'));
   const empty = connectionsPage(null); assert.match(empty, /first run/i);
 });
 
@@ -66,7 +67,7 @@ test('graph leads feed the other loops: transfers become questions, the best ope
   const { leadQuestions } = await import('../worker/src/graph.js');
   const { graphSeed } = await import('../tools/discover.mjs');
   const r = await run({ embed: async ts => bow(ts), now: Date.parse('2026-11-20T00:00:00Z'), cache: {}, ledger: null });
-  const qs = leadQuestions(r.view);
+  const qs = leadQuestions({ transfer: [{ id: 'transfer:x', via: { label: 'Newborn deaths' }, members: [{ id: 's:kmc', label: 'Start kangaroo mother care at birth for small babies' }, { id: 'p:maternal', label: 'Maternal deaths' }] }] });
   assert.ok(qs.length > 0 && /^Does ".+" reduce ".+"\?/.test(qs[0].text));
   assert.equal(leadQuestions(null).length, 0);
   const seed = graphSeed(r.ledger);
