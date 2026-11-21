@@ -53,7 +53,9 @@
     "tools/pipeline.mjs": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
     "tools/pipeline_backfill.mjs": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
     "worker/src/pipeline.js": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
-    "worker/src/justify.js": "renders this catalogue's connection justifications from its own ledgers; registered here so the tenant-sync check passes (it was unregistered on main)"
+    "worker/src/justify.js": "renders this catalogue's connection justifications from its own ledgers; registered here so the tenant-sync check passes (it was unregistered on main)",
+    ".github/workflows/yearsim.yml": "weekly run of tools/yearsim.mjs, which simulates this tenant's own loop (bin/ps.mjs) and checks this repository's workflows; the core year simulation (ultrastable/ultrastable foundation/yearsim.py) reads its ops/yearsim.json",
+    "tools/yearsim.mjs": "simulates this tenant's own loop on a fake clock and checks this repository's scheduled workflows; tenant-specific by construction"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",

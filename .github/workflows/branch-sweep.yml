@@ -10,6 +10,7 @@ concurrency: { group: branch-sweep, cancel-in-progress: false }
 permissions: { contents: write, pull-requests: write, actions: write }  # actions: the sweep dispatches deploy-tenant after a merge (SWEEP-DEPLOY-1)
 jobs:
   sweep:
+    if: ${{ vars.HALT != '1' }}  # HALT-1: the repository variable HALT=1 stops every job
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

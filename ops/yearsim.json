@@ -1,0 +1,228 @@
+{
+ "at": "2026-11-21T11:51:30.889Z",
+ "days": 365,
+ "labels": {
+  "criticality": "REAL code, SYNTHETIC world, no model",
+  "cadence": "read from workflow files; GitHub firing is not observed"
+ },
+ "checks": [
+  {
+   "id": "C1",
+   "name": "reproducible birth",
+   "status": "pass",
+   "value": true
+  },
+  {
+   "id": "C2",
+   "name": "published briefs trace to tick-run items checked by a different reviewer",
+   "status": "pass",
+   "value": "10/10"
+  },
+  {
+   "id": "C3",
+   "name": "self-sustaining: branching ratio in band and backlog bounded",
+   "status": "pass",
+   "value": "ratio 1.10, active 7"
+  },
+  {
+   "id": "C4",
+   "name": "plus share of finished items",
+   "status": "pass",
+   "value": "29% (17/58)"
+  },
+  {
+   "id": "C5",
+   "name": "predictions scored; Brier better than a coin; every published brief has one",
+   "status": "fail",
+   "value": "Brier 0.278 over 8, 0 unpredicted"
+  },
+  {
+   "id": "C6",
+   "name": "trust ledger moves in both directions",
+   "status": "pass",
+   "value": "43 up, 3 down"
+  },
+  {
+   "id": "C7",
+   "name": "no item waits on a person",
+   "status": "pass",
+   "value": "0 stale blocked"
+  },
+  {
+   "id": "C8",
+   "name": "cost inside the cap",
+   "status": "pass",
+   "value": "$0.00"
+  },
+  {
+   "id": "C9",
+   "name": "a real model role ran",
+   "status": "fail",
+   "value": "0 successful calls",
+   "expected_fail": "the simulated world has no model; a real model role is observed only in the live loops (modelprobe)"
+  },
+  {
+   "id": "C10",
+   "name": "defects found here are fixed upstream",
+   "status": "pass",
+   "value": "UPSTREAM-1:done UPSTREAM-2:done"
+  }
+ ],
+ "cadence": [
+  {
+   "workflow": "agent.yml",
+   "fires_per_year": 4380,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "audit-anchor.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "branch-sweep.yml",
+   "fires_per_year": 8760,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "ci.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "connections.yml",
+   "fires_per_year": 730,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "context.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "cycle.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "deploy-lag.yml",
+   "fires_per_year": 8760,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "discover.yml",
+   "fires_per_year": 104,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "ensemble.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "gapscan.yml",
+   "fires_per_year": 52,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "host-sync.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "indexnow.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "pipeline.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "problemscan.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "redteam.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "references.yml",
+   "fires_per_year": 52,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "release.yml",
+   "fires_per_year": 52,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "synth.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "translate.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "yearsim.yml",
+   "fires_per_year": 52,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  }
+ ],
+ "cadence_defects": [],
+ "unexpected_fails": [
+  "C5"
+ ],
+ "notes": [
+  "trust step skipped in the simulation: config.policy is invalid: invalid policy: standing limits: no entry names the harness"
+ ],
+ "ok": false
+}
