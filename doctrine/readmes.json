@@ -1,0 +1,6 @@
+{
+  "_doc": "DOCS-SYNC-1 (Rowan, 2026-11-21): public docs are complete and match the code. Consumer: tools/check_readmes.py (npm run docs:check, in npm test chain).",
+  "site_host": "",
+  "site_globs": ["worker/*.js"],
+  "documents": [{"path": "README.md", "sections": ["What it does", "Why it exists", "How it works", "Run it", "Layout", "License"]}]
+}
