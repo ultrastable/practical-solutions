@@ -1,5 +1,5 @@
 {
- "at": "2026-11-21T11:51:30.889Z",
+ "at": "2026-11-21T18:52:58.334Z",
  "days": 365,
  "labels": {
   "criticality": "REAL code, SYNTHETIC world, no model",
@@ -33,8 +33,8 @@
   {
    "id": "C5",
    "name": "predictions scored; Brier better than a coin; every published brief has one",
-   "status": "fail",
-   "value": "Brier 0.278 over 8, 0 unpredicted"
+   "status": "pass",
+   "value": "Brier 0.219 over 8, 0 unpredicted"
   },
   {
    "id": "C6",
@@ -218,11 +218,9 @@
   }
  ],
  "cadence_defects": [],
- "unexpected_fails": [
-  "C5"
- ],
+ "unexpected_fails": [],
  "notes": [
   "trust step skipped in the simulation: config.policy is invalid: invalid policy: standing limits: no entry names the harness"
  ],
- "ok": false
+ "ok": true
 }

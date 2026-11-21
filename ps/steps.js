@@ -117,7 +117,11 @@ async function verify(item, S) {
     const refresh = (JSON.parse(problem.config).refresh_days || 30) * DAY;
     const params = await getParams(S.db);
     const hist = await first(S.db, `SELECT COUNT(*) n, SUM(CASE WHEN verdict='hit' THEN 1 ELSE 0 END) h FROM ps_predictions WHERE problem_id=? AND klass=? AND verdict IS NOT NULL`, row.problem_id, status);
-    const prob = ((hist.h || 0) + 0.5 * 2) / (hist.n + 2);
+    // Q-YEARSIM-calibration: a flat 0.5 prior was worse than a coin (Brier 0.278). A bright spot regresses toward its peers, and a brief that only
+    // passed the unit check (not leave-one-out and permutation) regresses more, so the prior is by class, below 0.5 for unit_only, and the
+    // per-problem record moves it with four pseudo-observations. Bootstrap stability is not used: it is ~1 for almost every spot and was overconfident (Brier 0.57).
+    const prior = status === 'verified' ? 0.55 : 0.3;
+    const prob = ((hist.h || 0) + prior * 4) / (hist.n + 4);
     await run(S.db, `INSERT OR IGNORE INTO ps_predictions (id, brief_id, problem_id, unit, klass, metric, op, target, probability, due_at) VALUES (?,?,?,?,?,?,?,?,?,?)`,
       `pred:${id}`, id, row.problem_id, row.unit, status, 'ps_residual_z', '>=', params.stableZ, Math.min(0.99, Math.max(0.01, prob)), iso(S.now + refresh));
     await run(S.db, `INSERT OR IGNORE INTO predictions (id, item_id, metric, op, target, due_at) VALUES (?,?,?,?,?,?)`, `core:pred:${id}`, `ps:brief:${id}`, 'ps_residual_z', '>=', params.stableZ, iso(S.now + refresh)); // graded by core through the registered domain metric
