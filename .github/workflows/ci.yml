@@ -50,3 +50,17 @@ jobs:
       - name: the Python prototype stays a runnable behaviour reference
         working-directory: reference/python
         run: python -m unittest discover -s tests -t . -v
+  merge:
+    # LANE-FAST-1 (tenant side): a same-repository pull request merges itself in this run as soon as every job above is green, instead of waiting for
+    # a sweeper tick on another host. Fails soft: a refusal (a conflict, a changed head) leaves the PR to the core sweeper.
+    needs: [test, access, reference-python]
+    if: ${{ vars.HALT != '1' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.draft != true }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions: { contents: write, pull-requests: write }
+    steps:
+      - name: Merge this pull request on its exact head commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr merge "${{ github.event.pull_request.number }}" -R "${{ github.repository }}" --squash --delete-branch --match-head-commit "${{ github.event.pull_request.head.sha }}" || echo "merge refused; the core sweeper takes it"
