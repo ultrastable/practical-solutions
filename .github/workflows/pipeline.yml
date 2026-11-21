@@ -1,0 +1,57 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; about 2 minutes a run.
+# trigger: daily at 07:17 UTC, after the scan (03:17), synthesis (03:41), discovery (04:23), red team (04:41) and graph (05:17) have written their ledgers; the counts only change when those do, so faster adds nothing.
+# free-alternative: none needed; Europe PMC is a free public API and the run uses its own GITHUB_TOKEN.
+# PIPELINE-1: evidence search for the advocate queue, then the stage counts, the queue, the history and the stall probe. A stall files one `idea` issue (the code agent takes it)
+# and fails the run. Writes ledger/pipeline.json, ledger/evidence-leads.json and the generated module behind /pipeline, commits them and dispatches the deploy.
+name: pipeline
+on:
+  schedule: [{ cron: '17 7 * * *' }]
+  workflow_dispatch: {}
+concurrency: { group: pipeline, cancel-in-progress: false }
+permissions: { contents: write, actions: write, issues: write }
+jobs:
+  pipeline:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: search Europe PMC for the queued problems
+        run: node --no-warnings tools/evidence.mjs --max 12
+      - name: count stages, move the queue, run the stall probe
+        id: probe
+        shell: bash
+        run: |
+          set +e
+          node --no-warnings tools/pipeline.mjs --check | tee pipeline.json
+          echo "code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+      - run: npm test
+      - name: commit and deploy
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/pipeline.json ledger/evidence-leads.json worker/src/pipeline.gen.js
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "pipeline: stage counts, advocate queue and evidence leads (PIPELINE-1)"
+          for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+          bash tools/dispatch_deploy.sh
+      - name: a stall becomes one work item
+        if: ${{ steps.probe.outputs.code != '0' }}
+        run: |
+          title="Pipeline stalled: no substantive movement"
+          if [ -z "$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number')" ]; then
+            reasons=$(node -e "console.log(JSON.parse(require('fs').readFileSync('ledger/pipeline.json','utf8')).health.reasons.join('; '))")
+            gh issue create --title "$title" --label idea --body "The pipeline probe (tools/pipeline.mjs --check) failed: $reasons.
+
+          Done when: node tools/pipeline.mjs --check exits 0, because queued problems gained evidence or solutions, solutions were added or checked, or syntheses were proposed or verified. Look first at the advocate queue in ledger/pipeline.json, the discover and synth workflow runs, and ledger/evidence-leads.json.
+          Closing probe: the live site /pipeline.json shows health.status ok.
+          Disposition: owner agent (.github/workflows/agent.yml), trigger: label idea."
+          fi
+          exit 1
