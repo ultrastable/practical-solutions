@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-20T16:09:07.238Z",
+ "at": "2026-11-21T11:42:42.574Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -51,7 +51,7 @@
    "novelty": [
     {
      "label": "barbershop and hypertension, Africa or Asia",
-     "total": 18,
+     "total": 19,
      "closest": [
       {
        "title": "Global epidemiology, health burden and effective interventions for elevated blood pressure and hypertension",
@@ -97,16 +97,16 @@
        "hit": true
       },
       {
-       "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
-       "year": 2012,
-       "url": "https://openalex.org/W166737179",
-       "hit": false
-      },
-      {
        "title": "Reckoning Time in the Barber Shop:A Qualitative Study of a Barber Navigating Time, Temporality, and Rhythm",
        "year": 2014,
        "url": "https://openalex.org/W2243527285",
        "hit": true
+      },
+      {
+       "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
+       "year": 2012,
+       "url": "https://openalex.org/W166737179",
+       "hit": false
       },
       {
        "title": "Stay Beautiful -- Stay Alive: Assessing the Receptivity of African American Beauty Salon Owners to the Integration of Breast Cancer Intervention Programs into Salon Operations",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T16:08:40.788Z"
+   "checked_at": "2026-11-21T11:42:29.433Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -213,7 +213,7 @@
     },
     {
      "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1637,
+     "total": 1643,
      "closest": [
       {
        "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
@@ -234,15 +234,15 @@
        "hit": false
       },
       {
-       "title": "Process evaluation of a brief messaging intervention to improve diabetes treatment adherence in sub-Saharan Africa",
-       "year": 2021,
-       "url": "https://doi.org/10.1186/s12889-021-11552-8",
-       "hit": false
-      },
-      {
        "title": "Factors associated with poor adherence to medication among hypertensive patients in twelve low and middle income Sub-Saharan countries",
        "year": 2019,
        "url": "https://doi.org/10.1371/journal.pone.0219266",
+       "hit": false
+      },
+      {
+       "title": "Process evaluation of a brief messaging intervention to improve diabetes treatment adherence in sub-Saharan Africa",
+       "year": 2021,
+       "url": "https://doi.org/10.1186/s12889-021-11552-8",
        "hit": false
       }
      ],
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T16:08:46.281Z"
+   "checked_at": "2026-11-21T11:42:32.379Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -304,7 +304,7 @@
    "novelty": [
     {
      "label": "older adult volunteers delivering foundational learning in low-income countries",
-     "total": 559,
+     "total": 560,
      "closest": [
       {
        "title": "Literacy and numeracy support for homeless adults",
@@ -331,9 +331,9 @@
        "hit": false
       },
       {
-       "title": "Perceptions of how literacy and numeracy instructions influence the lives of adult learners: a qualitative multiple case study of learners with low literacy skills",
-       "year": 2019,
-       "url": "https://doi.org/10.17918/00000102",
+       "title": "A delicate balance: a study of volunteer literacy tutors and their training and development in Northern Tasmania",
+       "year": 1997,
+       "url": "https://openalex.org/W7222383058",
        "hit": false
       }
      ],
@@ -341,7 +341,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 38699,
+     "total": 38790,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -378,7 +378,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T16:08:55.243Z"
+   "checked_at": "2026-11-21T11:42:35.996Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -444,7 +444,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T16:08:59.928Z"
+   "checked_at": "2026-11-21T11:42:40.082Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -477,7 +477,7 @@
    "novelty": [
     {
      "label": "Existing studies",
-     "total": 417,
+     "total": 420,
      "closest": [
       {
        "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
@@ -514,7 +514,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-20T16:09:07.238Z"
+   "checked_at": "2026-11-21T11:42:42.574Z"
   }
  },
  "errors": []
