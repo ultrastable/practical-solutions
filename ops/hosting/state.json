@@ -37,8 +37,8 @@
    "compat_date": "2026-10-01",
    "compat_flags": [],
    "deployment": {
-    "id": "79b77374-5a83-4ac1-b0c6-b4394c19e2c5",
-    "created_on": "2026-11-21T11:05:28.802202Z"
+    "id": "9951521f-9c04-4e9e-a940-25c6826a2030",
+    "created_on": "2026-11-21T11:20:03.745084Z"
    },
    "read_errors": []
   },
@@ -90,7 +90,7 @@
   "tenant-ps-llm": {
    "script": "tenant-ps-llm",
    "found": true,
-   "sha256": "69ad7e604b912887c553a61edaa81a90cc4b7b96c29a1df1714d383748388c8e",
+   "sha256": "1dd3093f7caa305eee53736f3b2f8184677b5df57019ec2ab0b241f4056959bb",
    "bindings": [
     {
      "type": "ai",
@@ -105,8 +105,8 @@
    "compat_date": "2026-10-01",
    "compat_flags": [],
    "deployment": {
-    "id": "108d8394-04c3-4f5a-a98e-f4100bf7db18",
-    "created_on": "2026-11-20T21:02:55.953165Z"
+    "id": "be2d4473-6ad8-487a-a392-220b5da578f2",
+    "created_on": "2026-11-21T11:20:03.625058Z"
    },
    "read_errors": []
   }
