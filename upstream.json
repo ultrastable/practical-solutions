@@ -4,8 +4,8 @@
     "repo": "ultrastable/ultrastable"
   },
   "keep": {
-  "worker/src/ask-intents.js": "answers the tenant's suggested questions from its own catalogue (solutions, problems, trends); the intents are this catalogue's vocabulary, so lifting needs a core ask-intents interface first",
-  "tools/live_ask.mjs": "live probe of this tenant's suggested questions (imports EXAMPLES from the tenant ask module); tenant-specific by construction",
+    "worker/src/ask-intents.js": "answers the tenant's suggested questions from its own catalogue (solutions, problems, trends); the intents are this catalogue's vocabulary, so lifting needs a core ask-intents interface first",
+    "tools/live_ask.mjs": "live probe of this tenant's suggested questions (imports EXAMPLES from the tenant ask module); tenant-specific by construction",
     ".github/workflows/branch-sweep.yml": "tenant trigger for branch_sweep; generic merge-and-delete of this repository branches, lifting queued upstream",
     "tools/branch_sweep.mjs": "merges feature branches and deletes merged ones for this repository; lifting queued upstream",
     ".github/workflows/bootstrap.yml": "boots the tenant's own organisation",
@@ -49,7 +49,11 @@
     "tools/push_main.py": "copy of core's MAIN-WRITER-1 pusher that vendor/ultrastable/tools/hostsync_commit.sh calls as tools/push_main.py; core does not ship it in the vendor tree yet",
     ".github/workflows/deploy-lag.yml": "this tenant's deploy-lag probe over its own deploy workflows",
     "worker/src/connections.js": "the /connections page of this tenant: renders its own catalogue graph with its UI kit; the generic engine is core/discover",
-    "worker/src/autonomy.js": "the /autonomy page of this tenant: counts its own loop records and release ledger with its UI kit; nothing generic to lift"
+    "worker/src/autonomy.js": "the /autonomy page of this tenant: counts its own loop records and release ledger with its UI kit; nothing generic to lift",
+    "tools/pipeline.mjs": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
+    "tools/pipeline_backfill.mjs": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
+    "worker/src/pipeline.js": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
+    "worker/src/justify.js": "renders this catalogue's connection justifications from its own ledgers; registered here so the tenant-sync check passes (it was unregistered on main)"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",

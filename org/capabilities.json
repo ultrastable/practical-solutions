@@ -293,6 +293,15 @@
       "feature": "Index of every cited source with the entries that cite it",
       "probe": null,
       "priority": 1
+    },
+    {
+      "id": "pipeline-view",
+      "reference": "Our World in Data, Cochrane living evidence",
+      "feature": "Live pipeline view: counts per stage, advocate queue and the stall probe",
+      "probe": {
+        "path": "/pipeline",
+        "text": "Is it moving?"
+      }
     }
   ]
 }

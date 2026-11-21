@@ -46,6 +46,9 @@ export function seedPair(n = 0, list = SOLUTIONS) {
   const a = list[n % list.length], rest = list.filter(s => !(s.problem_ids || []).some(p => (a.problem_ids || []).includes(p)) && s.id !== a.id), b = (rest.length ? rest : list.filter(s => s.id !== a.id))[Math.floor(n / list.length) % Math.max(1, (rest.length || list.length - 1))];
   return [a, b];
 }
+export const seedText = seed => !seed ? '' : seed.frontier
+  ? `\nStart from this problem, which has no solution in the catalogue yet: "${seed.frontier.title}"${seed.frontier.status ? ` (${seed.frontier.status})` : ''}.${seed.solution ? ` The knowledge graph suggests the catalogue entry "${seed.solution.title}" as the nearest thing already proven elsewhere.` : ''} Propose how a catalogue intervention could be transferred to this problem; the problem field must name it.`
+  : `\nStart from this cross-sector pairing and ask what one lends the other that neither has been tried with: "${seed[0].title}" and "${seed[1].title}". The novelty must be a mechanism or delivery channel carried from one setting into another, not a bundle of two programmes.`;
 export const proposePrompt = (max, existing, papers = [], seed = null) => `You propose NEW practical solutions made by transferring or combining interventions that published studies support, to a context or combination that no published trial has tested. Do not invent papers: every citation must be a real, published paper whose exact title and year you are sure of.${papers.length ? ' Cite ONLY papers from the verified list below, copying each title and year exactly; an idea that needs a paper not on the list is left out.' : ''} Do not quote figures (leave "numbers" as an empty list). If you are not sure a paper exists, leave that idea out.
 
 ${papers.length ? 'Verified papers (found in Crossref):\n' + papers.map(p => `- ${p.title} (${p.year})`).join('\n') + '\n\n' : ''}Catalogue entries you may build on (use their ids in "components"):
@@ -53,7 +56,7 @@ ${SOLUTIONS.slice(0, 30).map(s => `- ${s.id}: ${s.title}`).join('\n')}
 
 Pressing problems with a measured gap to target: ${PROBLEMS.map(p => p.title).join('; ')}.
 Already proposed (do not repeat): ${existing.join(', ')}.
-Standard programmes (a proposal that is a rewording of any of these, or of any catalogue entry above, is rejected by the reviewer): ${STANDARD.join('; ')}.${seed ? `\nStart from this cross-sector pairing and ask what one lends the other that neither has been tried with: "${seed[0].title}" and "${seed[1].title}". The novelty must be a mechanism or delivery channel carried from one setting into another, not a bundle of two programmes.` : ''}
+Standard programmes (a proposal that is a rewording of any of these, or of any catalogue entry above, is rejected by the reviewer): ${STANDARD.join('; ')}.${seedText(seed)}
 
 Return a JSON array of at most ${max} objects, nothing else. Each object has exactly these fields: id (kebab-case), title, headline (one sentence an implementer can act on), domain, problem, transfer {from, to}, components (catalogue ids), mechanism (why the parts should combine), citations (3 to 5 of {id, role, cite, q (exact paper title), year (integer), numbers: [], supports (what the paper shows)}), novelty {statement, queries: [{label, q, must: [words that would appear in the title of a paper that already tested this]}]}, who, takes, first_test (a cheap randomised pilot that states a stop rule: when it counts as failed), cost_note, limits, risks (at least 2), model {cost: {upfront: USD, years: 1}, nodes: [{id, label, kind: "direct"|"multiplier"|"spillover"|"unintended", parent (for non-direct), amount: {kind: "ci90", low, high, shape: "lognormal"}, unit: "daly"|"death_averted"|"wellby"|"consumption_doubling_year", years, source: "assumption: show the arithmetic"}]}.`;
 export const redTeamPrompt = c => `You are a hostile reviewer. A proposal says: "${c.title}": ${c.headline} It combines: ${c.transfer.from} -> ${c.transfer.to}. Cited papers: ${c.citations.map(x => `${x.q} (${x.year})`).join('; ')}.
@@ -87,9 +90,18 @@ export function graphSeed(ledger, list = SOLUTIONS) {
     .map(e => ({ e, pair: e.members.map(m => by.get(String(m).replace(/^s:/, ''))) })).filter(x => x.pair.every(Boolean)).sort((a, b) => b.e.justification.value - a.e.justification.value);
   return open.length ? { id: open[0].e.id, pair: open[0].pair } : null;
 }
+// PIPELINE-1: on alternate days the proposal starts from the advocate queue's top problem with no solution (and the graph's suggested solution for it)
+// and may cite the real titles the evidence search found for it, so the intake side of the catalogue reaches the solution side.
+export function frontierSeed(pipeline, evidence, list = SOLUTIONS, day = 0) {
+  const q = ((pipeline && pipeline.queue) || []).filter(x => !x.proposed);
+  if (!q.length || day % 2 === 0) return null;
+  const pick = q.find(x => (x.candidates || []).some(c => list.some(s => s.id === c))) || q[0];
+  const sol = list.find(s => (pick.candidates || []).includes(s.id)) || null, hits = (((evidence && evidence.items) || {})[pick.id] || {}).hits || [];
+  return { frontier: { id: pick.id, title: pick.title, status: pick.status }, solution: sol, papers: hits.map(h => ({ title: h.title, year: h.year })) };
+}
 export async function discover({ ask, ground = null, max = 2, prev = { entries: [], log: [] }, now = () => new Date().toISOString(), seed = null }) {
   const existing = [...SYNTHESES.map(s => s.id), ...prev.entries.map(s => s.id)], log = [...prev.log], entries = [...prev.entries];
-  const papers = ground ? await ground().catch(e => { log.push({ at: now(), event: 'grounding failed', detail: String(e.message || e).slice(0, 120) }); return []; }) : [], seen = new Set(papers.map(p => norm(p.title)));
+  const papers = [...(ground ? await ground().catch(e => { log.push({ at: now(), event: 'grounding failed', detail: String(e.message || e).slice(0, 120) }); return []; }) : []), ...((seed && seed.papers) || [])], seen = new Set(papers.map(p => norm(p.title)));
   const out = await ask(proposePrompt(max, existing, papers, seed || seedPair(Math.floor(Date.parse(now()) / 1000) % 997))), list = json(out);
   if (!Array.isArray(list)) { log.push({ at: now(), event: 'no usable proposal', detail: String(out || '').slice(0, 120) }); return { schema: 'ps-synth-discovered/1', at: now(), entries, log: log.slice(-100) }; }
   for (const raw0 of list.slice(0, max)) {
@@ -112,9 +124,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const i = process.argv.indexOf('--max'), max = i > 0 ? Number(process.argv[i + 1]) : 2;
   const ask = async prompt => { const r = await complete({ secrets: process.env, prompt: 'Reply with JSON only.\n\n' + prompt, maxTokens: 6000 }); return r.ok ? r.text : ''; };
   const prev = existsSync(DISCOVERED) ? JSON.parse(readFileSync(DISCOVERED, 'utf8')) : { entries: [], log: [] };
-  const CONN = 'ledger/connections.json', ledger = existsSync(CONN) ? JSON.parse(readFileSync(CONN, 'utf8')) : null, g = graphSeed(ledger);
-  const r = await discover({ ask, max, prev, ground: () => groundPapers(), seed: g ? g.pair : null });
+  const CONN = 'ledger/connections.json', ledger = existsSync(CONN) ? JSON.parse(readFileSync(CONN, 'utf8')) : null, g = graphSeed(ledger), P = existsSync('ledger/pipeline.json') ? JSON.parse(readFileSync('ledger/pipeline.json', 'utf8')) : null, EV = existsSync('ledger/evidence-leads.json') ? JSON.parse(readFileSync('ledger/evidence-leads.json', 'utf8')) : null, fs = frontierSeed(P, EV, SOLUTIONS, Math.floor(Date.now() / 86400000));
+  const r = await discover({ ask, max, prev, ground: () => groundPapers(), seed: fs || (g ? g.pair : null) });
   writeFileSync(DISCOVERED, JSON.stringify(r, null, 1) + '\n');
-  if (g) { ledger.entries[g.id] = { ...ledger.entries[g.id], seeded: new Date().toISOString() }; writeFileSync(CONN, JSON.stringify(ledger, null, 1) + '\n'); }
+  if (fs && P) { P.queue = P.queue.map(x => x.id === fs.frontier.id ? { ...x, proposed: new Date().toISOString() } : x); writeFileSync('ledger/pipeline.json', JSON.stringify(P, null, 1) + '\n'); }
+  if (g && !fs) { ledger.entries[g.id] = { ...ledger.entries[g.id], seeded: new Date().toISOString() }; writeFileSync(CONN, JSON.stringify(ledger, null, 1) + '\n'); }
   console.log(JSON.stringify({ entries: r.entries.length, last: r.log.slice(-3) }));
 }
