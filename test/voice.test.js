@@ -18,9 +18,9 @@ test('posts follow the hierarchy, sound human, end on a question, carry the disc
     assert.doesNotMatch(p.title + ' ' + p.summary, robot, p.id);
     assert.match(p.summary, /\?$/, p.id + ' should end on a question');
     for (const [ch, max] of [['bluesky', 300], ['mastodon', 500]]) {
-      const t = compose(ch, p, {}, { promote: { automatedLabel: 'Posted by our bot, checked against the sources' } });
+      const t = compose(ch, p, {}, { promote: { automatedLabel: 'Posted by Ultrastable, source-checked' } });
       assert.ok(t.length <= max, `${ch} ${p.id} ${t.length}`);
-      assert.ok(t.includes(p.url) && t.includes('Posted by our bot'), `${ch} ${p.id}`);
+      assert.ok(t.includes(p.url) && t.includes('Posted by Ultrastable'), `${ch} ${p.id}`);
       assert.match(t.split('\n')[0], /\?$/, `${ch} ${p.id} was cut off: ${t}`);
     }
   }

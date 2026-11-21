@@ -23,3 +23,11 @@ test('posts state only catalogue numbers', () => {
   assert.ok(t.includes(String(d.problems.length)) && t.includes(String(d.solutions.length)));
   assert.ok(META.every(m => m('').length < 280));
 });
+
+test('THOUGHT-1: every queued post names Ultrastable, so the domain reads as an example of what the system can do', async () => {
+  const { socialQueue, HOOK } = await import('../worker/src/social-voice.js');
+  const cat = { domains: [{ slug: 'water', name: 'Water', problems: [1], solutions: [1, 2] }], probs: [{ id: 'p1', title: 'Unsafe water', ranked: true, value: 2.1, unit: 'billion people', year: 2024, target: 0 }], sols: [{ id: 's1', title: 'Chlorine dispensers', claim: 'Dispensers at the water point raise chlorination.', label: 'evidence-backed' }] };
+  const q = socialQueue(cat, { origin: 'https://ultrastable.org', now: Date.parse('2026-11-21T00:00:00Z') });
+  for (const p of q.posts) { assert.match(p.text, /Ultrastable/, p.id); assert.ok(p.text.length <= 280, p.id + ' ' + p.text.length); }
+  assert.ok(q.posts.some(p => p.text.includes(HOOK)));
+});
