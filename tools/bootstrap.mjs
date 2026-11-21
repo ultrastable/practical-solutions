@@ -7,7 +7,7 @@
 //   node tools/bootstrap.mjs rebuild   down, then up
 //   node tools/bootstrap.mjs plan      print the plan; touches nothing
 // Secrets (from the environment, set by the platform): CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID; optional ANTHROPIC_API_KEY.
-// Only the Quniverse account may be used. The Ultrastable account is refused by an allow-list, not by a deny-list.
+// Only the Ultrastable account may be used, enforced by an allow-list (QUNIVERSE-CUT-1: the old account is assumed gone).
 import { spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHmac } from 'node:crypto';
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 import { NAMES, seedSql } from './deploy.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const ALLOWED = (process.env.PS_ALLOWED_ACCOUNT || 'edb167b78c9fb901ea5bca3ce58ccc4b').split(',');
+const ALLOWED = (process.env.PS_ALLOWED_ACCOUNT || '81e3a4efb4eb66e613529b87682911bb').split(',');
 const log = (...a) => console.log('[bootstrap]', ...a);
 
 export function guard(env = process.env) {

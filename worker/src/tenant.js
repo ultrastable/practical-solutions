@@ -29,7 +29,7 @@ import { sitemapPaths } from './site.js';
 // Behind the ultrastable.org edge the request arrives on the workers.dev host with x-forwarded-host set; links and canonicals use the public host.
 const PUBLIC_HOSTS = new Set(['ultrastable.org', 'solutions.ultrastable.org']);
 export const canonicalOrigin = (r, u) => { const f = (r.headers.get('x-forwarded-host') || '').toLowerCase(); return PUBLIC_HOSTS.has(f) ? 'https://' + (f === 'solutions.ultrastable.org' ? 'ultrastable.org' : f) : u.origin; };
-const BACKEND = 'https://ps-practical-solutions.q08.workers.dev';
+const BACKEND = 'https://tenant-ps-core.ultrastable.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
 const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' };
 

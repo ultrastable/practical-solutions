@@ -15,7 +15,7 @@ const OPENALEX = 'https://api.openalex.org/works';
 const HOUR = 3600e3;
 // cadence the /method page states, rendered from here
 export const CADENCE = { problemsHours: 6, checkHours: 24, maxVerify: 3, candidateSearchesPerRun: 1, brightSpotHours: 24 };
-const BACKEND_URL = 'https://ps-practical-solutions.q08.workers.dev';
+const BACKEND_URL = 'https://tenant-ps-core.ultrastable.workers.dev';
 
 export const SEARCH = {
   tobacco: 'tobacco smoking cessation',
