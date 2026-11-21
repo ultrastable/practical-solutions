@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# budget: public repository, unmetered; about 1 minute a run.
+# trigger: weekly; the simulated year changes only when the loop code or workflows change, so faster adds nothing.
+# free-alternative: none needed; the run uses its own GITHUB_TOKEN.
+# YEARSIM-1: a 365-day fake-clock run of the loop plus the workflow cadence check; writes ops/yearsim.json, which the Ultrastable year simulation reads.
+name: yearsim
+on:
+  schedule: [{ cron: '41 5 * * 3' }]
+  workflow_dispatch: {}
+concurrency: { group: yearsim, cancel-in-progress: false }
+permissions: { contents: write }
+jobs:
+  yearsim:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: simulate a year, check cadence
+        run: node --no-warnings tools/yearsim.mjs
+        continue-on-error: true
+      - name: record
+        run: |
+          git config user.name "ultrastable-bot"; git config user.email "bot@users.noreply.github.com"
+          git add ops/yearsim.json
+          git diff --cached --quiet || { git commit -qm "yearsim: weekly simulated-year result [skip ci]"; for i in 1 2 3; do git pull -q --rebase origin main && git push -q origin HEAD:main && break; sleep 5; done; }
