@@ -8,7 +8,9 @@ const LIMIT = 280;  // Bluesky allows 300; the link is counted in full
 const h = s => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 const pick = (id, arr) => arr[h(id) % arr.length];
 const clip = (s, n) => (s.length <= n ? s : s.slice(0, Math.max(0, n - 1)).replace(/[\s,;:.]+\S*$/, '') + '…');
-const fit = (head, tail) => `${clip(head, LIMIT - tail.length - 1)}\n${tail}`;
+// THOUGHT-1 (Rowan, 2026-11-21): every post says what this is an example of, so a reader never wonders why a data person posts about child health.
+export const HOOK = 'Runs on Ultrastable, a system that runs itself: ultrastable.io';
+const fit = (head, url) => { const tail = /Ultrastable/.test(head) ? url : `${HOOK}\n${url}`; return `${clip(head, LIMIT - tail.length - 1)}\n${tail}`; };
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 const num = v => (typeof v === 'number' ? Number(v.toPrecision(3)).toString() : String(v));
 

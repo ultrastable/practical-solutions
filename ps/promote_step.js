@@ -15,7 +15,7 @@ export function promoteStep({ solutions, fetch: f, env, origin }) {
   return {
     name: 'ps_promote',
     async run(db, ctx) {
-      const config = { promote: { tenant: TENANT, origin, automatedLabel: 'Posted by our bot, checked against the sources',
+      const config = { promote: { tenant: TENANT, origin, automatedLabel: 'Posted by Ultrastable, source-checked',
         halt: false, channels: { indexnow: { perDay: 1 }, mastodon: { base: env.MASTODON_BASE || 'https://mastodon.social', perDay: 2 }, bluesky: { perDay: 2 } } } };
       const pctx = { db, fetch: f, env, now: () => ctx.now ?? Date.now(), config };
       const sent = await run(pctx, entriesFrom(solutions, origin));
