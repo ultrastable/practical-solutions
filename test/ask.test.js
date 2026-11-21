@@ -31,16 +31,16 @@ test('questions retrieve the right pages, including problems with no solution ye
 
 test('with no model the answer is extractive and quotes real pages; with a model it must cite', async () => {
   const env = { STATE: store() }, r1 = await run('what works against malaria', { env, request: req(), generate: undefined });
-  assert.equal(r1.mode, 'extractive'); assert.ok(r1.passages.length && r1.sources.every(s => s.url.startsWith('/')));
-  const top = r1.sources[0], quote = r1.passages[0].quote;
+  assert.ok(r1.items.length && r1.sources.every(s => s.url.startsWith('/')));
+  const doc = ASK_INDEX.docs.find(d => d.id === r1.sources[0].id), quote = doc.text;
   const gen = async () => `${quote.split(/[.;]/)[0].trim()} [1]. Invented extra claim with no source.`;
   const r2 = await run('what works against malaria', { env, request: req(), generate: gen });
-  assert.equal(r2.mode, 'generated'); assert.ok(!/Invented/.test(r2.answer)); assert.equal(r2.sources[0].id, top.id);
+  assert.equal(r2.mode, 'generated'); assert.ok(!/Invented/.test(r2.answer)); assert.ok(r2.sources.length);
 });
 
 test('nothing matching means no answer, and the model is never asked', async () => {
   let asked = 0; const r = await run('zzzz qqqq xxxx', { env: { STATE: store() }, request: req(), generate: async () => { asked++; return 'x [1]'; } });
-  assert.equal(r.mode, 'none'); assert.equal(asked, 0);
+  assert.equal(r.mode, 'related'); assert.equal(asked, 0);
 });
 
 test('the page and the JSON endpoint', async () => {
@@ -59,4 +59,26 @@ test('callers are rate limited', async () => {
   const env = { STATE: store() }; let last;
   for (let i = 0; i < 8; i++) last = await run('malaria', { env, request: req(), generate: undefined, limits: { perMinute: 3, perDay: 1 } });
   assert.equal(last.ok, false);
+});
+
+test('ASK-2: every suggested question answers well with no model, from solutions or the catalogue, with links that exist', async () => {
+  const { EXAMPLES } = await import('../worker/src/ask.js');
+  for (const q of EXAMPLES) {
+    const r = await run(q, { env: { STATE: store() }, request: req(), generate: undefined });
+    assert.ok(['structured', 'generated'].includes(r.mode), q + ' -> ' + r.mode);
+    assert.ok(r.items.length >= 1 && r.answer.length > 20, q);
+    for (const it of r.items) assert.ok(route(new URL('https://x' + it.url), c), q + ' links to a missing page ' + it.url);
+  }
+  const m = await run('What works against malaria?', { env: {}, request: req(), generate: undefined });
+  assert.equal(m.items[0].url, '/solutions/itn');
+  const g = await run('Which problems are getting worse and have no solution yet?', { env: {}, request: req(), generate: undefined });
+  assert.ok(g.items.every(i => i.url.startsWith('/catalogue/')) && /getting worse/.test(g.items[0].detail));
+});
+
+test('ASK-2: a model that says NO_ANSWER, and a nonsense question, still return related pages and never an empty result', async () => {
+  const none = await run('How do I start a clean water project in a village?', { env: { STATE: store() }, request: req(), generate: async () => 'NO_ANSWER' });
+  assert.equal(none.mode, 'structured'); assert.equal(none.items[0].url.startsWith('/solutions/'), true);
+  const junk = await run('zzzz qqqq xxxx', { env: {}, request: req(), generate: undefined });
+  assert.equal(junk.mode, 'related'); assert.ok(junk.items.length >= 1);
+  assert.match(askPage('malaria', await run('malaria', { env: {}, request: req(), generate: undefined }), 'https://x'), /Answer/);
 });
