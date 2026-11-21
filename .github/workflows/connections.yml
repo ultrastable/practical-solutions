@@ -6,11 +6,11 @@
 # free-alternative: none needed; the model route is the tenant's own Worker reached with this run's OIDC token, no secret is stored.
 # DISCOVER-1: the catalogue's knowledge graph and vector index. Embeds what changed, finds connections nobody has drawn, screens them for
 # novelty, settles earlier leads against what the catalogue adopted, tunes its threshold with a scored prediction, rebuilds the generated
-# modules behind /connections and /ask, commits them and dispatches the deploy, whose live check is the gate.
+# modules behind /connections, /graph, the Connections section of every entry and /ask, commits them and dispatches the deploy, whose live check is the gate.
 name: connections
 on:
   schedule: [{ cron: '17 5 * * *' }, { cron: '41 0 * * *' }]   # 00:41 UTC is just after the free model allowance resets; 05:17 retries and picks up where a short allowance stopped
-  push: { branches: [main], paths: ['worker/src/solutions.js', 'worker/src/problems.js', 'worker/src/problem-scan.gen.js', 'worker/src/syntheses.gen.js', 'worker/src/ask-index.gen.js', 'tools/connections.mjs', 'vendor/ultrastable/core/discover/**', '.github/workflows/connections.yml'] }
+  push: { branches: [main], paths: ['worker/src/solutions.js', 'worker/src/problems.js', 'worker/src/problem-scan.gen.js', 'worker/src/syntheses.gen.js', 'worker/src/ask-index.gen.js', 'worker/src/more-solutions.js', 'tools/connections.mjs', 'vendor/ultrastable/core/discover/**', '.github/workflows/connections.yml'] }
   workflow_dispatch: {}
 concurrency: { group: connections, cancel-in-progress: false }
 permissions: { contents: write, actions: write, id-token: write }
@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name practical-solutions-bot
           git config user.email bot@users.noreply.github.com
-          git add ledger/embeddings.json ledger/connections.json worker/src/connections.gen.js worker/src/ask-vectors.gen.js
+          git add ledger/embeddings.json ledger/connections.json worker/src/connections.gen.js worker/src/ask-vectors.gen.js worker/src/links.gen.js
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git commit -m "connections: knowledge graph run, ledger and generated modules (DISCOVER-1)"
           for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
