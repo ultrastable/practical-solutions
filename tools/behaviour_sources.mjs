@@ -14,8 +14,9 @@ const HEAD = '// SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0\n// Cop
 const norm = t => String(t).toLowerCase().replace(/<[^>]+>/g, '').replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(w => w.length > 2);
 export const similar = (a, b) => { const x = new Set(norm(a)), y = new Set(norm(b)); if (!x.size || !y.size) return 0; const i = [...x].filter(w => y.has(w)).length; return i / Math.max(x.size, y.size); };
 export function matches(work, [title, year, surname]) {
-  const names = (work.authorships || []).map(a => String((a.author || {}).display_name || '').toLowerCase());
-  return similar(work.title || work.display_name || '', title) >= 0.8 && Math.abs((work.publication_year || 0) - year) <= 1 && names.some(n => n.includes(surname.toLowerCase().replace('-', ' ')) || n.includes(surname.toLowerCase()));
+  const flat = t => String(t || '').toLowerCase().normalize('NFKD').replace(/[^a-z]+/g, ' ').trim();
+  const names = (work.authorships || []).map(a => flat((a.author || {}).display_name));
+  return similar(work.title || work.display_name || '', title) >= 0.8 && Math.abs((work.publication_year || 0) - year) <= 1 && names.some(n => n.includes(flat(surname)));
 }
 export async function checkAll({ fetch: f = globalThis.fetch, prev = {}, now = () => Date.now(), checks = CHECKS } = {}) {
   const out = {};
@@ -30,6 +31,10 @@ export async function checkAll({ fetch: f = globalThis.fetch, prev = {}, now = (
       if (!hit) {   // second route: relevance search on the whole title, no year filter; the year and author are still checked on the result
         const r2 = await f('https://api.openalex.org/works?per-page=10&select=title,publication_year,doi,authorships&search=' + encodeURIComponent(title), { headers: { accept: 'application/json', 'user-agent': 'practical-solutions citation check (public)' } });
         if (r2.ok) hit = ((await r2.json()).results || []).find(w => matches(w, c));
+      }
+      if (!hit) {   // third route: Crossref's bibliographic search, a different index
+        const r3 = await f('https://api.crossref.org/works?rows=5&select=title,issued,author,DOI&query.bibliographic=' + encodeURIComponent(title + ' ' + c[2]), { headers: { accept: 'application/json', 'user-agent': 'practical-solutions citation check (public)' } });
+        if (r3.ok) { const w = (((await r3.json()).message || {}).items || []).map(i => ({ title: (i.title || [])[0], publication_year: (((i.issued || {})['date-parts'] || [[]])[0] || [])[0], doi: i.DOI ? 'https://doi.org/' + i.DOI : null, authorships: (i.author || []).map(a => ({ author: { display_name: [a.given, a.family].filter(Boolean).join(' ') } })) })).find(x => matches(x, c)); if (w) hit = w; }
       }
       out[id] = hit ? { status: 'verified', doi: hit.doi || null, at: new Date(now()).toISOString() } : { status: 'unresolved', at: new Date(now()).toISOString() };
     } catch (e) { out[id] = prev[id] || { status: 'unchecked', note: String(e.message || e).slice(0, 80) }; }

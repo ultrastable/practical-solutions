@@ -105,6 +105,9 @@ test('BEHAVIOUR-SOURCES-1: every source has a lookup entry, and the lookup match
   const f = async u => ({ ok: true, json: async () => ({ results: /Status/i.test(decodeURIComponent(u)) ? [ok] : [] }) });
   const viaSearch = await checkAll({ fetch: async u => ({ ok: true, json: async () => ({ results: /[?&]search=/.test(u) ? [ok] : [] }) }), checks: { samuelson1988: c } });
   assert.equal(viaSearch.results.samuelson1988.status, 'verified', 'the second route finds what the filter missed');
+  const viaCrossref = await checkAll({ fetch: async u => ({ ok: true, json: async () => /crossref/.test(u) ? { message: { items: [{ title: ['Status quo bias in decision making'], issued: { 'date-parts': [[1988]] }, DOI: '10.1/x', author: [{ given: 'William', family: 'Samuelson' }] }] } } : { results: [] } }), checks: { samuelson1988: c } });
+  assert.equal(viaCrossref.results.samuelson1988.status, 'verified', 'the third route is a different index');
+  assert.ok(matches({ title: 'The loss of loss aversion', publication_year: 2018, authorships: [{ author: { display_name: 'Omar Al\u2010Ubaydli' } }] }, ['The loss of loss aversion', 2018, 'Al-Ubaydli']), 'unicode hyphens in names');
   const led = await checkAll({ fetch: f, checks: { samuelson1988: c, arkes1985: CHECKS.arkes1985, rogers2003: CHECKS.rogers2003 } });
   assert.equal(led.results.samuelson1988.status, 'verified');
   assert.equal(led.results.arkes1985.status, 'unresolved');
