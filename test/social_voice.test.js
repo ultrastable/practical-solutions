@@ -31,3 +31,14 @@ test('THOUGHT-1: every queued post names Ultrastable, so the domain reads as an 
   for (const p of q.posts) { assert.match(p.text, /Ultrastable/, p.id); assert.ok(p.text.length <= 280, p.id + ' ' + p.text.length); }
   assert.ok(q.posts.some(p => p.text.includes(HOOK)));
 });
+
+test('POST-QUALITY-1: no post trails off, has one link, and wording matches the evidence grade', async () => {
+  const { solutionPost, solutionLong } = await import('../worker/src/social-voice.js');
+  const base = { id: 'deworming', title: 'School-based deworming (evidence is contested)', claim: 'An influential trial found that treating schoolchildren for worms raised school attendance, but a later Cochrane review found little effect on growth, school performance or survival for mass treatment.', evidence: [] };
+  const t = solutionPost({ ...base, label: 'mixed evidence' }, O);
+  assert.doesNotMatch(t, /…|\.\.\.|something that works/i);
+  assert.equal((t.match(/https?:\/\//g) || []).length, 1);
+  assert.match(t, /contested/i); assert.ok(t.length <= 280);
+  assert.match(solutionLong({ ...base, label: 'mixed evidence' }, O), /Cochrane review found little effect/);
+  for (const p of socialQueue(cat, { origin: O }).posts) { assert.doesNotMatch(p.text, /…|\.\.\./, p.id); assert.equal((p.text.match(/https?:\/\//g) || []).length, 1, p.id); assert.match(p.text, /[.!?:]\n?https?:\/\/\S+$/, p.id); }
+});
