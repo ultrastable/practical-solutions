@@ -1,6 +1,6 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-21T12:59:19.105Z",
+ "at": "2026-11-22T12:50:52.081Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
@@ -783,6 +783,174 @@
      "q": 15,
      "challenge": "Inadequate training or protocol adherence",
      "falsifier": "Instances of incorrect drape calibration, improper administration of first-response treatments, or failure to recognize heavy bleeding",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "smartphones-for-women": {
+   "at": "2026-11-22T12:50:52.081Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Alternative explanations for increased spending",
+     "falsifier": "Observation of decreased household spending among women who received smartphones",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Potential negative consequences for women who lose access to smartphones",
+     "falsifier": "Evidence of economic or social harm to women who no longer have access to smartphones after 13 months",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumption that smartphone ownership is the primary driver of increased spending",
+     "falsifier": "Discovery of other factors (e.g., external economic changes, alternative forms of support) that contribute to increased household spending",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Anticipated challenges in maintaining smartphone access and usage",
+     "falsifier": "High rates of smartphone loss, theft, or damage, or lack of access to maintenance and repair services",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "tb-community-screening": {
+   "at": "2026-11-22T12:50:52.081Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Ineffective Reduction",
+     "falsifier": "No significant decrease in tuberculosis prevalence after three yearly rounds of sputum testing",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Unnecessary Testing Harm",
+     "falsifier": "Increased incidence of false positives leading to unnecessary treatment and patient harm",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumed Test Accuracy",
+     "falsifier": "Discovery of significant inaccuracies in the rapid sputum tests used",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate Resource Allocation",
+     "falsifier": "Evidence that resources spent on mass testing could have been more effectively allocated to other healthcare initiatives",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "vita": {
+   "at": "2026-11-22T12:50:52.081Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "No effect on mortality",
+     "falsifier": "A randomized controlled trial showing no significant difference in child mortality between vitamin A supplemented and placebo groups",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Harm to children with adequate vitamin A levels",
+     "falsifier": "Reports of vitamin A toxicity or adverse effects in children with normal or high vitamin A levels who received high-dose supplements",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumption of consistent supplement quality and delivery",
+     "falsifier": "Studies revealing variability in supplement quality, distribution issues, or inadequate training of healthcare workers administering the supplements",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate consideration of alternative interventions",
+     "falsifier": "Research demonstrating that other interventions, such as dietary diversification or fortification, are more effective or cost-effective in reducing child mortality than vitamin A supplementation",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "women-leaders": {
+   "at": "2026-11-22T12:50:52.081Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Lack of representation effectiveness",
+     "falsifier": "Observation of no significant difference in funding priorities between councils with and without reserved seats for women",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Potential harm to men or other groups",
+     "falsifier": "Evidence of decreased funding for projects benefiting men or other groups in councils with reserved seats for women",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumption of homogeneous female preferences",
+     "falsifier": "Discovery of significant diversity in funding priorities among women in different councils or regions",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate consideration of contextual factors",
+     "falsifier": "Identification of contextual factors (e.g., socioeconomic status, education level) that negate the effect of reserved seats on funding priorities",
      "severity": 2,
      "source": "model",
      "family": "meta"
