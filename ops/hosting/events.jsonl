@@ -210,3 +210,4 @@
 {"at":"2026-11-22T11:20:51.062Z","kind":"host-expect","subject":"tenant-ps-web","summary":"deploy recorded as expected","data":{"sha256":"84d44bc97e99c33799688f607dfcd34101221a6dcdf06aa0ac3e1d3ff652c2c1"}}
 {"at":"2026-11-22T11:58:42.398Z","kind":"host-expect","subject":"tenant-ps-web","summary":"deploy recorded as expected","data":{"sha256":"ad7247630ec7974a626dd046b011eb30df88b64382b4b9c6fdecdd71447f934b"}}
 {"at":"2026-11-22T12:59:07.400Z","kind":"host-expect","subject":"tenant-ps-core","summary":"deploy recorded as expected","data":{"sha256":"06a4df486ebaef78d7e3eac81f659740139a13319ff12c97bbfff235dab1239c"}}
+{"at":"2026-11-22T13:16:28.027Z","kind":"host-expect","subject":"tenant-ps-web","summary":"deploy recorded as expected","data":{"sha256":"f2b158efad167d6f49f5d64fae8d69804699562a0d930286bc8e0cce4f03ff81"}}
