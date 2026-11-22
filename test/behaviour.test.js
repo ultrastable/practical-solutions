@@ -90,3 +90,36 @@ test('the json export carries every profile and the transparency rule', () => {
   assert.match(j.rule.test, /agree/);
   assert.equal(Object.keys(j.solutions).length, cat.sols.length);
 });
+
+import { checkAll, matches, similar, generated } from '../tools/behaviour_sources.mjs';
+import { CHECKS } from '../worker/src/behaviour-lib.js';
+import { statusOf, strengthOf } from '../worker/src/behaviour.js';
+import { readFileSync } from 'node:fs';
+
+test('BEHAVIOUR-SOURCES-1: every source has a lookup entry, and the lookup matches on title, year and author', async () => {
+  for (const id of Object.keys(SOURCES)) assert.ok(CHECKS[id], 'no lookup for ' + id);
+  const c = CHECKS.samuelson1988, ok = { title: 'Status quo bias in decision making', publication_year: 1988, authorships: [{ author: { display_name: 'William Samuelson' } }] };
+  assert.ok(matches(ok, c));
+  assert.ok(!matches({ ...ok, publication_year: 2001 }, c) && !matches({ ...ok, authorships: [{ author: { display_name: 'Someone Else' } }] }, c) && !matches({ ...ok, title: 'A different paper entirely' }, c));
+  assert.ok(similar('status quo bias', 'status quo bias') === 1);
+  const f = async u => ({ ok: true, json: async () => ({ results: /Status/i.test(decodeURIComponent(u)) ? [ok] : [] }) });
+  const led = await checkAll({ fetch: f, checks: { samuelson1988: c, arkes1985: CHECKS.arkes1985, rogers2003: CHECKS.rogers2003 } });
+  assert.equal(led.results.samuelson1988.status, 'verified');
+  assert.equal(led.results.arkes1985.status, 'unresolved');
+  assert.equal(led.results.rogers2003.status, 'not_indexed');
+  const down = await checkAll({ fetch: async () => { throw new Error('offline'); }, prev: { arkes1985: { status: 'verified' } }, checks: { arkes1985: CHECKS.arkes1985 } });
+  assert.equal(down.results.arkes1985.status, 'verified', 'a failed lookup keeps the previous status and never invents one');
+});
+
+test('the generated status module matches the ledger, and a lever with only unresolved sources is capped at weak', () => {
+  const led = JSON.parse(readFileSync('ledger/behaviour-sources.json', 'utf8'));
+  assert.equal(readFileSync('worker/src/behaviour-sources.gen.js', 'utf8'), generated(led));
+  assert.ok(['verified', 'unresolved', 'not_indexed', 'unchecked'].includes(statusOf('samuelson1988')));
+  assert.equal(strengthOf({ strength: 'strong', sources: [] }), 'strong');
+});
+
+import { existsSync } from 'node:fs';
+test('POST-QUALITY-1: every change post passes the core post gate once it is vendored (checked by hand against ultrastable#1929: 0 of 24 blocked)', { skip: !existsSync('vendor/ultrastable/core/social/postquality.js') && 'the core gate is not in the vendored copy yet' }, async () => {
+  const { lintPost } = await import('../vendor/ultrastable/core/social/postquality.js');
+  for (const p of socialQueue(cat, { origin: 'https://example.org' }).posts.filter(p => p.arm === 'ps-change')) assert.deepEqual(lintPost(p.text, { grade: p.grade }), [], p.id);
+});

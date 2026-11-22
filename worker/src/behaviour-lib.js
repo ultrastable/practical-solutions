@@ -124,3 +124,47 @@ export const ETHICS = {
 // Words a change plan must never use about a contested or weakly evidenced finding, and manipulation words it must never use at all.
 export const OVERCLAIM = /\b(proven|settled|beyond doubt|undeniable|guaranteed|always works|no longer in doubt|obviously works)\b/i;
 export const MANIPULATIVE = /\b(act now|limited time|last chance|don't miss|don.t be left behind|everyone else is|you will regret|fear of missing|secretly|without them noticing|trick|exploit)\b/i;
+
+// BEHAVIOUR-SOURCES-1: how each citation is looked up in an outside index (OpenAlex) by tools/behaviour_sources.mjs. `kind` book or report is not
+// indexed by title and is shown as not machine-checked. The titles here are what the lookup matches, so a wrong title or year shows as unresolved.
+export const CHECKS = {
+  michie2011: ['The behaviour change wheel: A new method for characterising and designing behaviour change interventions', 2011, 'Michie'],
+  bit2014: ['report'], rogers2003: ['book'], tetlock2015: ['book'],
+  powell2015: ['A refined compilation of implementation strategies: results from the Expert Recommendations for Implementing Change (ERIC) project', 2015, 'Powell'],
+  damschroder2009: ['Fostering implementation of health services research findings into practice: a consolidated framework for advancing implementation science', 2009, 'Damschroder'],
+  greenhalgh2004: ['Diffusion of innovations in service organizations: systematic review and recommendations', 2004, 'Greenhalgh'],
+  grol2003: ['From best evidence to best practice: effective implementation of change in patients\' care', 2003, 'Grol'],
+  gollwitzer2006: ['Implementation intentions and goal achievement: A meta-analysis of effects and processes', 2006, 'Gollwitzer'],
+  samuelson1988: ['Status quo bias in decision making', 1988, 'Samuelson'],
+  arkes1985: ['The psychology of sunk cost', 1985, 'Arkes'],
+  katz1982: ['Investigating the Not Invented Here (NIH) syndrome: A look at the performance, tenure, and communication patterns of 50 R&D Project Groups', 1982, 'Katz'],
+  ritov1990: ['Reluctance to vaccinate: Omission bias and ambiguity', 1990, 'Ritov'],
+  flyvbjerg2006: ['From Nobel Prize to project management: getting risks right', 2006, 'Flyvbjerg'],
+  edmondson1999: ['Psychological safety and learning behavior in work teams', 1999, 'Edmondson'],
+  bhargava2015: ['Psychological frictions and the incomplete take-up of social benefits: Evidence from an IRS field experiment', 2015, 'Bhargava'],
+  jachimowicz2019: ['When and why defaults influence decisions: a meta-analysis of default effects', 2019, 'Jachimowicz'],
+  mertens2022: ['The effectiveness of nudging: A meta-analysis of choice architecture interventions across behavioral domains', 2022, 'Mertens'],
+  maier2022: ['No evidence for nudging after adjusting for publication bias', 2022, 'Maier'],
+  dellavigna2022: ['RCTs to Scale: Comprehensive Evidence From Two Nudge Units', 2022, 'DellaVigna'],
+  mitchell1989: ['Back to the future: Temporal perspective in the explanation of events', 1989, 'Mitchell'],
+  mellers2014: ['Psychological strategies for winning a geopolitical forecasting tournament', 2014, 'Mellers'],
+  alubaydli2017: ['What Can We Learn from Experiments? Understanding the Threats to the Scalability of Experimental Results', 2017, 'Al-Ubaydli'],
+  ivers2012: ['Audit and feedback: effects on professional practice and healthcare outcomes', 2012, 'Ivers'],
+  flodgren2019: ['Local opinion leaders: effects on professional practice and healthcare outcomes', 2019, 'Flodgren'],
+  marsh2004: ['The power of positive deviance', 2004, 'Marsh'],
+  lewandowsky2012: ['Misinformation and its correction: Continued influence and successful debiasing', 2012, 'Lewandowsky'],
+  walter2018: ['How to unring the bell: A meta-analytic approach to correction of misinformation', 2018, 'Walter'],
+  wood2019: ['The elusive backfire effect: Mass attitudes\' steadfast factual adherence', 2019, 'Wood'],
+  nyhan2010: ['When corrections fail: The persistence of political misperceptions', 2010, 'Nyhan'],
+  ecker2022: ['The psychological drivers of misinformation belief and its resistance to correction', 2022, 'Ecker'],
+  kahan2012: ['The polarizing impact of science literacy and numeracy on perceived climate change risks', 2012, 'Kahan'],
+  kalla2020: ['Reducing Exclusionary Attitudes through Interpersonal Conversation: Evidence from Three Field Experiments', 2020, 'Kalla'],
+  cohen2014: ['The psychology of change: self-affirmation and social psychological intervention', 2014, 'Cohen'],
+  schultz2007: ['The constructive, destructive, and reconstructive power of social norms', 2007, 'Schultz'],
+  haynes2009: ['A surgical safety checklist to reduce morbidity and mortality in a global population', 2009, 'Haynes'],
+  urbach2014: ['Introduction of surgical safety checklists in Ontario, Canada', 2014, 'Urbach'],
+  hagger2016: ['A multilab preregistered replication of the ego-depletion effect', 2016, 'Hagger'],
+  doyen2012: ['Behavioral priming: it\'s all in the mind, but whose mind?', 2012, 'Doyen'],
+  gal2018: ['The loss of loss aversion: Will it loom larger than its gain?', 2018, 'Gal'],
+  hansen2013: ['Nudge and the manipulation of choice: A framework for the responsible use of the nudge approach to behaviour change in public policy', 2013, 'Hansen'],
+};

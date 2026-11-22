@@ -8,6 +8,7 @@
 // source the library lacks, or states a lever more strongly than its sources allow; npm test runs it over every entry.
 import * as ui from './kit/index.js';
 import { esc } from './catalog.js';
+import { CHECKED } from './behaviour-sources.gen.js';
 import { SOURCES, BARRIERS, LEVERS, RETIRED, MIND_RULES, ETHICS, OVERCLAIM, MANIPULATIVE } from './behaviour-lib.js';
 
 // belief: what practitioners or the public commonly hold; says: what this entry's own evidence shows (limits kept); barriers: library ids.
@@ -121,7 +122,11 @@ export function lintLibrary() {
 
 // ---------------------------------------------------------------- rendering
 const STRENGTH_TONE = { strong: 'ok', moderate: 'info', weak: 'warn', contested: 'warn' };
-const srcLine = id => { const x = SOURCES[id]; return x ? `${esc(x.cite)} <span class="m">(${esc(x.grade)}). ${esc(x.says)} <i>Caution: ${esc(x.caveat)}</i></span>` : ''; };
+const CHECK_TEXT = { verified: 'found in OpenAlex', unresolved: 'NOT FOUND in OpenAlex: treat as unverified', not_indexed: 'book or report, not machine-checked', unchecked: 'not yet machine-checked' };
+export const statusOf = id => (CHECKED.status || {})[id] || 'unchecked';
+// a lever whose every source failed the lookup is shown no stronger than weak
+export const strengthOf = l => l.sources.length && l.sources.every(x => statusOf(x) === 'unresolved') ? 'weak' : l.strength;
+const srcLine = id => { const x = SOURCES[id]; return x ? `${esc(x.cite)} <span class="m">(${esc(x.grade)}). ${esc(x.says)} <i>Caution: ${esc(x.caveat)}</i> <b>Citation: ${esc(CHECK_TEXT[statusOf(id)])}.</b></span>` : ''; };
 const srcSearch = id => 'https://europepmc.org/search?query=' + encodeURIComponent(String(SOURCES[id].cite).replace(/\(.*?\)/g, '').slice(0, 140));
 const sourceList = ids => ui.list(ids.filter(i => SOURCES[i]).map(i => `${srcLine(i)} <a href="${esc(srcSearch(i))}" rel="noopener">find it</a>`));
 
@@ -134,7 +139,7 @@ export function changeBlock(s) {
 <p class="m">These are common concerns to ask about, not facts about any one person.</p>
 <h3>What people may believe, and what the evidence says</h3><p><b>Common belief:</b> ${esc(p.belief.belief)}</p><p><b>What this entry\'s evidence shows:</b> ${esc(p.belief.says)}</p>
 <h3>What tends to get in the way</h3>${ui.list(p.barriers.map(b => `<b>${esc(BARRIERS[b].name)}.</b> ${esc(BARRIERS[b].why)} <span class="m">Ask: ${esc(BARRIERS[b].diagnose)}</span>`))}
-<h3>What has been tested against it</h3>${ui.list(p.levers.map(id => { const l = LEVERS[id]; return `${ui.badge(l.strength, STRENGTH_TONE[l.strength])} <b>${esc(l.name)}.</b> ${esc(l.how)} <span class="m">${esc(l.not)}</span>`; }))}
+<h3>What has been tested against it</h3>${ui.list(p.levers.map(id => { const l = LEVERS[id]; return `${ui.badge(strengthOf(l), STRENGTH_TONE[strengthOf(l)])} <b>${esc(l.name)}.</b> ${esc(l.how)} <span class="m">${esc(l.not)}</span>`; }))}
 <h3>First steps, each small enough for a week</h3><ol class="list">${p.steps.map(t => `<li>${esc(t)}</li>`).join('')}</ol>
 <h3>What would change your mind</h3>${ui.summaryList([['Ours', esc(p.mind.ours)], ['Yours', esc(p.mind.yours)]])}
 <p class="m">This follows the transparency test: ${esc(ETHICS.test)} <a href="/change">How the change layer works, and the ideas it does not rely on</a>.</p>
@@ -149,7 +154,7 @@ export function changeBody(c) {
 ${ui.callout({ tone: 'info', title: 'The rule', body: `<p>${esc(ETHICS.test)}</p>${ui.list(ETHICS.rules.map(esc))}<p class="m">After ${srcLine(ETHICS.source)}</p>` })}
 ${ui.section({ id: 'aim', title: 'The aim follows the evidence', body: ui.list([`${ui.badge('evidence-backed', 'ok')} A trial or review stands behind it: the aim is a small, well-run local pilot with a decision rule.`, `${ui.badge('cited, weaker design', 'info')} Early evidence: the aim is a test that could show it does not work.`, `${ui.badge('mixed evidence', 'warn')} The sources disagree: the aim is a fair local test and a rule agreed in advance. Nobody is asked to adopt on one side\'s word.`]) })}
 ${ui.section({ id: 'barriers', title: `What gets in the way (${bs.length})`, body: ui.list(bs.map(([, b]) => `<b>${esc(b.name)}.</b> ${esc(b.why)} <span class="m">It sounds like: ${b.signs.map(esc).join(' ')} Ask: ${esc(b.diagnose)}</span> ${sourceList(b.sources)}`)) })}
-${ui.section({ id: 'levers', title: `What has been tested (${ls.length})`, body: ui.list(ls.map(([, l]) => `${ui.badge(l.strength, STRENGTH_TONE[l.strength])} <b>${esc(l.name)}.</b> ${esc(l.how)} <span class="m">${esc(l.not)}</span> ${sourceList(l.sources)}`)) })}
+${ui.section({ id: 'levers', title: `What has been tested (${ls.length})`, body: ui.list(ls.map(([, l]) => `${ui.badge(strengthOf(l), STRENGTH_TONE[strengthOf(l)])} <b>${esc(l.name)}.</b> ${esc(l.how)} <span class="m">${esc(l.not)}</span> ${sourceList(l.sources)}`)) })}
 ${ui.section({ id: 'minds', title: 'Changing minds, yours and theirs', body: ui.list(MIND_RULES.map(m => `<b>${esc(m.rule)}</b> ${esc(m.why)} ${sourceList(m.sources)}`)) })}
 ${ui.section({ id: 'retired', title: 'Ideas this layer does not rely on', body: `<p>Popular claims from behavioural science that failed to hold up. A change plan built on them would be built on sand.</p>${ui.list(RETIRED.map(r => `${esc(r.idea)}. ${sourceList([r.source, r.also].filter(Boolean))}`))}` })}
 ${ui.section({ id: 'entries', title: 'Change profiles by solution', body: `<p>${ps.length} solutions have a profile; ${bespoke} carry a belief and barriers written for that entry and the rest use a generated profile until one is written. A new entry gets one at once.</p>${ui.list(ps.map(([s, p]) => `<a href="/solutions/${esc(s.id)}#change">${esc(s.title)}</a> ${ui.badge(s.label, p.grade === 'strong' ? 'ok' : p.grade === 'mixed' ? 'warn' : 'info')}`))}` })}
@@ -168,7 +173,10 @@ export function changePost(s, o, limit = 280) {
   const p = profileFor(s), url = `${o}/solutions/${s.id}#change`, t = lower(plain(s.title));
   const b = p.belief.belief.replace(/\.$/, ''), lever = LEVERS[p.levers[0]].name.toLowerCase();
   const step = BARRIERS[p.barriers[0]].first_step.replace(/\.$/, '');
-  const c = p.grade === 'mixed'
+  const early = p.grade === 'weak';
+  const c = early
+    ? [`Early evidence on ${t}, so the useful move is a small local test first. A common view: "${b}." What helps: ${lever}. ${HOOK}`, `${plain(s.title)}: the evidence is early. A small local test comes first; the people side is on the page. ${HOOK}`]
+    : p.grade === 'mixed'
     ? [`The evidence on ${t} is contested, so the useful move is a fair local test with the stopping rule written first. People often start from "${b}". ${HOOK}`, `${plain(s.title)}: contested evidence. Agree a local test and a stop rule before anyone adopts. ${HOOK}`]
     : [`The hard part of ${t} is usually people, not evidence. A common view: "${b}" What helps: ${lever}. ${HOOK}`, `Getting ${t} adopted: ${lever}. A first step: ${lower(step)}. ${HOOK}`, `${plain(s.title)}: the people who must change, what gets in their way and a first step. ${HOOK}`];
   const room = limit - url.length - 1;

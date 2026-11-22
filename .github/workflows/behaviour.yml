@@ -2,15 +2,15 @@
 # Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 # budget: public repository, unmetered; under a minute a run.
 # trigger: weekly (Monday 06:43 UTC); entries are added by the daily loops, a new one is on a generated profile at once, and a week is soon enough to write its specific belief and barriers.
-# free-alternative: none needed; no network and no secret is used.
+# free-alternative: none needed; OpenAlex is a free public API and the run uses its own GITHUB_TOKEN.
 # BEHAVIOUR-1: audit the change layer. A guard failure (overclaim, pressure wording, unknown source) or an entry with no written belief and barriers files one `idea` issue
-# for the code agent, with the audit itself as the closing probe. Nothing here is published; the layer is generated from the catalogue on every request.
+# for the code agent, with the audit itself as the closing probe. Citations are looked up weekly (tools/behaviour_sources.mjs); the layer itself is generated from the catalogue on every request.
 name: behaviour
 on:
   schedule: [{ cron: '43 6 * * 1' }]
   workflow_dispatch: {}
 concurrency: { group: behaviour, cancel-in-progress: false }
-permissions: { contents: read, issues: write }
+permissions: { contents: write, actions: write, issues: write }
 jobs:
   audit:
     if: ${{ vars.HALT != '1' }}
@@ -23,6 +23,34 @@ jobs:
         with: { ref: main }
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
+      - name: look up every behavioural citation in OpenAlex
+        id: sources
+        shell: bash
+        run: |
+          set +e
+          node --no-warnings tools/behaviour_sources.mjs | tee sources.json
+          npm test
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/behaviour-sources.json worker/src/behaviour-sources.gen.js
+          if ! git diff --cached --quiet; then
+            git commit -m "behaviour: citation lookup results (BEHAVIOUR-SOURCES-1)"
+            for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+            bash tools/dispatch_deploy.sh
+          fi
+      - name: an unresolved citation becomes one work item
+        if: ${{ always() }}
+        run: |
+          un=$(node -e "const r=JSON.parse(require('fs').readFileSync('ledger/behaviour-sources.json','utf8')).results;console.log(Object.entries(r).filter(([,v])=>v.status==='unresolved').map(([k])=>k).join(' '))")
+          title="Change layer: citations that did not resolve"
+          if [ -n "$un" ] && [ -z "$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number')" ]; then
+            gh issue create --title "$title" --label idea --body "OpenAlex found no match on title, year and first author for: $un
+
+          Done when: each id is corrected in CHECKS and SOURCES in worker/src/behaviour-lib.js (title, year, author as printed in the paper) and tools/behaviour_sources.mjs reports it verified, or the source and the levers resting only on it are removed. Never delete the check to clear the item.
+          Closing probe: node tools/behaviour_sources.mjs --check exits 0 on main.
+          Disposition: owner agent (.github/workflows/agent.yml), trigger: label idea."
+          fi
       - name: audit the change layer
         id: audit
         shell: bash
