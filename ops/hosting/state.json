@@ -4,7 +4,7 @@
   "tenant-ps-web": {
    "script": "tenant-ps-web",
    "found": true,
-   "sha256": "5b550cd419a77db0a9d43665581c09e5925359a6e1db0dd9387fbdf2c41b1f17",
+   "sha256": "b50851e2937fb0e43fce3e64410fc8846a4efc172c80e76ca7a151fdb8858661",
    "bindings": [
     {
      "type": "ai",
@@ -37,8 +37,8 @@
    "compat_date": "2026-10-01",
    "compat_flags": [],
    "deployment": {
-    "id": "a278fff2-f9c6-435e-9305-8fcf7cc3f9ed",
-    "created_on": "2026-11-22T13:26:16.266807Z"
+    "id": "e7c27fa3-095c-4dec-819c-7a980ac5d9e4",
+    "created_on": "2026-11-22T13:34:42.646433Z"
    },
    "read_errors": []
   },
