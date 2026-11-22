@@ -103,6 +103,8 @@ test('BEHAVIOUR-SOURCES-1: every source has a lookup entry, and the lookup match
   assert.ok(!matches({ ...ok, publication_year: 2001 }, c) && !matches({ ...ok, authorships: [{ author: { display_name: 'Someone Else' } }] }, c) && !matches({ ...ok, title: 'A different paper entirely' }, c));
   assert.ok(similar('status quo bias', 'status quo bias') === 1);
   const f = async u => ({ ok: true, json: async () => ({ results: /Status/i.test(decodeURIComponent(u)) ? [ok] : [] }) });
+  const viaSearch = await checkAll({ fetch: async u => ({ ok: true, json: async () => ({ results: /[?&]search=/.test(u) ? [ok] : [] }) }), checks: { samuelson1988: c } });
+  assert.equal(viaSearch.results.samuelson1988.status, 'verified', 'the second route finds what the filter missed');
   const led = await checkAll({ fetch: f, checks: { samuelson1988: c, arkes1985: CHECKS.arkes1985, rogers2003: CHECKS.rogers2003 } });
   assert.equal(led.results.samuelson1988.status, 'verified');
   assert.equal(led.results.arkes1985.status, 'unresolved');
