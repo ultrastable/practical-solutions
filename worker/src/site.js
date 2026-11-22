@@ -27,11 +27,12 @@ import { autonomyPage, autonomyData } from './autonomy.js';  // AUTONOMY-1
 import * as V from './views.js';
 import { levelName } from './context.js';
 import { INFRA, solutionsFor } from './countries.js';
+import { changeBody, changeJson } from './behaviour.js';  // BEHAVIOUR-1
 
 const { esc } = ui;
 export const HEADERS = { ...SECURITY_HEADERS, 'cache-control': 'public, max-age=300' };
 export const legend = P.legend;
-const SITE_PATHS = ['/', '/ask', '/problems', '/catalogue', '/solutions', '/syntheses', '/connections', '/graph', '/evidence-map', '/ranking', '/glossary', '/accessibility', '/country/compare', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/unknowns', '/pipeline', '/impact', '/changes', '/autonomy', '/releases', '/api', '/about', '/privacy'];
+const SITE_PATHS = ['/', '/ask', '/problems', '/catalogue', '/solutions', '/syntheses', '/connections', '/graph', '/evidence-map', '/ranking', '/glossary', '/accessibility', '/country/compare', '/domains', '/for', '/context', '/country', '/compare', '/leads', '/method', '/change', '/unknowns', '/pipeline', '/impact', '/changes', '/autonomy', '/releases', '/api', '/about', '/privacy'];
 
 const solutionJson = (s, c, o) => ({ id: s.id, title: s.title, claim: s.claim, label: s.label, implementability: s.impl, design: s.design, verdict: s.verdict, problems: s.problem_ids, domains: s.domains, verified: s.verified,
   works_where: s.works_where, takes: s.takes, who: s.who, first_test: s.first_test, limits: s.limits, sources: s.links.map(l => ({ cite: l.cite, finding: l.finding, links: [...l.direct.map(d => d.url), l.search] })), url: o + '/solutions/' + s.id, cite: P.citation(s.title, '/solutions/' + s.id, o) });
@@ -142,7 +143,7 @@ export function route(u, c) {
     '/evidence-map': () => page('/evidence-map', o, 'Evidence map', 'Where evidence is strong, thin or missing, by domain.', V.evidenceMapBody(c)), '/ranking': () => page('/ranking', o, 'Benefit-cost ranking', 'Solutions ranked by benefit per dollar in WELLBYs, with ranges.', V.rankingBody(c, u)),
     '/glossary': () => page('/glossary', o, 'Glossary', 'The terms used on this site, each defined once.', V.glossaryBody(), { jsonld: V.glossaryLd(o) }), '/accessibility': () => page('/accessibility', o, 'Accessibility', 'What is checked automatically and how to report a barrier.', V.accessibilityBody(P.CORRECTIONS_URL)),
     '/country/compare': () => page('/country/compare', o, 'Compare countries', 'Income group, HDI tier, infrastructure and fitting solutions for up to four countries side by side.', V.countryCompareBody(c, u, { levelName, INFRA, solutionsFor }), { noindex: u.searchParams.has('c') }),
-    '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o, u), '/method': () => methodPage(c, o), '/unknowns': () => page('/unknowns', o, 'What we do not know', 'Known unknowns, red-team findings and the new questions generated from them.', U.unknownsBody(c)), '/pipeline': () => page('/pipeline', o, 'Pipeline', 'How problems move through the catalogue and whether anything is moving.', PL.pipelineBody()), '/api': () => P.apiPage(c, o), '/about': () => P.aboutPage(c, o), '/privacy': () => P.privacyPage(c, o), '/search': () => P.searchPage(c, u, o), '/ask': () => askPage('', null, o) };
+    '/leads': () => leadsPage(c, o), '/impact': () => impactPage(c, o), '/changes': () => changesPage(c, o, u), '/method': () => methodPage(c, o), '/change': () => page('/change', o, 'Making change happen', 'Why good evidence is not adopted, what has been tested against it, and a first step for every solution.', changeBody(c)), '/unknowns': () => page('/unknowns', o, 'What we do not know', 'Known unknowns, red-team findings and the new questions generated from them.', U.unknownsBody(c)), '/pipeline': () => page('/pipeline', o, 'Pipeline', 'How problems move through the catalogue and whether anything is moving.', PL.pipelineBody()), '/api': () => P.apiPage(c, o), '/about': () => P.aboutPage(c, o), '/privacy': () => P.privacyPage(c, o), '/search': () => P.searchPage(c, u, o), '/ask': () => askPage('', null, o) };
   if (p === '/connections') return h(connectionsPage(undefined, o, page));  // DISCOVER-1 (a ?q= search is served by the Worker, which has the model)
   if (p === '/connections.json') return json(connectionsJson(undefined, o));
   if (p === '/graph') { const g = graphPage(c, u, o, page); return g ? h(g) : h(P.notFound(c, o, p), 404); }  // LINKS-1
@@ -162,6 +163,7 @@ export function route(u, c) {
   if (p === '/search.json') return json({ q: u.searchParams.get('q') || '', results: search(searchIndex(c), u.searchParams.get('q')) });
   if (p === '/claims.json') return json({ statements: describe(STATEMENTS, CTX) });
   if (p === '/ensemble.json') return json(ENSEMBLE_LEDGER);
+  if (p === '/change.json') return json(changeJson(c));
   if (p === '/unknowns.json') return json(U.unknownsData(c));
   if (p === '/pipeline.json') return json(PL.pipelineData());
   if (p === '/index.json') return json(indexJson(c, o));

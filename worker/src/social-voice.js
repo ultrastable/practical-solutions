@@ -4,6 +4,7 @@
 // catalogue entry it is about (never typed here), so a post can only state what the site itself shows. Core's publisher (ultrastable seed/worker
 // src/social.js) fetches /social-queue.json and drains it within its own caps; this module decides only the words and the order.
 // Order follows the hierarchy: a new domain, then its problems, then its solutions. Wording varies by a hash of the id so the feed never repeats itself.
+import { changePost } from './behaviour.js';  // BEHAVIOUR-1: the human side of each solution, after its own post
 const LIMIT = 280;  // Bluesky allows 300; the link is counted in full
 const h = s => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 const pick = (id, arr) => arr[h(id) % arr.length];
@@ -77,6 +78,7 @@ export function socialQueue(cat, { origin, now = Date.now(), recent = new Set() 
   for (const d of cat.domains) add('ps:domain:' + d.slug, domainPost(d, origin), 0, 'ps-domain');
   for (const p of cat.probs) add('ps:problem:' + p.id, problemPost(p, origin), 1, 'ps-problem');
   for (const s of cat.sols) add('ps:solution:' + s.id, solutionPost(s, origin), 2, 'ps-solution', { grade: GRADE[s.label], long: solutionLong(s, origin) });
+  for (const s of cat.sols) add('ps:change:' + s.id, changePost(s, origin, LIMIT), 3, 'ps-change', { grade: GRADE[s.label] });
   q.sort((a, b) => (a.kind !== 'event') - (b.kind !== 'event') || a.rank - b.rank);
   q.unshift({ id: 'ps:meta:' + wk, date: day, text: metaPost(wk, wk, origin), kind: 'backlog', arm: 'meta-story', rank: -1 });
   return { tenant: 'practical-solutions', origin, as_of: new Date(now).toISOString(), posts: q.map(({ rank, ...x }) => x) };
