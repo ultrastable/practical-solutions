@@ -1,0 +1,44 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; under a minute a run.
+# trigger: weekly (Monday 06:43 UTC); entries are added by the daily loops, a new one is on a generated profile at once, and a week is soon enough to write its specific belief and barriers.
+# free-alternative: none needed; no network and no secret is used.
+# BEHAVIOUR-1: audit the change layer. A guard failure (overclaim, pressure wording, unknown source) or an entry with no written belief and barriers files one `idea` issue
+# for the code agent, with the audit itself as the closing probe. Nothing here is published; the layer is generated from the catalogue on every request.
+name: behaviour
+on:
+  schedule: [{ cron: '43 6 * * 1' }]
+  workflow_dispatch: {}
+concurrency: { group: behaviour, cancel-in-progress: false }
+permissions: { contents: read, issues: write }
+jobs:
+  audit:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: audit the change layer
+        id: audit
+        shell: bash
+        run: |
+          set +e
+          node --no-warnings tools/behaviour.mjs --check | tee behaviour.json
+          echo "code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+      - name: a gap becomes one work item
+        if: ${{ steps.audit.outputs.code != '0' }}
+        run: |
+          title="Change layer: entries need attention"
+          if [ -z "$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number')" ]; then
+            gh issue create --title "$title" --label idea --body "The behaviour audit (tools/behaviour.mjs) found: $(cat behaviour.json)
+
+          Done when: node tools/behaviour.mjs exits 0. For each id in missing_bespoke, add an entry to HINTS in worker/src/behaviour.js: the belief people commonly hold that this entry's own evidence contradicts or qualifies (stay inside what the entry cites; a contested entry gets both sides), what the evidence shows, and two or three barrier ids from worker/src/behaviour-lib.js. For each failing id, fix the wording or the library; never weaken the guard.
+          Closing probe: node tools/behaviour.mjs exits 0 on main.
+          Disposition: owner agent (.github/workflows/agent.yml), trigger: label idea."
+          fi
+          exit 1

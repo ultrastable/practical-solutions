@@ -4,61 +4,64 @@
     "repo": "ultrastable/ultrastable"
   },
   "keep": {
-    "worker/src/ask-intents.js": "answers the tenant's suggested questions from its own catalogue (solutions, problems, trends); the intents are this catalogue's vocabulary, so lifting needs a core ask-intents interface first",
-    "tools/live_ask.mjs": "live probe of this tenant's suggested questions (imports EXAMPLES from the tenant ask module); tenant-specific by construction",
-    ".github/workflows/branch-sweep.yml": "tenant trigger for branch_sweep; generic merge-and-delete of this repository branches, lifting queued upstream",
-    "tools/branch_sweep.mjs": "merges feature branches and deletes merged ones for this repository; lifting queued upstream",
+    ".github/workflows/behaviour.yml": "weekly trigger for the behaviour audit of this catalogue",
     ".github/workflows/bootstrap.yml": "boots the tenant's own organisation",
+    ".github/workflows/branch-sweep.yml": "tenant trigger for branch_sweep; generic merge-and-delete of this repository branches, lifting queued upstream",
     ".github/workflows/ci.yml": "tenant CI; runs the sync check",
+    ".github/workflows/deploy-lag.yml": "this tenant's deploy-lag probe over its own deploy workflows",
+    ".github/workflows/gapscan.yml": "runs this tenant's own gap analysis against its own routes (org/capabilities.json) and files its own idea issues",
     ".github/workflows/host-sync.yml": "tenant's own trigger for core/hostsync; names this tenant's deploy workflows",
-    "tools/dispatch_deploy.sh": "names this tenant's own deploy-tenant workflow; nothing generic to lift",
+    ".github/workflows/problemscan.yml": "tenant trigger for its own problem scan",
+    ".github/workflows/release.yml": "cuts releases of this tenant's own catalogue (problems, solutions, combinations, findings) and dispatches its own loops",
+    ".github/workflows/synth.yml": "tenant's own synthesis loop over its own entries",
+    ".github/workflows/translate.yml": "tenant trigger for its own translation loop",
+    ".github/workflows/yearsim.yml": "weekly run of tools/yearsim.mjs, which simulates this tenant's own loop (bin/ps.mjs) and checks this repository's workflows; the core year simulation (ultrastable/ultrastable foundation/yearsim.py) reads its ops/yearsim.json",
     "bin/issues.mjs": "applies the tenant's issue plan with gh",
     "ps/brief.js": "renders a bright-spot brief",
     "ps/detect.js": "the bright-spot detector is the product's domain method",
+    "ps/gapscan.js": "scans this tenant's capability registry; the registry and probes are tenant data, a core copy would only be the loop shell",
     "ps/issues.js": "bright-spot issue lifecycle over the tenant's own predictions",
     "ps/ledger.js": "exports the tenant ledger",
     "ps/metrics.js": "tenant metric set",
     "ps/narrate.js": "tenant brief narration",
     "ps/org.js": "creates the tenant's own organisation",
     "ps/promote_step.js": "tenant promotion step over its own entries",
-    "ps/voice.js": "this product's own social wording for its domains, problems and solutions",
     "ps/synth.js": "synthetic world for the detector tests",
     "ps/verify.js": "verifies bright-spot briefs",
-    "tools/bca_precompute.mjs": "generates the tenant's own benefit-cost precompute from its own seed models (bca-models.js); tenant-specific",
-    "tools/live_ux.mjs": "probes the tenant's own live pages",
-    "worker/src/audiences.js": "tenant audiences",
-    "worker/src/domains-meta.js": "tenant domain list",
-    "worker/src/kit/tokens.js": "tenant design tokens (accent and type pair), the permitted variation",
-    "worker/src/redteam-config.js": "tenant red-team pool config",
-    "worker/src/freshness.js": "reports this tenant's own generated bundles (ensemble ledger age, bca and selfmigrate), so it names tenant files and is not generic",
-    ".github/workflows/synth.yml": "tenant's own synthesis loop over its own entries",
-    ".github/workflows/release.yml": "cuts releases of this tenant's own catalogue (problems, solutions, combinations, findings) and dispatches its own loops",
-    "tools/problemscan.mjs": "runs this tenant's scan and writes its ledger and generated module",
-    ".github/workflows/problemscan.yml": "tenant trigger for its own problem scan",
-    ".github/workflows/gapscan.yml": "runs this tenant's own gap analysis against its own routes (org/capabilities.json) and files its own idea issues",
-    "ps/gapscan.js": "scans this tenant's capability registry; the registry and probes are tenant data, a core copy would only be the loop shell",
-    "tools/gapscan.mjs": "drives ps/gapscan.js against this tenant's router and issue tracker",
-    "worker/src/catalogue-pages.js": "renders this tenant's problem catalogue pages from its generated scan module",
-    "worker/src/ask-docs.js": "turns this tenant's own catalogue into Ask documents",
-    "worker/src/ask.js": "this tenant's Ask page and model wiring over core/ask",
-    "worker/src/i18n.js": "this tenant's language list, dictionary store and switcher over core/i18n",
-    "tools/translate.mjs": "harvests this tenant's pages and writes its translation ledger",
+    "ps/voice.js": "this product's own social wording for its domains, problems and solutions",
     "tools/askindex.mjs": "builds this tenant's Ask index",
-    "worker/src/ask-index.gen.js": "generated from this tenant's catalogue",
-    ".github/workflows/translate.yml": "tenant trigger for its own translation loop",
-    "tools/push_main.py": "copy of core's MAIN-WRITER-1 pusher that vendor/ultrastable/tools/hostsync_commit.sh calls as tools/push_main.py; core does not ship it in the vendor tree yet",
-    ".github/workflows/deploy-lag.yml": "this tenant's deploy-lag probe over its own deploy workflows",
-    "worker/src/connections.js": "the /connections page of this tenant: renders its own catalogue graph with its UI kit; the generic engine is core/discover",
-    "worker/src/autonomy.js": "the /autonomy page of this tenant: counts its own loop records and release ledger with its UI kit; nothing generic to lift",
+    "tools/bca_precompute.mjs": "generates the tenant's own benefit-cost precompute from its own seed models (bca-models.js); tenant-specific",
+    "tools/behaviour.mjs": "audits this catalogue's change profiles",
+    "tools/branch_sweep.mjs": "merges feature branches and deletes merged ones for this repository; lifting queued upstream",
+    "tools/check_readmes.py": "checks this repository's own README layout; tenant-specific",
+    "tools/content_dates.mjs": "dates this catalogue's entries from its own git history; reads the tenant's solution and synthesis files, so it is tenant-specific by construction",
+    "tools/dispatch_deploy.sh": "names this tenant's own deploy-tenant workflow; nothing generic to lift",
+    "tools/gapscan.mjs": "drives ps/gapscan.js against this tenant's router and issue tracker",
+    "tools/live_ask.mjs": "live probe of this tenant's suggested questions (imports EXAMPLES from the tenant ask module); tenant-specific by construction",
+    "tools/live_ux.mjs": "probes the tenant's own live pages",
     "tools/pipeline.mjs": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
     "tools/pipeline_backfill.mjs": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
-    "worker/src/pipeline.js": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
-    "worker/src/justify.js": "renders this catalogue's connection justifications from its own ledgers; registered here so the tenant-sync check passes (it was unregistered on main)",
-    ".github/workflows/yearsim.yml": "weekly run of tools/yearsim.mjs, which simulates this tenant's own loop (bin/ps.mjs) and checks this repository's workflows; the core year simulation (ultrastable/ultrastable foundation/yearsim.py) reads its ops/yearsim.json",
+    "tools/problemscan.mjs": "runs this tenant's scan and writes its ledger and generated module",
+    "tools/push_main.py": "copy of core's MAIN-WRITER-1 pusher that vendor/ultrastable/tools/hostsync_commit.sh calls as tools/push_main.py; core does not ship it in the vendor tree yet",
+    "tools/translate.mjs": "harvests this tenant's pages and writes its translation ledger",
     "tools/yearsim.mjs": "simulates this tenant's own loop on a fake clock and checks this repository's scheduled workflows; tenant-specific by construction",
+    "worker/src/ask-docs.js": "turns this tenant's own catalogue into Ask documents",
+    "worker/src/ask-index.gen.js": "generated from this tenant's catalogue",
+    "worker/src/ask-intents.js": "answers the tenant's suggested questions from its own catalogue (solutions, problems, trends); the intents are this catalogue's vocabulary, so lifting needs a core ask-intents interface first",
+    "worker/src/ask.js": "this tenant's Ask page and model wiring over core/ask",
+    "worker/src/audiences.js": "tenant audiences",
+    "worker/src/autonomy.js": "the /autonomy page of this tenant: counts its own loop records and release ledger with its UI kit; nothing generic to lift",
+    "worker/src/behaviour.js": "builds the change profile of each entry of this catalogue and renders it on its pages; bound to this catalogue's fields and the /change routes",
+    "worker/src/catalogue-pages.js": "renders this tenant's problem catalogue pages from its generated scan module",
+    "worker/src/connections.js": "the /connections page of this tenant: renders its own catalogue graph with its UI kit; the generic engine is core/discover",
     "worker/src/content-feed.js": "builds this catalogue's JSON Feed from its own solutions and syntheses; the generic feed format lives in core/stickiness (toJsonFeed), this file only maps this tenant's entries onto it",
-    "tools/content_dates.mjs": "dates this catalogue's entries from its own git history; reads the tenant's solution and synthesis files, so it is tenant-specific by construction",
-    "tools/check_readmes.py": "checks this repository's own README layout; tenant-specific"
+    "worker/src/domains-meta.js": "tenant domain list",
+    "worker/src/freshness.js": "reports this tenant's own generated bundles (ensemble ledger age, bca and selfmigrate), so it names tenant files and is not generic",
+    "worker/src/i18n.js": "this tenant's language list, dictionary store and switcher over core/i18n",
+    "worker/src/justify.js": "renders this catalogue's connection justifications from its own ledgers; registered here so the tenant-sync check passes (it was unregistered on main)",
+    "worker/src/kit/tokens.js": "tenant design tokens (accent and type pair), the permitted variation",
+    "worker/src/pipeline.js": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
+    "worker/src/redteam-config.js": "tenant red-team pool config"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",
@@ -77,6 +80,11 @@
       "hold": "queued: workflow templates lift after parameterising the tenant name",
       "item": "Q-LIFT-TENANT-1"
     },
+    ".github/workflows/audit-anchor.yml": {
+      "core": "core/audit/templates/audit-anchor.yml",
+      "hold": "queued: workflow templates lift after parameterising the tenant name",
+      "item": "Q-LIFT-TENANT-1"
+    },
     ".github/workflows/ensemble.yml": {
       "core": "core/modelport/templates/ensemble.yml",
       "hold": "ensemble thread lifts the ensemble family",
@@ -92,6 +100,11 @@
       "hold": "queued: workflow templates lift after parameterising the tenant name",
       "item": "Q-LIFT-TENANT-1"
     },
+    ".github/workflows/references.yml": {
+      "core": "core/references/templates/references.yml",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
+    },
     "ps/db.js": {
       "core": "core/_shared/opendb.js",
       "hold": "queued: imports the vendored sqlite adapter; lifts after review",
@@ -102,9 +115,24 @@
       "hold": "queued: depends on ps/llm.js, which lifts with the ensemble",
       "item": "Q-LIFT-TENANT-1"
     },
+    "ps/problemscan.js": {
+      "core": "core/problemscan/index.js",
+      "hold": "queued: the engine is tenant-agnostic (sources, rules and budget are arguments); lifts to core after its first live scan",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "ps/references.js": {
+      "core": "core/references/index.js",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
+    },
     "ps/review.js": {
       "core": "core/codeloop/review.js",
       "hold": "ensemble thread lifts the ensemble family",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "tools/audit_anchor.mjs": {
+      "core": "core/audit/anchor.mjs",
+      "hold": "queued: lifts with the audit module's anchor helper once the base URL is a parameter",
       "item": "Q-LIFT-TENANT-1"
     },
     "tools/build_migrations.mjs": {
@@ -117,6 +145,16 @@
       "hold": "queued: parameterise the tenant paths",
       "item": "Q-LIFT-TENANT-1"
     },
+    "tools/references.mjs": {
+      "core": "core/references/runner.mjs",
+      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
+      "item": "Q-LIFT-REFERENCES-1"
+    },
+    "worker/src/behaviour-lib.js": {
+      "core": "core/behaviour/library.js",
+      "hold": "queued: generic and product-free (sources, barriers, levers, guard words); lifts once another tenant needs a change layer",
+      "item": "Q-LIFT-TENANT-1"
+    },
     "worker/src/ensemble-config.js": {
       "core": "core/modelport/ensemble-config.js",
       "hold": "ensemble thread lifts the ensemble family",
@@ -127,40 +165,10 @@
       "hold": "ensemble thread lifts the ensemble family",
       "item": "Q-LIFT-TENANT-1"
     },
-    ".github/workflows/audit-anchor.yml": {
-      "core": "core/audit/templates/audit-anchor.yml",
-      "hold": "queued: workflow templates lift after parameterising the tenant name",
-      "item": "Q-LIFT-TENANT-1"
-    },
-    "tools/audit_anchor.mjs": {
-      "core": "core/audit/anchor.mjs",
-      "hold": "queued: lifts with the audit module's anchor helper once the base URL is a parameter",
-      "item": "Q-LIFT-TENANT-1"
-    },
-    "ps/problemscan.js": {
-      "core": "core/problemscan/index.js",
-      "hold": "queued: the engine is tenant-agnostic (sources, rules and budget are arguments); lifts to core after its first live scan",
-      "item": "Q-LIFT-TENANT-1"
-    },
     "worker/src/numfmt.js": {
       "core": "core/format/numfmt.js",
       "hold": "queued: dependency-free number formatter (NUMFMT-1) lifts to core for every tenant",
       "item": "Q-LIFT-TENANT-1"
-    },
-    "ps/references.js": {
-      "core": "core/references/index.js",
-      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
-      "item": "Q-LIFT-REFERENCES-1"
-    },
-    "tools/references.mjs": {
-      "core": "core/references/runner.mjs",
-      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
-      "item": "Q-LIFT-REFERENCES-1"
-    },
-    ".github/workflows/references.yml": {
-      "core": "core/references/templates/references.yml",
-      "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
-      "item": "Q-LIFT-REFERENCES-1"
     },
     "worker/src/references.js": {
       "core": "core/references/page.js",

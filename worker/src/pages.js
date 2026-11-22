@@ -8,6 +8,7 @@ import { LABELS, DESIGN, RULE, openQuestions, search, searchIndex } from './cata
 import { bcaBlock } from './bca.js';
 import { unknownsBlock } from './unknowns.js';
 import { ensembleBlock } from './ensemble-view.js';
+import { changeBlock } from './behaviour.js';
 import { FOOTER } from './publish.js';
 import { RELEASES } from './releases.gen.js';
 import { digest } from '../../vendor/ultrastable/core/progress/index.js';  // PROGRESS-1: counts of recorded changes per period, from the core's shared rule
@@ -37,7 +38,7 @@ export const SHELL = {
     columns: [
       { title: 'Explore', links: [{ label: 'Solutions', href: '/solutions' }, { label: 'New solutions', href: '/syntheses' }, { label: 'Problems', href: '/problems' }, { label: 'Problem catalogue', href: '/catalogue' }, { label: 'Domains', href: '/domains' }, { label: 'Knowledge graph', href: '/graph' }, { label: 'Compare solutions', href: '/compare' }, { label: 'Benefit-cost ranking', href: '/ranking' }, { label: 'Evidence map', href: '/evidence-map' }] },
       { title: 'Who it is for', links: AUDIENCES.map(a => ({ label: a.name, href: '/for/' + a.id })) },
-      { title: 'Trust', links: [{ label: 'About', href: '/about' }, { label: 'Privacy', href: '/privacy' }, { label: 'Accessibility', href: '/accessibility' }, { label: 'Glossary', href: '/glossary' }, { label: 'Method', href: '/method' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
+      { title: 'Trust', links: [{ label: 'About', href: '/about' }, { label: 'Privacy', href: '/privacy' }, { label: 'Accessibility', href: '/accessibility' }, { label: 'Glossary', href: '/glossary' }, { label: 'Method', href: '/method' }, { label: 'Making change happen', href: '/change' }, { label: 'What we do not know', href: '/unknowns' }, { label: 'Leads (not findings)', href: '/leads' }, { label: 'Changes', href: '/changes' }, { label: 'Impact and reach', href: '/impact' }] },
       { title: 'Ultrastable family', links: [{ label: 'Ultrastable for good (.org)', href: 'https://ultrastable.org/' }, { label: 'Platform and product (.io)', href: 'https://ultrastable.io/' }, { label: 'How it is built', href: 'https://ultrastable.io/how' }, { label: 'Live proof', href: 'https://ultrastable.io/proof' }, { label: 'Contact', href: 'https://ultrastable.io/contact' }] },
       { title: 'Data', links: [{ label: 'Data and API', href: '/api' }, { label: 'index.json', href: '/index.json' }, { label: 'solutions.csv', href: '/solutions.csv' }, { label: 'Feed', href: '/feed.xml' }, { label: 'llms.txt', href: '/llms.txt' }] },
     ],
@@ -82,6 +83,7 @@ registerSection('solution', { id: 'fits', title: 'Where it fits by income level'
 registerSection('solution', { id: 'takes', title: 'What it takes', order: 20, render: s => `<p>${esc(s.takes)}</p><p><b>Who can act:</b> ${esc(s.who)}</p>` });
 registerSection('solution', { id: 'first-test', title: 'Cheapest first test', order: 30, render: s => `<p>${esc(s.first_test)}</p>` });
 registerSection('solution', { id: 'implementable', title: 'Can it be implemented?', order: 40, render: s => implBlock(s) });
+registerSection('solution', { id: 'change', title: 'Making the change happen: people, beliefs and first steps', order: 42, render: s => changeBlock(s) });
 registerSection('solution', { id: 'bca', title: 'Benefit and cost, in WELLBYs', order: 45, render: s => bcaBlock(s.bca, s.id) });
 registerSection('solution', { id: 'unknowns', title: 'What we do not know, and the red team', order: 55, render: (s, c) => unknownsBlock(s.id, c) });
 registerSection('solution', { id: 'crosscheck', title: 'Cross-model check', order: 56, render: s => ensembleBlock(s.id) });
