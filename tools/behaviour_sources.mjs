@@ -26,7 +26,11 @@ export async function checkAll({ fetch: f = globalThis.fetch, prev = {}, now = (
       const u = 'https://api.openalex.org/works?per-page=5&select=title,publication_year,doi,authorships&filter=' + encodeURIComponent(`title.search:${norm(title).slice(0, 12).join(' ')},publication_year:${year - 1}-${year + 1}`);
       const r = await f(u, { headers: { accept: 'application/json', 'user-agent': 'practical-solutions citation check (public)' } });
       if (!r.ok) { out[id] = prev[id] || { status: 'unchecked', note: 'HTTP ' + r.status }; continue; }
-      const hit = ((await r.json()).results || []).find(w => matches(w, c));
+      let hit = ((await r.json()).results || []).find(w => matches(w, c));
+      if (!hit) {   // second route: relevance search on the whole title, no year filter; the year and author are still checked on the result
+        const r2 = await f('https://api.openalex.org/works?per-page=10&select=title,publication_year,doi,authorships&search=' + encodeURIComponent(title), { headers: { accept: 'application/json', 'user-agent': 'practical-solutions citation check (public)' } });
+        if (r2.ok) hit = ((await r2.json()).results || []).find(w => matches(w, c));
+      }
       out[id] = hit ? { status: 'verified', doi: hit.doi || null, at: new Date(now()).toISOString() } : { status: 'unresolved', at: new Date(now()).toISOString() };
     } catch (e) { out[id] = prev[id] || { status: 'unchecked', note: String(e.message || e).slice(0, 80) }; }
   }
