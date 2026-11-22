@@ -1,0 +1,129 @@
+{
+ "schema": "ps-behaviour-sources/1",
+ "at": null,
+ "results": {
+  "michie2011": {
+   "status": "unchecked"
+  },
+  "bit2014": {
+   "status": "unchecked"
+  },
+  "rogers2003": {
+   "status": "unchecked"
+  },
+  "tetlock2015": {
+   "status": "unchecked"
+  },
+  "powell2015": {
+   "status": "unchecked"
+  },
+  "damschroder2009": {
+   "status": "unchecked"
+  },
+  "greenhalgh2004": {
+   "status": "unchecked"
+  },
+  "grol2003": {
+   "status": "unchecked"
+  },
+  "gollwitzer2006": {
+   "status": "unchecked"
+  },
+  "samuelson1988": {
+   "status": "unchecked"
+  },
+  "arkes1985": {
+   "status": "unchecked"
+  },
+  "katz1982": {
+   "status": "unchecked"
+  },
+  "ritov1990": {
+   "status": "unchecked"
+  },
+  "flyvbjerg2006": {
+   "status": "unchecked"
+  },
+  "edmondson1999": {
+   "status": "unchecked"
+  },
+  "bhargava2015": {
+   "status": "unchecked"
+  },
+  "jachimowicz2019": {
+   "status": "unchecked"
+  },
+  "mertens2022": {
+   "status": "unchecked"
+  },
+  "maier2022": {
+   "status": "unchecked"
+  },
+  "dellavigna2022": {
+   "status": "unchecked"
+  },
+  "mitchell1989": {
+   "status": "unchecked"
+  },
+  "mellers2014": {
+   "status": "unchecked"
+  },
+  "alubaydli2017": {
+   "status": "unchecked"
+  },
+  "ivers2012": {
+   "status": "unchecked"
+  },
+  "flodgren2019": {
+   "status": "unchecked"
+  },
+  "marsh2004": {
+   "status": "unchecked"
+  },
+  "lewandowsky2012": {
+   "status": "unchecked"
+  },
+  "walter2018": {
+   "status": "unchecked"
+  },
+  "wood2019": {
+   "status": "unchecked"
+  },
+  "nyhan2010": {
+   "status": "unchecked"
+  },
+  "ecker2022": {
+   "status": "unchecked"
+  },
+  "kahan2012": {
+   "status": "unchecked"
+  },
+  "kalla2020": {
+   "status": "unchecked"
+  },
+  "cohen2014": {
+   "status": "unchecked"
+  },
+  "schultz2007": {
+   "status": "unchecked"
+  },
+  "haynes2009": {
+   "status": "unchecked"
+  },
+  "urbach2014": {
+   "status": "unchecked"
+  },
+  "hagger2016": {
+   "status": "unchecked"
+  },
+  "doyen2012": {
+   "status": "unchecked"
+  },
+  "gal2018": {
+   "status": "unchecked"
+  },
+  "hansen2013": {
+   "status": "unchecked"
+  }
+ }
+}
