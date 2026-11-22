@@ -10,6 +10,7 @@ import { indexnowKey } from '../../vendor/ultrastable/core/promote/index.js';
 import { toRss, toJsonFeed, itemsFrom } from '../../vendor/ultrastable/core/feed/index.js';
 import { describeChange } from './publish.js';
 import { SOLUTIONS } from './solutions.js';
+import { contentFeed } from './content-feed.js';  // STICKY-1
 import { buildCatalog } from './catalog.js';
 import { route, notFoundResponse } from './site.js';
 import { recordView, summary } from './reach.js';
@@ -92,6 +93,7 @@ const handler = {
       const lang = u.pathname.slice(9, -4); if (lang !== SOURCE_LANG && !live.includes(lang)) return new Response('not found\n', { status: 404 });
       return new Response(sitemapFor({ origin, paths: sitemapPaths(await catalog(env)), lang, live, def: SOURCE_LANG }), x);
     }
+    if (u.pathname === '/content.json') return Response.json(contentFeed(origin), { headers: { 'content-type': 'application/feed+json; charset=utf-8', 'cache-control': 'public, max-age=900', 'access-control-allow-origin': '*' } });  // STICKY-1
     if (['/feed.xml', '/feed.json'].includes(u.pathname)) {
       const meta = { title: 'Practical Solutions: what changed', link: origin, description: 'Every automatic change the improvement loop made: re-rankings, evidence checks, new candidate evidence.' };
       const items = itemsFrom(await j(env, 'changes', []), c => describeChange(c, origin));
