@@ -20,19 +20,19 @@ test('the first run releases the whole catalogue', () => {
 });
 test('new entries wait for the minimum interval, then release with only what is new', () => {
   const inv = { ...inv0, solutions: { ...inv0.solutions, s2: 'S two' } };
-  assert.equal(decide(first, inv, '2026-11-23T00:00:00Z').state, 'waiting');
+  assert.equal(decide(first, inv, '2026-11-20T12:00:00Z').state, 'waiting');
   const d = decide(first, inv, '2026-11-27T00:00:00Z'); assert.equal(d.cut, true);
   const next = cut(first, inv, d, '2026-11-27T00:00:00Z').releases[1];
   assert.deepEqual(next.added.solutions, [{ id: 's2', title: 'S two' }]); assert.equal(next.added.problems.length, 0); assert.equal(next.totals.solutions, 2);
 });
 test('nothing new after a week dispatches the loops that make entries; three weeks is late', () => {
-  assert.deepEqual(decide(first, inv0, '2026-11-22T00:00:00Z').heal, []);
-  const quiet = decide(first, inv0, '2026-11-28T00:00:00Z'); assert.equal(quiet.state, 'nothing_new'); assert.deepEqual(quiet.heal, CONFIG.heal);
+  assert.deepEqual(decide(first, inv0, '2026-11-20T12:00:00Z').heal, []);
+  const quiet = decide(first, inv0, '2026-11-24T00:00:00Z'); assert.equal(quiet.state, 'nothing_new'); assert.deepEqual(quiet.heal, CONFIG.heal);
   const late = decide(first, inv0, '2026-12-20T00:00:00Z'); assert.equal(late.state, 'late'); assert.deepEqual(late.heal, CONFIG.heal);
 });
 test('a problem is taken in by the largest measured shortfall, never one already listed or unmeasured', () => {
   const bank = JSON.parse(readFileSync(BANK, 'utf8'));
-  assert.equal(problemDue(first, bank, '2026-12-01T00:00:00Z'), false); assert.equal(problemDue(first, bank, '2026-12-19T00:00:00Z'), true);
+  assert.equal(problemDue(first, bank, '2026-11-25T00:00:00Z'), false); assert.equal(problemDue(first, bank, '2026-12-19T00:00:00Z'), true);
   const m = [{ id: 'a', shortfall: 0.4 }, { id: 'b', shortfall: 0.7 }, { id: 'c', shortfall: null }, { id: 'd', shortfall: 0.9 }];
   assert.equal(pickProblem(bank, ['d'], m).id, 'b'); assert.equal(pickProblem(bank, [], [{ id: 'c', shortfall: null }]), null);
   for (const c of bank.candidates) {
@@ -54,12 +54,22 @@ test('the generated module matches the ledger, and the site serves it', async ()
   assert.match(await route(new URL('https://x/releases.atom'), {}).text(), /<feed xmlns="http:\/\/www.w3.org\/2005\/Atom">/);
 });
 test('a release loop that stopped is a measured failure', () => {
-  const rel = { max_gap_days: 21, releases: [{ date: '2026-11-20' }] }, t = Date.parse('2026-11-20'), fresh = { at: new Date(t + 40 * 864e5).toISOString() };
+  const rel = { max_gap_days: 7, releases: [{ date: '2026-11-20' }] }, t = Date.parse('2026-11-20'), fresh = { at: new Date(t + 40 * 864e5).toISOString() };
   assert.equal(freshness(t + 864e5, { at: new Date(t).toISOString() }, rel).ok, true);
-  assert.deepEqual(freshness(t + (21 + RELEASE_GRACE_DAYS + 1) * 864e5, { at: new Date(t + (21 + RELEASE_GRACE_DAYS + 1) * 864e5).toISOString() }, rel).stale, ['releases']);
+  assert.deepEqual(freshness(t + (7 + RELEASE_GRACE_DAYS + 1) * 864e5, { at: new Date(t + (7 + RELEASE_GRACE_DAYS + 1) * 864e5).toISOString() }, rel).stale, ['releases']);
   assert.deepEqual(freshness(Date.parse(fresh.at), fresh, { releases: [] }).stale, ['releases']);
 });
 test('both routes that start a release exist', () => {
-  assert.match(readFileSync('.github/workflows/release.yml', 'utf8'), /cron: '41 6 \* \* 1'/);
+  assert.match(readFileSync('.github/workflows/release.yml', 'utf8'), /cron: '41 6 \* \* \*'/);
   assert.match(readFileSync('.github/workflows/cycle.yml', 'utf8'), /gh workflow run release\.yml/);
+});
+
+test('merged site changes make a release due, data commits do not (RELEASE-FEATURES-1)', async () => {
+  const { featuresFrom, featureTitle, backfill } = await import('../tools/release.mjs');
+  const f = featuresFrom(['aaaaaaa1\t2026-11-21T10:00:00Z\tBEHAVIOUR-1: change layer - who must change (#202)', 'bbbbbbb2\t2026-11-21T11:00:00Z\thost-sync - record deployed tenant-ps-web', 'ccccccc3\t2026-11-21T12:00:00Z\tauto: merge claude/x (#203)']);
+  assert.deepEqual(f.map(x => x.title), ['Change layer: who must change']); assert.equal(featureTitle('X-1: a thing (#1) (#2)'), 'A thing');
+  const d = decide(first, inv0, '2026-11-22T00:00:00Z', CONFIG, f); assert.equal(d.cut, true); assert.equal(d.added.features.length, 1);
+  assert.equal(decide(first, inv0, '2026-11-22T00:00:00Z', CONFIG, []).cut, false);
+  const bf = backfill(first, inv0, f.concat([{ id: 'ddddddd', at: '2026-11-22T09:00:00Z', pr: 9, title: 'Later' }]), '2026-11-22T10:00:00Z');
+  assert.deepEqual(bf.releases.map(r => r.version), ['2026.11.20', '2026.11.21', '2026.11.22']);
 });
