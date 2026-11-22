@@ -38,16 +38,16 @@
    "outcome": "rejected"
   },
   "immunisation": {
-   "at": "2026-11-17T19:19:50.543Z",
-   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, with no discrepancies or outdated information found."
+   "at": "2026-11-22T13:19:07.695Z",
+   "outcome": "no change proposed: The entry already agrees with the sources, which discuss the effectiveness of incentives and interventions in improving immunisation uptake in low- and middle-income countries, but do not provide info"
   },
   "itn": {
-   "at": "2026-11-17T19:19:50.543Z",
-   "outcome": "no change proposed: All fields in the entry are consistent with the information provided in the cited sources."
+   "at": "2026-11-22T13:19:07.695Z",
+   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, with no discrepancies or outdated information identified."
   },
   "kmc": {
-   "at": "2026-11-17T19:19:50.543Z",
-   "outcome": "uncertain"
+   "at": "2026-11-22T13:19:07.695Z",
+   "outcome": "no change proposed: The provided sources describe different studies or protocols and do not contradict the specific details of the study mentioned in the entry."
   },
   "mobile-money": {
    "at": "2026-11-17T19:30:56.255Z",
@@ -480,11 +480,11 @@
    "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "mistral-small-3.1": {
-   "calls": 5,
+   "calls": 6,
    "errors": 0
   },
   "gemma-4": {
-   "calls": 6,
+   "calls": 7,
    "errors": 2,
    "last": "empty"
   },
@@ -519,7 +519,7 @@
    "last": "empty"
   },
   "llama-3.3-70b": {
-   "calls": 5,
+   "calls": 6,
    "errors": 0
   }
  },
@@ -723,11 +723,23 @@
    "none": 2,
    "panel_failures": 0,
    "failures": []
+  },
+  {
+   "at": "2026-11-22T13:19:07.695Z",
+   "examined": 3,
+   "proposed": 0,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 0,
+   "none": 3,
+   "panel_failures": 0,
+   "failures": []
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-21T13:27:22.746Z"
+ "at": "2026-11-22T13:19:07.695Z"
 }
