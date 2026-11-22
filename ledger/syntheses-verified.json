@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-21T11:42:42.574Z",
+ "at": "2026-11-22T11:57:31.441Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -97,16 +97,16 @@
        "hit": true
       },
       {
-       "title": "Reckoning Time in the Barber Shop:A Qualitative Study of a Barber Navigating Time, Temporality, and Rhythm",
-       "year": 2014,
-       "url": "https://openalex.org/W2243527285",
-       "hit": true
-      },
-      {
        "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
        "year": 2012,
        "url": "https://openalex.org/W166737179",
        "hit": false
+      },
+      {
+       "title": "Reckoning Time in the Barber Shop:A Qualitative Study of a Barber Navigating Time, Temporality, and Rhythm",
+       "year": 2014,
+       "url": "https://openalex.org/W2243527285",
+       "hit": true
       },
       {
        "title": "Stay Beautiful -- Stay Alive: Assessing the Receptivity of African American Beauty Salon Owners to the Integration of Breast Cancer Intervention Programs into Salon Operations",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-21T11:42:29.433Z"
+   "checked_at": "2026-11-22T11:56:21.773Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -197,15 +197,15 @@
        "hit": false
       },
       {
-       "title": "Health care professional barriers and facilitators to discontinuing antidepressant use: A systematic review and thematic synthesis",
-       "year": 2024,
-       "url": "https://doi.org/10.1016/j.jad.2024.04.060",
-       "hit": false
-      },
-      {
        "title": "Getting the Benefit of the Doubt: The Effect of Randomization Ratio on the Placebo Response",
        "year": 2019,
        "url": "https://openalex.org/W2989759371",
+       "hit": false
+      },
+      {
+       "title": "Health care professional barriers and facilitators to discontinuing antidepressant use: A systematic review and thematic synthesis",
+       "year": 2024,
+       "url": "https://doi.org/10.1016/j.jad.2024.04.060",
        "hit": false
       }
      ],
@@ -213,7 +213,7 @@
     },
     {
      "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1643,
+     "total": 1648,
      "closest": [
       {
        "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-21T11:42:32.379Z"
+   "checked_at": "2026-11-22T11:56:46.453Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -304,7 +304,7 @@
    "novelty": [
     {
      "label": "older adult volunteers delivering foundational learning in low-income countries",
-     "total": 560,
+     "total": 561,
      "closest": [
       {
        "title": "Literacy and numeracy support for homeless adults",
@@ -331,9 +331,9 @@
        "hit": false
       },
       {
-       "title": "A delicate balance: a study of volunteer literacy tutors and their training and development in Northern Tasmania",
-       "year": 1997,
-       "url": "https://openalex.org/W7222383058",
+       "title": "Perceptions of how literacy and numeracy instructions influence the lives of adult learners: a qualitative multiple case study of learners with low literacy skills",
+       "year": 2019,
+       "url": "https://doi.org/10.17918/00000102",
        "hit": false
       }
      ],
@@ -341,7 +341,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 38790,
+     "total": 38833,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -356,16 +356,16 @@
        "hit": false
       },
       {
-       "title": "Qualitative exploration of the impact of employment and volunteering upon the health and wellbeing of African refugees settled in regional Australia: a refugee perspective",
-       "year": 2019,
-       "url": "https://doi.org/10.1186/s12889-018-6328-2",
-       "hit": false
-      },
-      {
        "title": "What is the effect of intergenerational activities on the wellbeing and mental health of older people?: A systematic review",
        "year": 2023,
        "url": "https://doi.org/10.1002/cl2.1355",
        "hit": true
+      },
+      {
+       "title": "Qualitative exploration of the impact of employment and volunteering upon the health and wellbeing of African refugees settled in regional Australia: a refugee perspective",
+       "year": 2019,
+       "url": "https://doi.org/10.1186/s12889-018-6328-2",
+       "hit": false
       },
       {
        "title": "Older women: Employment and wellbeing in later life",
@@ -378,7 +378,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-21T11:42:35.996Z"
+   "checked_at": "2026-11-22T11:57:24.181Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -422,15 +422,15 @@
        "hit": false
       },
       {
-       "title": "Learning From History About Reducing Infant Mortality: Contrasting the Centrality of Structural Interventions to Early 20th‐Century Successes in the United States to Their Neglect in Current Global Initiatives",
-       "year": 2019,
-       "url": "https://doi.org/10.1111/1468-0009.12376",
-       "hit": false
-      },
-      {
        "title": "Methodological considerations and cost to measure coverage of multisectoral nutrition interventions: protocol for the One Nutrition Coverage Survey in Bangladesh",
        "year": 2025,
        "url": "https://doi.org/10.1136/bmjopen-2025-099314",
+       "hit": false
+      },
+      {
+       "title": "Learning From History About Reducing Infant Mortality: Contrasting the Centrality of Structural Interventions to Early 20th‐Century Successes in the United States to Their Neglect in Current Global Initiatives",
+       "year": 2019,
+       "url": "https://doi.org/10.1111/1468-0009.12376",
        "hit": false
       },
       {
@@ -444,7 +444,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-21T11:42:40.082Z"
+   "checked_at": "2026-11-22T11:57:28.673Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -477,7 +477,7 @@
    "novelty": [
     {
      "label": "Existing studies",
-     "total": 420,
+     "total": 422,
      "closest": [
       {
        "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
@@ -514,7 +514,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-21T11:42:42.574Z"
+   "checked_at": "2026-11-22T11:57:31.441Z"
   }
  },
  "errors": []
