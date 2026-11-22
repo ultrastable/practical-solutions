@@ -1,6 +1,6 @@
 {
  "schema": "ps-evidence-leads/1",
- "at": "2026-11-21T11:38:05.478Z",
+ "at": "2026-11-22T15:26:33.451Z",
  "note": "Titles Europe PMC returned for a problem-wording query. A hit is a lead to read, not evidence that an intervention works.",
  "items": {
   "wb-sn-itk-svfi-zs": {
@@ -452,54 +452,5 @@
    ]
   }
  },
- "log": [
-  {
-   "id": "wb-sn-itk-svfi-zs",
-   "event": "found 5 of 1253"
-  },
-  {
-   "id": "wb-sn-itk-msfi-zs",
-   "event": "found 5 of 859"
-  },
-  {
-   "id": "sdg-15-5-1",
-   "event": "found 5 of 9629"
-  },
-  {
-   "id": "wb-sm-pop-opip-ea",
-   "event": "found 5 of 255"
-  },
-  {
-   "id": "wb-sm-pop-idpc",
-   "event": "found 5 of 16"
-  },
-  {
-   "id": "wb-se-sec-tcaq-up-zs",
-   "event": "found 5 of 660"
-  },
-  {
-   "id": "wb-en-ghg-ch4-zg-ar5",
-   "event": "found 1 of 1"
-  },
-  {
-   "id": "wb-en-ghg-n2o-zg-ar5",
-   "event": "found 1 of 1"
-  },
-  {
-   "id": "wb-en-ghg-fgas-ip-mt-ce-ar5",
-   "event": "found 5 of 41"
-  },
-  {
-   "id": "wb-en-ghg-ch4-pi-mt-ce-ar5",
-   "event": "found 5 of 43"
-  },
-  {
-   "id": "who-finprotection-imp-np-rel-level-million",
-   "event": "found 5 of 41"
-  },
-  {
-   "id": "wb-se-pre-tcaq-zs",
-   "event": "found 5 of 7"
-  }
- ]
+ "log": []
 }
