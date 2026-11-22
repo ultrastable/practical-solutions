@@ -32,6 +32,7 @@
     "tools/askindex.mjs": "builds this tenant's Ask index",
     "tools/bca_precompute.mjs": "generates the tenant's own benefit-cost precompute from its own seed models (bca-models.js); tenant-specific",
     "tools/behaviour.mjs": "audits this catalogue's change profiles",
+    "tools/mobile_layout.mjs": "renders this tenant's own pages through its route() and checks them at 390 px; the page list and catalogue are tenant-specific (the budgets it enforces come from core/ui)",
     "tools/behaviour_sources.mjs": "looks up this catalogue's behavioural citations in OpenAlex; reads the tenant's own source table",
     "tools/branch_sweep.mjs": "merges feature branches and deletes merged ones for this repository; lifting queued upstream",
     "tools/check_readmes.py": "checks this repository's own README layout; tenant-specific",
