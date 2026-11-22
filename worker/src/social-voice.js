@@ -7,17 +7,18 @@
 const LIMIT = 280;  // Bluesky allows 300; the link is counted in full
 const h = s => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 const pick = (id, arr) => arr[h(id) % arr.length];
-const clip = (s, n) => (s.length <= n ? s : s.slice(0, Math.max(0, n - 1)).replace(/[\s,;:.]+\S*$/, '') + '…');
-// THOUGHT-1 (Rowan, 2026-11-21): every post says what this is an example of, so a reader never wonders why a data person posts about child health.
-export const HOOK = 'Runs on Ultrastable, a system that runs itself: ultrastable.io';
-const fit = (head, url) => { const tail = /Ultrastable/.test(head) ? url : `${HOOK}\n${url}`; return `${clip(head, LIMIT - tail.length - 1)}\n${tail}`; };
+// POST-QUALITY-1: nothing is ever clipped. A post is built from whole sentences; the first candidate that fits is used, and the last candidate always fits.
+const fitWhole = (cands, n) => cands.map(c => c.replace(/[ \t]+/g, ' ').trim()).find(c => c.length <= n);
+// THOUGHT-1 (Rowan, 2026-11-21): every post says what this is an example of. One link only (the page itself); the hook names Ultrastable without a second URL.
+export const HOOK = 'Built on Ultrastable.';
+const fit = (heads, url) => `${fitWhole(heads.map(h => `${h} ${/Ultrastable/.test(h) ? '' : HOOK}`), LIMIT - url.length - 1)}\n${url}`;
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 const num = v => (typeof v === 'number' ? Number(v.toPrecision(3)).toString() : String(v));
 
 const A = f => Object.assign(f, { link: '/autonomy' });
 export const META = [
-  A(o => `Claim: a system left to run its own loop, inside fixed limits, can do useful public work. Test: this one has been compiling evidence on child health, water and hunger on its own. Its record, and what it doesn't prove:`),
-  A(o => `"Autonomous AI can't be trusted without a human in every step." Maybe. So we built one with hard limits, open records and public corrections, and count what it does. Check our numbers, then tell us where we're wrong:`),
+  A(o => `Claim: a system left to run its own loop, inside fixed limits, can do useful public work. Test: this one has been compiling evidence on child health, water and hunger on its own. Here is its record, and what it doesn't prove.`),
+  A(o => `"Autonomous AI can't be trusted without a human in every step." Maybe. So we built one with hard limits, open records and public corrections, and count what it does. Check our numbers, then tell us where we're wrong.`),
   o => `Practical Solutions is a free library of fixes with real evidence behind them: child deaths, dirty water, hunger. It keeps itself up to date, and it's the first thing built on Ultrastable, a platform for systems that improve themselves. ${o}`,
   o => `I started a nonprofit, Empowering Change, to ask how data can serve the common good. That became years of research, then AI for good. Practical Solutions is where it lands: ideas that work, kept current by a system that improves itself. ${o}`,
   o => `Ultrastable for good: a system that checks its own work and keeps improving, pointed at the problems people actually have. Start with the solutions, then see how the loop runs. ${o}`,
@@ -33,7 +34,7 @@ export function domainPost(d, o) {
     `We've opened a ${d.name} section. ${plural(s, 'solution')} so far, each with its evidence. Know something that works that we're missing?`,
     `${d.name} is now part of Practical Solutions: ${plural(p, 'problem')}, ${plural(s, 'solution')}. Tell us what we've got wrong.`,
   ]);
-  return fit(head, url);
+  return fit([head, `${d.name} is now part of Practical Solutions.`], url);
 }
 
 export function problemPost(p, o) {
@@ -44,30 +45,38 @@ export function problemPost(p, o) {
     `How far are we from fixing this? ${p.title}: ${gap} Have you seen something work?`,
     `${p.title} is one of the problems we track. ${gap} What do you think is holding it back?`,
   ]);
-  return fit(head, url);
+  return fit([head, `${p.title}. ${gap}`, `${p.title}.`], url);
 }
 
+// SOCIAL-VOICE-2: wording is calibrated to the evidence label, so a contested finding is never introduced as one that works.
+const lower = t => t.charAt(0).toLowerCase() + t.slice(1);
+const plain = t => t.replace(/\s*\([^)]*\)\s*$/, '');
+const GRADE = { 'evidence-backed': 'strong', 'mixed evidence': 'mixed', 'cited, weaker design': 'weak' };
 export function solutionPost(s, o) {
-  const url = `${o}/solutions/${s.id}`;
-  const how = { 'evidence-backed': 'Backed by a trial or systematic review.', 'mixed evidence': 'The evidence is mixed, and we say so.', 'cited, weaker design': 'Weaker evidence so far, and the page says that.', lead: 'An early lead, not a conclusion.' }[s.label] || '';
-  const head = pick(s.id, [
-    `${s.title}. ${s.claim} ${how} Would this work where you are?`,
-    `Something that works: ${s.title.charAt(0).toLowerCase()}${s.title.slice(1)}. ${s.claim} ${how}`,
-    `${s.claim} That's the finding behind "${s.title}". ${how} What would it take to try it near you?`,
-  ]);
-  return fit(head, url);
+  const url = `${o}/solutions/${s.id}`, t = plain(s.title), g = GRADE[s.label];
+  const lead = { strong: `${t}. `, mixed: `Contested evidence: ${lower(t)}. `, weak: `Early evidence only: ${lower(t)}. ` }[g] || `${t}. `;
+  const closer = { strong: 'Could this work where you are?', mixed: 'Both sides of the evidence, with sources, on the page.', weak: 'The page says what is not yet shown.' }[g] || '';
+  const fallback = { strong: `${t}: backed by a trial or systematic review.`, mixed: `${t}: the evidence is contested. We set out each side, with sources.`, weak: `${t}: an early finding, not yet established.` }[g] || `${t}.`;
+  return fit([`${lead}${s.claim} ${closer}`, `${lead}${s.claim}`, fallback], url);
+}
+// LinkedIn and other long channels get the full finding and the sources, still one link.
+export function solutionLong(s, o) {
+  const url = `${o}/solutions/${s.id}`, t = plain(s.title), g = GRADE[s.label];
+  const lead = { strong: `${t}.`, mixed: `The evidence on ${lower(t)} is contested.`, weak: `Early evidence on ${lower(t)}.` }[g] || `${t}.`;
+  const ev = (s.evidence || []).slice(0, 2).map(e => `${e.src}: ${e.finding}`).join('\n');
+  return `${lead}\n\n${s.claim}${ev ? `\n\n${ev}` : ''}\n\nOur page sets out the evidence and what is not yet known. ${HOOK}\n${url}`;
 }
 
-export const metaPost = (week, i, o) => fit(META[i % META.length]('').trim(), o + (META[i % META.length].link || '/how'));
+export const metaPost = (week, i, o) => { const m = META[i % META.length]; return fit([m('').trim(), 'Practical Solutions: evidence on what works against big problems, kept current by a system that checks its own work.'], o + (m.link || '/how')); };
 
 // Queue: hierarchy order, stable ids, so core posts each exactly once. Anything the loop touched in the last 3 days (changes feed) is an event and goes first.
 export function socialQueue(cat, { origin, now = Date.now(), recent = new Set() } = {}) {
   const day = new Date(now).toISOString().slice(0, 10), wk = Math.floor(now / 6048e5);
   const q = [];
-  const add = (id, text, rank, arm) => q.push({ id, date: day, text, kind: recent.has(id) ? 'event' : 'backlog', arm, rank });
+  const add = (id, text, rank, arm, extra = {}) => q.push({ id, date: day, text, kind: recent.has(id) ? 'event' : 'backlog', arm, rank, ...extra });
   for (const d of cat.domains) add('ps:domain:' + d.slug, domainPost(d, origin), 0, 'ps-domain');
   for (const p of cat.probs) add('ps:problem:' + p.id, problemPost(p, origin), 1, 'ps-problem');
-  for (const s of cat.sols) add('ps:solution:' + s.id, solutionPost(s, origin), 2, 'ps-solution');
+  for (const s of cat.sols) add('ps:solution:' + s.id, solutionPost(s, origin), 2, 'ps-solution', { grade: GRADE[s.label], long: solutionLong(s, origin) });
   q.sort((a, b) => (a.kind !== 'event') - (b.kind !== 'event') || a.rank - b.rank);
   q.unshift({ id: 'ps:meta:' + wk, date: day, text: metaPost(wk, wk, origin), kind: 'backlog', arm: 'meta-story', rank: -1 });
   return { tenant: 'practical-solutions', origin, as_of: new Date(now).toISOString(), posts: q.map(({ rank, ...x }) => x) };
