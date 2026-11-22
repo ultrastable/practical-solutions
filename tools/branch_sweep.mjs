@@ -11,6 +11,9 @@ export function plan(branches) {
   for (const b of branches) {
     if (PROTECTED.has(b.name)) continue;
     const open = (b.prs || []).find((p) => p.state === "OPEN");
+    // SWEEP-COVERED-1: a branch whose every changed file main has since changed too cannot merge and is superseded; close its PR and delete it, so
+    // the sweep stops reopening a PR for it every half hour (PRs 195 and 197 on 2026-11-22). The head sha is kept in the closing comment.
+    if (b.covered && b.ahead > 0 && (open ? open.mergeStateStatus === "DIRTY" : (b.prs || []).length > 0)) { actions.push({ do: "supersede", branch: b.name, pr: open && open.number, sha: b.sha, why: "main already changed every file this branch changes, and the branch cannot merge" }); continue; }
     if (b.ahead === 0) { actions.push({ do: "delete", branch: b.name, why: "fully merged into main" }); continue; }
     if (!open) { actions.push({ do: "open-pr", branch: b.name, why: `${b.ahead} commit(s) ahead of main, no open PR` }); continue; }
     if (open.mergeStateStatus === "CLEAN") actions.push({ do: "merge", branch: b.name, pr: open.number, why: "checks green" });
@@ -26,6 +29,19 @@ export function ghRunner(repo) {
     branches() {
       return gh("api", `repos/${repo}/branches?per_page=100`, "--paginate", "--jq", ".[].name").split(/\s+/).filter(Boolean);
     },
+    sha: (n) => json("api", `repos/${repo}/git/ref/heads/${encodeURIComponent(n)}`).object.sha,
+    covered(n) {
+      const c = json("api", `repos/${repo}/compare/main...${encodeURIComponent(n)}`);
+      const mine = (c.files || []).map((f) => f.filename);
+      if (!mine.length) return false;
+      const m = json("api", `repos/${repo}/compare/${c.merge_base_commit.sha}...main`);
+      const theirs = new Set((m.files || []).map((f) => f.filename));
+      return mine.every((f) => theirs.has(f));
+    },
+    supersede(n, num, sha) {
+      if (num) gh("pr", "close", String(num), "--repo", repo, "--comment", `Superseded: main already changed every file this branch changes and the branch cannot merge. Head was ${sha}. BRANCH-SWEEP-1 deleted the branch.`);
+      gh("api", "-X", "DELETE", `repos/${repo}/git/refs/heads/${n}`);
+    },
     ahead: (n) => json("api", `repos/${repo}/compare/main...${encodeURIComponent(n)}`).ahead_by,
     prs: (n) => json("pr", "list", "--repo", repo, "--head", n, "--state", "all", "--json", "number,state,mergeStateStatus"),
     openPr: (n) => gh("pr", "create", "--repo", repo, "--head", n, "--base", "main", "--title", `auto: merge ${n}`, "--body", "BRANCH-SWEEP-1: opened automatically for a branch ahead of main."),
@@ -37,12 +53,13 @@ export function ghRunner(repo) {
 }
 
 export function run(repo, io = ghRunner(repo), log = console.log) {
-  const rows = io.branches().filter((n) => !PROTECTED.has(n)).map((name) => ({ name, ahead: io.ahead(name), prs: io.prs(name) }));
+  const rows = io.branches().filter((n) => !PROTECTED.has(n)).map((name) => ({ name, ahead: io.ahead(name), prs: io.prs(name), covered: io.covered ? io.covered(name) : false, sha: io.sha ? io.sha(name) : "" }));
   const actions = plan(rows);
   let merged = 0;
   for (const a of actions) {
     try {
       if (a.do === "delete") io.del(a.branch);
+      else if (a.do === "supersede") io.supersede(a.branch, a.pr, a.sha);
       else if (a.do === "open-pr") io.openPr(a.branch);
       else if (a.do === "merge") { io.merge(a.pr); merged++; }
       log(`${a.do} ${a.branch}${a.pr ? ` #${a.pr}` : ""}: ${a.why}`);

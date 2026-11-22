@@ -48,3 +48,12 @@ test("a merge dispatches the deploy once; a sweep with no merge does not; a fail
   assert.ok(l2.some((l) => l.startsWith("FAILED deploy dispatch: boom")));
   assert.match(readFileSync(new URL("../.github/workflows/branch-sweep.yml", import.meta.url), "utf8"), /actions: write/);
 });
+
+test("SWEEP-COVERED-1: a dirty branch whose files main already changed is superseded, never reopened", () => {
+  const a = plan([
+    { name: "stale", ahead: 2, covered: true, sha: "abc", prs: [{ number: 9, state: "OPEN", mergeStateStatus: "DIRTY" }] },
+    { name: "reopened", ahead: 2, covered: true, sha: "def", prs: [{ number: 5, state: "CLOSED" }] },
+    { name: "fresh", ahead: 1, covered: false, prs: [] },
+  ]);
+  assert.deepEqual(a.map((x) => `${x.do}:${x.branch}`), ["supersede:stale", "supersede:reopened", "open-pr:fresh"]);
+});
