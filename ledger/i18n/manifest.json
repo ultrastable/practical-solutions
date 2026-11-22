@@ -85,25 +85,42 @@
     "ca3d163bab055381"
    ],
    "at": "2026-11-21T13:04:06.745Z"
+  },
+  "zh": {
+   "live": false,
+   "coverage": 0.09,
+   "segments": 243,
+   "of": 9612,
+   "shards": [
+    "5ae1ffda9916f794",
+    "792bef9d41377d41",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-22T12:53:38.427Z"
   }
  },
  "source": "en",
- "at": "2026-11-21T13:04:06.745Z",
- "total_segments": 9590,
+ "at": "2026-11-22T12:53:38.427Z",
+ "total_segments": 9612,
  "last_run": {
-  "at": "2026-11-21T13:04:06.745Z",
+  "at": "2026-11-22T12:53:38.427Z",
   "report": {
-   "hi": {
+   "zh": {
     "before": 0,
     "rejected": {
-     "wrong script": 36,
+     "wrong script": 7,
      "length out of range": 1,
-     "missing": 23,
-     "numbers changed": 1
+     "missing": 37,
+     "numbers changed": 12
     },
     "calls": 12,
-    "after": 239,
-    "coverage": 0.083,
+    "after": 243,
+    "coverage": 0.09,
     "live": false
    }
   }
