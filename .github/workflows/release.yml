@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 # Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 # budget: public repository, unmetered; about 2 minutes a run.
-# trigger: weekly; a release needs at least seven days of new entries, so faster adds cost and no information. The daily cycle dispatches this
+# trigger: daily; a release is cut when something new exists (entries or merged site changes) and the last one is a day old, so it is never faster than daily. The daily cycle dispatches this
 #   workflow as a second route when a release is due or late.
 # free-alternative: none needed; the run's own GITHUB_TOKEN commits, tags and dispatches.
 # RELEASE-1: cut a dated release of what is new (problems, solutions, combinations, red-team findings), publish it on /releases with a feed and as a
@@ -9,10 +9,10 @@
 # When nothing is new or the cadence is late, the workflows that produce new entries are dispatched (self-healing cadence).
 name: release
 on:
-  schedule: [{ cron: '41 6 * * 1' }]
+  schedule: [{ cron: '41 6 * * *' }]
   workflow_dispatch: {}
 concurrency: { group: release, cancel-in-progress: false }
-permissions: { contents: write, actions: write }
+permissions: { contents: write, actions: write, issues: write }
 jobs:
   release:
     if: ${{ vars.HALT != '1' }}
@@ -22,7 +22,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
-        with: { ref: main }
+        with: { ref: main, fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - name: intake, decide, cut
@@ -46,3 +46,9 @@ jobs:
           for w in $(node -p "JSON.parse(require('fs').readFileSync('release.json','utf8').trim().split('\n').pop()).heal.join(' ')"); do
             gh workflow run "$w" -R "$GITHUB_REPOSITORY" --ref main && echo "dispatched $w"
           done
+      - name: stale cadence is an issue (RELEASE-STALE-1)
+        run: |
+          state=$(node -p "JSON.parse(require('fs').readFileSync('release.json','utf8').trim().split('\n').pop()).state")
+          n=$(gh issue list -R "$GITHUB_REPOSITORY" --state open --search 'RELEASE-STALE-1 in:title' --json number -q '.[0].number')
+          if [ "$state" = "late" ] && [ -z "$n" ]; then gh issue create -R "$GITHUB_REPOSITORY" --title "RELEASE-STALE-1: no release inside the allowed gap" --body "The release job found no release in max_gap_days. Dispatched the entry-producing workflows. Closing probe: node tools/release.mjs --watch reports state other than late."; fi
+          if [ "$state" != "late" ] && [ -n "$n" ]; then gh issue close "$n" -R "$GITHUB_REPOSITORY" --comment "A release is current again."; fi

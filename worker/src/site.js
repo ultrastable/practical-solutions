@@ -89,15 +89,15 @@ ${ui.list(shown.map(x => `${esc(String(x.kind).replace(/_/g, ' '))}: ${esc(x.id 
 }
 
 // RELEASE-1: dated releases cut by tools/release.mjs; every number here is read from the generated ledger module.
-const REL_KINDS = [['problems', 'problems', '/problems/'], ['solutions', 'solutions', '/solutions/'], ['syntheses', 'new combinations', '/syntheses/'], ['insights', 'red-team findings', null]];
+const REL_KINDS = [['features', 'changes to the site', null], ['problems', 'problems', '/problems/'], ['solutions', 'solutions', '/solutions/'], ['syntheses', 'new combinations', '/syntheses/'], ['insights', 'red-team findings', null]];
 export function releasesPage(o, d = RELEASES) {
-  const one = r => `<section><h2 id="r-${esc(r.version)}">${esc(r.version)}</h2><p class="m">${esc(r.date)}${r.first ? ' · first release: the whole catalogue as it stood' : ''}</p>${REL_KINDS.map(([k, label, href]) => r.counts[k] ? `<h3>${r.counts[k]} new ${esc(label)}</h3>${ui.list(r.added[k].map(x => href ? `<a href="${href}${esc(x.id)}">${esc(x.title)}</a>` : esc(x.title))) || ''}${r.counts[k] > r.added[k].length ? `<p class="m">and ${r.counts[k] - r.added[k].length} more in <a href="/releases.json">releases.json</a></p>` : ''}` : '').join('')}</section>`;
+  const one = r => `<section><h2 id="r-${esc(r.version)}">${esc(r.version)}</h2><p class="m">${esc(r.date)}${r.first ? ' · first release: the whole catalogue as it stood' : ''}</p>${REL_KINDS.map(([k, label, href]) => r.counts[k] ? `<h3>${r.counts[k]} ${k === 'features' ? '' : 'new '}${esc(label)}</h3>${ui.list(r.added[k].map(x => href ? `<a href="${href}${esc(x.id)}">${esc(x.title)}</a>` : esc(x.title))) || ''}${r.counts[k] > r.added[k].length ? `<p class="m">and ${r.counts[k] - r.added[k].length} more in <a href="/releases.json">releases.json</a></p>` : ''}` : '').join('')}</section>`;
   const body = `${ui.breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Releases' }])}<h1>Releases</h1><p class="lede">What is new in each release, newest first. <a href="/releases.atom">Atom feed</a> · <a href="/releases.json">JSON</a> · <a href="/changes">Every change</a></p>
 ${d.releases.map(one).join('') || '<p>No release yet.</p>'}`;
   return page('/releases', o, 'Releases', 'New problems, solutions, combinations and findings in each release.', body);
 }
 export function releasesAtom(o, d = RELEASES) {
-  const e = r => `<entry><id>${esc(o)}/releases#r-${esc(r.version)}</id><title>Practical Solutions ${esc(r.version)}</title><updated>${esc(r.date)}T00:00:00Z</updated><link href="${esc(o)}/releases#r-${esc(r.version)}"/><summary>${esc(REL_KINDS.map(([k, label]) => `${r.counts[k]} new ${label}`).join(', '))}</summary></entry>`;
+  const e = r => `<entry><id>${esc(o)}/releases#r-${esc(r.version)}</id><title>Practical Solutions ${esc(r.version)}</title><updated>${esc(r.date)}T00:00:00Z</updated><link href="${esc(o)}/releases#r-${esc(r.version)}"/><summary>${esc(REL_KINDS.filter(([k]) => r.counts[k]).map(([k, label]) => `${r.counts[k]} ${k === 'features' ? '' : 'new '}${label}`).join(', '))}</summary></entry>`;
   return `<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><id>${esc(o)}/releases</id><title>Practical Solutions releases</title><updated>${esc((d.releases[0] || {}).date || '1970-01-01')}T00:00:00Z</updated><link rel="self" href="${esc(o)}/releases.atom"/>${d.releases.map(e).join('')}</feed>`;
 }
 
