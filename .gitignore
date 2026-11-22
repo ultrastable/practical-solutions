@@ -7,3 +7,4 @@ worker/seed.sql
 /briefs/
 .build-tenant.js
 release-notes.md
+mobile-shots/

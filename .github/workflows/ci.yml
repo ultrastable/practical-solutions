@@ -25,6 +25,21 @@ jobs:
         run: node --no-warnings bin/ps.mjs simulate --days 150 | tee simulate.txt || true
       - uses: actions/upload-artifact@v4
         with: { name: simulate, path: simulate.txt }
+  mobile:
+    # MOBILE-LAYOUT-1: real pages in a real browser at 390 px; fails when the chrome (family bar + header) passes its height budget, the h1 falls
+    # off the first screen, a page scrolls sideways, or a header control is under 44 px. Zero network: pages come from the Worker's own route().
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install --no-save --no-package-lock playwright@1.49.1
+      - run: npx playwright install --with-deps chromium
+      - run: node --no-warnings tools/mobile_layout.mjs --shots mobile-shots
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: mobile-shots, path: mobile-shots }
   access:
     # The access preflight (core/access): probes the real state of every capability this tenant depends on, fails when a required one is
     # not present, and fails when any file asks a person for a capability the probe shows present or unproven missing.
@@ -55,7 +70,7 @@ jobs:
   merge:
     # LANE-FAST-1 (tenant side): a same-repository pull request merges itself in this run as soon as every job above is green, instead of waiting for
     # a sweeper tick on another host. Fails soft: a refusal (a conflict, a changed head) leaves the PR to the core sweeper.
-    needs: [test, access, reference-python]
+    needs: [test, mobile, access, reference-python]
     if: ${{ vars.HALT != '1' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.draft != true }}
     runs-on: ubuntu-latest
     timeout-minutes: 3
