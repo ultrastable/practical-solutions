@@ -50,16 +50,16 @@
    "outcome": "no change proposed: The provided sources describe different studies or protocols and do not contradict the specific details of the study mentioned in the entry."
   },
   "mobile-money": {
-   "at": "2026-11-17T19:30:56.255Z",
-   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, with no discrepancies or outdated information found."
+   "at": "2026-11-23T15:56:01.196Z",
+   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, with no discrepancies or outdated information identified."
   },
   "ors-zinc": {
-   "at": "2026-11-17T19:30:56.255Z",
-   "outcome": "no change proposed: The provided sources do not contain information that contradicts or refines the details of the ORS plus zinc treatment entry."
+   "at": "2026-11-23T15:56:01.196Z",
+   "outcome": "no change proposed: All fields are supported by the cited abstracts."
   },
   "rural-electrification": {
-   "at": "2026-11-17T19:30:56.255Z",
-   "outcome": "no change proposed: None of the sources relate to grid connection subsidies in rural Kenya or challenge the entry's claims, limits, works_where, takes, or first_test fields."
+   "at": "2026-11-23T15:56:01.196Z",
+   "outcome": "no change proposed: None of the provided sources discuss subsidised grid connections for rural households in Kenya, so there is no basis to confirm or correct any entry fields."
   },
   "tarl": {
    "at": "2026-11-18T11:14:33.506Z",
@@ -480,18 +480,18 @@
    "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "mistral-small-3.1": {
-   "calls": 6,
+   "calls": 7,
    "errors": 0
   },
   "gemma-4": {
-   "calls": 7,
-   "errors": 2,
+   "calls": 8,
+   "errors": 3,
    "last": "empty"
   },
   "qwen3-30b": {
-   "calls": 8,
-   "errors": 4,
-   "last": "empty"
+   "calls": 10,
+   "errors": 6,
+   "last": "worker-ai HTTP 502 5028: @cf/qwen/qwen3-30b-a3b-fp8 was deprecated on 2026-11-20. See the model catalog for a"
   },
   "glm-5.3-flash": {
    "calls": 6,
@@ -509,12 +509,12 @@
    "last": "worker-ai HTTP 502 5035: Model @cf/deepseek-ai/deepseek-v4-flash-0731 is not available on the Workers Free pl"
   },
   "nemotron-3": {
-   "calls": 8,
-   "errors": 7,
+   "calls": 10,
+   "errors": 9,
    "last": "worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
   },
   "gpt-oss-120b": {
-   "calls": 9,
+   "calls": 11,
    "errors": 2,
    "last": "empty"
   },
@@ -735,11 +735,29 @@
    "none": 3,
    "panel_failures": 0,
    "failures": []
+  },
+  {
+   "at": "2026-11-23T15:56:01.196Z",
+   "examined": 3,
+   "proposed": 0,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 0,
+   "none": 3,
+   "panel_failures": 0,
+   "failures": [
+    "gemma-4: empty",
+    "qwen3-30b: worker-ai HTTP 502 5028: @cf/qwen/qwen3-30b-a3b-fp8 was deprecated on 2026-11-20. See the model catalog for a",
+    "nemotron-3: worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog",
+    "qwen3-30b: worker-ai HTTP 502 5028: @cf/qwen/qwen3-30b-a3b-fp8 was deprecated on 2026-11-20. See the model catalog for a",
+    "nemotron-3: worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-22T13:19:07.695Z"
+ "at": "2026-11-23T15:56:01.196Z"
 }
