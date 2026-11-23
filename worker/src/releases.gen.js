@@ -5,8 +5,95 @@ export const RELEASES = {
  "schema": "ps-releases/1",
  "min_days": 1,
  "max_gap_days": 7,
- "count": 3,
+ "count": 4,
  "releases": [
+  {
+   "version": "2026.11.23",
+   "date": "2026-11-23",
+   "first": false,
+   "through": "2026-11-23T18:42:16Z",
+   "added": {
+    "problems": [],
+    "solutions": [],
+    "syntheses": [],
+    "insights": [
+     {
+      "id": "cash:bfd493aacf",
+      "title": "cash: Inflation hurts local businesses"
+     },
+     {
+      "id": "cash:d6e14f97c1",
+      "title": "cash: Long-run income effects are negligible"
+     },
+     {
+      "id": "chlorine:2ee23efc55",
+      "title": "chlorine: Assumed consistent use of dispensers"
+     },
+     {
+      "id": "chlorine:4f2a67d3b0",
+      "title": "chlorine: Increased child mortality with chlorination"
+     },
+     {
+      "id": "chlorine:760b13357f",
+      "title": "chlorine: Vulnerable populations not using dispensers"
+     },
+     {
+      "id": "chlorine:8904c3b380",
+      "title": "chlorine: Ineffective chlorination in certain contexts"
+     },
+     {
+      "id": "clean-cooking:9638373a5a",
+      "title": "clean-cooking: Vulnerable population"
+     },
+     {
+      "id": "deworming:22478d2146",
+      "title": "deworming: Potential harm to children with undiagnosed health conditions"
+     },
+     {
+      "id": "deworming:30350ce59b",
+      "title": "deworming: Assuming mass treatment has no effect"
+     },
+     {
+      "id": "deworming:c492ba4649",
+      "title": "deworming: Inadequate consideration of external factors influencing treatment outcomes"
+     },
+     {
+      "id": "deworming:c4e93403ef",
+      "title": "deworming: Assuming all children in the treatment group have worm infestations"
+     }
+    ],
+    "features": [
+     {
+      "id": "4236c07",
+      "pr": 206,
+      "title": "Crossref route and unicode-safe author match"
+     },
+     {
+      "id": "1a3803f",
+      "pr": 208,
+      "title": "Declutter the mobile layout (header, family bar, type scale, 390px check)"
+     },
+     {
+      "id": "976c5a6",
+      "pr": 209,
+      "title": "Add design-for-context barriers and levers to the change layer (buyer vs user, trust by looks, wrong problem, repurposing, missing context, funder appeal)"
+     }
+    ]
+   },
+   "totals": {
+    "problems": 21,
+    "solutions": 24,
+    "syntheses": 3,
+    "insights": 89
+   },
+   "counts": {
+    "problems": 0,
+    "solutions": 0,
+    "syntheses": 0,
+    "insights": 11,
+    "features": 3
+   }
+  },
   {
    "version": "2026.11.22",
    "date": "2026-11-22",
