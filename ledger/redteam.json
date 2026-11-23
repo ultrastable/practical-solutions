@@ -1,10 +1,10 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-22T12:50:52.081Z",
+ "at": "2026-11-23T15:20:26.060Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
-   "at": "2026-11-17T18:25:38.153Z",
+   "at": "2026-11-23T15:20:26.060Z",
    "family": "meta",
    "findings": [
     {
@@ -19,8 +19,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inflation hurts fixed-income households",
-     "falsifier": "Data showing a significant increase in poverty rates among fixed-income households in areas where cash transfers were implemented",
+     "challenge": "Inflation hurts local businesses",
+     "falsifier": "Survey data indicating a significant increase in prices and a corresponding decline in sales for local businesses",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -29,7 +29,7 @@
      "pass": "red_team",
      "q": 15,
      "challenge": "Assuming perfect targeting",
-     "falsifier": "Evidence of significant targeting errors, such as a large proportion of cash transfers going to non-poor households",
+     "falsifier": "Audit findings revealing a high rate of targeting errors, with a significant portion of cash transfers going to non-poor households",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -37,8 +37,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Dependence on external funding",
-     "falsifier": "A scenario where external funding for cash transfers is suddenly withdrawn, leading to a collapse of the program and a decline in household incomes",
+     "challenge": "Long-run income effects are negligible",
+     "falsifier": "Longitudinal data showing no sustained increase in income for recipient households after the cash transfer program ends",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -46,14 +46,14 @@
    ]
   },
   "chlorine": {
-   "at": "2026-11-17T18:25:38.153Z",
+   "at": "2026-11-23T15:20:26.060Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Unintended Consequences",
-     "falsifier": "Reports of adverse health effects or increased morbidity among children or other populations using chlorinated water from community points",
+     "challenge": "Increased child mortality with chlorination",
+     "falsifier": "Observation of higher child mortality rates in communities with free, automatic or supervised chlorine dosing at community water points",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -61,8 +61,26 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Implementation Failure",
-     "falsifier": "Evidence of poor maintenance, inadequate training, or insufficient supply chains for the chlorine dosing systems, leading to ineffective or inconsistent water treatment",
+     "challenge": "Vulnerable populations not using dispensers",
+     "falsifier": "Evidence of increased water-borne illnesses or child mortality among households that do not use the chlorine dispensers",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumed consistent use of dispensers",
+     "falsifier": "Data showing low usage rates of chlorine dispensers at community water points, leading to minimal impact on child mortality",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Ineffective chlorination in certain contexts",
+     "falsifier": "Studies demonstrating that free, automatic or supervised chlorine dosing at community water points has little to no effect on child mortality in areas with existing water treatment infrastructure",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -70,41 +88,14 @@
    ]
   },
   "clean-cooking": {
-   "at": "2026-11-17T18:25:38.153Z",
+   "at": "2026-11-23T15:20:26.060Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Alternative explanations for pneumonia reduction",
-     "falsifier": "A subsequent trial demonstrating significant pneumonia reduction with consistent LPG stove use",
-     "severity": 2,
-     "source": "model",
-     "family": "meta"
-    },
-    {
-     "pass": "red_team",
-     "q": 15,
-     "challenge": "Vulnerable populations' exposure to mixed fuel use",
-     "falsifier": "Data showing no significant difference in pneumonia rates between households with consistent LPG stove use and those with mixed fuel use",
-     "severity": 2,
-     "source": "model",
-     "family": "meta"
-    },
-    {
-     "pass": "red_team",
-     "q": 15,
-     "challenge": "Assumed consistent use of LPG stoves",
-     "falsifier": "Evidence of high adherence to LPG stove use among trial participants, correlated with significant health benefits",
-     "severity": 2,
-     "source": "model",
-     "family": "meta"
-    },
-    {
-     "pass": "red_team",
-     "q": 15,
-     "challenge": "Potential biases in the trial's methodology",
-     "falsifier": "A re-analysis of the trial data, controlling for potential biases, that finds a significant reduction in severe infant pneumonia",
+     "challenge": "Vulnerable population",
+     "falsifier": "Infants in households using LPG stoves show a lower incidence of severe pneumonia compared to those using traditional stoves",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -112,14 +103,14 @@
    ]
   },
   "deworming": {
-   "at": "2026-11-17T18:25:38.153Z",
+   "at": "2026-11-23T15:20:26.060Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Lack of significant impact on attendance",
-     "falsifier": "A subsequent randomized controlled trial showing no improvement in school attendance",
+     "challenge": "Assuming mass treatment has no effect",
+     "falsifier": "A significant increase in school attendance and academic performance in treated schools compared to untreated schools",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -127,8 +118,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Potential harm to children with undiagnosed conditions",
-     "falsifier": "Reports of adverse events or unintended consequences from mass treatment",
+     "challenge": "Potential harm to children with undiagnosed health conditions",
+     "falsifier": "Reports of adverse reactions or health complications in children receiving mass deworming treatment",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -136,8 +127,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assumption of uniform worm infestation rates",
-     "falsifier": "Studies showing significant variability in worm infestation rates among schools or regions",
+     "challenge": "Assuming all children in the treatment group have worm infestations",
+     "falsifier": "A high percentage of children in the treatment group testing negative for worm infestations",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -145,8 +136,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inadequate consideration of external factors",
-     "falsifier": "Analysis revealing that improvements in attendance or performance are due to external factors, such as changes in school resources or community health initiatives",
+     "challenge": "Inadequate consideration of external factors influencing treatment outcomes",
+     "falsifier": "Significant differences in socioeconomic status, access to healthcare, or nutrition between treatment and control groups",
      "severity": 2,
      "source": "model",
      "family": "meta"
