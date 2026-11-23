@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-22T11:57:31.441Z",
+ "at": "2026-11-23T13:36:53.943Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-22T11:56:21.773Z"
+   "checked_at": "2026-11-23T13:36:26.878Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -197,15 +197,15 @@
        "hit": false
       },
       {
-       "title": "Getting the Benefit of the Doubt: The Effect of Randomization Ratio on the Placebo Response",
-       "year": 2019,
-       "url": "https://openalex.org/W2989759371",
-       "hit": false
-      },
-      {
        "title": "Health care professional barriers and facilitators to discontinuing antidepressant use: A systematic review and thematic synthesis",
        "year": 2024,
        "url": "https://doi.org/10.1016/j.jad.2024.04.060",
+       "hit": false
+      },
+      {
+       "title": "Getting the Benefit of the Doubt: The Effect of Randomization Ratio on the Placebo Response",
+       "year": 2019,
+       "url": "https://openalex.org/W2989759371",
        "hit": false
       }
      ],
@@ -213,7 +213,7 @@
     },
     {
      "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1648,
+     "total": 1653,
      "closest": [
       {
        "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-22T11:56:46.453Z"
+   "checked_at": "2026-11-23T13:36:40.579Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -304,7 +304,7 @@
    "novelty": [
     {
      "label": "older adult volunteers delivering foundational learning in low-income countries",
-     "total": 561,
+     "total": 564,
      "closest": [
       {
        "title": "Literacy and numeracy support for homeless adults",
@@ -341,7 +341,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 38833,
+     "total": 38916,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -378,7 +378,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-22T11:57:24.181Z"
+   "checked_at": "2026-11-23T13:36:45.649Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -401,7 +401,11 @@
     },
     "5": {
      "found": false,
-     "reason": "no Crossref title match"
+     "doi": "10.83842/kangaroomotcar",
+     "title": "Kangaroo Mother Care",
+     "year": null,
+     "similarity": 0.33,
+     "reason": "year null is not 2019"
     }
    },
    "novelty": [
@@ -444,7 +448,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-22T11:57:28.673Z"
+   "checked_at": "2026-11-23T13:36:48.951Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -477,7 +481,7 @@
    "novelty": [
     {
      "label": "Existing studies",
-     "total": 422,
+     "total": 423,
      "closest": [
       {
        "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
@@ -514,7 +518,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-22T11:57:31.441Z"
+   "checked_at": "2026-11-23T13:36:53.943Z"
   }
  },
  "errors": []
