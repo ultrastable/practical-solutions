@@ -1,11 +1,28 @@
 {
  "schema": "ps-behaviour-sources/1",
- "at": "2026-11-22T13:50:45.119Z",
+ "at": "2026-11-23T18:42:38.073Z",
  "results": {
   "michie2011": {
    "status": "verified",
    "doi": "https://doi.org/10.1186/1748-5908-6-42",
-   "at": "2026-11-22T13:48:42.438Z"
+   "at": "2026-11-23T18:42:32.520Z"
+  },
+  "ames2019": {
+   "status": "not_indexed",
+   "kind": "book"
+  },
+  "papanek1971": {
+   "status": "not_indexed",
+   "kind": "book"
+  },
+  "cooke2001": {
+   "status": "not_indexed",
+   "kind": "book"
+  },
+  "chambers1994": {
+   "status": "verified",
+   "doi": "https://doi.org/10.1016/0305-750x(94)90141-4",
+   "at": "2026-11-23T18:42:32.679Z"
   },
   "bit2014": {
    "status": "not_indexed",
@@ -22,187 +39,187 @@
   "powell2015": {
    "status": "verified",
    "doi": "https://doi.org/10.1186/s13012-015-0209-1",
-   "at": "2026-11-22T13:50:36.964Z"
+   "at": "2026-11-23T18:42:32.830Z"
   },
   "damschroder2009": {
    "status": "verified",
    "doi": "https://doi.org/10.1186/1748-5908-4-50",
-   "at": "2026-11-22T13:50:37.178Z"
+   "at": "2026-11-23T18:42:32.950Z"
   },
   "greenhalgh2004": {
    "status": "verified",
    "doi": "https://doi.org/10.1111/j.0887-378x.2004.00325.x",
-   "at": "2026-11-22T13:50:37.310Z"
+   "at": "2026-11-23T18:42:33.087Z"
   },
   "grol2003": {
    "status": "verified",
    "doi": "https://doi.org/10.1016/s0140-6736(03)14546-1",
-   "at": "2026-11-22T13:50:37.569Z"
+   "at": "2026-11-23T18:42:33.205Z"
   },
   "gollwitzer2006": {
    "status": "verified",
    "doi": "https://doi.org/10.1016/s0065-2601(06)38002-1",
-   "at": "2026-11-22T13:48:43.318Z"
+   "at": "2026-11-23T18:42:33.322Z"
   },
   "samuelson1988": {
    "status": "verified",
    "doi": "https://doi.org/10.1007/bf00055564",
-   "at": "2026-11-22T13:50:37.799Z"
+   "at": "2026-11-23T18:42:33.435Z"
   },
   "arkes1985": {
    "status": "verified",
    "doi": "https://doi.org/10.1016/0749-5978(85)90049-4",
-   "at": "2026-11-22T13:48:43.616Z"
+   "at": "2026-11-23T18:42:33.573Z"
   },
   "katz1982": {
    "status": "verified",
    "doi": "https://doi.org/10.1111/j.1467-9310.1982.tb00478.x",
-   "at": "2026-11-22T13:50:38.241Z"
+   "at": "2026-11-23T18:42:33.704Z"
   },
   "ritov1990": {
    "status": "verified",
    "doi": "https://doi.org/10.1002/bdm.3960030404",
-   "at": "2026-11-22T13:50:38.680Z"
+   "at": "2026-11-23T18:42:33.827Z"
   },
   "flyvbjerg2006": {
    "status": "verified",
    "doi": "https://doi.org/10.1177/875697280603700302",
-   "at": "2026-11-22T13:50:38.855Z"
+   "at": "2026-11-23T18:42:33.969Z"
   },
   "edmondson1999": {
    "status": "verified",
    "doi": "https://doi.org/10.2307/2666999",
-   "at": "2026-11-22T13:50:39.079Z"
+   "at": "2026-11-23T18:42:34.141Z"
   },
   "bhargava2015": {
    "status": "verified",
    "doi": "https://doi.org/10.1257/aer.20121493",
-   "at": "2026-11-22T13:48:44.581Z"
+   "at": "2026-11-23T18:42:34.278Z"
   },
   "jachimowicz2019": {
    "status": "verified",
    "doi": "https://doi.org/10.1017/bpp.2018.43",
-   "at": "2026-11-22T13:48:44.810Z"
+   "at": "2026-11-23T18:42:34.405Z"
   },
   "mertens2022": {
    "status": "verified",
    "doi": "https://doi.org/10.1073/pnas.2107346118",
-   "at": "2026-11-22T13:50:39.333Z"
+   "at": "2026-11-23T18:42:34.564Z"
   },
   "maier2022": {
    "status": "verified",
    "doi": "https://doi.org/10.1073/pnas.2200300119",
-   "at": "2026-11-22T13:50:39.507Z"
+   "at": "2026-11-23T18:42:34.694Z"
   },
   "dellavigna2022": {
    "status": "verified",
    "doi": "https://doi.org/10.3982/ecta18709",
-   "at": "2026-11-22T13:50:39.656Z"
+   "at": "2026-11-23T18:42:34.808Z"
   },
   "mitchell1989": {
    "status": "verified",
    "doi": "https://doi.org/10.1002/bdm.3960020103",
-   "at": "2026-11-22T13:50:39.839Z"
+   "at": "2026-11-23T18:42:34.928Z"
   },
   "mellers2014": {
    "status": "verified",
    "doi": "https://doi.org/10.1177/0956797614524255",
-   "at": "2026-11-22T13:50:40.057Z"
+   "at": "2026-11-23T18:42:35.073Z"
   },
   "alubaydli2017": {
    "status": "verified",
    "doi": "https://doi.org/10.1257/aer.p20171115",
-   "at": "2026-11-22T13:50:40.665Z"
+   "at": "2026-11-23T18:42:35.202Z"
   },
   "ivers2012": {
    "status": "verified",
    "doi": "https://doi.org/10.1002/14651858.cd000259.pub3",
-   "at": "2026-11-22T13:48:48.471Z"
+   "at": "2026-11-23T18:42:35.334Z"
   },
   "flodgren2019": {
    "status": "verified",
    "doi": "https://doi.org/10.1002/14651858.cd000125.pub5",
-   "at": "2026-11-22T13:50:40.910Z"
+   "at": "2026-11-23T18:42:35.482Z"
   },
   "marsh2004": {
    "status": "verified",
    "doi": "https://doi.org/10.1136/bmj.329.7475.1177",
-   "at": "2026-11-22T13:50:41.055Z"
+   "at": "2026-11-23T18:42:35.643Z"
   },
   "lewandowsky2012": {
    "status": "verified",
    "doi": "https://doi.org/10.1177/1529100612451018",
-   "at": "2026-11-22T13:48:48.993Z"
+   "at": "2026-11-23T18:42:35.774Z"
   },
   "walter2018": {
    "status": "verified",
    "doi": "https://doi.org/10.1080/03637751.2018.1467564",
-   "at": "2026-11-22T13:48:49.222Z"
+   "at": "2026-11-23T18:42:35.891Z"
   },
   "wood2019": {
    "status": "verified",
    "doi": "https://doi.org/10.1007/s11109-018-9443-y",
-   "at": "2026-11-22T13:50:42.946Z"
+   "at": "2026-11-23T18:42:36.545Z"
   },
   "nyhan2010": {
    "status": "verified",
    "doi": "https://doi.org/10.1007/s11109-010-9112-2",
-   "at": "2026-11-22T13:50:43.223Z"
+   "at": "2026-11-23T18:42:36.676Z"
   },
   "ecker2022": {
    "status": "verified",
    "doi": "https://doi.org/10.1038/s44159-021-00006-y",
-   "at": "2026-11-22T13:50:43.388Z"
+   "at": "2026-11-23T18:42:36.804Z"
   },
   "kahan2012": {
    "status": "verified",
    "doi": null,
-   "at": "2026-11-22T13:50:43.605Z"
+   "at": "2026-11-23T18:42:36.953Z"
   },
   "kalla2020": {
    "status": "verified",
    "doi": "https://doi.org/10.1017/s0003055419000923",
-   "at": "2026-11-22T13:50:43.778Z"
+   "at": "2026-11-23T18:42:37.080Z"
   },
   "cohen2014": {
    "status": "verified",
    "doi": "https://doi.org/10.1146/annurev-psych-010213-115137",
-   "at": "2026-11-22T13:50:43.949Z"
+   "at": "2026-11-23T18:42:37.203Z"
   },
   "schultz2007": {
    "status": "verified",
    "doi": "https://doi.org/10.1111/j.1467-9280.2007.01917.x",
-   "at": "2026-11-22T13:48:51.228Z"
+   "at": "2026-11-23T18:42:37.347Z"
   },
   "haynes2009": {
    "status": "verified",
    "doi": "https://doi.org/10.1056/nejmsa0810119",
-   "at": "2026-11-22T13:50:44.205Z"
+   "at": "2026-11-23T18:42:37.473Z"
   },
   "urbach2014": {
    "status": "verified",
    "doi": "https://doi.org/10.1056/nejmsa1308261",
-   "at": "2026-11-22T13:50:44.446Z"
+   "at": "2026-11-23T18:42:37.585Z"
   },
   "hagger2016": {
    "status": "verified",
    "doi": "https://doi.org/10.1177/1745691616652873",
-   "at": "2026-11-22T13:50:44.668Z"
+   "at": "2026-11-23T18:42:37.728Z"
   },
   "doyen2012": {
    "status": "verified",
    "doi": "https://doi.org/10.1371/journal.pone.0029081",
-   "at": "2026-11-22T13:50:44.908Z"
+   "at": "2026-11-23T18:42:37.842Z"
   },
   "gal2018": {
    "status": "verified",
    "doi": "https://doi.org/10.1002/jcpy.1047",
-   "at": "2026-11-22T13:48:52.268Z"
+   "at": "2026-11-23T18:42:37.957Z"
   },
   "hansen2013": {
    "status": "verified",
    "doi": "https://doi.org/10.1017/s1867299x00002762",
-   "at": "2026-11-22T13:50:45.119Z"
+   "at": "2026-11-23T18:42:38.073Z"
   }
  }
 }
