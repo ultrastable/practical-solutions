@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-23T13:36:53.943Z",
+ "at": "2026-11-24T14:15:06.936Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -91,16 +91,16 @@
      "total": 56,
      "closest": [
       {
-       "title": "A pilot study to examine the feasibility of involving urban beauty salons and stylists in a social marketing campaign aimed at improving calcium consumption among low income, African-American and Hispanic children",
-       "year": 2008,
-       "url": "https://doi.org/10.7282/t3v1254t",
-       "hit": true
-      },
-      {
        "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
        "year": 2012,
        "url": "https://openalex.org/W166737179",
        "hit": false
+      },
+      {
+       "title": "A pilot study to examine the feasibility of involving urban beauty salons and stylists in a social marketing campaign aimed at improving calcium consumption among low income, African-American and Hispanic children",
+       "year": 2008,
+       "url": "https://doi.org/10.7282/t3v1254t",
+       "hit": true
       },
       {
        "title": "Reckoning Time in the Barber Shop:A Qualitative Study of a Barber Navigating Time, Temporality, and Rhythm",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-23T13:36:26.878Z"
+   "checked_at": "2026-11-24T14:14:20.437Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -213,7 +213,7 @@
     },
     {
      "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1653,
+     "total": 1654,
      "closest": [
       {
        "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
@@ -234,15 +234,15 @@
        "hit": false
       },
       {
-       "title": "Factors associated with poor adherence to medication among hypertensive patients in twelve low and middle income Sub-Saharan countries",
-       "year": 2019,
-       "url": "https://doi.org/10.1371/journal.pone.0219266",
-       "hit": false
-      },
-      {
        "title": "Process evaluation of a brief messaging intervention to improve diabetes treatment adherence in sub-Saharan Africa",
        "year": 2021,
        "url": "https://doi.org/10.1186/s12889-021-11552-8",
+       "hit": false
+      },
+      {
+       "title": "Factors associated with poor adherence to medication among hypertensive patients in twelve low and middle income Sub-Saharan countries",
+       "year": 2019,
+       "url": "https://doi.org/10.1371/journal.pone.0219266",
        "hit": false
       }
      ],
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-23T13:36:40.579Z"
+   "checked_at": "2026-11-24T14:14:23.657Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -304,7 +304,7 @@
    "novelty": [
     {
      "label": "older adult volunteers delivering foundational learning in low-income countries",
-     "total": 564,
+     "total": 567,
      "closest": [
       {
        "title": "Literacy and numeracy support for homeless adults",
@@ -341,7 +341,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 38916,
+     "total": 38956,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -378,7 +378,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-23T13:36:45.649Z"
+   "checked_at": "2026-11-24T14:14:56.564Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -448,7 +448,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-23T13:36:48.951Z"
+   "checked_at": "2026-11-24T14:15:00.873Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -481,7 +481,7 @@
    "novelty": [
     {
      "label": "Existing studies",
-     "total": 423,
+     "total": 424,
      "closest": [
       {
        "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
@@ -518,7 +518,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-23T13:36:53.943Z"
+   "checked_at": "2026-11-24T14:15:06.936Z"
   }
  },
  "errors": []
