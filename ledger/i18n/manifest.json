@@ -119,23 +119,40 @@
     "ca3d163bab055381"
    ],
    "at": "2026-11-23T15:25:49.851Z"
+  },
+  "de": {
+   "live": false,
+   "coverage": 0.086,
+   "segments": 100,
+   "of": 10143,
+   "shards": [
+    "5b2fe913e1e226d4",
+    "1abef1a4332d9fdc",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381",
+    "ca3d163bab055381"
+   ],
+   "at": "2026-11-24T15:19:44.518Z"
   }
  },
  "source": "en",
- "at": "2026-11-23T15:25:49.851Z",
- "total_segments": 10082,
+ "at": "2026-11-24T15:19:44.518Z",
+ "total_segments": 10143,
  "last_run": {
-  "at": "2026-11-23T15:25:49.851Z",
+  "at": "2026-11-24T15:19:44.518Z",
   "report": {
-   "ru": {
+   "de": {
     "before": 0,
     "rejected": {
-     "wrong script": 45,
-     "missing": 14
+     "numbers changed": 25
     },
-    "calls": 12,
-    "after": 241,
-    "coverage": 0.087,
+    "calls": 5,
+    "error": "two batches with no accepted translation",
+    "after": 100,
+    "coverage": 0.086,
     "live": false
    }
   }
