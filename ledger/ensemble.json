@@ -62,16 +62,16 @@
    "outcome": "no change proposed: None of the provided sources discuss subsidised grid connections for rural households in Kenya, so there is no basis to confirm or correct any entry fields."
   },
   "tarl": {
-   "at": "2026-11-18T11:14:33.506Z",
-   "outcome": "no change proposed: The provided sources are unrelated to the 'Teaching at the Right Level' program and do not provide information to verify or correct the entry."
+   "at": "2026-11-24T15:51:04.930Z",
+   "outcome": "no sources: Europe PMC HTTP 500"
   },
   "vita": {
-   "at": "2026-11-18T11:14:33.506Z",
-   "outcome": "no change proposed: The entry's claim about Vitamin A supplementation reducing mortality is not contradicted by the sources, which focus on Vitamin D, clinical deficiency prevalence, and nutrition service gaps, but do no"
+   "at": "2026-11-24T15:51:04.930Z",
+   "outcome": "no change proposed: None of the provided sources contradict or update any of the entry's fields."
   },
   "women-leaders": {
-   "at": "2026-11-18T11:14:33.506Z",
-   "outcome": "no change proposed: None of the provided sources discuss village‑council seat reservations for women in India, so there is no evidence to correct any field."
+   "at": "2026-11-24T15:51:04.930Z",
+   "outcome": "no change proposed: None of the provided sources discuss reservation of village‑council leadership seats for women, so no field can be verified or corrected."
   },
   "cytisine": {
    "at": "2026-11-20T13:59:08.078Z",
@@ -489,8 +489,8 @@
    "last": "empty"
   },
   "qwen3-30b": {
-   "calls": 10,
-   "errors": 6,
+   "calls": 11,
+   "errors": 7,
    "last": "worker-ai HTTP 502 5028: @cf/qwen/qwen3-30b-a3b-fp8 was deprecated on 2026-11-20. See the model catalog for a"
   },
   "glm-5.3-flash": {
@@ -509,12 +509,12 @@
    "last": "worker-ai HTTP 502 5035: Model @cf/deepseek-ai/deepseek-v4-flash-0731 is not available on the Workers Free pl"
   },
   "nemotron-3": {
-   "calls": 10,
-   "errors": 9,
+   "calls": 12,
+   "errors": 11,
    "last": "worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
   },
   "gpt-oss-120b": {
-   "calls": 11,
+   "calls": 13,
    "errors": 2,
    "last": "empty"
   },
@@ -753,11 +753,27 @@
     "qwen3-30b: worker-ai HTTP 502 5028: @cf/qwen/qwen3-30b-a3b-fp8 was deprecated on 2026-11-20. See the model catalog for a",
     "nemotron-3: worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
    ]
+  },
+  {
+   "at": "2026-11-24T15:51:04.930Z",
+   "examined": 3,
+   "proposed": 0,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 0,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": [
+    "qwen3-30b: worker-ai HTTP 502 5028: @cf/qwen/qwen3-30b-a3b-fp8 was deprecated on 2026-11-20. See the model catalog for a",
+    "nemotron-3: worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog",
+    "nemotron-3: worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-23T15:56:01.196Z"
+ "at": "2026-11-24T15:51:04.930Z"
 }
