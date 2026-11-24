@@ -5,8 +5,87 @@ export const RELEASES = {
  "schema": "ps-releases/1",
  "min_days": 1,
  "max_gap_days": 7,
- "count": 4,
+ "count": 5,
  "releases": [
+  {
+   "version": "2026.11.24",
+   "date": "2026-11-24",
+   "first": false,
+   "through": "2026-11-24T18:14:52Z",
+   "added": {
+    "problems": [],
+    "solutions": [],
+    "syntheses": [],
+    "insights": [
+     {
+      "id": "emissions-market:0c23012699",
+      "title": "emissions-market: Local communities experience adverse health effects due to inadequate emissions reduction"
+     },
+     {
+      "id": "emissions-market:72b194d10a",
+      "title": "emissions-market: Assumption that continuous monitoring is accurately reflective of overall emissions"
+     },
+     {
+      "id": "emissions-market:7f7a033ddc",
+      "title": "emissions-market: Emissions increased under the cap-and-trade market"
+     },
+     {
+      "id": "emissions-market:b3aa5175cc",
+      "title": "emissions-market: Inadequate enforcement or market design flaws leading to ineffective emissions reduction"
+     },
+     {
+      "id": "friendship-bench:0dd5fcf1d1",
+      "title": "friendship-bench: Inadequate Training or Support"
+     },
+     {
+      "id": "friendship-bench:a831819d48",
+      "title": "friendship-bench: Ineffectiveness of Lay Health Workers"
+     },
+     {
+      "id": "friendship-bench:e4a79b8811",
+      "title": "friendship-bench: Vulnerability of Severe Cases"
+     },
+     {
+      "id": "friendship-bench:fffbb553a2",
+      "title": "friendship-bench: Assumed Accessibility and Engagement"
+     },
+     {
+      "id": "graduation:b06d218934",
+      "title": "graduation: No impact on consumption and food security"
+     },
+     {
+      "id": "graduation:ea9405a2f0",
+      "title": "graduation: Insufficient consideration of local market conditions"
+     },
+     {
+      "id": "helmets:6c86968d60",
+      "title": "helmets: The benefit of helmets may be overstated due to biases in the data collection or analysis"
+     },
+     {
+      "id": "helmets:bad6a34974",
+      "title": "helmets: Certain groups, such as those with specific medical conditions, may be harmed by wearing helmets"
+     },
+     {
+      "id": "helmets:c45d99d39a",
+      "title": "helmets: The assumption that all helmets provide equal protection"
+     }
+    ],
+    "features": []
+   },
+   "totals": {
+    "problems": 21,
+    "solutions": 24,
+    "syntheses": 3,
+    "insights": 91
+   },
+   "counts": {
+    "problems": 0,
+    "solutions": 0,
+    "syntheses": 0,
+    "insights": 13,
+    "features": 0
+   }
+  },
   {
    "version": "2026.11.23",
    "date": "2026-11-23",
