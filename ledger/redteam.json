@@ -1,6 +1,6 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-23T15:20:26.060Z",
+ "at": "2026-11-24T15:15:27.181Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
@@ -145,13 +145,13 @@
    ]
   },
   "emissions-market": {
-   "at": "2026-11-18T13:25:17.865Z",
+   "at": "2026-11-24T15:15:27.181Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Emissions increase under cap-and-trade",
+     "challenge": "Emissions increased under the cap-and-trade market",
      "falsifier": "Observation of higher emissions at plants in the market compared to those under standard rules",
      "severity": 2,
      "source": "model",
@@ -160,8 +160,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inequitable distribution of pollution burden",
-     "falsifier": "Evidence of disproportionate pollution exposure among vulnerable populations near plants participating in the cap-and-trade market",
+     "challenge": "Local communities experience adverse health effects due to inadequate emissions reduction",
+     "falsifier": "Evidence of significant negative health impacts on local populations despite the cap-and-trade market",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -169,8 +169,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assumed equivalence of standard rules and cap-and-trade",
-     "falsifier": "Discovery of significant differences in enforcement or compliance mechanisms between standard rules and the cap-and-trade market",
+     "challenge": "Assumption that continuous monitoring is accurately reflective of overall emissions",
+     "falsifier": "Discovery of significant discrepancies between monitored emissions and actual emissions due to evasion or monitoring errors",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -178,8 +178,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inadequate monitoring or data issues",
-     "falsifier": "Identification of systematic errors or biases in the continuous monitoring data used to assess emissions reductions",
+     "challenge": "Inadequate enforcement or market design flaws leading to ineffective emissions reduction",
+     "falsifier": "Identification of systemic flaws in the market's design or enforcement mechanisms that undermine its effectiveness",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -187,14 +187,14 @@
    ]
   },
   "friendship-bench": {
-   "at": "2026-11-18T13:25:17.865Z",
+   "at": "2026-11-24T15:15:27.181Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Vulnerable populations",
-     "falsifier": "Higher rates of misdiagnosis or delayed specialist care in severe cases",
+     "challenge": "Ineffectiveness of Lay Health Workers",
+     "falsifier": "A randomized controlled trial showing no significant reduction in symptoms of common mental disorders after brief problem-solving therapy delivered by trained grandmothers",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -202,8 +202,26 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Lack of long-term follow-up",
-     "falsifier": "Relapse rates exceeding those of specialist-delivered therapy at 12-month follow-up",
+     "challenge": "Vulnerability of Severe Cases",
+     "falsifier": "Documentation of severe mental health cases that deteriorated due to lack of specialist care after receiving brief problem-solving therapy from lay health workers",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumed Accessibility and Engagement",
+     "falsifier": "Evidence showing that a significant portion of the target population cannot access or does not engage with trained grandmothers for problem-solving therapy",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate Training or Support",
+     "falsifier": "An investigation revealing that trained grandmothers lack sufficient training, resources, or ongoing support to effectively deliver problem-solving therapy",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -211,14 +229,14 @@
    ]
   },
   "graduation": {
-   "at": "2026-11-18T13:25:17.865Z",
+   "at": "2026-11-24T15:15:27.181Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Consumption and food security do not increase",
-     "falsifier": "A randomized controlled trial showing no significant difference in consumption and food security between treatment and control groups",
+     "challenge": "No impact on consumption and food security",
+     "falsifier": "A randomized controlled trial showing no significant difference in consumption and food security between treatment and control groups after two years",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -227,7 +245,7 @@
      "pass": "red_team",
      "q": 15,
      "challenge": "Households with limited access to markets or coaching",
-     "falsifier": "Data showing that households in areas with poor market access or low-quality coaching experience decreased consumption and food security",
+     "falsifier": "Data showing that households in areas with poor market access or low-quality coaching experienced no improvement or even declines in consumption and food security",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -236,7 +254,7 @@
      "pass": "red_team",
      "q": 15,
      "challenge": "Assumption that coaching quality is consistently high",
-     "falsifier": "An evaluation revealing significant variability in coaching quality, leading to inconsistent outcomes",
+     "falsifier": "An evaluation revealing significant variability in coaching quality across locations, with lower-quality coaching associated with poorer outcomes",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -244,8 +262,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inadequate consideration of local market conditions",
-     "falsifier": "A pre-mortem analysis identifying a lack of market demand or infrastructure as a primary reason for the intervention's failure",
+     "challenge": "Insufficient consideration of local market conditions",
+     "falsifier": "A study demonstrating that the graduation approach is ineffective in areas with saturated or unstable markets, leading to no lasting gains in consumption and food security",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -253,7 +271,7 @@
    ]
   },
   "helmets": {
-   "at": "2026-11-18T13:25:17.865Z",
+   "at": "2026-11-24T15:15:27.181Z",
    "family": "meta",
    "findings": [
     {
@@ -268,8 +286,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Certain groups may be disproportionately affected by helmet laws",
-     "falsifier": "Data indicating that enforcement of helmet laws leads to increased harassment or targeting of specific demographic groups by law enforcement",
+     "challenge": "Certain groups, such as those with specific medical conditions, may be harmed by wearing helmets",
+     "falsifier": "Evidence of a significant number of riders experiencing adverse medical effects due to helmet use",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -277,8 +295,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assuming all helmets provide equal protection",
-     "falsifier": "Evidence that low-quality helmets do not significantly reduce the risk of head injury or death",
+     "challenge": "The assumption that all helmets provide equal protection",
+     "falsifier": "A comparison of helmets showing significant variations in safety performance",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -286,8 +304,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Failure to account for other factors contributing to motorcycle accidents",
-     "falsifier": "Analysis revealing that the primary causes of motorcycle fatalities are unrelated to helmet use, such as reckless driving or poor road conditions",
+     "challenge": "The benefit of helmets may be overstated due to biases in the data collection or analysis",
+     "falsifier": "A re-analysis of the data from the Liu et al. study that controls for potential biases and finds a significantly lower benefit",
      "severity": 2,
      "source": "model",
      "family": "meta"
