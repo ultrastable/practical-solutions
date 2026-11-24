@@ -1,6 +1,6 @@
 {
  "schema": "ps-pipeline/1",
- "at": "2026-11-23T19:18:28.891Z",
+ "at": "2026-11-24T18:56:38.145Z",
  "rules": {
   "window_days": 7,
   "min_substantive_7d": 3,
@@ -22,7 +22,7 @@
   "evidence_items": 27,
   "verified": 4,
   "bca": 6,
-  "redteam_findings": 89,
+  "redteam_findings": 91,
   "leads": 114,
   "leads_open": 7,
   "leads_consumed": 0,
@@ -38,8 +38,8 @@
    "advocate": "advocate:wb-sn-itk-svfi-zs",
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
-   "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "last_move": "2026-11-24T14:59:03.023Z",
+   "turns": 4,
    "hits": 5,
    "candidates": [],
    "proposed": "2026-11-24T14:59:03.023Z"
@@ -53,7 +53,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 5,
    "candidates": []
   },
@@ -66,7 +66,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 5,
    "candidates": []
   },
@@ -79,7 +79,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 5,
    "candidates": []
   },
@@ -92,7 +92,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 5,
    "candidates": []
   },
@@ -105,7 +105,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 5,
    "candidates": []
   },
@@ -118,7 +118,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 1,
    "candidates": []
   },
@@ -131,7 +131,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 1,
    "candidates": []
   },
@@ -144,7 +144,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 5,
    "candidates": []
   },
@@ -157,7 +157,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 5,
    "candidates": []
   },
@@ -170,7 +170,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 5,
    "candidates": []
   },
@@ -183,7 +183,7 @@
    "duty": "find evidence, get a solution listed, or step aside after 14 days",
    "since": "2026-11-21T11:34:22.711Z",
    "last_move": "2026-11-21T11:38:05.547Z",
-   "turns": 3,
+   "turns": 4,
    "hits": 5,
    "candidates": []
   }
@@ -481,13 +481,36 @@
    },
    "moved": 0,
    "intake": 0
+  },
+  {
+   "at": "2026-11-24T18:56:38.145Z",
+   "source": "run",
+   "counts": {
+    "intake": 812,
+    "triage": 388,
+    "solved_problems": 21,
+    "queue": 12,
+    "evidence_leads": 12,
+    "solutions": 24,
+    "evidence_items": 27,
+    "verified": 4,
+    "bca": 6,
+    "redteam_findings": 91,
+    "leads": 114,
+    "leads_open": 7,
+    "leads_consumed": 0,
+    "syntheses_proposed": 2,
+    "syntheses_verified": 3
+   },
+   "moved": 2,
+   "intake": 0
   }
  ],
  "health": {
   "status": "ok",
   "window_days": 7,
   "covered_days": 7,
-  "days_since_substantive": 1.2,
+  "days_since_substantive": 0,
   "substantive_moves": 43,
   "intake_moves": 801,
   "by_kind": {
@@ -496,9 +519,9 @@
    "evidence_items": 16,
    "intake": 801
   },
-  "runs": 9,
+  "runs": 10,
   "idle_runs": 3,
-  "idle_share": 0.3333333333333333,
+  "idle_share": 0.3,
   "reasons": [],
   "trivial_note": "Intake (new indicators) is inflow and does not count as substantive; a run that changes no count is churn."
  }
