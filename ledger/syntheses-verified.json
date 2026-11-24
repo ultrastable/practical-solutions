@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-24T14:15:06.936Z",
+ "at": "2026-11-24T15:00:22.308Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-24T14:14:20.437Z"
+   "checked_at": "2026-11-24T14:59:35.608Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-24T14:14:23.657Z"
+   "checked_at": "2026-11-24T15:00:06.944Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -341,7 +341,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 38956,
+     "total": 38959,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -378,7 +378,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-24T14:14:56.564Z"
+   "checked_at": "2026-11-24T15:00:13.134Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -448,7 +448,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-24T14:15:00.873Z"
+   "checked_at": "2026-11-24T15:00:17.430Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -518,7 +518,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-24T14:15:06.936Z"
+   "checked_at": "2026-11-24T15:00:22.308Z"
   }
  },
  "errors": []
