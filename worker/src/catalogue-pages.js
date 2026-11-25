@@ -12,6 +12,9 @@ import { connectionsBlock } from './links.js';  // LINKS-1
 
 const { esc } = ui, PAGE_SIZE = 24, SRC = SCAN.sources;
 export const entries = (c, scan = SCAN) => scan.entries.map(e => ({ ...e, dslug: slug(e.domain), sought: !(c && c.sols || []).some(s => (s.problem_ids || []).includes(e.id)) }));
+// PROBLEM-COUNTS-1: the one place every displayed problem count is computed, so the home page, /catalogue, /catalogue.json and the impact loop agree.
+// curated = problems with a full entry (/problems); catalogue = problems found by scanning public sources (/catalogue); sought = catalogue entries and curated problems with no listed solution.
+export const problemCounts = (c, scan = SCAN) => { const cat = entries(c, scan), curatedOpen = ((c && c.probs) || []).filter(p => !((c.byProblem || {})[p.id] || []).length).length, catalogueSought = cat.filter(e => e.sought).length; return { curated: ((c && c.probs) || []).length, curated_open: curatedOpen, catalogue: cat.length, catalogue_sought: catalogueSought, sought: catalogueSought + curatedOpen }; };
 export const find = (id, scan = SCAN) => scan.entries.find(e => e.id === id) || null;
 const trend = e => !e.m ? 'Recognised problem; no world figure read yet' : e.m.status === 'no trend yet' ? 'World figure read; no ten-year trend yet' : e.m.status === 'new' ? 'New: no earlier non-zero figure' : e.m.status === 'changing' ? `Changing (${e.m.dir === 'up' ? 'rising' : 'falling'}; better direction unclear)` : e.m.status === 'little change' ? 'Little change' : e.m.status === 'trend not computable' ? 'Trend not computable' : e.m.status;
 const tone = e => !e.m ? 'info' : e.m.status === 'getting worse' ? 'warn' : e.m.status === 'improving' ? 'ok' : 'info';
@@ -21,7 +24,7 @@ const dir = e => e.lower === true ? 'a lower figure is better' : e.lower === fal
 // Where higher is better the pace is measured on the share still left out, so say so; a bare "up" beside a falling figure reads as a contradiction.
 const paceWords = e => e.lower === false ? 'share still left out ' + rate(e.m.pace) : rate(e.m.pace);
 export const entryJson = (e, o) => ({ id: e.id, title: e.title, domain: e.domain, source: e.source, source_name: (SRC[e.source] || {}).name, source_code: e.code, source_url: e.page, direction: dir(e), world_value: e.m ? machine(e.m.value) : null, world_value_display: e.m ? figure(e.m.value, e.title) : null, world_year: e.m ? e.m.year : null, earlier_value: e.m ? machine(e.m.base) : null, earlier_value_display: e.m && e.m.base != null ? figure(e.m.base, e.title) : null, earlier_year: e.m ? e.m.base_year : null, pace: e.m && e.m.pace != null ? machine(e.m.pace) : null, pace_display: e.m && e.m.pace != null ? paceWords(e) : null, trend: trend(e), rank: e.rank, first_seen: e.first_seen, solution_status: 'solution sought unless the entry lists solutions', url: o + '/catalogue/' + e.id });
-export const indexJson = (c, o, scan = SCAN) => ({ generated_from: scan.at, rank_rule: scan.rank_rule, sources: scan.sources, count: scan.entries.length, problems: entries(c, scan).map(e => ({ ...entryJson(e, o), solution_status: e.sought ? 'solution sought' : 'has listed solutions' })) });
+export const indexJson = (c, o, scan = SCAN) => ({ generated_from: scan.at, rank_rule: scan.rank_rule, sources: scan.sources, count: scan.entries.length, counts: problemCounts(c, scan), problems: entries(c, scan).map(e => ({ ...entryJson(e, o), solution_status: e.sought ? 'solution sought' : 'has listed solutions' })) });
 
 export function indexPage(c, u, o, page, scan = SCAN) {
   const q = u.searchParams, dom = q.get('domain') || '', src = q.get('source') || '', tr = q.get('trend') || '', text = (q.get('q') || '').toLowerCase();

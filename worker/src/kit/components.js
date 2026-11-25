@@ -41,7 +41,7 @@ export const cardGrid = (cards, level = 3) => `<ul class="grid">${(level === 3 ?
 export const summaryList = rows => `<dl class="sl">${rows.filter(r => r && r[1] != null && r[1] !== '').map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('')}</dl>`;
 export const callout = ({ tone = 'info', title, body }) => `<div class="callout ${esc(tone === 'info' ? '' : tone)}" role="note">${title ? `<h2>${esc(title)}</h2>` : ''}${body}</div>`;
 export const keyMessages = (items, title = 'Key messages') => callout({ tone: 'info', title, body: `<ul>${items.map(i => `<li>${i}</li>`).join('')}</ul>` });
-export const stats = items => `<ul class="stats">${items.map(i => `<li><b>${esc(i.value)}</b><span>${esc(i.label)}</span></li>`).join('')}</ul>`;
+export const stats = items => `<ul class="stats">${items.map(i => `<li><b>${esc(i.value)}</b><span>${i.href ? `<a href="${esc(i.href)}">${esc(i.label)}</a>` : esc(i.label)}</span></li>`).join('')}</ul>`;
 export const meter = (value, max, label) => `<span class="meter" role="img" aria-label="${esc(label || `${value} of ${max}`)}">${Array.from({ length: max }, (_, i) => `<i${i < value ? ' class="on"' : ''}></i>`).join('')}</span>`;
 export const bar = (pct, label) => `<div class="bar" role="img" aria-label="${esc(label)}"><i style="width:${Math.max(0, Math.min(100, Math.round(pct)))}%"></i></div>`;
 export const box = (title, body) => `<section class="box" aria-label="${esc(title)}"><h2>${esc(title)}</h2>${body}</section>`;
