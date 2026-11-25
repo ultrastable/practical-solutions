@@ -28,7 +28,7 @@ const fail = why => { led.problems[target.id] = { at: new Date().toISOString(), 
 
 const ev = await gather({ solutions: [{ id: target.id, title: target.title }], prev: { items: {} }, max: 1, refresh_days: 0 });
 const hits = (ev.items[target.id] || { hits: [] }).hits;
-if (!hits.length) fail('no source with a resolving DOI and a matching abstract was found');
+if (!hits.length) fail('no usable source (' + JSON.stringify(ev.log.slice(-1)) + ', query ' + JSON.stringify((ev.items[target.id] || {}).query) + ')');
 const ask = await complete({ secrets: { GITHUB_MODELS_TOKEN: env.GITHUB_TOKEN, PS_LLM_URL: env.PS_LLM_URL, ACTIONS_ID_TOKEN_REQUEST_URL: env.ACTIONS_ID_TOKEN_REQUEST_URL, ACTIONS_ID_TOKEN_REQUEST_TOKEN: env.ACTIONS_ID_TOKEN_REQUEST_TOKEN, ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY }, prompt: buildPrompt(target, hits), maxTokens: 2500 });
 if (!ask.ok) fail('no model route answered: ' + (ask.tried || []).join('; '));
 const r = check(ask.text, { problem: target, hits, ids: cat.sols.map(s => s.id) });
