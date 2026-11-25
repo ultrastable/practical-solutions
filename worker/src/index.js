@@ -11,6 +11,7 @@ import { ALLOW, FILES } from './selfmigrate.gen.js';
 import { FOOTER } from './publish.js';
 import { freshnessResponse } from './freshness.js';
 import { authorizer } from '../../ps/audit.js';
+import { graphTick, graphApi } from './kg.js';  // KGRAPH-1
 import { handleInbound, recordEvent, metrics, queue, approveIntent, suppressAddr, agenciesGraph } from '../../ps/outreach_step.js';
 
 
@@ -19,7 +20,8 @@ const ps = env => createPs({ db: env.DB, env, secrets: env, selfMigrate: { files
 const authed = (request, env) => Boolean(env.PS_TICK_TOKEN) && request.headers.get('x-ps-token') === env.PS_TICK_TOKEN;
 
 export default {
-  async scheduled(_event, env, ctx) { ctx.waitUntil(ps(env).tick()); },
+  // KGRAPH-1: the knowledge graph rebuilds once an hour beside the tick; a failed run is recorded in kg_runs and fails /api/graph/health
+  async scheduled(_event, env, ctx) { ctx.waitUntil(ps(env).tick()); ctx.waitUntil(graphTick(env.DB, SOLUTIONS).then(r => { if (r && r.error) console.error('ps graph', r.error); }, e => console.error('ps graph', e && e.message || e))); },
   // Mail to the monitored reply address: stored, classified, and acted on automatically (opt-outs suppress, bounces count toward the health gate).
   async email(message, env) {
     const raw = await new Response(message.raw).text();
@@ -41,6 +43,7 @@ export default {
     if (pathname === '/audit' || pathname.startsWith('/audit/')) { const r = await ps(env).org.audit.handle(request, { authorize: authorizer(env) }); if (r) return r; }
     if (pathname === '/internal/goals' && request.headers.get('x-ps-internal') === '1') { const m = await metrics(env.DB); return Response.json({ sent: m.sent, replies: m.replies, implementation_signals: m.implementation_signals }); }  // GOALS-1: reached only through the web Worker's service binding
     if (pathname === '/internal/tick' && request.method === 'POST' && request.headers.get('x-ps-internal') === '1') return Response.json({ report: (await ps(env).tick()).report });
+    if (pathname.startsWith('/api/graph')) return graphApi(request, env.DB);  // KGRAPH-1: graph, insights, node, live method, health; POST follow
     if (pathname === '/agencies.json') return Response.json(agenciesGraph(SOLUTIONS));
     if (pathname.startsWith('/ps/outreach/')) {
       if (!authed(request, env)) return new Response('forbidden\n', { status: 403 });
