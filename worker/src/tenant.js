@@ -2,7 +2,8 @@
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 // tenant-ps-web: the tenant's own Worker. Cron runs the improvement tick; fetch serves the page and the data it reads.
 // Bindings: STATE (tenant-ps-kv) and CORE, a service binding to the loop backend (tenant-ps-core).
-// A plain fetch between two Workers of one account is refused by Cloudflare (error 1042), so the backend is reached through CORE only.
+// A plain fetch between two Workers of one account is refused by Cloudflare (error 1042), so the backend is reached through CORE; the plain
+// address is only the fallback of the pulse routes when CORE is not bound.
 import { socialQueue, recentIds } from './social-voice.js';
 import { PAGE } from './ui.js';
 import { rankProblems } from './problems.js';
@@ -29,6 +30,7 @@ import { sitemapFor, sitemapIndex, parsePath, localizable } from '../../vendor/u
 import { CODES, manifest, liveLangs, decorate, syncDictionaries, SOURCE_LANG } from './i18n.js';
 import { sitemapPaths } from './site.js';
 import { health } from './contract.js';  // FLEET-CONTRACT-1, HEALTH-FRONT-1
+const BACKEND = 'https://tenant-ps-core.ultrastable.workers.dev';  // BACKEND-PULSE-1 fallback only, when CORE is not bound; never the first route (error 1042)
 
 // Behind the ultrastable.org edge the request arrives on the workers.dev host with x-forwarded-host set; links and canonicals use the public host.
 const PUBLIC_HOSTS = new Set(['ultrastable.org', 'solutions.ultrastable.org']);

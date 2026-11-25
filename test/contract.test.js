@@ -48,7 +48,9 @@ test('HEALTH-FRONT-1: /health is 200 while the tick is recent and 503 with its r
   const never = await health({ STATE: kv() }); assert.equal(never.ok, false); assert.equal(never.tick.minutes_ago, null);
 });
 
-test('the Worker never fetches the backend by its public address (Cloudflare refuses it with error 1042)', () => {
+test('the Worker reaches the backend through CORE first; the public address is only a fallback (Cloudflare refuses it with error 1042)', () => {
   const src = readFileSync(new URL('../worker/src/tenant.js', import.meta.url), 'utf8');
-  assert.ok(!/fetch\(\s*BACKEND|tenant-ps-core\.ultrastable\.workers\.dev/.test(src));
+  // every use of the public address is the fallback arm of a route that tries the CORE binding first
+  for (const line of src.split('\n').filter(l => /fetch(Fn)?\(\s*BACKEND/.test(l))) assert.match(line, /env\.CORE \?/, line.trim().slice(0, 120));
+  assert.ok(!/includes\(u\.pathname\)\) return fetch\(BACKEND/.test(src), 'the /health and /ps proxy by plain fetch is gone');
 });
