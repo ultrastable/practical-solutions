@@ -1,12 +1,13 @@
 # SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 # Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 # budget: public repository, unmetered; about 1 minute a run.
-# trigger: every 3 hours; items are bounded and deduplicated by key, so a pass with nothing new files nothing, and the agent is dispatched at once instead of waiting for its own schedule (GitHub's scheduler skips runs).
+# trigger: every 3 hours and after a finished tenant deploy (second route, at most every 2 hours); items are bounded and deduplicated by key, so a pass with nothing new files nothing, and the agent is dispatched at once instead of waiting for its own schedule (GitHub's scheduler skips runs).
 # free-alternative: none needed; the run reads this repository and the live counters and files items with its own GITHUB_TOKEN.
 # IMPACT-LOOP-1: record the impact and reach series, settle earlier predictions, file the next bounded items for the free code agent (agent.yml).
 name: impact-loop
 on:
   schedule: [{ cron: '41 */3 * * *' }]
+  workflow_run: { workflows: [deploy-tenant], types: [completed] }   # second trigger: the scheduler skipped the 18:41 pass on 2026-11-25; tools/impactloop.mjs rate-limits this one to every 2 h
   workflow_dispatch: {}
 concurrency: { group: impact-loop, cancel-in-progress: false }
 permissions: { contents: write, issues: write, actions: write }

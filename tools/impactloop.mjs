@@ -10,6 +10,8 @@ import { SOLUTIONS } from '../worker/src/solutions.js';
 import { run } from '../ps/impactloop.js';
 const FILE = new URL('../ledger/impact.json', import.meta.url), ORIGIN = process.env.PS_ORIGIN || 'https://ultrastable.org';
 const state = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : { series: {}, ledger: [] };
+// second trigger (GitHub's scheduler skips runs): a finished deploy also starts a pass, at most once every 2 hours
+if (process.env.GITHUB_EVENT_NAME === 'workflow_run' && state.at && Date.now() - Date.parse(state.at) < 2 * 3600e3) { console.log(JSON.stringify({ skipped: 'ran less than 2 h ago' })); process.exit(0); }
 if (process.argv.includes('--status')) { console.log(JSON.stringify({ at: state.at, readings: state.readings, pending: state.ledger.filter(e => !e.outcome).length, kept: state.ledger.filter(e => e.outcome === 'kept').length, missed: state.ledger.filter(e => e.outcome === 'missed').length }, null, 2)); process.exit(0); }
 const cat = buildCatalog({ problems: null, solutions: SOLUTIONS });
 let reach = null;
@@ -18,7 +20,7 @@ const dry = process.argv.includes('--dry'), gh = (...a) => execFileSync('gh', a,
 let open = [];
 if (!dry) { try { open = JSON.parse(gh('issue', 'list', '--state', 'open', '--label', 'impact-loop', '--limit', '200', '--json', 'body')).flatMap(i => [...String(i.body).matchAll(/impact-key: (\S+)/g)].map(m => m[1])); } catch (e) { console.error('issue list failed:', e.message); process.exit(1); } }
 const EV = new URL('../ledger/impl-evidence.json', import.meta.url), evidence = existsSync(EV) ? JSON.parse(readFileSync(EV, 'utf8')).items : {};
-const out = run({ cat, reach, hist: state.series, ledger: state.ledger, open, evidence });
+const out = run({ cat, reach, hist: state.series, ledger: state.ledger, open, evidence, cap: 6 });
 const filed = [];
 for (const it of out.items) {
   if (dry) { console.log('would file', it.key, '|', it.prediction); filed.push(it); continue; }
