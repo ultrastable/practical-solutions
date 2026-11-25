@@ -58,6 +58,9 @@ const handler = {
     if (u.pathname === '/metrics.json') return Response.json(await summary(env.STATE), { headers: { 'cache-control': 'public, max-age=300' } });
     // AUDIT-1: the public half of the audit log (counts, chain head, verification, Merkle proofs) is read from the backend through the service binding.
     if (env.CORE && (u.pathname === '/audit/summary.json' || u.pathname === '/audit/verify' || u.pathname === '/audit/proof') && r.method === 'GET') return env.CORE.fetch('https://core.internal' + u.pathname + u.search);
+    // KGRAPH-1: the knowledge graph lives in the backend's D1; its public read side (graph, insights, node, method, health, and a reader's POST
+    // follow) is served here through the service binding, since the backend has no public route.
+    if (env.CORE && u.pathname.startsWith('/api/graph') && (r.method === 'GET' || r.method === 'POST')) return env.CORE.fetch(new Request('https://core.internal' + u.pathname + u.search, r));
     if (u.pathname === '/goals.json') return Response.json(await j(env, 'goals:feed', { tenant: 'ps', goals: [], knobs: [], readings: {} }), { headers: { 'cache-control': 'public, max-age=300', 'access-control-allow-origin': '*' } });  // GOALS-1: the public feed core reads
     if (u.pathname === '/live') return new Response(PAGE, { headers });
     if (u.pathname === '/solutions.json') {

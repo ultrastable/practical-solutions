@@ -17,11 +17,14 @@ import { handleInbound, recordEvent, metrics, queue, approveIntent, suppressAddr
 
 const ORIGIN = 'https://ultrastable.org'; // the public home (tenant-ps-edge on the ultrastable.org zone); IndexNow and outreach links use it
 const ps = env => createPs({ db: env.DB, env, secrets: env, selfMigrate: { files: FILES, allow: ALLOW }, solutions: SOLUTIONS, footer: FOOTER, origin: env.PS_ORIGIN || ORIGIN });
+// KGRAPH-1: the graph run beside every tick, gated to once an hour inside graphTick. The account's cron limit leaves this Worker without a cron
+// of its own (the web Worker's schedule calls /internal/tick), so the graph must run on that route too: with scheduled() alone it never ran.
+const graph = env => graphTick(env.DB, SOLUTIONS).then(r => { if (r && r.error) console.error('ps graph', r.error); return r; }, e => { console.error('ps graph', e && e.message || e); return { error: String(e && e.message || e) }; });
 const authed = (request, env) => Boolean(env.PS_TICK_TOKEN) && request.headers.get('x-ps-token') === env.PS_TICK_TOKEN;
 
 export default {
   // KGRAPH-1: the knowledge graph rebuilds once an hour beside the tick; a failed run is recorded in kg_runs and fails /api/graph/health
-  async scheduled(_event, env, ctx) { ctx.waitUntil(ps(env).tick()); ctx.waitUntil(graphTick(env.DB, SOLUTIONS).then(r => { if (r && r.error) console.error('ps graph', r.error); }, e => console.error('ps graph', e && e.message || e))); },
+  async scheduled(_event, env, ctx) { ctx.waitUntil(ps(env).tick()); ctx.waitUntil(graph(env)); },
   // Mail to the monitored reply address: stored, classified, and acted on automatically (opt-outs suppress, bounces count toward the health gate).
   async email(message, env) {
     const raw = await new Response(message.raw).text();
@@ -42,7 +45,7 @@ export default {
     // AUDIT-1: public summary, verify and proof; events and writes need the tick token or this repository's Actions OIDC token.
     if (pathname === '/audit' || pathname.startsWith('/audit/')) { const r = await ps(env).org.audit.handle(request, { authorize: authorizer(env) }); if (r) return r; }
     if (pathname === '/internal/goals' && request.headers.get('x-ps-internal') === '1') { const m = await metrics(env.DB); return Response.json({ sent: m.sent, replies: m.replies, implementation_signals: m.implementation_signals }); }  // GOALS-1: reached only through the web Worker's service binding
-    if (pathname === '/internal/tick' && request.method === 'POST' && request.headers.get('x-ps-internal') === '1') return Response.json({ report: (await ps(env).tick()).report });
+    if (pathname === '/internal/tick' && request.method === 'POST' && request.headers.get('x-ps-internal') === '1') { const [t, g] = await Promise.all([ps(env).tick(), graph(env)]); return Response.json({ report: t.report, graph: g }); }
     if (pathname.startsWith('/api/graph')) return graphApi(request, env.DB);  // KGRAPH-1: graph, insights, node, live method, health; POST follow
     if (pathname === '/agencies.json') return Response.json(agenciesGraph(SOLUTIONS));
     if (pathname.startsWith('/ps/outreach/')) {

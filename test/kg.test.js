@@ -59,3 +59,14 @@ test('the worker runs the graph from its cron and serves /api/graph', () => {
   const src = readFileSync(new URL('../worker/src/index.js', import.meta.url), 'utf8');
   assert.match(src, /graphTick\(env\.DB, SOLUTIONS\)/); assert.match(src, /pathname\.startsWith\('\/api\/graph'\)/);
 });
+
+// The backend has no cron (the account is at its cron limit): the web Worker's schedule calls /internal/tick. A graph run only in scheduled()
+// never ran in production (tenant-ps-db had no kg_ tables two hours after the deploy), so the internal tick route must run it too, and the
+// public read side must be reachable through the web Worker.
+test('the graph runs on the internal tick route and the web Worker serves /api/graph through the backend', () => {
+  const src = readFileSync(new URL('../worker/src/index.js', import.meta.url), 'utf8');
+  const route = src.split('\n').find(l => l.includes("pathname === '/internal/tick'"));
+  assert.ok(route && /graph\(env\)/.test(route), 'internal tick runs the graph');
+  const web = readFileSync(new URL('../worker/src/tenant.js', import.meta.url), 'utf8');
+  assert.match(web, /startsWith\('\/api\/graph'\)[^\n]*CORE\.fetch/);
+});
