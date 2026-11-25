@@ -1,1 +1,16 @@
-{"schema":"ps-grow/1","problems":{},"added":[]}
+{
+ "schema": "ps-grow/1",
+ "problems": {},
+ "added": [
+  {
+   "id": "tuberculosis-intervention",
+   "problem": "tb",
+   "at": "2026-11-25T20:05:42.726Z",
+   "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+   "sources": [
+    "https://doi.org/10.1016/s0140-6736(18)32279-7"
+   ]
+  }
+ ],
+ "at": "2026-11-25T20:05:59.118Z"
+}

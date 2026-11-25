@@ -130,4 +130,12 @@ export const MORE = [
     who: 'Telecom regulators and universal-service funds, mobile operators, social-protection programmes.',
     first_test: 'Give 200 women without a phone a low-cost smartphone, half of them (by lottery) also with a monthly data top-up and a repair-or-replace promise; record who still has and uses the phone at 6 and 12 months.',
     limits: 'A working paper, not yet in a peer-reviewed journal, from one country. It measures spending and phone retention, not internet use directly. No trial was found that shows how to raise the share of a whole country that is online, so this entry is a partial answer.' },
+  { id: "tuberculosis-intervention", design: "review", verdict: "works", checks: [], problem_ids: ["tb"], verified: "not yet checked against the source", problem: "Tuberculosis", title: "Improve TB Outcomes",
+    claim: "Improving tuberculosis treatment outcomes reduces incidence",
+    evidence: [{"src":"Global, regional, and national incidence, prevalence, and years lived with disability for 354 diseases and injuries for 195 countries and territories, 1990-2017: a systematic analysis for the Global Burden of Disease Study 2017 (2018), https://doi.org/10.1016/s0140-6736(18)32279-7","finding":"354 diseases and injuries assessed, including tuberculosis, with incidence, prevalence, and years lived with disability for 195 countries and territories from 1990 to 2017"}],
+    works_where: "Low- and middle-income countries",
+    takes: "Trained healthcare workers, diagnostic equipment, and medication",
+    who: "Ministries of Health, NGOs, and international organizations",
+    first_test: "Pilot improved treatment protocols in a single district",
+    limits: "Does not address antibiotic resistance or co-infection with HIV" },
 ];
