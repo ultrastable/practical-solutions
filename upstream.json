@@ -9,7 +9,7 @@
     ".github/workflows/branch-sweep.yml": "tenant trigger for branch_sweep; generic merge-and-delete of this repository branches, lifting queued upstream",
     ".github/workflows/changes-watch.yml": "stall loop for this tenant's own /changes feed",
     ".github/workflows/ci.yml": "tenant CI; runs the sync check",
-    ".github/workflows/count-claims.yml": "runs this tenant's own count-claims check over its pages",
+    ".github/workflows/count-claims.yml": "probes this site's home page against its catalogue data",
     ".github/workflows/deploy-lag.yml": "this tenant's deploy-lag probe over its own deploy workflows",
     ".github/workflows/gapscan.yml": "runs this tenant's own gap analysis against its own routes (org/capabilities.json) and files its own idea issues",
     ".github/workflows/host-sync.yml": "tenant's own trigger for core/hostsync; names this tenant's deploy workflows",
@@ -21,7 +21,7 @@
     ".github/workflows/yearsim.yml": "weekly run of tools/yearsim.mjs, which simulates this tenant's own loop (bin/ps.mjs) and checks this repository's workflows; the core year simulation (ultrastable/ultrastable foundation/yearsim.py) reads its ops/yearsim.json",
     "bin/issues.mjs": "applies the tenant's issue plan with gh",
     "ps/brief.js": "renders a bright-spot brief",
-    "ps/countclaims.js": "checks counts stated on this tenant's pages",
+    "ps/countclaims.js": "compares this site's home-page counts with its own catalogue and problem data",
     "ps/detect.js": "the bright-spot detector is the product's domain method",
     "ps/gapscan.js": "scans this tenant's capability registry; the registry and probes are tenant data, a core copy would only be the loop shell",
     "ps/issues.js": "bright-spot issue lifecycle over the tenant's own predictions",
@@ -72,8 +72,11 @@
     "worker/src/loop-events.js": "maps this tenant's generated modules to /changes events",
     "worker/src/pipeline.js": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
     "worker/src/redteam-config.js": "tenant red-team pool config",
-    ".github/workflows/count-claims.yml": "probes this site's home page against its catalogue data",
-    "ps/countclaims.js": "compares this site's home-page counts with its own catalogue and problem data"
+    ".github/workflows/vendor-seed.yml": "daily refresh of vendor/seed from the core registry's vendor map (KGRAPH-1 engine); tenant trigger",
+    "scripts/vendor_seed.mjs": "fetches the core seed files this tenant's vendor map names into vendor/seed; tenant-side twin of unlearn's vendor_sync",
+    "worker/src/kg.js": "Practical Solutions mappers and spec for the shared KGRAPH-1 engine: problem, solution, agency words live only here",
+    "test/kg.test.js": "tenant test of the KGRAPH-1 wiring",
+    "tools/implevidence.mjs": "refreshes this catalogue's ledger/impl-evidence.json from its own solutions (IMPACT-LOOP-1); tenant data, no core counterpart"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",
