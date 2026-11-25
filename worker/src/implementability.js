@@ -28,7 +28,7 @@ export const IMPL = {
   'latrine-subsidy': { cost: 'medium', cost_note: 'A voucher worth part of a latrine for each poor household, plus mobilisation visits', adoption: 'piloted', channel: 'rural sanitation programmes and community-led total sanitation campaigns', actors: 'local governments, sanitation departments' },
   'cash-birth-certificate': { cost: 'low', cost_note: 'A rule added to a transfer that is already paid; registration itself must be free', adoption: 'piloted', channel: 'child grants and other cash-transfer programmes', actors: 'social-protection ministries, civil registration authorities' },
   'smartphones-for-women': { cost: 'high', cost_note: 'A handset and data for every household', adoption: 'trial-only', channel: 'universal-service funds and mobile operators', actors: 'telecom regulators, mobile operators', limits: 'No evidence of adoption beyond trials or a low-cost delivery variant; most handsets were gone within a year in trials' },
-  'emissions-market': { cost: 'high', cost_note: 'Monitors and a market platform', adoption: 'trial-only', channel: null, actors: 'state pollution control boards' },
+  'emissions-market': { cost: 'high', cost_note: 'Monitors and a market platform', adoption: 'trial-only', channel: null, actors: 'state pollution control boards', limits: 'No evidence of adoption beyond trials or a low-cost delivery variant; no existing delivery channel' },
 };
 export const COST = { low: 3, medium: 2, high: 1 }, ADOPT = { scaled: 3, piloted: 2, 'trial-only': 1 }, CHANNEL_POINTS = 2;
 export const MIN_PRACTICAL = 5, READY = 7;
