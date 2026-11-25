@@ -61,7 +61,7 @@ const BASE = [
     first_test: 'Check local deficiency and current coverage; where deficient and coverage is under 80%, add dosing to the next immunisation contact in one district.',
     limits: 'Benefit depends on baseline deficiency; recent surveys show falling deficiency in some countries, so check before scaling.' },
   { id: 'cash', problem_ids: ['poverty', 'hunger'], verified: 'not yet checked against the source', problem: 'Extreme poverty', title: 'Give unconditional cash directly to poor households',
-    claim: 'Large one-off or regular cash transfers to very poor households raise assets, consumption and food security, and the spending also lifts neighbours\' incomes.',
+    claim: 'Regular unconditional cash transfers improve household dietary intake and reduce food insecurity, but evidence on asset accumulation or spillover effects to neighbours is limited.',
     evidence: [{ src: 'Egger, Haushofer, Miguel, Niehaus and Walker, Econometrica, 2022 (GiveDirectly in Kenya)', finding: 'Randomised study of large transfers in rural Kenya found sizeable local spending effects with limited price inflation.' }],
     works_where: 'Rural Kenya; many other countries through GiveDirectly and government programmes.',
     takes: 'Identify households (census or satellite), pay by mobile money, monitor fraud.',
