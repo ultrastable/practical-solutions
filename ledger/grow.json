@@ -1,1 +1,11 @@
-{"schema":"ps-grow/1","problems":{},"added":[]}
+{
+ "schema": "ps-grow/1",
+ "problems": {
+  "tb": {
+   "at": "2026-11-25T20:04:26.908Z",
+   "why": "tests failed: not ok 46 - every entry has a written belief and barriers, so a new entry without one is caught by the audit, not hidden | failureType: 'testCodeFailure' | error: 'no bespoke change hint for tuberculosis-intervention' | expected: true"
+  }
+ },
+ "added": [],
+ "at": "2026-11-25T20:04:26.908Z"
+}
