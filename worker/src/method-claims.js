@@ -23,7 +23,7 @@ import { ENSEMBLE_LEDGER } from './ensemble-ledger.gen.js';
 import { allowed } from '../../ps/scope.js';
 import { scan as scanProblems, classify as classifyProblem, measure as measureProblem, RANK_RULE, unSdg, whoCauses, worldBank, whoGho } from '../../ps/problemscan.js';
 import { SCAN } from './problem-scan.gen.js';
-import { run as graphRun, records as graphRecords } from '../../tools/graph.mjs';  // core/datagraph on this catalogue's records
+import { run as graphRun, records as graphRecords } from './graph-run.js';  // core/datagraph on this catalogue's records
 import { GRAPH_INSIGHTS } from './graph-insights.gen.js';
 import { RULES as PIPE, selectQueue, health as pipeHealth, record as pipeRecord, DAY as PDAY } from '../../ps/pipeline.js';
 
