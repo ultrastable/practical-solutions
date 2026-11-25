@@ -16,6 +16,12 @@ import { SCOPE, DENY, allowed } from '../ps/scope.js';
 
 export const LABEL = 'agent-task';
 export const TRUSTED = ['OWNER', 'MEMBER', 'COLLABORATOR'];
+// The system's own loops file issues as the built-in token's bot; the permission API reports no access for it, so it was never trusted and
+// its `idea` issues sat open for days (issue 204). It is the system itself, so it is trusted by name.
+export const SYSTEM_AUTHORS = ['github-actions[bot]'];
+export const SLA_HOURS = 24;
+// A closing probe an issue may name: `npm test` or one read-only check script. Anything else is never executed.
+export const RECONCILE_PROBE = /^(npm test|node (--no-warnings )?tools\/[a-z0-9_]+\.mjs --check)$/;
 export const PROBES = ['npm test'];  // the only commands an issue may name as its closing probe
 export { SCOPE, DENY, allowed };
 
@@ -30,7 +36,7 @@ export function parseTask(body = '') {
 // A failed issue is retried, never dropped: an explicit --issue takes it at once, and a scheduled run with no fresh issue takes the oldest failed one.
 export function pickIssue(issues, { only, writers = new Set() } = {}) {
   const has = (i, n) => (i.labels || []).some(l => (l.name || l) === n);
-  const ok = issues.filter(i => !i.pull_request && has(i, LABEL) && (TRUSTED.includes(i.author_association) || writers.has(i.user && i.user.login)) && !has(i, 'agent-working'))
+  const ok = issues.filter(i => !i.pull_request && has(i, LABEL) && (TRUSTED.includes(i.author_association) || writers.has(i.user && i.user.login) || SYSTEM_AUTHORS.includes(i.user && i.user.login)) && !has(i, 'agent-working'))
     .sort((a, b) => a.number - b.number);
   if (only) return ok.find(i => i.number === Number(only)) || null;
   return ok.find(i => !has(i, 'agent-failed')) || ok[0] || null;
@@ -137,6 +143,32 @@ export async function run({ issueNo, dry = false, root = process.cwd(), env = pr
   return { issue: issue.number, ok: true, changed, how };
 }
 
+// SLA-ISSUE-1 (Rowan 2026-11-25: "why is an issue open for 3 days?"). Every pass, before the agent works: (1) an open issue from a trusted author that carries `idea`
+// but not `agent-task` gets the label (a label or issue created by the built-in token starts no workflow, so intake by event never fired for system-filed issues);
+// (2) an open issue whose `Closing probe:` line names an allowed check that already passes on main is closed with that evidence; (3) anything still open past
+// SLA_HOURS is reported, and the workflow fails on it so ciwatch files it. Returns { closed, labelled, overdue }.
+export function closingProbe(body = '') { const m = /^Closing probe:\s*(.+?)(?:\s+exits? 0.*)?\.?\s*$/mi.exec(body); return m ? m[1].trim().replace(/[.`]+$/, '').replace(/^`/, '') : ''; }
+export function overdueIssues(issues, now = Date.now(), hours = SLA_HOURS) { return issues.filter(i => !i.pull_request && (now - Date.parse(i.created_at)) / 36e5 > hours).map(i => i.number); }
+export function reconcile({ root = process.cwd(), env = process.env, now = Date.now(), dry = false } = {}) {
+  const issues = JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/issues?state=open&per_page=100`)).filter(i => !i.pull_request);
+  const out = { closed: [], labelled: [], overdue: [] };
+  for (const i of issues) {
+    const has = n => (i.labels || []).some(l => (l.name || l) === n);
+    const login = i.user && i.user.login;
+    if (has('idea') && !has(LABEL) && (TRUSTED.includes(i.author_association) || SYSTEM_AUTHORS.includes(login))) { if (!dry) gh('issue', 'edit', String(i.number), '--add-label', LABEL); out.labelled.push(i.number); }
+    const probe = closingProbe(i.body);
+    if (probe && RECONCILE_PROBE.test(probe) && (has('idea') || has(LABEL)) && (TRUSTED.includes(i.author_association) || SYSTEM_AUTHORS.includes(login))) {
+      let ok = false, tail = '';
+      try { tail = sh('sh', ['-c', probe], { cwd: root, maxBuffer: 1 << 26 }).trim().split('\n').slice(-3).join(' | '); ok = true; } catch (e) { tail = String(e.stdout || e.message).trim().split('\n').slice(-2).join(' | '); }
+      if (ok && !dry) { note(i.number, `SLA-ISSUE-1: the closing probe \`${probe}\` passes on main now (${tail.slice(0, 300)}). Closing as completed.`); gh('issue', 'close', String(i.number), '--reason', 'completed'); out.closed.push(i.number); }
+    }
+  }
+  const left = issues.filter(i => !out.closed.includes(i.number));
+  out.overdue = overdueIssues(left, now);
+  console.log(JSON.stringify({ reconcile: out }));
+  return out;
+}
+
 // Re-runs the tests on main; if an agent commit broke them, reverts it and reopens its issue.
 export function settle({ root = process.cwd(), force = false } = {}) {
   if (!force) try { sh('npm', ['test'], { cwd: root, maxBuffer: 1 << 26 }); console.log(JSON.stringify({ settled: 'kept' })); return 'kept'; } catch { /* fall through to the revert */ }
@@ -150,6 +182,7 @@ export function settle({ root = process.cwd(), force = false } = {}) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const [cmd, ...rest] = process.argv.slice(2), i = rest.indexOf('--issue');
   if (cmd === 'run') await run({ issueNo: i >= 0 ? rest[i + 1] : undefined, dry: rest.includes('--dry') });
+  else if (cmd === 'reconcile') { const r = reconcile({ dry: rest.includes('--dry') }); if (r.overdue.length && !rest.includes('--no-fail')) { console.error(`agent: issue(s) ${r.overdue.join(', ')} open past ${SLA_HOURS} h (SLA-ISSUE-1)`); process.exitCode = 1; } }
   else if (cmd === 'settle') settle({ force: rest.includes('--force') });
   else { console.error('usage: agent.mjs run [--issue N] [--dry] | settle'); process.exit(2); }
 }

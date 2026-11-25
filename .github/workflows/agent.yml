@@ -37,12 +37,17 @@ jobs:
           # trusted means write access (the API reports a private org member as CONTRIBUTOR, so the association alone is not enough)
           perm=$(gh api "repos/$GITHUB_REPOSITORY/collaborators/${{ github.event.issue.user.login }}/permission" --jq .permission || echo none)
           case "$perm" in admin|maintain|write) gh issue edit ${{ github.event.issue.number }} --add-label agent-task -R "$GITHUB_REPOSITORY" ;; *) echo "author has $perm access: not an agent task" ;; esac
+      - name: reconcile issues (label ideas, close what already passes)
+        run: node --no-warnings tools/agent.mjs reconcile --no-fail
       - name: work one agent-task issue
         id: agent
         run: node --no-warnings tools/agent.mjs run ${{ inputs.issue && format('--issue {0}', inputs.issue) || '' }} | tee agent.json
       - name: record in the audit log
         if: success()
         run: node tools/audit_post.mjs --kind entry_change --subject agent --summary "code agent worked one agent-task issue" --payload-file agent.json
+      - name: an issue still open past 24 h fails the run, so ciwatch files it (SLA-ISSUE-1)
+        if: ${{ always() }}
+        run: node --no-warnings tools/agent.mjs reconcile
       - name: deploy what the agent merged (a push by the built-in token does not start workflows)
         if: ${{ always() }}
         run: grep -q '"ok":true' agent.json && bash tools/dispatch_deploy.sh || echo "nothing merged"
