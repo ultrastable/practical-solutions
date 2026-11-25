@@ -1,12 +1,12 @@
 {
- "at": "2026-11-25T16:25:01.808Z",
+ "at": "2026-11-25T18:47:41.952Z",
  "readings": {
   "impact.ready_share": 0.625,
   "impact.held_back": 3,
   "impact.problems_covered": 0.905,
   "impact.problems_seeking": 811,
   "impact.catalogue_size": 45,
-  "reach.views_30d": 8159
+  "reach.views_30d": 8596
  },
  "assessments": [
   {
@@ -47,8 +47,8 @@
   {
    "id": "reach.views_30d",
    "status": "unknown",
-   "gap": 816,
-   "value": 8159,
+   "gap": 860,
+   "value": 8596,
    "note": "history shorter than the plateau window"
   }
  ],
@@ -80,7 +80,7 @@
   "reach.views_30d": [
    {
     "at": 1795617395822,
-    "v": 8159
+    "v": 8596
    }
   ],
   "impact.problems_seeking": [
@@ -156,6 +156,72 @@
    "due": 1796228696259,
    "prediction": "reach.views_30d >= 8259 within 168 h",
    "at": 1795623901808
+  },
+  {
+   "key": "ready:immunisation",
+   "lever": "raise-ready",
+   "metric": "impact.ready_share",
+   "op": ">=",
+   "base": 0.625,
+   "predicted": 0.667,
+   "due": 1796237252753,
+   "prediction": "impact.ready_share >= 0.667 within 168 h",
+   "at": 1795632461952
+  },
+  {
+   "key": "ready:cash",
+   "lever": "raise-ready",
+   "metric": "impact.ready_share",
+   "op": ">=",
+   "base": 0.625,
+   "predicted": 0.667,
+   "due": 1796237252753,
+   "prediction": "impact.ready_share >= 0.667 within 168 h",
+   "at": 1795632461952
+  },
+  {
+   "key": "ready:rural-electrification",
+   "lever": "raise-ready",
+   "metric": "impact.ready_share",
+   "op": ">=",
+   "base": 0.625,
+   "predicted": 0.667,
+   "due": 1796237252753,
+   "prediction": "impact.ready_share >= 0.667 within 168 h",
+   "at": 1795632461952
+  },
+  {
+   "key": "ready:graduation",
+   "lever": "raise-ready",
+   "metric": "impact.ready_share",
+   "op": ">=",
+   "base": 0.625,
+   "predicted": 0.667,
+   "due": 1796237252753,
+   "prediction": "impact.ready_share >= 0.667 within 168 h",
+   "at": 1795632461952
+  },
+  {
+   "key": "ready:clean-cooking",
+   "lever": "raise-ready",
+   "metric": "impact.ready_share",
+   "op": ">=",
+   "base": 0.625,
+   "predicted": 0.667,
+   "due": 1796237252753,
+   "prediction": "impact.ready_share >= 0.667 within 168 h",
+   "at": 1795632461952
+  },
+  {
+   "key": "ready:latrine-subsidy",
+   "lever": "raise-ready",
+   "metric": "impact.ready_share",
+   "op": ">=",
+   "base": 0.625,
+   "predicted": 0.667,
+   "due": 1796237252753,
+   "prediction": "impact.ready_share >= 0.667 within 168 h",
+   "at": 1795632461952
   }
  ]
 }

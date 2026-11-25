@@ -1,6 +1,6 @@
 {
  "schema": "ps-impl-evidence/1",
- "at": "2026-11-25T16:24:51.506Z",
+ "at": "2026-11-25T18:47:28.577Z",
  "note": "Real papers with a DOI that resolved at Crossref and an abstract that names the intervention. A lead to read, never a finding.",
  "items": {
   "emissions-market": {
@@ -95,44 +95,89 @@
      "abstract": "BackgroundPoor retention of participants in randomised trials can lead to missing outcome data which can introduce bias and reduce study power, affecting the generalisability, validity and reliability of results. Many strategies are used to improve retention but few have been formally evaluated.ObjectivesTo quantify the effect of strategies to improve retention of participants in randomised trials and to investigate if the effect varied by trial setting.Search methodsWe searched the Cochrane Central Register of Controlled Trials (CENTRAL), MEDLINE, Scopus, PsycINFO, CINAHL, Web of Science Core Collection (SCI-expanded, SSCI, CPSI-S, CPCI-SSH and ESCI) either directly with a specified search "
     }
    ]
+  },
+  "immunisation": {
+   "at": "2026-11-25T18:46:19.628Z",
+   "query": "Reliable immunisation camps small incentive",
+   "hits": [
+    {
+     "title": "Implementation strategies for health systems in low-income countries: an overview of systematic reviews",
+     "year": 2017,
+     "doi": "10.1002/14651858.cd011086.pub2",
+     "url": "https://doi.org/10.1002/14651858.cd011086.pub2",
+     "abstract": "BackgroundA key function of health systems is implementing interventions to improve health, but coverage of essential health interventions remains low in low-income countries. Implementing interventions can be challenging, particularly if it entails complex changes in clinical routines; in collaborative patterns among different healthcare providers and disciplines; in the behaviour of providers, patients or other stakeholders; or in the organisation of care. Decision-makers may use a range of strategies to implement health interventions, and these choices should be based on evidence of the strategies' effectiveness.ObjectivesTo provide an overview of the available evidence from up-to-date sy"
+    },
+    {
+     "title": "Community health workers in rural India: analysing the opportunities and challenges Accredited Social Health Activists (ASHAs) face in realising their multiple roles",
+     "year": 2015,
+     "doi": "10.1186/s12960-015-0094-3",
+     "url": "https://doi.org/10.1186/s12960-015-0094-3",
+     "abstract": "BackgroundGlobally, there is increasing interest in community health worker's (CHW) performance; however, there are gaps in the evidence with respect to CHWs' role in community participation and empowerment. Accredited Social Health Activists (ASHAs), whose roles include social activism, are the key cadre in India's CHW programme which is designed to improve maternal and child health. In a diverse country like India, there is a need to understand how the ASHA programme operates in different underserved Indian contexts, such as rural Manipur.MethodsWe undertook qualitative research to explore stakeholders' perceptions and experiences of the ASHA scheme in strengthening maternal health and unc"
+    },
+    {
+     "title": "Interventions for improving coverage of childhood immunisation in low- and middle-income countries",
+     "year": 2016,
+     "doi": "10.1002/14651858.cd008145.pub3",
+     "url": "https://doi.org/10.1002/14651858.cd008145.pub3",
+     "abstract": "BackgroundImmunisation is a powerful public health strategy for improving child survival, not only by directly combating key diseases that kill children but also by providing a platform for other health services. However, each year millions of children worldwide, mostly from low- and middle-income countries (LMICs), do not receive the full series of vaccines on their national routine immunisation schedule. This is an update of the Cochrane review published in 2011 and focuses on interventions for improving childhood immunisation coverage in LMICs.ObjectivesTo evaluate the effectiveness of intervention strategies to boost and sustain high childhood immunisation coverage in LMICs.Search method"
+    }
+   ]
+  },
+  "rural-electrification": {
+   "at": "2026-11-25T18:46:37.839Z",
+   "query": "Subsidise grid connections rural",
+   "hits": [
+    {
+     "title": "Community and cultural engagement for people with lived experience of mental health conditions: what are the barriers and enablers?",
+     "year": 2022,
+     "doi": "10.1186/s40359-022-00775-y",
+     "url": "https://doi.org/10.1186/s40359-022-00775-y",
+     "abstract": "BackgroundCommunity and cultural engagement can support recovery, help symptom management and increase social connections for people with lived experience of mental health conditions. However, research suggests that people with mental health conditions experience significant barriers to participation. The aim of this study was to explore barriers and enablers of participation in community and cultural activities among people with mental health conditions.MethodsA qualitative interview study with 23 people with mild-to-moderate mental health conditions was undertaken. Data were analysed thematically, and themes were mapped to domains of the Capability, Opportunity and Motivation Model of Beha"
+    }
+   ]
+  },
+  "graduation": {
+   "at": "2026-11-25T18:47:03.976Z",
+   "query": "graduation approach bundle asset training savings",
+   "hits": [
+    {
+     "title": "Systematic review of cash plus or bundled interventions targeting adolescents in Africa to reduce HIV risk",
+     "year": 2024,
+     "doi": "10.1186/s12889-023-17565-9",
+     "url": "https://doi.org/10.1186/s12889-023-17565-9",
+     "abstract": "BackgroundHIV remains a leading cause of death for adolescents and young people aged 10-24 years. HIV prevention requires multisectoral approaches that target adolescents and young people, addressing HIV risk pathways (e.g., transactional sex, gender-based violence, and school attendance) through bundled interventions that combine economic strengthening, health capabilities, and gender equality education. However, best practices are unknown because evidence on multisectoral programming targeted to adolescents and combining these components has not been systematically reviewed.MethodsWe conducted a systematic review to summarize the evidence on bundled interventions combining health and econo"
+    },
+    {
+     "title": "Social safety nets, women's economic achievements and agency in 45 countries: a systematic review and meta-analysis",
+     "year": 2026,
+     "doi": "10.1038/s41562-025-02394-0",
+     "url": "https://doi.org/10.1038/s41562-025-02394-0",
+     "abstract": "There are increasing calls for economic assistance in the form of social safety nets (SSNs) to be designed and implemented to promote women's economic inclusion and agency, contributing to closing gender disparities globally. Here we investigate the extent to which SSNs affect women's economic achievements and agency through a systematic review and meta-analysis of randomized controlled trials implemented in low- and middle-income countries. We searched six databases utilizing search strings in English, French and Spanish through December 2024. Studies were assessed for risk of bias using an adapted version of the Joanna Briggs Institute critical appraisal tool. Our sample includes 1,307 eff"
+    }
+   ]
+  },
+  "latrine-subsidy": {
+   "at": "2026-11-25T18:47:28.577Z",
+   "query": "Subsidise hygienic latrines poorest alongside community",
+   "hits": []
   }
  },
  "log": [
   {
-   "id": "emissions-market",
-   "event": "kept 2 of 8"
-  },
-  {
-   "id": "tb-community-screening",
+   "id": "immunisation",
    "event": "kept 3 of 8"
   },
   {
-   "id": "smartphones-for-women",
-   "event": "kept 2 of 8"
-  },
-  {
-   "id": "clean-cooking",
-   "event": "kept 1 of 8"
-  },
-  {
-   "id": "immunisation",
-   "event": "search failed: HTTP 500"
-  },
-  {
-   "id": "cash",
-   "event": "kept 1 of 8"
-  },
-  {
    "id": "rural-electrification",
-   "event": "deferred: request budget"
+   "event": "kept 1 of 8"
   },
   {
    "id": "graduation",
-   "event": "deferred: request budget"
+   "event": "kept 2 of 8"
   },
   {
    "id": "latrine-subsidy",
-   "event": "deferred: request budget"
+   "event": "kept 0 of 0"
   }
  ]
 }
