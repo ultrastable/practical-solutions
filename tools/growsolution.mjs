@@ -40,7 +40,7 @@ const more = insertBefore(readFileSync(moreP, 'utf8'), MORE_ANCHOR, renderEntry(
 if (!more || !impl) fail('insertion anchor not found exactly once');
 if (dry) { console.log(JSON.stringify({ grow: 'dry', problem: target.id, id: r.entry.id, capped: r.capped, entry: renderEntry(r.entry).slice(0, 900) })); process.exit(0); }
 writeFileSync(moreP, more); writeFileSync(implP, impl);
-try { sh('node', ['--no-warnings', 'tools/content_dates.mjs']); sh('node', ['--no-warnings', 'tools/connections.mjs', '--links-only']); sh('npm', ['test']); } catch (e) { sh('git', ['checkout', '--', 'worker']); fail('tests failed: ' + String(e.stdout || e.message).split('\n').filter(l => /^\s*(not ok|error:|message:|expected|actual|\+|-) ?/i.test(l) && !/^\s*ok /.test(l)).map(l => l.trim()).slice(0, 8).join(' | ')); }
+try { sh('node', ['--no-warnings', 'tools/content_dates.mjs']); sh('node', ['--no-warnings', 'tools/connections.mjs', '--links-only']); sh('npm', ['test']); } catch (e) { sh('git', ['checkout', '--', 'worker']); fail('tests failed: ' + String(e.stdout || e.message).split('\n').filter(l => /^\s*(not ok|error:|message:|expected:|actual:|failureType:) ?/i.test(l) && !/^\s*ok /.test(l)).map(l => l.trim()).slice(0, 8).join(' | ')); }
 led.added.push({ id: r.entry.id, problem: target.id, at: new Date().toISOString(), model: ask.model, sources: hits.map(h => h.url) }); delete led.problems[target.id]; save();
 const branch = `grow/${r.entry.id}`, title = `Grow catalogue: ${r.entry.title} (problem ${target.id})`;
 sh('git', ['config', 'user.name', 'practical-solutions-agent']); sh('git', ['config', 'user.email', 'agent@users.noreply.github.com']);

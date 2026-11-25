@@ -1,11 +1,1 @@
-{
- "schema": "ps-grow/1",
- "problems": {
-  "tb": {
-   "at": "2026-11-25T20:02:13.914Z",
-   "why": "tests failed: --- | --- | --- | --- | --- | --- | --- | ---"
-  }
- },
- "added": [],
- "at": "2026-11-25T20:02:13.914Z"
-}
+{"schema":"ps-grow/1","problems":{},"added":[]}
