@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-25T05:43:51.824Z",
+ "at": "2026-11-25T11:42:54.849Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T05:42:21.150Z"
+   "checked_at": "2026-11-25T11:42:08.284Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -213,7 +213,7 @@
     },
     {
      "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1654,
+     "total": 1664,
      "closest": [
       {
        "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T05:42:55.058Z"
+   "checked_at": "2026-11-25T11:42:28.682Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -304,7 +304,7 @@
    "novelty": [
     {
      "label": "older adult volunteers delivering foundational learning in low-income countries",
-     "total": 569,
+     "total": 572,
      "closest": [
       {
        "title": "Literacy and numeracy support for homeless adults",
@@ -341,7 +341,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 39145,
+     "total": 39421,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -378,7 +378,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T05:43:41.004Z"
+   "checked_at": "2026-11-25T11:42:45.943Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -448,7 +448,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T05:43:47.153Z"
+   "checked_at": "2026-11-25T11:42:49.940Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -481,7 +481,7 @@
    "novelty": [
     {
      "label": "Existing studies",
-     "total": 427,
+     "total": 434,
      "closest": [
       {
        "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
@@ -502,15 +502,15 @@
        "hit": false
       },
       {
-       "title": "A decline in the coverage and utilization of long-lasting insecticidal nets in Southern Ethiopia: A repeated cross-sectional study",
-       "year": 2025,
-       "url": "https://doi.org/10.1371/journal.pone.0322342",
-       "hit": false
-      },
-      {
        "title": "“In starvation, a bone can also be meat”: a mixed methods evaluation of factors associated with discarding of long-lasting insecticidal nets in Bagamoyo, Tanzania",
        "year": 2022,
        "url": "https://doi.org/10.1186/s12936-022-04126-5",
+       "hit": false
+      },
+      {
+       "title": "A decline in the coverage and utilization of long-lasting insecticidal nets in Southern Ethiopia: A repeated cross-sectional study",
+       "year": 2025,
+       "url": "https://doi.org/10.1371/journal.pone.0322342",
        "hit": false
       }
      ],
@@ -518,7 +518,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T05:43:51.824Z"
+   "checked_at": "2026-11-25T11:42:54.849Z"
   }
  },
  "errors": []

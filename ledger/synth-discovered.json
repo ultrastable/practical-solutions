@@ -1,6 +1,6 @@
 {
  "schema": "ps-synth-discovered/1",
- "at": "2026-11-25T05:41:14.060Z",
+ "at": "2026-11-25T11:41:18.123Z",
  "entries": [
   {
    "id": "kmc-ors-zinc",
@@ -470,6 +470,14 @@
    "event": "rejected: red team",
    "detail": [
     "(d) it is a rewording of a standard programme"
+   ]
+  },
+  {
+   "at": "2026-11-25T11:41:18.123Z",
+   "id": "immunisation-ors-zinc",
+   "event": "rejected: red team",
+   "detail": [
+    "a published trial of exactly this combination does not exist, but the combination itself is not novel and is a rewording of standard programmes"
    ]
   }
  ]
