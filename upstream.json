@@ -74,6 +74,7 @@
     "worker/src/redteam-config.js": "tenant red-team pool config",
     ".github/workflows/vendor-seed.yml": "daily refresh of vendor/seed from the core registry's vendor map (KGRAPH-1 engine); tenant trigger",
     "scripts/vendor_seed.mjs": "fetches the core seed files this tenant's vendor map names into vendor/seed; tenant-side twin of unlearn's vendor_sync",
+    "worker/src/graph-run.js": "maps this catalogue's problems, solutions, scan and syntheses into records for core/datagraph (KNOWLEDGE-GRAPH-1); the mapping is tenant data, the graph logic is core",
     "worker/src/kg.js": "Practical Solutions mappers and spec for the shared KGRAPH-1 engine: problem, solution, agency words live only here",
     "test/kg.test.js": "tenant test of the KGRAPH-1 wiring",
     "tools/implevidence.mjs": "refreshes this catalogue's ledger/impl-evidence.json from its own solutions (IMPACT-LOOP-1); tenant data, no core counterpart"
