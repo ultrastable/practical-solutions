@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 // Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 // tenant-ps-web: the tenant's own Worker. Cron runs the improvement tick; fetch serves the page and the data it reads.
-// Bindings: STATE (tenant-ps-kv) only. Core is never called; the loop backend is reached by plain HTTP (BACKEND var).
+// Bindings: STATE (tenant-ps-kv) and CORE, a service binding to the loop backend (tenant-ps-core).
+// A plain fetch between two Workers of one account is refused by Cloudflare (error 1042), so the backend is reached through CORE only.
 import { socialQueue, recentIds } from './social-voice.js';
 import { PAGE } from './ui.js';
 import { rankProblems } from './problems.js';
@@ -27,11 +28,11 @@ import { freshnessResponse } from './freshness.js';  // PAGES-FRESH-1
 import { sitemapFor, sitemapIndex, parsePath, localizable } from '../../vendor/ultrastable/core/i18n/index.js';  // I18N-1
 import { CODES, manifest, liveLangs, decorate, syncDictionaries, SOURCE_LANG } from './i18n.js';
 import { sitemapPaths } from './site.js';
+import { health } from './contract.js';  // FLEET-CONTRACT-1, HEALTH-FRONT-1
 
 // Behind the ultrastable.org edge the request arrives on the workers.dev host with x-forwarded-host set; links and canonicals use the public host.
 const PUBLIC_HOSTS = new Set(['ultrastable.org', 'solutions.ultrastable.org']);
 export const canonicalOrigin = (r, u) => { const f = (r.headers.get('x-forwarded-host') || '').toLowerCase(); return PUBLIC_HOSTS.has(f) ? 'https://' + (f === 'solutions.ultrastable.org' ? 'ultrastable.org' : f) : u.origin; };
-const BACKEND = 'https://tenant-ps-core.ultrastable.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
 const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' };
 
@@ -55,6 +56,7 @@ const handler = {
     // PAGES-FRESH-1: the public front end reports the age of its own bundles. The route existed only on the backend Worker, so the core's
     // pages-live probe of this host read 404 and a stale front end could not be detected (found 2026-11-20).
     if (u.pathname === '/api/freshness') return freshnessResponse();
+    if (u.pathname === '/health') { const h = await health(env); return Response.json(h, { status: h.ok ? 200 : 503, headers: { 'cache-control': 'no-store', 'access-control-allow-origin': '*' } }); }  // HEALTH-FRONT-1
     if (u.pathname === '/metrics.json') return Response.json(await summary(env.STATE), { headers: { 'cache-control': 'public, max-age=300' } });
     // AUDIT-1: the public half of the audit log (counts, chain head, verification, Merkle proofs) is read from the backend through the service binding.
     if (env.CORE && (u.pathname === '/audit/summary.json' || u.pathname === '/audit/verify' || u.pathname === '/audit/proof') && r.method === 'GET') return env.CORE.fetch('https://core.internal' + u.pathname + u.search);
@@ -112,7 +114,8 @@ const handler = {
     const cat = await catalog(env); cat.ign = await ignView(env.STATE).catch(() => null); cat.reach = u.pathname === '/impact' ? await summary(env.STATE) : null;
     const site = route(new URL(u.pathname + u.search, origin), cat);
     if (site) { if (edge && site.status === 200 && ctx && ctx.waitUntil) ctx.waitUntil(edge.put(ckey, site.clone()).catch(() => {})); return site; }
-    if (['/health', '/ps/briefs', '/ps/criticality'].includes(u.pathname)) return fetch(BACKEND + u.pathname, { headers: { accept: 'application/json' } });
+    // HEALTH-FRONT-1: a plain fetch of the backend's workers.dev address is refused between Workers of one account (error 1042); the service binding is the route.
+    if (env.CORE && ['/ps/briefs', '/ps/criticality'].includes(u.pathname)) return env.CORE.fetch('https://core.internal' + u.pathname, { headers: { accept: 'application/json' } });
     return notFoundResponse(cat, new URL(u.pathname + u.search, origin));
   },
 };

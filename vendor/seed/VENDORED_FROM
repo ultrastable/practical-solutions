@@ -1,2 +1,3 @@
 ultrastable/ultrastable@local
 seed/worker/src/knowledge.js -> vendor/seed/knowledge.js
+seed/worker/src/contract.js -> vendor/seed/contract.js
