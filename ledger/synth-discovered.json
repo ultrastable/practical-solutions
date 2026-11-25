@@ -1,6 +1,6 @@
 {
  "schema": "ps-synth-discovered/1",
- "at": "2026-11-24T14:59:03.023Z",
+ "at": "2026-11-25T05:41:14.060Z",
  "entries": [
   {
    "id": "kmc-ors-zinc",
@@ -462,6 +462,14 @@
    "event": "rejected: red team",
    "detail": [
     "d"
+   ]
+  },
+  {
+   "at": "2026-11-25T05:41:14.060Z",
+   "id": "itn-vita-delivery",
+   "event": "rejected: red team",
+   "detail": [
+    "(d) it is a rewording of a standard programme"
    ]
   }
  ]
