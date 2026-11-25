@@ -1,1 +1,11 @@
-{"schema":"ps-grow/1","problems":{},"added":[]}
+{
+ "schema": "ps-grow/1",
+ "problems": {
+  "tb": {
+   "at": "2026-11-25T19:56:27.951Z",
+   "why": "no model route answered: github-models Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  }
+ },
+ "added": [],
+ "at": "2026-11-25T19:56:27.951Z"
+}
