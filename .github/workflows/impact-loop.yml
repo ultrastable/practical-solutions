@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: gh label create impact-loop --color 0e8a16 || true
+      - name: find real sources for the solutions that are not yet ready (Europe PMC, DOI resolved at Crossref)
+        run: node --no-warnings tools/implevidence.mjs
       - run: node --no-warnings tools/impactloop.mjs
       - name: start the code agent now (a schedule alone can skip hours)
         run: gh workflow run agent.yml || echo "agent dispatch failed; its own 2-hour schedule is the second route"
@@ -30,7 +32,7 @@ jobs:
         run: |
           git config user.name practical-solutions-bot
           git config user.email bot@users.noreply.github.com
-          git add ledger/impact.json
+          git add ledger/impact.json ledger/impl-evidence.json
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git commit -m "impact-loop: daily readings"
           for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
