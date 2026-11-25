@@ -1,6 +1,6 @@
 {
  "schema": "ps-impl-evidence/1",
- "at": "2026-11-25T19:55:55.602Z",
+ "at": "2026-11-25T19:57:41.104Z",
  "note": "Real papers with a DOI that resolved at Crossref and an abstract that names the intervention. A lead to read, never a finding.",
  "items": {
   "emissions-market": {

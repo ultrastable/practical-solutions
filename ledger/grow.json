@@ -4,8 +4,12 @@
   "tb": {
    "at": "2026-11-25T19:56:27.951Z",
    "why": "no model route answered: github-models Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  },
+  "internet": {
+   "at": "2026-11-25T19:58:08.170Z",
+   "why": "no usable source ([{\"id\":\"internet\",\"event\":\"kept 0 of 8\"}], query \"offline\")"
   }
  },
  "added": [],
- "at": "2026-11-25T19:56:27.951Z"
+ "at": "2026-11-25T19:58:08.170Z"
 }
