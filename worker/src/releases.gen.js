@@ -5,8 +5,176 @@ export const RELEASES = {
  "schema": "ps-releases/1",
  "min_days": 1,
  "max_gap_days": 7,
- "count": 5,
+ "count": 6,
  "releases": [
+  {
+   "version": "2026.11.25",
+   "date": "2026-11-25",
+   "first": false,
+   "through": "2026-11-25T17:35:50Z",
+   "added": {
+    "problems": [],
+    "solutions": [],
+    "syntheses": [],
+    "insights": [
+     {
+      "id": "hypertension:1bc856bea2",
+      "title": "hypertension: Vulnerable population neglect"
+     },
+     {
+      "id": "hypertension:1eee689527",
+      "title": "hypertension: Assumed access to resources"
+     },
+     {
+      "id": "hypertension:575733c2ad",
+      "title": "hypertension: Protocol ineffectiveness"
+     },
+     {
+      "id": "hypertension:dccbd3a80d",
+      "title": "hypertension: Inadequate protocol adaptation"
+     },
+     {
+      "id": "immunisation:03ebaa94d1",
+      "title": "immunisation: Incentives may disproportionately benefit certain groups"
+     },
+     {
+      "id": "immunisation:555cbbc2b9",
+      "title": "immunisation: Lack of generalisability to other regions"
+     },
+     {
+      "id": "immunisation:c901710058",
+      "title": "immunisation: Incentives have no impact on immunisation rates"
+     },
+     {
+      "id": "immunisation:dba582ddbb",
+      "title": "immunisation: Assuming that the incentive is the primary motivator for immunisation"
+     },
+     {
+      "id": "itn:48b7dc7ada",
+      "title": "itn: Inadequate distribution, poor net quality, or insufficient user compliance undermine the effectiveness of treated nets"
+     },
+     {
+      "id": "itn:494ac95755",
+      "title": "itn: Vulnerable populations, such as pregnant women and children under 5, are not adequately protected by treated nets"
+     },
+     {
+      "id": "itn:c6b1270bd9",
+      "title": "itn: Assuming that dual-insecticide nets will remain effective against evolving mosquito resistance"
+     },
+     {
+      "id": "kmc:327c89838c",
+      "title": "kmc: Assumption of consistent maternal support"
+     },
+     {
+      "id": "kmc:5a23d5de88",
+      "title": "kmc: Increased mortality with skin-to-skin contact"
+     },
+     {
+      "id": "kmc:737716f8bf",
+      "title": "kmc: Vulnerable populations not benefiting from KMC"
+     },
+     {
+      "id": "kmc:a3b84026f0",
+      "title": "kmc: Inadequate hospital infrastructure for KMC"
+     }
+    ],
+    "features": [
+     {
+      "id": "57e8c93",
+      "pr": 210,
+      "title": "Changes feed: include loop runs from generated modules, restore swallowed provenance call, add changes-watch stall loop"
+     },
+     {
+      "id": "22581e7",
+      "pr": 211,
+      "title": "Reconcile issues every agent pass: trust system-filed ideas, close passing probes, fail on 24 h overdue (SLA-ISSUE-1)"
+     },
+     {
+      "id": "801edb9",
+      "pr": 212,
+      "title": "Impact loop: daily readings, plateau detection, bounded lever items with predictions (IMPACT-LOOP-1)"
+     },
+     {
+      "id": "eeda47a",
+      "pr": 217,
+      "title": "Agent: Ensemble update: cash claim"
+     },
+     {
+      "id": "0639d65",
+      "pr": 220,
+      "title": "Impact loop: run every 3 h, dispatch the agent, drain 3 issues per run"
+     },
+     {
+      "id": "579e673",
+      "pr": 219,
+      "title": "Knowledge graph on core/knowledge; insights flow to Changes and the feed"
+     },
+     {
+      "id": "5b30132",
+      "pr": 222,
+      "title": "Impact loop acquires real sources: Europe PMC search, DOI resolved at Crossref, abstracts in the item (IMPACT-LOOP-1)"
+     },
+     {
+      "id": "5246398",
+      "pr": 225,
+      "title": "Agent: Impact: make \"Test every adult in a high-burden community once a year, whatever their symptoms\" practical or say why it cannot be"
+     },
+     {
+      "id": "4ca00d1",
+      "pr": 226,
+      "title": "Agent: Impact: make \"Give women in low-income households a smartphone (most handsets were gone within a year)\" practical or say why it cannot be"
+     },
+     {
+      "id": "d5edcca",
+      "pr": 227,
+      "title": "Agent: Impact: make \"A regulated pollution market with continuous monitoring\" practical or say why it cannot be"
+     },
+     {
+      "id": "09758e0",
+      "pr": 228,
+      "title": "Practical Solutions keeps its catalogue in the shared D1 knowledge graph"
+     },
+     {
+      "id": "aefcc3b",
+      "pr": 218,
+      "title": "Count problems from the catalogue on the home page; claims-are-code probe; impact lever for sought problems"
+     },
+     {
+      "id": "cbbdf69",
+      "pr": 229,
+      "title": "Fold the catalogue graph onto core/datagraph"
+     },
+     {
+      "id": "6a163f5",
+      "pr": 218,
+      "title": "Home page counts the catalogue; count-claims probe; impact lever"
+     },
+     {
+      "id": "f85ef9b",
+      "pr": 221,
+      "title": "Impact items name the files the agent edits and forbid invented evidence (IMPACT-LOOP-1)"
+     },
+     {
+      "id": "703457f",
+      "pr": 230,
+      "title": "Keep file access out of the Worker bundle: graph run logic moves to worker/src/graph-run.js (fixes deploy-tenant after #229)"
+     }
+    ]
+   },
+   "totals": {
+    "problems": 21,
+    "solutions": 24,
+    "syntheses": 3,
+    "insights": 92
+   },
+   "counts": {
+    "problems": 0,
+    "solutions": 0,
+    "syntheses": 0,
+    "insights": 15,
+    "features": 16
+   }
+  },
   {
    "version": "2026.11.24",
    "date": "2026-11-24",
