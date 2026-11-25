@@ -27,13 +27,16 @@ jobs:
       - name: find real sources for the solutions that are not yet ready (Europe PMC, DOI resolved at Crossref)
         run: node --no-warnings tools/implevidence.mjs
       - run: node --no-warnings tools/impactloop.mjs
+      - name: grow the catalogue by one sourced solution for one problem (checked against real abstracts, tests, then merged)
+        run: node --no-warnings tools/growsolution.mjs || echo "growth step failed; recorded, next pass retries"
+        env: { GITHUB_TOKEN: '${{ github.token }}' }
       - name: start the code agent now (a schedule alone can skip hours)
         run: gh workflow run agent.yml || echo "agent dispatch failed; its own 2-hour schedule is the second route"
       - name: commit ledger
         run: |
           git config user.name practical-solutions-bot
           git config user.email bot@users.noreply.github.com
-          git add ledger/impact.json ledger/impl-evidence.json
+          git add ledger/impact.json ledger/impl-evidence.json ledger/grow.json
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git commit -m "impact-loop: daily readings"
           for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done

@@ -100,9 +100,10 @@ test('every solution has implementability facts and the score follows the publis
   assert.ok(route(new URL('https://x/solutions/chlorine'), c).status === 200);
 });
 test('the solutions list is sorted most implementable first', async () => {
-  const html = await get('/solutions?page=1').text(), last = await get('/solutions?page=2').text();
-  assert.ok(html.includes('/solutions/chlorine') && !html.includes('/solutions/emissions-market'));
-  assert.ok(last.includes('/solutions/emissions-market'));
+  let n = 1, pages = [];   // the catalogue grows by itself, so walk every page instead of assuming two
+  for (; n <= 20; n++) { const h = await get('/solutions?page=' + n).text(); pages.push(h); if (!h.includes('page=' + (n + 1))) break; }
+  assert.ok(pages[0].includes('/solutions/chlorine') && !pages[0].includes('/solutions/emissions-market'));
+  assert.ok(pages[pages.length - 1].includes('/solutions/emissions-market'));
 });
 
 import { recordView, summary } from '../worker/src/reach.js';
