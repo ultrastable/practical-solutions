@@ -63,7 +63,9 @@
     "worker/src/justify.js": "renders this catalogue's connection justifications from its own ledgers; registered here so the tenant-sync check passes (it was unregistered on main)",
     "worker/src/kit/tokens.js": "tenant design tokens (accent and type pair), the permitted variation",
     "worker/src/pipeline.js": "reads this catalogue's own ledgers and generated modules (problem scan, solutions, connections, evidence leads); a core pipeline interface would need a stage-ledger contract first",
-    "worker/src/redteam-config.js": "tenant red-team pool config"
+    "worker/src/redteam-config.js": "tenant red-team pool config",
+    ".github/workflows/count-claims.yml": "probes this site's home page against its catalogue data",
+    "ps/countclaims.js": "compares this site's home-page counts with its own catalogue and problem data"
   },
   "lifted": {
     "ps/ensemble.js": "core/ensemble/index.js",
@@ -176,6 +178,26 @@
       "core": "core/references/page.js",
       "hold": "reference-source linking is generic (a source is one registry row); lifts into core once the first run has verified links",
       "item": "Q-LIFT-REFERENCES-1"
+    },
+    ".github/workflows/changes-watch.yml": {
+      "core": "core/changes/templates/changes-watch.yml",
+      "hold": "queued: lifts after parameterising the tenant name",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    ".github/workflows/impact-loop.yml": {
+      "core": "core/impact/templates/impact-loop.yml",
+      "hold": "queued: lifts after parameterising the tenant name",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "tools/impactloop.mjs": {
+      "core": "core/impact/tools/impactloop.mjs",
+      "hold": "queued: lifts after parameterising the tenant name",
+      "item": "Q-LIFT-TENANT-1"
+    },
+    "worker/src/loop-events.js": {
+      "core": "core/loop/loop-events.js",
+      "hold": "queued: lifts after parameterising the tenant name",
+      "item": "Q-LIFT-TENANT-1"
     }
   },
   "min_lines": 8,

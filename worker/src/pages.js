@@ -221,11 +221,14 @@ function whatsNew(c, now = Date.now()) {
 <p class="m">The loop recorded ${n.day} change(s) in the last 24 hours, ${n.week} in the last 7 days and ${n.month} in the last 30 days. <a href="/changes">Every change</a> · <a href="/releases">Releases</a> · <a href="/releases.atom">Subscribe</a> · <a href="https://ultrastable.io/progress" rel="noopener">Progress across every Ultrastable system</a></p>` });
 }
 
+// Home-page counts that name the page they count (COUNT-CLAIMS-1); the shared kit's stats() has no link, so the list is written here in the same markup.
+const linkedStats = items => `<ul class="stats">${items.map(i => `<li><b>${esc(i.value)}</b><span>${i.href ? `<a href="${esc(i.href)}">${esc(i.label)}</a>` : esc(i.label)}</span></li>`).join('')}</ul>`;
+
 export function home(c, o) {
   const pc = problemCounts(c), ready = c.sols.filter(s => s.impl && s.impl.score >= 7).slice(0, 6), top = c.probs.filter(p => p.ranked).slice(0, 5);
   const body = `${ui.hero({ title: 'What actually works, and how to do it', lede: 'An evidence-based encyclopedia of practical solutions to pressing problems. Every entry shows its sources, how strong the evidence is, what it costs and who can deliver it. Written and kept current by an automated loop, in the open.',
     search: SHELL.search, actions: [{ href: '/solutions?ready=ready', label: 'See solutions ready to implement' }, { href: '/catalogue', label: 'Browse the problem catalogue', alt: true }, { href: '/method', label: 'How we know', alt: true }] })}
-${ui.stats([{ value: c.sols.length, label: 'solutions' }, { value: pc.catalogue, label: 'problems in the catalogue', href: '/catalogue' }, { value: pc.curated, label: 'problems with a full evidence entry', href: '/problems' }, { value: c.domains.length, label: 'domains' }, { value: c.sols.filter(s => s.impl && s.impl.score >= 7).length, label: 'ready to implement' }, { value: pc.sought, label: 'problems still seeking a solution', href: '/catalogue' }])}
+${linkedStats([{ value: c.sols.length, label: 'solutions' }, { value: pc.catalogue, label: 'problems in the catalogue', href: '/catalogue' }, { value: pc.curated, label: 'problems with a full evidence entry', href: '/problems' }, { value: c.domains.length, label: 'domains' }, { value: c.sols.filter(s => s.impl && s.impl.score >= 7).length, label: 'ready to implement' }, { value: pc.sought, label: 'problems still seeking a solution', href: '/catalogue' }])}
 ${whatsNew(c)}
 ${ui.section({ id: 'who', title: 'Start from who you are', body: ui.cardGrid(AUDIENCES.map(a => ui.card({ title: a.name, href: '/for/' + a.id, body: a.goal, meta: a.who, hue: a.hue }))) })}
 ${ui.section({ id: 'ready', title: 'Ready to implement', body: `<p class="m">High evidence is not enough; these also have low cost, real-world scale and an existing way to deliver them.</p>${ui.cardGrid(ready.map(s => solCard(s, c)))}<p><a href="/solutions?ready=ready">All solutions ready to implement</a></p>` })}
