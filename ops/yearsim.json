@@ -1,5 +1,5 @@
 {
- "at": "2026-11-21T18:52:58.334Z",
+ "at": "2026-11-25T16:00:16.779Z",
  "days": 365,
  "labels": {
   "criticality": "REAL code, SYNTHETIC world, no model",
@@ -84,8 +84,22 @@
    "concurrency": true
   },
   {
+   "workflow": "behaviour.yml",
+   "fires_per_year": 52,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
    "workflow": "branch-sweep.yml",
    "fires_per_year": 8760,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "changes-watch.yml",
+   "fires_per_year": 1460,
    "halt": true,
    "timeout": true,
    "concurrency": true
@@ -107,6 +121,13 @@
   {
    "workflow": "context.yml",
    "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
+   "workflow": "count-claims.yml",
+   "fires_per_year": 1460,
    "halt": true,
    "timeout": true,
    "concurrency": true
@@ -154,6 +175,13 @@
    "concurrency": true
   },
   {
+   "workflow": "impact-loop.yml",
+   "fires_per_year": 365,
+   "halt": true,
+   "timeout": true,
+   "concurrency": true
+  },
+  {
    "workflow": "indexnow.yml",
    "fires_per_year": 365,
    "halt": true,
@@ -190,7 +218,7 @@
   },
   {
    "workflow": "release.yml",
-   "fires_per_year": 52,
+   "fires_per_year": 365,
    "halt": true,
    "timeout": true,
    "concurrency": true
