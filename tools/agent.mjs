@@ -98,7 +98,8 @@ export function applyEdits(edits, root, fs = { read: p => readFileSync(p, 'utf8'
 }
 
 export const sh = (cmd, args, o = {}) => execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...o });
-export const gh = (...a) => sh('gh', a);
+// a GitHub-side 5xx or GraphQL hiccup is retried (3 tries) before it can stop a run: on 2026-11-25 one such error in reconcile skipped the whole agent run
+export const gh = (...a) => { let last; for (let t = 0; t < 3; t++) { try { return sh('gh', a); } catch (e) { last = e; if (!/50\d|Something went wrong|timeout|ECONNRESET/i.test(String(e.stderr || e.message))) throw e; Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 2000 * (t + 1)); } } throw last; };
 export const note = (n, text) => { try { gh('issue', 'comment', String(n), '--body', text + '\n\n_Free code agent run (GitHub Models, then Workers AI through the tenant model Worker)._'); } catch (e) { console.error('comment failed', e.message); } };
 
 export async function run({ issueNo, dry = false, root = process.cwd(), env = process.env } = {}) {
@@ -155,7 +156,7 @@ export function reconcile({ root = process.cwd(), env = process.env, now = Date.
   for (const i of issues) {
     const has = n => (i.labels || []).some(l => (l.name || l) === n);
     const login = i.user && i.user.login;
-    if (has('idea') && !has(LABEL) && (TRUSTED.includes(i.author_association) || SYSTEM_AUTHORS.includes(login))) { if (!dry) gh('issue', 'edit', String(i.number), '--add-label', LABEL); out.labelled.push(i.number); }
+    if (has('idea') && !has(LABEL) && (TRUSTED.includes(i.author_association) || SYSTEM_AUTHORS.includes(login))) { if (!dry) { try { gh('api', '-X', 'POST', `repos/${env.GITHUB_REPOSITORY}/issues/${i.number}/labels`, '-f', `labels[]=${LABEL}`); } catch (e) { console.error('label failed (REST, retried next pass):', i.number, String(e.message).slice(0, 160)); continue; } } out.labelled.push(i.number); }
     const probe = closingProbe(i.body);
     if (probe && RECONCILE_PROBE.test(probe) && (has('idea') || has(LABEL)) && (TRUSTED.includes(i.author_association) || SYSTEM_AUTHORS.includes(login))) {
       let ok = false, tail = '';
