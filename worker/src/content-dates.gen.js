@@ -22,6 +22,7 @@ export const DATES = {
  "solution:smartphones-for-women": "2026-11-21T11:07:20+00:00",
  "solution:tarl": "2026-11-21T11:07:20+00:00",
  "solution:tb-community-screening": "2026-11-21T11:07:20+00:00",
+ "solution:tuberculosis-intervention": "2026-11-25T20:05:42.769Z",
  "solution:vita": "2026-11-21T11:07:20+00:00",
  "solution:women-leaders": "2026-11-21T11:07:20+00:00",
  "synthesis:barbershop-hearts": "2026-11-21T11:07:20+00:00",
