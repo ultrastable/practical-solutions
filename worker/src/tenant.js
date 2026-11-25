@@ -38,11 +38,27 @@ const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-
 
 const catalog = async env => buildCatalog({ problems: await j(env, 'problems', null), solutions: SOLUTIONS, verif: await j(env, 'verif', {}), cands: await j(env, 'candidates', {}), drafts: await j(env, 'drafts', {}), spots: await j(env, 'brightspots', {}), changes: mergeChanges(await j(env, 'changes', [])), lastTick: await j(env, 'last_tick', null), bcaState: await j(env, BCA_KEY, null) });
 
+// BACKEND-PULSE-1: the backend (tenant-ps-core) has no cron; this schedule is its first route (the impact-loop workflow is the second). It calls
+// POST /pulse/watch through the CORE service binding, or over plain HTTP when the binding is missing, and never drops a failure: the outcome is
+// logged and kept in STATE under core:pulse, so a silent backend shows up in the store and in the backend's own GET /pulse reading.
+export async function pulseCore(env, fetchFn = fetch) {
+  const init = { method: 'POST', headers: { 'x-ps-internal': '1', accept: 'application/json' } };
+  let out;
+  try {
+    const r = env.CORE ? await env.CORE.fetch('https://core.internal/pulse/watch', init) : await fetchFn(BACKEND + '/pulse/watch', init);
+    let body = null; try { body = await r.json(); } catch { body = null; }
+    out = { at: new Date().toISOString(), via: env.CORE ? 'CORE' : 'http', status: r.status, ok: r.ok && Boolean(body && body.ok), ran: Boolean(body && body.ran), error: r.ok ? (body && body.error) || null : `HTTP ${r.status}` };
+  } catch (e) { out = { at: new Date().toISOString(), via: env.CORE ? 'CORE' : 'http', status: 0, ok: false, ran: false, error: String(e && e.message || e).slice(0, 300) }; }
+  if (!out.ok) console.error('ps core pulse', JSON.stringify(out));
+  try { await env.STATE.put('core:pulse', JSON.stringify(out)); } catch (e) { console.error('ps core pulse: STATE write failed', e && e.message || e); }
+  return out;
+}
+
 const handler = {
   // The account is at the free plan's cron limit, so the backend has no cron of its own: this Worker's schedule also runs the backend tick
-  // through a service binding (CORE). The backend has no public route, so only this call reaches /internal/tick.
+  // and knowledge graph through POST /pulse/watch (pulseCore above), which runs them only when the newest tick is older than its interval.
   async scheduled(_e, env, ctx) {
-    if (env.CORE) ctx.waitUntil(env.CORE.fetch('https://core.internal/internal/tick', { method: 'POST', headers: { 'x-ps-internal': '1' } }).catch(() => {}));
+    ctx.waitUntil(pulseCore(env));  // BACKEND-PULSE-1
     ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems, mailto: env.OPENALEX_MAILTO, maxVerify: knob(await j(env, 'goals:knobs', {}), 'ps.verify.per_tick', undefined) });  // GOALS-1: core's knob value, the default when unset
       try { await PV.recordChanges(env.STATE, [...r.changes, ...r.errors], r.at); } catch (e) { await env.STATE.put('provenance:error', String(e.message || e)); }
       try { const b = await bcaTick({ store: env.STATE }); const be = b.changes.filter(c => /_error$/.test(c.kind)), bc = b.changes.filter(c => !/_error$/.test(c.kind)); await recordErrors(env.STATE, be, b.at); if (b.changes.length) { await PV.recordChanges(env.STATE, b.changes, b.at); if (bc.length) await env.STATE.put('changes', JSON.stringify([...bc.map(c => ({ at: b.at, ...c })), ...(await j(env, 'changes', []))].slice(0, 200))); } } catch (e) { await env.STATE.put('bca:error', String(e.message || e)); }
@@ -62,6 +78,9 @@ const handler = {
     if (env.CORE && (u.pathname === '/audit/summary.json' || u.pathname === '/audit/verify' || u.pathname === '/audit/proof') && r.method === 'GET') return env.CORE.fetch('https://core.internal' + u.pathname + u.search);
     // KGRAPH-1: the knowledge graph lives in the backend's D1; its public read side (graph, insights, node, method, health, and a reader's POST
     // follow) is served here through the service binding, since the backend has no public route.
+    // BACKEND-PULSE-1: the backend's live reading and its watch route, on the public host too.
+    if (u.pathname === '/pulse' && r.method === 'GET') return env.CORE ? env.CORE.fetch('https://core.internal/pulse') : fetch(BACKEND + '/pulse');
+    if (u.pathname === '/pulse/watch' && r.method === 'POST') return env.CORE ? env.CORE.fetch('https://core.internal/pulse/watch', { method: 'POST' }) : fetch(BACKEND + '/pulse/watch', { method: 'POST' });
     if (env.CORE && u.pathname.startsWith('/api/graph') && (r.method === 'GET' || r.method === 'POST')) return env.CORE.fetch(new Request('https://core.internal' + u.pathname + u.search, r));
     if (u.pathname === '/goals.json') return Response.json(await j(env, 'goals:feed', { tenant: 'ps', goals: [], knobs: [], readings: {} }), { headers: { 'cache-control': 'public, max-age=300', 'access-control-allow-origin': '*' } });  // GOALS-1: the public feed core reads
     if (u.pathname === '/live') return new Response(PAGE, { headers });

@@ -40,3 +40,11 @@ jobs:
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git commit -m "impact-loop: daily readings"
           for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done
+      - name: pulse the backend (BACKEND-PULSE-1, second route; tenant-ps-core has no cron and runs only when called)
+        run: |
+          # Safe to call by anyone: it runs the backend tick and knowledge graph only when the newest tick is older than 25 min, else answers ran:false.
+          curl -sS -X POST https://tenant-ps-core.ultrastable.workers.dev/pulse/watch -o pulse.json -w '%{http_code}\n' | tee code.txt; cat pulse.json; echo
+          [ "$(cat code.txt)" = 200 ]
+          # the live reading decides whether the backend loop is done: 503 when the graph never ran, failed or is stale, or the tick is stale
+          curl -sS https://tenant-ps-core.ultrastable.workers.dev/pulse -o reading.json -w '%{http_code}\n' | tee code.txt; cat reading.json; echo
+          [ "$(cat code.txt)" = 200 ]
