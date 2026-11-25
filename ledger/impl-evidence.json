@@ -1,6 +1,6 @@
 {
  "schema": "ps-impl-evidence/1",
- "at": "2026-11-25T20:05:32.602Z",
+ "at": "2026-11-25T20:13:42.779Z",
  "note": "Real papers with a DOI that resolved at Crossref and an abstract that names the intervention. A lead to read, never a finding.",
  "items": {
   "emissions-market": {
@@ -160,7 +160,25 @@
    "at": "2026-11-25T18:47:28.577Z",
    "query": "Subsidise hygienic latrines poorest alongside community",
    "hits": []
+  },
+  "tuberculosis-intervention": {
+   "at": "2026-11-25T20:13:42.779Z",
+   "query": "Improve TB Outcomes",
+   "hits": [
+    {
+     "title": "Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990-2015: a systematic analysis for the Global Burden of Disease Study 2015",
+     "year": 2016,
+     "doi": "10.1016/s0140-6736(16)31678-6",
+     "url": "https://doi.org/10.1016/s0140-6736(16)31678-6",
+     "abstract": "BackgroundNon-fatal outcomes of disease and injury increasingly detract from the ability of the world's population to live in full health, a trend largely attributable to an epidemiological transition in many countries from causes affecting children, to non-communicable diseases (NCDs) more common in adults. For the Global Burden of Diseases, Injuries, and Risk Factors Study 2015 (GBD 2015), we estimated the incidence, prevalence, and years lived with disability for diseases and injuries at the global, regional, and national scale over the period of 1990 to 2015.MethodsWe estimated incidence and prevalence by age, sex, cause, year, and geography with a wide range of updated and standardised "
+    }
+   ]
   }
  },
- "log": []
+ "log": [
+  {
+   "id": "tuberculosis-intervention",
+   "event": "kept 1 of 8"
+  }
+ ]
 }
