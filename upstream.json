@@ -42,7 +42,7 @@
     "tools/content_dates.mjs": "dates this catalogue's entries from its own git history; reads the tenant's solution and synthesis files, so it is tenant-specific by construction",
     "tools/dispatch_deploy.sh": "names this tenant's own deploy-tenant workflow; nothing generic to lift",
     "tools/gapscan.mjs": "drives ps/gapscan.js against this tenant's router and issue tracker",
-    "tools/graph.mjs": "builds this catalogue's records for core/knowledge (KNOWLEDGE-GRAPH-1); the record mapping is tenant data, the graph logic is core",
+    "tools/graph.mjs": "builds this catalogue's records for core/datagraph (KNOWLEDGE-GRAPH-1); the record mapping is tenant data, the graph logic is core",
     "tools/impactloop.mjs": "this tenant's impact readings and lever items",
     "tools/live_ask.mjs": "live probe of this tenant's suggested questions (imports EXAMPLES from the tenant ask module); tenant-specific by construction",
     "tools/live_ux.mjs": "probes the tenant's own live pages",
