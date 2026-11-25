@@ -23,7 +23,7 @@ import { ENSEMBLE_LEDGER } from './ensemble-ledger.gen.js';
 import { allowed } from '../../ps/scope.js';
 import { scan as scanProblems, classify as classifyProblem, measure as measureProblem, RANK_RULE, unSdg, whoCauses, worldBank, whoGho } from '../../ps/problemscan.js';
 import { SCAN } from './problem-scan.gen.js';
-import * as KG from '../../vendor/ultrastable/core/knowledge/index.js';
+import { run as graphRun, records as graphRecords } from '../../tools/graph.mjs';  // core/datagraph on this catalogue's records
 import { GRAPH_INSIGHTS } from './graph-insights.gen.js';
 import { RULES as PIPE, selectQueue, health as pipeHealth, record as pipeRecord, DAY as PDAY } from '../../ps/pipeline.js';
 
@@ -178,13 +178,11 @@ export const STATEMENTS = defineStatements([
       const r2 = await bcaTick({ store, fetchFn: epmc([]), now: NOW + HOUR }); must(r2.id !== id, 'did not pick the estimate looked at longest ago'); must(/pooled/.test(bcaBlock(bcaFor(id, st), id)) && /Cost study 1/.test(bcaBlock(bcaFor(id, st), id)), 'pooled source is not listed on the entry');
     } },
   // ---- KNOWLEDGE-GRAPH-1
-  { id: 'knowledge-graph', section: 'loop', evidence: 'core/knowledge/index.js run(); tools/graph.mjs', text: () => `The catalogue is kept as a knowledge graph by the core knowledge module (last run reads ${(GRAPH_INSIGHTS.stats || {}).nodes ?? 0} nodes and ${(GRAPH_INSIGHTS.stats || {}).edges ?? 0} links). Near-duplicate records are merged, every link records its source and time, links the model-free similarity search proposes stay labelled leads and are never counted as facts, and each run's insights (new items, new links, items that became more central, items that connect separate groups, unlinked pairs worth a look) appear in Changes with the items they rest on. Nothing in a graph insight is written by a model.`,
+  { id: 'knowledge-graph', section: 'loop', evidence: 'core/datagraph/index.js; tools/graph.mjs', text: () => `The catalogue is kept as a knowledge graph by the core datagraph module (last run reads ${(GRAPH_INSIGHTS.stats || {}).nodes ?? 0} nodes and ${(GRAPH_INSIGHTS.stats || {}).edges ?? 0} links). Every link comes from the catalogue itself, links the model-free similarity search proposes stay labelled leads and are never counted as facts, and each run's insights (problems nothing yet addresses, items that connect separate groups, items that became more central, unlinked pairs worth a look) appear in Changes with the items they rest on. Nothing in a graph insight is written by a model.`,
     verify: async () => {
-      const R = (id, title, refs = []) => ({ id, kind: 'k', title, refs, source: 't', at: '2026-01-01T00:00:00Z' });
-      const recs = [R('a', 'Clean cooking stoves'), R('a2', 'cooking stoves clean'), R('b', 'Water chlorination', ['a']), R('c', 'Latrine subsidy', ['b']), R('d', 'Cash transfers', ['b'])];
-      const g = KG.build({ records: recs, extra: [{ a: 'a', b: 'c', w: 0.9 }] }); must(g.stats.merged === 1, 'near-duplicate not merged'); must(g.edges.every(e => e.source && e.at), 'an edge has no provenance');
-      must(g.edges.filter(e => e.conf === 'lead').length === 1 && !g.adj.get('a').has('c'), 'a lead was counted as a fact');
-      must(KG.insights(g, null).every(i => i.kind.startsWith('graph_') && Array.isArray(i.evidence)), 'insight without evidence ids');
+      const recs = { tables: [{ name: 'problem', rows: [{ id: 'p:a', title: 'A' }, { id: 'p:b', title: 'B' }, { id: 'p:c', title: 'C' }] }, { name: 'solution', rows: [{ id: 's:a', title: 'SA' }, { id: 's:b', title: 'SB' }] }, { name: 'combination', rows: [] }], refs: [['s:a', 'p:a', 'solves'], ['s:b', 'p:a', 'solves']] };
+      const r = graphRun({ recs, conn: { candidates: [{ members: ['p:a', 'p:c'], score: 0.9 }] } });
+      must(r.stats.edges === 2, 'a lead was counted as a fact'); must(r.insights.every(i => i.kind.startsWith('graph_') && Array.isArray(i.evidence)), 'insight without evidence ids');
     } },
   // ---- 5b unknowns
   { id: 'unknowns-audit', section: 'unknowns', evidence: 'core/ignorance/index.js UIA', text: c => `The method is the Universal Ignorance Audit: ${c.UIA.phases.length} phases, ${c.UIA.questions.length} questions. "We do not know" is an acceptable answer; skipping is not.`,
