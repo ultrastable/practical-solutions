@@ -1,6 +1,6 @@
 {
  "schema": "ps-impl-evidence/1",
- "at": "2026-11-25T18:47:28.577Z",
+ "at": "2026-11-25T19:51:08.468Z",
  "note": "Real papers with a DOI that resolved at Crossref and an abstract that names the intervention. A lead to read, never a finding.",
  "items": {
   "emissions-market": {
@@ -162,22 +162,5 @@
    "hits": []
   }
  },
- "log": [
-  {
-   "id": "immunisation",
-   "event": "kept 3 of 8"
-  },
-  {
-   "id": "rural-electrification",
-   "event": "kept 1 of 8"
-  },
-  {
-   "id": "graduation",
-   "event": "kept 2 of 8"
-  },
-  {
-   "id": "latrine-subsidy",
-   "event": "kept 0 of 0"
-  }
- ]
+ "log": []
 }

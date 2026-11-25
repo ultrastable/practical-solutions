@@ -1,12 +1,12 @@
 {
- "at": "2026-11-25T18:47:41.952Z",
+ "at": "2026-11-25T19:51:17.082Z",
  "readings": {
   "impact.ready_share": 0.625,
   "impact.held_back": 3,
   "impact.problems_covered": 0.905,
   "impact.problems_seeking": 811,
   "impact.catalogue_size": 45,
-  "reach.views_30d": 8596
+  "reach.views_30d": 8738
  },
  "assessments": [
   {
@@ -47,8 +47,8 @@
   {
    "id": "reach.views_30d",
    "status": "unknown",
-   "gap": 860,
-   "value": 8596,
+   "gap": 874,
+   "value": 8738,
    "note": "history shorter than the plateau window"
   }
  ],
@@ -80,7 +80,7 @@
   "reach.views_30d": [
    {
     "at": 1795617395822,
-    "v": 8596
+    "v": 8738
    }
   ],
   "impact.problems_seeking": [
@@ -222,6 +222,39 @@
    "due": 1796237252753,
    "prediction": "impact.ready_share >= 0.667 within 168 h",
    "at": 1795632461952
+  },
+  {
+   "key": "seek:wb-sm-pop-opip-ea",
+   "lever": "solve-sought",
+   "metric": "impact.problems_seeking",
+   "op": "<=",
+   "base": 811,
+   "predicted": 800.75,
+   "due": 1796241072326,
+   "prediction": "impact.problems_seeking <= 800.75 within 168 h",
+   "at": 1795636277082
+  },
+  {
+   "key": "seek:wb-sm-pop-opip-eo",
+   "lever": "solve-sought",
+   "metric": "impact.problems_seeking",
+   "op": "<=",
+   "base": 811,
+   "predicted": 800.75,
+   "due": 1796241072326,
+   "prediction": "impact.problems_seeking <= 800.75 within 168 h",
+   "at": 1795636277082
+  },
+  {
+   "key": "seek:wb-se-sec-tcaq-up-fe-zs",
+   "lever": "solve-sought",
+   "metric": "impact.problems_seeking",
+   "op": "<=",
+   "base": 811,
+   "predicted": 800.75,
+   "due": 1796241072326,
+   "prediction": "impact.problems_seeking <= 800.75 within 168 h",
+   "at": 1795636277082
   }
  ]
 }
