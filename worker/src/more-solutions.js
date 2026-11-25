@@ -138,4 +138,12 @@ export const MORE = [
     who: "Ministries of Health, NGOs, and international organizations",
     first_test: "Pilot improved treatment protocols in a single district",
     limits: "Does not address antibiotic resistance or co-infection with HIV" },
+  { id: "reducing-newborn-deaths", design: "review", verdict: "works", checks: [], problem_ids: ["neonatal"], verified: "not yet checked against the source", problem: "Newborn deaths", title: "Reduce Newborn Deaths",
+    claim: "Improved newborn care reduces newborn deaths",
+    evidence: [{"src":"Global, regional, and national age-sex-specific mortality for 282 causes of death in 195 countries and territories, 1980-2017: a systematic analysis for the Global Burden of Disease Study 2017 (2018), https://doi.org/10.1016/s0140-6736(18)32203-7","finding":"The study estimated global, regional, national, and subnational cause-specific mortality for 282 causes in 195 countries and territories from 1980 to 2017"}],
+    works_where: "Low and middle income countries",
+    takes: "Trained healthcare workers and equipment",
+    who: "Ministries of Health",
+    first_test: "Pilot improved newborn care in a district hospital",
+    limits: "Does not show long term sustainability" },
 ];
