@@ -26,7 +26,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         with: { name: simulate, path: simulate.txt }
   mobile:
-    # MOBILE-LAYOUT-1: real pages in a real browser at 390 px; fails when the chrome (family bar + header) passes its height budget, the h1 falls
+    # MOBILE-LAYOUT-1 + PHONE-OVERFLOW-1: real pages in a real browser at 390 px, and every page the web Worker serves at 360 and 390 px for sideways
+    # scroll; fails when the chrome (family bar + header) passes its height budget, the h1 falls
     # off the first screen, a page scrolls sideways, or a header control is under 44 px. Zero network: pages come from the Worker's own route().
     runs-on: ubuntu-latest
     timeout-minutes: 8
