@@ -18,6 +18,7 @@ export const DATES = {
  "solution:mobile-money": "2026-11-21T11:07:20+00:00",
  "solution:ors-zinc": "2026-11-21T11:07:20+00:00",
  "solution:pph-bundle": "2026-11-21T11:07:20+00:00",
+ "solution:reducing-newborn-deaths": "2026-11-25T20:54:35.274Z",
  "solution:rural-electrification": "2026-11-21T11:07:20+00:00",
  "solution:smartphones-for-women": "2026-11-21T11:07:20+00:00",
  "solution:tarl": "2026-11-21T11:07:20+00:00",

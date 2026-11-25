@@ -33,6 +33,7 @@
     "ps/synth.js": "synthetic world for the detector tests",
     "ps/verify.js": "verifies bright-spot briefs",
     "ps/voice.js": "this product's own social wording for its domains, problems and solutions",
+    "tools/openstd.py": "standalone copy of ultrastable/ultrastable foundation/openstd.py (OPEN-STANDARDS-1) so this repository gates its own formats; the core file is the source",
     "tools/askindex.mjs": "builds this tenant's Ask index",
     "tools/bca_precompute.mjs": "generates the tenant's own benefit-cost precompute from its own seed models (bca-models.js); tenant-specific",
     "tools/behaviour.mjs": "audits this catalogue's change profiles",

@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/doctrine.schema.json",
+  "_doc": "OPEN-STANDARDS-1 shrink-only baseline: files that predate the standard. Drain it; never add to it.",
+  "config": [
+    "doctrine/readmes.json",
+    "hosting.json",
+    "tenancy.json",
+    "upstream.json"
+  ],
+  "ledgers": [
+    "ledger/audit-anchors.jsonl",
+    "ledger/cycles.jsonl",
+    "ops/hosting/events.jsonl"
+  ],
+  "extensions": [
+    "ledger/ps.sqlite"
+  ]
+}

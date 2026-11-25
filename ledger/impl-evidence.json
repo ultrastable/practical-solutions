@@ -1,6 +1,6 @@
 {
  "schema": "ps-impl-evidence/1",
- "at": "2026-11-25T20:13:42.779Z",
+ "at": "2026-11-25T20:54:29.170Z",
  "note": "Real papers with a DOI that resolved at Crossref and an abstract that names the intervention. A lead to read, never a finding.",
  "items": {
   "emissions-market": {
@@ -175,10 +175,5 @@
    ]
   }
  },
- "log": [
-  {
-   "id": "tuberculosis-intervention",
-   "event": "kept 1 of 8"
-  }
- ]
+ "log": []
 }
