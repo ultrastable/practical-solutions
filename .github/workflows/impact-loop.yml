@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 # Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 # budget: public repository, unmetered; about 1 minute a run.
-# trigger: daily; the metrics move only when merged work lands, so a faster cadence would only repeat open items.
+# trigger: every 3 hours; items are bounded and deduplicated by key, so a pass with nothing new files nothing, and the agent is dispatched at once instead of waiting for its own schedule (GitHub's scheduler skips runs).
 # free-alternative: none needed; the run reads this repository and the live counters and files items with its own GITHUB_TOKEN.
 # IMPACT-LOOP-1: record the impact and reach series, settle earlier predictions, file the next bounded items for the free code agent (agent.yml).
 name: impact-loop
 on:
-  schedule: [{ cron: '41 7 * * *' }]
+  schedule: [{ cron: '41 */3 * * *' }]
   workflow_dispatch: {}
 concurrency: { group: impact-loop, cancel-in-progress: false }
 permissions: { contents: write, issues: write, actions: write }
@@ -24,6 +24,8 @@ jobs:
         with: { node-version: 22 }
       - run: gh label create impact-loop --color 0e8a16 || true
       - run: node --no-warnings tools/impactloop.mjs
+      - name: start the code agent now (a schedule alone can skip hours)
+        run: gh workflow run agent.yml || echo "agent dispatch failed; its own 2-hour schedule is the second route"
       - name: commit ledger
         run: |
           git config user.name practical-solutions-bot

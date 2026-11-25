@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
 # Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
 # budget: public repository, so Actions minutes are unmetered; each run is about 3 minutes.
-# trigger: an issue labelled `idea` or `agent-task` (intake), every 2 hours (backlog; a run with no open agent-task issue exits in under a minute), a finished deploy (settle), manual dispatch.
+# trigger: an issue labelled `idea` or `agent-task` (intake), every 2 hours and after each impact-loop pass (backlog; a run with no open agent-task issue exits in under a minute), a finished deploy (settle), manual dispatch.
 # free-alternative: none needed; models run on GitHub Models with the run's own GITHUB_TOKEN, no key a person mints.
 # The free code agent: works `agent-task` issues from trusted authors through tests, deploy and the live check; reverts what breaks.
 name: agent
@@ -41,7 +41,9 @@ jobs:
         run: node --no-warnings tools/agent.mjs reconcile --no-fail
       - name: work one agent-task issue
         id: agent
-        run: node --no-warnings tools/agent.mjs run ${{ inputs.issue && format('--issue {0}', inputs.issue) || '' }} | tee agent.json
+        run: |
+          # IMPACT-LOOP-1: a run works up to 3 open agent-task issues (agent.json keeps the last result; the deploy step below reads it), so a queue of items drains in hours, not days
+          for n in 1 2 3; do node --no-warnings tools/agent.mjs run ${{ inputs.issue && format('--issue {0}', inputs.issue) || '' }} | tee agent.$n.json; cp agent.$n.json agent.json; grep -q '"picked":null' agent.$n.json && break; ${{ inputs.issue && 'break' || 'true' }}; git checkout -q main && git pull -q --ff-only origin main || true; done
       - name: record in the audit log
         if: success()
         run: node tools/audit_post.mjs --kind entry_change --subject agent --summary "code agent worked one agent-task issue" --payload-file agent.json
@@ -50,7 +52,7 @@ jobs:
         run: node --no-warnings tools/agent.mjs reconcile
       - name: deploy what the agent merged (a push by the built-in token does not start workflows)
         if: ${{ always() }}
-        run: grep -q '"ok":true' agent.json && bash tools/dispatch_deploy.sh || echo "nothing merged"
+        run: cat agent.*.json | grep -q '"ok":true' && bash tools/dispatch_deploy.sh || echo "nothing merged"
   settle:
     # The live check is the merge gate: when the deploy of an agent change fails, the change is reverted and its issue reopened.
     if: ${{ vars.HALT != '1' && github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main' }}
