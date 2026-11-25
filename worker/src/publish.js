@@ -5,7 +5,10 @@ const esc = s => String(s ?? '').replace(/[<>&"']/g, c => ({ '<': '&lt;', '>': '
 
 export const FOOTER = 'This message was generated and fact-checked automatically by Practical Solutions, an automated evidence service. Every claim links to the paper it rests on.';
 
+const run = (what, link) => c => ({ title: `${what}: ${c.id}`, summary: `The loop ran ${what.toLowerCase()} and recorded the result.`, link });
 const WORDS = {
+  problem_scan: run('Problem scan', '/problems'), connections_run: run('Knowledge graph run', '/connections'), synthesis_checked: run('Syntheses re-checked', '/syntheses'),
+  ensemble_run: run('Model ensemble run', '/method'), pipeline_move: run('Pipeline move', '/pipeline'),
   verification: c => ({ title: `Evidence check: ${c.id} is ${c.status}`, summary: `The loop re-checked the cited paper for "${c.id}" against Europe PMC: ${c.status}.`, link: `/solutions/${c.id}` }),
   problem_moved: c => ({ title: `Problem ${c.id} moved from rank ${c.from_rank} to ${c.to_rank}`, summary: `New World Bank data (${c.year}) changed its gap to the SDG target.`, link: '/' }),
   problem_added: c => ({ title: `New problem ranked: ${c.id}`, summary: 'A problem entered the ranking.', link: '/' }),

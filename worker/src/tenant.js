@@ -12,6 +12,7 @@ import { describeChange } from './publish.js';
 import { SOLUTIONS } from './solutions.js';
 import { contentFeed } from './content-feed.js';  // STICKY-1
 import { buildCatalog } from './catalog.js';
+import { mergeChanges } from './loop-events.js';  // CHANGES-FEED-1
 import { route, notFoundResponse } from './site.js';
 import { recordView, summary } from './reach.js';
 import { ignoranceTick, ignView } from './unknowns.js';
@@ -34,14 +35,15 @@ const BACKEND = 'https://tenant-ps-core.ultrastable.workers.dev';
 const j = async (env, k, d) => { const v = await env.STATE.get(k); return v ? JSON.parse(v) : d; };
 const headers = { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'", 'x-content-type-options': 'nosniff' };
 
-const catalog = async env => buildCatalog({ problems: await j(env, 'problems', null), solutions: SOLUTIONS, verif: await j(env, 'verif', {}), cands: await j(env, 'candidates', {}), drafts: await j(env, 'drafts', {}), spots: await j(env, 'brightspots', {}), changes: await j(env, 'changes', []), lastTick: await j(env, 'last_tick', null), bcaState: await j(env, BCA_KEY, null) });
+const catalog = async env => buildCatalog({ problems: await j(env, 'problems', null), solutions: SOLUTIONS, verif: await j(env, 'verif', {}), cands: await j(env, 'candidates', {}), drafts: await j(env, 'drafts', {}), spots: await j(env, 'brightspots', {}), changes: mergeChanges(await j(env, 'changes', [])), lastTick: await j(env, 'last_tick', null), bcaState: await j(env, BCA_KEY, null) });
 
 const handler = {
   // The account is at the free plan's cron limit, so the backend has no cron of its own: this Worker's schedule also runs the backend tick
   // through a service binding (CORE). The backend has no public route, so only this call reaches /internal/tick.
   async scheduled(_e, env, ctx) {
     if (env.CORE) ctx.waitUntil(env.CORE.fetch('https://core.internal/internal/tick', { method: 'POST', headers: { 'x-ps-internal': '1' } }).catch(() => {}));
-    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems, mailto: env.OPENALEX_MAILTO, maxVerify: knob(await j(env, 'goals:knobs', {}), 'ps.verify.per_tick', undefined) });  // GOALS-1: core's knob value, the default when unset await PV.recordChanges(env.STATE, [...r.changes, ...r.errors], r.at);
+    ctx.waitUntil((async () => { await env.STATE.put('solutions', JSON.stringify(SOLUTIONS)); const r = await tick({ store: env.STATE, rank: rankProblems, mailto: env.OPENALEX_MAILTO, maxVerify: knob(await j(env, 'goals:knobs', {}), 'ps.verify.per_tick', undefined) });  // GOALS-1: core's knob value, the default when unset
+      try { await PV.recordChanges(env.STATE, [...r.changes, ...r.errors], r.at); } catch (e) { await env.STATE.put('provenance:error', String(e.message || e)); }
       try { const b = await bcaTick({ store: env.STATE }); const be = b.changes.filter(c => /_error$/.test(c.kind)), bc = b.changes.filter(c => !/_error$/.test(c.kind)); await recordErrors(env.STATE, be, b.at); if (b.changes.length) { await PV.recordChanges(env.STATE, b.changes, b.at); if (bc.length) await env.STATE.put('changes', JSON.stringify([...bc.map(c => ({ at: b.at, ...c })), ...(await j(env, 'changes', []))].slice(0, 200))); } } catch (e) { await env.STATE.put('bca:error', String(e.message || e)); }
       try { let backend = null; try { if (env.CORE) { const b = await env.CORE.fetch('https://core.internal/internal/goals', { headers: { 'x-ps-internal': '1' } }); if (b.ok) backend = await b.json(); } } catch { } await goalsTick({ store: env.STATE, cat: await catalog(env), reach: await summary(env.STATE), backend }); } catch (e) { await env.STATE.put('goals:error', String(e.message || e)); }  // GOALS-1
       try { await syncDictionaries(env); await env.STATE.delete('i18n:error'); } catch (e) { await env.STATE.put('i18n:error', String(e.message || e)); }  // I18N-1
@@ -80,7 +82,7 @@ const handler = {
       try { return Response.json(b.settle ? { ok: await PV.settle(env.STATE, b.settle, b.effect, b.note) } : { ok: true, row: await PV.add(env.STATE, b) }); } catch (x) { return Response.json({ error: String(x.message || x) }, { status: 400 }); }
     }
     if (u.pathname === '/social-queue.json') { const cat = await catalog(env), origin = canonicalOrigin(r, u); return Response.json(socialQueue(cat, { origin, recent: recentIds(await j(env, 'changes', [])) }), { headers: { 'cache-control': 'public, max-age=600' } }); }  // SOCIAL-VOICE-1
-    if (u.pathname === '/changes.json') return Response.json({ changes: await j(env, 'changes', []), last_tick: await j(env, 'last_tick', null) });
+    if (u.pathname === '/changes.json') return Response.json({ changes: mergeChanges(await j(env, 'changes', [])), last_tick: await j(env, 'last_tick', null) });
     if (/^\/[a-f0-9]{32}\.txt$/.test(u.pathname) && u.pathname === '/' + await indexnowKey('practical-solutions') + '.txt') return new Response(u.pathname.slice(1, 33), { headers: { 'content-type': 'text/plain' } });
     const origin = canonicalOrigin(r, u);
     const asked = await askRoute(r, u, env, ctx, { origin, lang: r.headers.get('x-ps-lang') || SOURCE_LANG, headers });  // ASK-1
@@ -96,7 +98,7 @@ const handler = {
     if (u.pathname === '/content.json') return Response.json(contentFeed(origin), { headers: { 'content-type': 'application/feed+json; charset=utf-8', 'cache-control': 'public, max-age=900', 'access-control-allow-origin': '*' } });  // STICKY-1
     if (['/feed.xml', '/feed.json'].includes(u.pathname)) {
       const meta = { title: 'Practical Solutions: what changed', link: origin, description: 'Every automatic change the improvement loop made: re-rankings, evidence checks, new candidate evidence.' };
-      const items = itemsFrom(await j(env, 'changes', []), c => describeChange(c, origin));
+      const items = itemsFrom(mergeChanges(await j(env, 'changes', [])), c => describeChange(c, origin));
       return u.pathname === '/feed.xml' ? new Response(toRss({ ...meta, items }), { headers: { 'content-type': 'application/rss+xml; charset=utf-8' } })
         : Response.json(toJsonFeed({ ...meta, feedUrl: origin + '/feed.json', items }));
     }
