@@ -10,7 +10,7 @@ on:
   workflow_run: { workflows: [deploy-tenant], types: [completed] }   # second trigger: the scheduler skipped the 18:41 pass on 2026-11-25; tools/impactloop.mjs rate-limits this one to every 2 h
   workflow_dispatch: {}
 concurrency: { group: impact-loop, cancel-in-progress: false }
-permissions: { contents: write, issues: write, actions: write }
+permissions: { contents: write, issues: write, pull-requests: write, actions: write, models: read, id-token: write }
 jobs:
   loop:
     if: ${{ vars.HALT != '1' }}
@@ -29,7 +29,7 @@ jobs:
       - run: node --no-warnings tools/impactloop.mjs
       - name: grow the catalogue by one sourced solution for one problem (checked against real abstracts, tests, then merged)
         run: node --no-warnings tools/growsolution.mjs || echo "growth step failed; recorded, next pass retries"
-        env: { GITHUB_TOKEN: '${{ github.token }}' }
+        env: { GITHUB_TOKEN: '${{ github.token }}', PS_LLM_URL: 'https://tenant-ps-llm.ultrastable.workers.dev/ps/llm' }
       - name: start the code agent now (a schedule alone can skip hours)
         run: gh workflow run agent.yml || echo "agent dispatch failed; its own 2-hour schedule is the second route"
       - name: commit ledger
