@@ -1,1 +1,11 @@
-{"schema":"ps-grow/1","problems":{},"added":[]}
+{
+ "schema": "ps-grow/1",
+ "problems": {
+  "tb": {
+   "at": "2026-11-25T20:00:09.848Z",
+   "why": "tests failed: # Subtest: the refresh fetches both cited series per group and keeps old figures when one fails | ok 7 - the refresh fetches both cited series per group and keeps old figures when one fa"
+  }
+ },
+ "added": [],
+ "at": "2026-11-25T20:00:09.848Z"
+}
