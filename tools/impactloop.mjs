@@ -17,7 +17,8 @@ try { const r = await fetch(`${ORIGIN}/metrics.json`, { signal: AbortSignal.time
 const dry = process.argv.includes('--dry'), gh = (...a) => execFileSync('gh', a, { encoding: 'utf8' });
 let open = [];
 if (!dry) { try { open = JSON.parse(gh('issue', 'list', '--state', 'open', '--label', 'impact-loop', '--limit', '200', '--json', 'body')).flatMap(i => [...String(i.body).matchAll(/impact-key: (\S+)/g)].map(m => m[1])); } catch (e) { console.error('issue list failed:', e.message); process.exit(1); } }
-const out = run({ cat, reach, hist: state.series, ledger: state.ledger, open });
+const EV = new URL('../ledger/impl-evidence.json', import.meta.url), evidence = existsSync(EV) ? JSON.parse(readFileSync(EV, 'utf8')).items : {};
+const out = run({ cat, reach, hist: state.series, ledger: state.ledger, open, evidence });
 const filed = [];
 for (const it of out.items) {
   if (dry) { console.log('would file', it.key, '|', it.prediction); filed.push(it); continue; }
