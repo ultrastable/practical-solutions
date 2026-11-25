@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# CHANGES-WATCH-1: a day with no recorded change is a stalled loop or a miscounting feed. Every 6 hours, read the live /changes.json; when its
+# newest event is over 24 hours old, dispatch the producer workflows and open one tracked issue (closed on the next pass that sees a fresh event).
+# budget: ~1 minute per run, 4 runs a day (about 4 min a day)
+# trigger: schedule, because nothing else notices a feed that stopped moving
+# free-alternative: the tenant Worker's own cron comparing last_tick with the newest change
+name: changes-watch
+on:
+  schedule: [{ cron: "17 */6 * * *" }]
+  workflow_dispatch: {}
+concurrency: { group: changes-watch, cancel-in-progress: false }
+permissions: { contents: read, actions: write, issues: write }
+jobs:
+  watch:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env: { GH_TOKEN: "${{ github.token }}", REPO: "${{ github.repository }}", LIVE: "https://ultrastable.org/changes.json", MAX_HOURS: "24" }
+    steps:
+      - name: stall check and remediation
+        run: |
+          set -euo pipefail
+          body=$(curl -fsS --retry 3 --max-time 30 -A "practical-solutions-changes-watch" "$LIVE")
+          newest=$(printf '%s' "$body" | jq -r '[.changes[].at] | max // ""')
+          [ -n "$newest" ] || newest="1970-01-01T00:00:00Z"
+          age=$(( ( $(date -u +%s) - $(date -u -d "$newest" +%s) ) / 3600 ))
+          echo "newest change $newest, age ${age}h"
+          open=$(gh issue list --repo "$REPO" --state open --search "CHANGES-STALL in:title" --json number --jq '.[0].number // ""')
+          if [ "$age" -lt "$MAX_HOURS" ]; then
+            [ -n "$open" ] && gh issue close "$open" --repo "$REPO" --comment "Fresh change at $newest (${age}h old). Closed by changes-watch."
+            exit 0
+          fi
+          echo "::warning::no recorded change for ${age}h; dispatching producers"
+          for wf in problemscan.yml connections.yml synth.yml pipeline.yml cycle.yml; do gh workflow run "$wf" --repo "$REPO" --ref main || echo "::warning::dispatch of $wf failed"; done
+          if [ -z "$open" ]; then
+            gh issue create --repo "$REPO" --title "CHANGES-STALL: no recorded change for ${age}h" --body "Newest change: $newest. Producers dispatched. Closing probe: GET $LIVE shows a change newer than ${MAX_HOURS}h. Owner: changes-watch."
+          fi

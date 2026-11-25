@@ -15,7 +15,7 @@ test('tenant serves feeds and permalinks through the vendored core feed', async 
   const get = p => tenant.fetch(new Request('https://t.example' + p), env);
   const rss = await (await get('/feed.xml')).text();
   assert.match(rss, /Evidence check: kmc is verified/); assert.match(rss, /New bright spot for under5: Country X/);
-  assert.equal((await (await get('/feed.json')).json()).items.length, 2);
+  const items = (await (await get('/feed.json')).json()).items; assert.ok(items.length >= 2 && items.some(i => /kmc/.test(i.title)));  // CHANGES-FEED-1: loop runs join the recorded changes
   const page = await (await get('/solutions/kmc')).text();
   assert.match(page, /kangaroo/i); assert.ok(page.includes(FOOTER.slice(0, 30)));
   assert.equal((await get('/solutions/nope')).status, 404);
