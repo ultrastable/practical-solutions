@@ -1,6 +1,6 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-24T15:15:27.181Z",
+ "at": "2026-11-25T14:54:55.098Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
@@ -313,14 +313,14 @@
    ]
   },
   "hypertension": {
-   "at": "2026-11-19T13:52:22.201Z",
+   "at": "2026-11-25T14:54:55.098Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Vulnerable populations",
-     "falsifier": "Poor health outcomes in low-income clinics due to supply and follow-up barriers",
+     "challenge": "Protocol ineffectiveness",
+     "falsifier": "Observation of no significant difference in blood pressure control between the standard protocol and usual care in a large, diverse patient population",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -328,8 +328,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assumed accessibility",
-     "falsifier": "Lack of access to healthcare services and medication adherence in disadvantaged populations",
+     "challenge": "Vulnerable population neglect",
+     "falsifier": "Evidence of poor health outcomes or decreased blood pressure control in low-income clinics or underserved communities despite implementation of the standard protocol",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -337,8 +337,17 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Implementation barriers",
-     "falsifier": "Inadequate training of healthcare providers or insufficient resources for tracking and follow-up",
+     "challenge": "Assumed access to resources",
+     "falsifier": "Discovery of significant barriers to accessing the standard protocol's required medications, follow-up care, or tracking systems in a substantial number of patients",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate protocol adaptation",
+     "falsifier": "Identification of a significant number of patients who do not respond well to the standard protocol due to comorbidities or other factors, indicating a need for more personalized treatment approaches",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -346,14 +355,14 @@
    ]
   },
   "immunisation": {
-   "at": "2026-11-19T13:52:22.201Z",
+   "at": "2026-11-25T14:54:55.098Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Incentives have no impact",
-     "falsifier": "No increase in immunisation rates in regions with incentives",
+     "challenge": "Incentives have no impact on immunisation rates",
+     "falsifier": "A study showing no significant increase in full immunisation rates in rural Rajasthan despite regular vaccination sessions and small gifts",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -361,8 +370,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inequitable distribution of incentives",
-     "falsifier": "Disparities in immunisation rates among different socioeconomic groups",
+     "challenge": "Incentives may disproportionately benefit certain groups",
+     "falsifier": "Data indicating that the immunisation program primarily benefits affluent or well-connected individuals in rural Rajasthan, rather than the most vulnerable populations",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -370,8 +379,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assuming incentive effectiveness is universal",
-     "falsifier": "Variation in effectiveness of incentives across different regions or populations",
+     "challenge": "Assuming that the incentive is the primary motivator for immunisation",
+     "falsifier": "Research demonstrating that other factors, such as access to healthcare or education, are more significant drivers of immunisation rates in rural Rajasthan",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -379,8 +388,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inadequate supply chain reliability",
-     "falsifier": "Stockouts or inconsistent supply of vaccines at immunisation camps",
+     "challenge": "Lack of generalisability to other regions",
+     "falsifier": "A failed attempt to replicate the results of the Banerjee et al. study in a different region, indicating that the program is not scalable or effective elsewhere",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -388,14 +397,14 @@
    ]
   },
   "itn": {
-   "at": "2026-11-19T13:52:22.201Z",
+   "at": "2026-11-25T14:54:55.098Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
      "challenge": "Insecticide-treated bed nets have no effect on child mortality",
-     "falsifier": "A randomized controlled trial showing no significant reduction in child deaths in areas where treated nets are widely used",
+     "falsifier": "A randomized controlled trial showing no significant reduction in child deaths in areas where treated nets are used",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -403,8 +412,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Vulnerable populations, such as pregnant women and children under 5, may not benefit from treated nets",
-     "falsifier": "Epidemiological data indicating no decrease in malaria-related morbidity and mortality among these groups in areas with high treated net coverage",
+     "challenge": "Vulnerable populations, such as pregnant women and children under 5, are not adequately protected by treated nets",
+     "falsifier": "Epidemiological data indicating increased malaria-related morbidity and mortality among these groups despite treated net use",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -412,8 +421,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assuming that dual-insecticide nets will always be effective against local mosquito resistance",
-     "falsifier": "Emergence of mosquito populations with dual resistance to both insecticides used in the nets, leading to increased malaria transmission",
+     "challenge": "Assuming that dual-insecticide nets will remain effective against evolving mosquito resistance",
+     "falsifier": "Emergence of dual-insecticide resistant mosquito populations, rendering the nets ineffective",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -421,8 +430,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Current malaria mortality rates are not comparable to those during the trial period",
-     "falsifier": "Comparison of current malaria-related mortality rates with historical data from the trial period, showing significantly different trends or outcomes",
+     "challenge": "Inadequate distribution, poor net quality, or insufficient user compliance undermine the effectiveness of treated nets",
+     "falsifier": "Post-distribution monitoring data revealing low net usage rates, high net failure rates, or significant user non-compliance",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -430,14 +439,14 @@
    ]
   },
   "kmc": {
-   "at": "2026-11-19T13:52:22.201Z",
+   "at": "2026-11-25T14:54:55.098Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "No reduction in mortality",
-     "falsifier": "A replication study showing no significant difference in mortality rates between skin-to-skin contact and standard care",
+     "challenge": "Increased mortality with skin-to-skin contact",
+     "falsifier": "Observation of higher death rates in the first 28 days among babies receiving immediate skin-to-skin contact",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -445,8 +454,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Mother or baby fatigue and stress",
-     "falsifier": "Observations of increased maternal exhaustion or baby distress in the skin-to-skin contact group",
+     "challenge": "Vulnerable populations not benefiting from KMC",
+     "falsifier": "Evidence showing no reduction in mortality among babies with certain health conditions or from disadvantaged backgrounds",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -454,8 +463,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assumption of adequate maternal support",
-     "falsifier": "Studies showing that mothers without adequate support are unable to maintain skin-to-skin contact for many hours a day",
+     "challenge": "Assumption of consistent maternal support",
+     "falsifier": "Studies indicating that mothers without adequate support are unable to maintain skin-to-skin contact for many hours a day, leading to reduced effectiveness",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -463,8 +472,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inadequate hospital resources or training",
-     "falsifier": "Reports of hospitals lacking the resources or trained staff to effectively implement and maintain skin-to-skin contact protocols",
+     "challenge": "Inadequate hospital infrastructure for KMC",
+     "falsifier": "Reports of hospitals lacking the necessary resources or staff training to effectively implement and maintain skin-to-skin contact for small babies",
      "severity": 2,
      "source": "model",
      "family": "meta"
