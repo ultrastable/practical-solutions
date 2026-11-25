@@ -10,6 +10,10 @@ test('loop runs from generated modules are changes with the module timestamps', 
     SYNTHESES_PUBLISHED: { verified_at: '2026-11-25T13:00:00Z', published: [{}] }, ENSEMBLE_LEDGER: {}, PIPELINE: { history: [{ at: '2026-11-24T18:00:00Z', moved: 2, source: 'run' }, { at: '2026-11-24T10:00:00Z', moved: 0, source: 'run' }] } });
   assert.deepEqual(ev.map(e => e.kind).sort(), ['connections_run', 'pipeline_move', 'problem_scan', 'synthesis_checked']);
 });
+test('graph insights become changes and have feed wording', () => {
+  const ev = loopEvents({ GRAPH_INSIGHTS: { insights: [{ at: '2026-11-25T13:00:00Z', kind: 'graph_growth', id: '2 new item(s) joined the graph' }, { at: '2026-11-25T13:00:00Z', kind: 'other', id: 'x' }] } });
+  assert.deepEqual(ev.map(e => e.kind), ['graph_growth']); assert.ok(describeChange(ev[0], 'https://x'));
+});
 test('merge sorts newest first and drops duplicates', () => {
   const kv = [{ at: '2026-11-23T17:00:00Z', kind: 'candidate_added', problem: 'air' }];
   const m = mergeChanges([...kv, ...kv], [{ at: '2026-11-25T13:00:00Z', kind: 'synthesis_checked', id: 'x' }]);
