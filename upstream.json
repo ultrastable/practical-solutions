@@ -6,6 +6,8 @@
   "keep": {
     ".github/workflows/behaviour.yml": "weekly trigger for the behaviour audit of this catalogue",
     ".github/workflows/bootstrap.yml": "boots the tenant's own organisation",
+    ".github/workflows/branch-cleanup.yml": "the repository standard's branch cleanup (REPO-STANDARD-1), copied from the core kit seed/.github/workflows/branch-cleanup.yml; the core is its source, so there is nothing to lift",
+    "scripts/branch_cleanup.py": "the repository standard's cleanup script (REPO-STANDARD-1), copied from the core scripts/branch_cleanup.py; the core is its source",
     ".github/workflows/branch-sweep.yml": "tenant trigger for branch_sweep; generic merge-and-delete of this repository branches, lifting queued upstream",
     ".github/workflows/changes-watch.yml": "stall loop for this tenant's own /changes feed",
     ".github/workflows/ci.yml": "tenant CI; runs the sync check",
