@@ -1,19 +1,19 @@
 {
- "at": "2026-11-25T20:05:36.097Z",
+ "at": "2026-11-25T22:52:53.811Z",
  "readings": {
-  "impact.ready_share": 0.625,
+  "impact.ready_share": 0.577,
   "impact.held_back": 3,
-  "impact.problems_covered": 0.905,
+  "impact.problems_covered": 0.952,
   "impact.problems_seeking": 811,
-  "impact.catalogue_size": 45,
-  "reach.views_30d": 8764
+  "impact.catalogue_size": 47,
+  "reach.views_30d": 9094
  },
  "assessments": [
   {
    "id": "impact.ready_share",
    "status": "unknown",
-   "gap": 0.050000000000000044,
-   "value": 0.625,
+   "gap": 0.09800000000000009,
+   "value": 0.577,
    "note": "history shorter than the plateau window"
   },
   {
@@ -26,8 +26,8 @@
   {
    "id": "impact.problems_covered",
    "status": "unknown",
-   "gap": 0.04999999999999993,
-   "value": 0.905,
+   "gap": 0.04800000000000004,
+   "value": 0.952,
    "note": "history shorter than the plateau window"
   },
   {
@@ -41,14 +41,14 @@
    "id": "impact.catalogue_size",
    "status": "unknown",
    "gap": 5,
-   "value": 45,
+   "value": 47,
    "note": "history shorter than the plateau window"
   },
   {
    "id": "reach.views_30d",
    "status": "unknown",
-   "gap": 877,
-   "value": 8764,
+   "gap": 910,
+   "value": 9094,
    "note": "history shorter than the plateau window"
   }
  ],
@@ -56,7 +56,7 @@
   "impact.ready_share": [
    {
     "at": 1795617395822,
-    "v": 0.625
+    "v": 0.577
    }
   ],
   "impact.held_back": [
@@ -68,19 +68,19 @@
   "impact.problems_covered": [
    {
     "at": 1795617395822,
-    "v": 0.905
+    "v": 0.952
    }
   ],
   "impact.catalogue_size": [
    {
     "at": 1795617395822,
-    "v": 45
+    "v": 47
    }
   ],
   "reach.views_30d": [
    {
     "at": 1795617395822,
-    "v": 8764
+    "v": 9094
    }
   ],
   "impact.problems_seeking": [
@@ -255,6 +255,28 @@
    "due": 1796241072326,
    "prediction": "impact.problems_seeking <= 800.75 within 168 h",
    "at": 1795636277082
+  },
+  {
+   "key": "ready:tuberculosis-intervention",
+   "lever": "raise-ready",
+   "metric": "impact.ready_share",
+   "op": ">=",
+   "base": 0.577,
+   "predicted": 0.615,
+   "due": 1796251971123,
+   "prediction": "impact.ready_share >= 0.615 within 168 h",
+   "at": 1795647173811
+  },
+  {
+   "key": "ready:reducing-newborn-deaths",
+   "lever": "raise-ready",
+   "metric": "impact.ready_share",
+   "op": ">=",
+   "base": 0.577,
+   "predicted": 0.615,
+   "due": 1796251971123,
+   "prediction": "impact.ready_share >= 0.615 within 168 h",
+   "at": 1795647173811
   }
  ]
 }

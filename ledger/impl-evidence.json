@@ -1,6 +1,6 @@
 {
  "schema": "ps-impl-evidence/1",
- "at": "2026-11-25T20:54:29.170Z",
+ "at": "2026-11-25T22:52:49.332Z",
  "note": "Real papers with a DOI that resolved at Crossref and an abstract that names the intervention. A lead to read, never a finding.",
  "items": {
   "emissions-market": {
@@ -173,7 +173,39 @@
      "abstract": "BackgroundNon-fatal outcomes of disease and injury increasingly detract from the ability of the world's population to live in full health, a trend largely attributable to an epidemiological transition in many countries from causes affecting children, to non-communicable diseases (NCDs) more common in adults. For the Global Burden of Diseases, Injuries, and Risk Factors Study 2015 (GBD 2015), we estimated the incidence, prevalence, and years lived with disability for diseases and injuries at the global, regional, and national scale over the period of 1990 to 2015.MethodsWe estimated incidence and prevalence by age, sex, cause, year, and geography with a wide range of updated and standardised "
     }
    ]
+  },
+  "reducing-newborn-deaths": {
+   "at": "2026-11-25T22:52:49.331Z",
+   "query": "Reduce Newborn Deaths",
+   "hits": [
+    {
+     "title": "Global, regional, and national age-sex-specific mortality for 282 causes of death in 195 countries and territories, 1980-2017: a systematic analysis for the Global Burden of Disease Study 2017",
+     "year": 2018,
+     "doi": "10.1016/s0140-6736(18)32203-7",
+     "url": "https://doi.org/10.1016/s0140-6736(18)32203-7",
+     "abstract": "BackgroundGlobal development goals increasingly rely on country-specific estimates for benchmarking a nation's progress. To meet this need, the Global Burden of Diseases, Injuries, and Risk Factors Study (GBD) 2016 estimated global, regional, national, and, for selected locations, subnational cause-specific mortality beginning in the year 1980. Here we report an update to that study, making use of newly available data and improved methods. GBD 2017 provides a comprehensive assessment of cause-specific mortality for 282 causes in 195 countries and territories from 1980 to 2017.MethodsThe causes of death database is composed of vital registration (VR), verbal autopsy (VA), registry, survey, po"
+    },
+    {
+     "title": "Global, regional, and national age-sex specific all-cause and cause-specific mortality for 240 causes of death, 1990-2013: a systematic analysis for the Global Burden of Disease Study 2013",
+     "year": 2015,
+     "doi": "10.1016/s0140-6736(14)61682-2",
+     "url": "https://doi.org/10.1016/s0140-6736(14)61682-2",
+     "abstract": "BackgroundUp-to-date evidence on levels and trends for age-sex-specific all-cause and cause-specific mortality is essential for the formation of global, regional, and national health policies. In the Global Burden of Disease Study 2013 (GBD 2013) we estimated yearly deaths for 188 countries between 1990, and 2013. We used the results to assess whether there is epidemiological convergence across countries.MethodsWe estimated age-sex-specific all-cause mortality using the GBD 2010 methods with some refinements to improve accuracy applied to an updated database of vital registration, survey, and census data. We generally estimated cause of death as in the GBD 2010. Key improvements included the"
+    },
+    {
+     "title": "Global, regional, and national life expectancy, all-cause mortality, and cause-specific mortality for 249 causes of death, 1980-2015: a systematic analysis for the Global Burden of Disease Study 2015",
+     "year": 2016,
+     "doi": "10.1016/s0140-6736(16)31012-1",
+     "url": "https://doi.org/10.1016/s0140-6736(16)31012-1",
+     "abstract": "BackgroundImproving survival and extending the longevity of life for all populations requires timely, robust evidence on local mortality levels and trends. The Global Burden of Disease 2015 Study (GBD 2015) provides a comprehensive assessment of all-cause and cause-specific mortality for 249 causes in 195 countries and territories from 1980 to 2015. These results informed an in-depth investigation of observed and expected mortality patterns based on sociodemographic measures.MethodsWe estimated all-cause mortality by age, sex, geography, and year using an improved analytical approach originally developed for GBD 2013 and GBD 2010. Improvements included refinements to the estimation of child "
+    }
+   ]
   }
  },
- "log": []
+ "log": [
+  {
+   "id": "reducing-newborn-deaths",
+   "event": "kept 3 of 8"
+  }
+ ]
 }
