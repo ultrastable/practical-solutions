@@ -15,7 +15,16 @@
    "sources": [
     "https://doi.org/10.1016/s0140-6736(18)32279-7"
    ]
+  },
+  {
+   "id": "reducing-newborn-deaths",
+   "problem": "neonatal",
+   "at": "2026-11-25T20:54:35.241Z",
+   "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+   "sources": [
+    "https://doi.org/10.1016/s0140-6736(18)32203-7"
+   ]
   }
  ],
- "at": "2026-11-25T20:14:49.335Z"
+ "at": "2026-11-25T20:54:56.947Z"
 }
