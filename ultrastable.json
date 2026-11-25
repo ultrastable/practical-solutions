@@ -1,0 +1,28 @@
+{
+  "identity": {
+    "name": "Practical Solutions",
+    "slug": "practical-solutions",
+    "summary": "Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems.",
+    "repo": "ultrastable/practical-solutions",
+    "public_url": "https://ultrastable.org",
+    "license": "LicenseRef-Ultrastable-USL-1.0",
+    "topics": [
+      "autonomous-agents",
+      "built-on-ultrastable",
+      "cloudflare-workers",
+      "ultrastable"
+    ],
+    "layer": "tenant",
+    "parent": "ultrastable/ultrastable",
+    "visibility": "public",
+    "visibility_reason": "DISCOVER-1: public by default",
+    "status": "live",
+    "runs_as": [
+      {
+        "provider": "cloudflare",
+        "kind": "worker",
+        "name": "tenant-ps-core"
+      }
+    ]
+  }
+}

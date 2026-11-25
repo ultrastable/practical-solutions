@@ -8,6 +8,7 @@ import { methodSection } from './bca.js';
 import { ENSEMBLE_LEDGER } from './ensemble-ledger.gen.js';
 import { statement, region, live, describe } from '../../vendor/ultrastable/core/statements/index.js';
 import { STATEMENTS, CTX } from './method-claims.js';
+import { claimsJson, manifestJson } from './contract.js';  // FLEET-CONTRACT-1
 import * as U from './unknowns.js';
 import * as PL from './pipeline.js';
 import { SECURITY_HEADERS } from './kit/index.js';
@@ -161,7 +162,8 @@ export function route(u, c) {
   if (p === '/releases.atom') return new Response(releasesAtom(o), { headers: { 'content-type': 'application/atom+xml; charset=utf-8', 'cache-control': 'public, max-age=300' } });
   if (table[p]) return h(table[p]());
   if (p === '/search.json') return json({ q: u.searchParams.get('q') || '', results: search(searchIndex(c), u.searchParams.get('q')) });
-  if (p === '/claims.json') return json({ statements: describe(STATEMENTS, CTX) });
+  if (p === '/claims.json') return json(claimsJson(describe(STATEMENTS, CTX)));
+  if (p === '/.well-known/ultrastable.json') return json(manifestJson(o));  // FLEET-CONTRACT-1, DISCOVER-1
   if (p === '/ensemble.json') return json(ENSEMBLE_LEDGER);
   if (p === '/change.json') return json(changeJson(c));
   if (p === '/unknowns.json') return json(U.unknownsData(c));
