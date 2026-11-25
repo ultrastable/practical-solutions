@@ -1,11 +1,12 @@
 {
- "at": "2026-11-25T14:36:40.335Z",
+ "at": "2026-11-25T16:25:01.808Z",
  "readings": {
   "impact.ready_share": 0.625,
   "impact.held_back": 3,
   "impact.problems_covered": 0.905,
+  "impact.problems_seeking": 811,
   "impact.catalogue_size": 45,
-  "reach.views_30d": 7882
+  "reach.views_30d": 8159
  },
  "assessments": [
   {
@@ -30,6 +31,13 @@
    "note": "history shorter than the plateau window"
   },
   {
+   "id": "impact.problems_seeking",
+   "status": "unknown",
+   "gap": 41,
+   "value": 811,
+   "note": "history shorter than the plateau window"
+  },
+  {
    "id": "impact.catalogue_size",
    "status": "unknown",
    "gap": 5,
@@ -39,8 +47,8 @@
   {
    "id": "reach.views_30d",
    "status": "unknown",
-   "gap": 789,
-   "value": 7882,
+   "gap": 816,
+   "value": 8159,
    "note": "history shorter than the plateau window"
   }
  ],
@@ -72,7 +80,13 @@
   "reach.views_30d": [
    {
     "at": 1795617395822,
-    "v": 7882
+    "v": 8159
+   }
+  ],
+  "impact.problems_seeking": [
+   {
+    "at": 1795623896259,
+    "v": 811
    }
   ]
  },
@@ -109,6 +123,39 @@
    "due": 1796222195822,
    "prediction": "impact.held_back <= 2 within 168 h",
    "at": 1795617400335
+  },
+  {
+   "key": "grow:2968",
+   "lever": "grow-catalogue",
+   "metric": "impact.catalogue_size",
+   "op": ">=",
+   "base": 45,
+   "predicted": 47,
+   "due": 1796228696259,
+   "prediction": "impact.catalogue_size >= 47 within 168 h",
+   "at": 1795623901808
+  },
+  {
+   "key": "reach:index:2968",
+   "lever": "reindex",
+   "metric": "reach.views_30d",
+   "op": ">=",
+   "base": 8159,
+   "predicted": 8259,
+   "due": 1796228696259,
+   "prediction": "reach.views_30d >= 8259 within 168 h",
+   "at": 1795623901808
+  },
+  {
+   "key": "reach:surface:2968",
+   "lever": "surface",
+   "metric": "reach.views_30d",
+   "op": ">=",
+   "base": 8159,
+   "predicted": 8259,
+   "due": 1796228696259,
+   "prediction": "reach.views_30d >= 8259 within 168 h",
+   "at": 1795623901808
   }
  ]
 }

@@ -1,0 +1,138 @@
+{
+ "schema": "ps-impl-evidence/1",
+ "at": "2026-11-25T16:24:51.506Z",
+ "note": "Real papers with a DOI that resolved at Crossref and an abstract that names the intervention. A lead to read, never a finding.",
+ "items": {
+  "emissions-market": {
+   "at": "2026-11-25T16:22:24.811Z",
+   "query": "regulated pollution market continuous monitoring",
+   "hits": [
+    {
+     "title": "EDC-2: The Endocrine Society's Second Scientific Statement on Endocrine-Disrupting Chemicals",
+     "year": 2015,
+     "doi": "10.1210/er.2015-1010",
+     "url": "https://doi.org/10.1210/er.2015-1010",
+     "abstract": "The Endocrine Society's first Scientific Statement in 2009 provided a wake-up call to the scientific community about how environmental endocrine-disrupting chemicals (EDCs) affect health and disease. Five years later, a substantially larger body of literature has solidified our understanding of plausible mechanisms underlying EDC actions and how exposures in animals and humans-especially during development-may lay the foundations for disease later in life. At this point in history, we have much stronger knowledge about how EDCs alter gene-environment interactions via physiological, cellular, molecular, and epigenetic changes, thereby producing effects in exposed individuals as well as their "
+    },
+    {
+     "title": "Systemic insecticides (neonicotinoids and fipronil): trends, uses, mode of action and metabolites",
+     "year": 2015,
+     "doi": "10.1007/s11356-014-3470-y",
+     "url": "https://doi.org/10.1007/s11356-014-3470-y",
+     "abstract": "Since their discovery in the late 1980s, neonicotinoid pesticides have become the most widely used class of insecticides worldwide, with large-scale applications ranging from plant protection (crops, vegetables, fruits), veterinary products, and biocides to invertebrate pest control in fish farming. In this review, we address the phenyl-pyrazole fipronil together with neonicotinoids because of similarities in their toxicity, physicochemical profiles, and presence in the environment. Neonicotinoids and fipronil currently account for approximately one third of the world insecticide market; the annual world production of the archetype neonicotinoid, imidacloprid, was estimated to be ca. 20,000 "
+    }
+   ]
+  },
+  "tb-community-screening": {
+   "at": "2026-11-25T16:22:50.164Z",
+   "query": "Test adult high-burden community once symptoms",
+   "hits": [
+    {
+     "title": "Global, regional, and national age-sex-specific mortality for 282 causes of death in 195 countries and territories, 1980-2017: a systematic analysis for the Global Burden of Disease Study 2017",
+     "year": 2018,
+     "doi": "10.1016/s0140-6736(18)32203-7",
+     "url": "https://doi.org/10.1016/s0140-6736(18)32203-7",
+     "abstract": "BackgroundGlobal development goals increasingly rely on country-specific estimates for benchmarking a nation's progress. To meet this need, the Global Burden of Diseases, Injuries, and Risk Factors Study (GBD) 2016 estimated global, regional, national, and, for selected locations, subnational cause-specific mortality beginning in the year 1980. Here we report an update to that study, making use of newly available data and improved methods. GBD 2017 provides a comprehensive assessment of cause-specific mortality for 282 causes in 195 countries and territories from 1980 to 2017.MethodsThe causes of death database is composed of vital registration (VR), verbal autopsy (VA), registry, survey, po"
+    },
+    {
+     "title": "Staphylococcus aureus infections: epidemiology, pathophysiology, clinical manifestations, and management",
+     "year": 2015,
+     "doi": "10.1128/cmr.00134-14",
+     "url": "https://doi.org/10.1128/cmr.00134-14",
+     "abstract": "Staphylococcus aureus is a major human pathogen that causes a wide range of clinical infections. It is a leading cause of bacteremia and infective endocarditis as well as osteoarticular, skin and soft tissue, pleuropulmonary, and device-related infections. This review comprehensively covers the epidemiology, pathophysiology, clinical manifestations, and management of each of these clinical entities. The past 2 decades have witnessed two clear shifts in the epidemiology of S. aureus infections: first, a growing number of health care-associated infections, particularly seen in infective endocarditis and prosthetic device infections, and second, an epidemic of community-associated skin and soft"
+    },
+    {
+     "title": "Global burden of bacterial antimicrobial resistance 1990-2021: a systematic analysis with forecasts to 2050",
+     "year": 2024,
+     "doi": "10.1016/s0140-6736(24)01867-1",
+     "url": "https://doi.org/10.1016/s0140-6736(24)01867-1",
+     "abstract": "BackgroundAntimicrobial resistance (AMR) poses an important global health challenge in the 21st century. A previous study has quantified the global and regional burden of AMR for 2019, followed with additional publications that provided more detailed estimates for several WHO regions by country. To date, there have been no studies that produce comprehensive estimates of AMR burden across locations that encompass historical trends and future forecasts.MethodsWe estimated all-age and age-specific deaths and disability-adjusted life-years (DALYs) attributable to and associated with bacterial AMR for 22 pathogens, 84 pathogen-drug combinations, and 11 infectious syndromes in 204 countries and te"
+    }
+   ]
+  },
+  "smartphones-for-women": {
+   "at": "2026-11-25T16:22:51.003Z",
+   "query": "Give women smartphone",
+   "hits": [
+    {
+     "title": "Canadian Network for Mood and Anxiety Treatments (CANMAT) and International Society for Bipolar Disorders (ISBD) 2018 guidelines for the management of patients with bipolar disorder",
+     "year": 2018,
+     "doi": "10.1111/bdi.12609",
+     "url": "https://doi.org/10.1111/bdi.12609",
+     "abstract": "The Canadian Network for Mood and Anxiety Treatments (CANMAT) previously published treatment guidelines for bipolar disorder in 2005, along with international commentaries and subsequent updates in 2007, 2009, and 2013. The last two updates were published in collaboration with the International Society for Bipolar Disorders (ISBD). These 2018 CANMAT and ISBD Bipolar Treatment Guidelines represent the significant advances in the field since the last full edition was published in 2005, including updates to diagnosis and management as well as new research into pharmacological and psychological treatments. These advances have been translated into clear and easy to use recommendations for first, "
+    },
+    {
+     "title": "International guidelines for groin hernia management",
+     "year": 2018,
+     "doi": "10.1007/s10029-017-1668-x",
+     "url": "https://doi.org/10.1007/s10029-017-1668-x",
+     "abstract": "IntroductionWorldwide, more than 20 million patients undergo groin hernia repair annually. The many different approaches, treatment indications and a significant array of techniques for groin hernia repair warrant guidelines to standardize care, minimize complications, and improve results. The main goal of these guidelines is to improve patient outcomes, specifically to decrease recurrence rates and reduce chronic pain, the most frequent problems following groin hernia repair. They have been endorsed by all five continental hernia societies, the International Endo Hernia Society and the European Association for Endoscopic Surgery.MethodsAn expert group of international surgeons (the HerniaSu"
+    }
+   ]
+  },
+  "clean-cooking": {
+   "at": "2026-11-25T16:23:23.526Z",
+   "query": "Clean-fuel stoves",
+   "hits": [
+    {
+     "title": "Respiratory risks from household air pollution in low and middle income countries",
+     "year": 2014,
+     "doi": "10.1016/s2213-2600(14)70168-7",
+     "url": "https://doi.org/10.1016/s2213-2600(14)70168-7",
+     "abstract": "A third of the world's population uses solid fuel derived from plant material (biomass) or coal for cooking, heating, or lighting. These fuels are smoky, often used in an open fire or simple stove with incomplete combustion, and result in a large amount of household air pollution when smoke is poorly vented. Air pollution is the biggest environmental cause of death worldwide, with household air pollution accounting for about 3·5-4 million deaths every year. Women and children living in severe poverty have the greatest exposures to household air pollution. In this Commission, we review evidence for the association between household air pollution and respiratory infections, respiratory tract c"
+    }
+   ]
+  },
+  "cash": {
+   "at": "2026-11-25T16:24:51.506Z",
+   "query": "Give unconditional cash directly poor",
+   "hits": [
+    {
+     "title": "Strategies to improve retention in randomised trials",
+     "year": 2021,
+     "doi": "10.1002/14651858.mr000032.pub3",
+     "url": "https://doi.org/10.1002/14651858.mr000032.pub3",
+     "abstract": "BackgroundPoor retention of participants in randomised trials can lead to missing outcome data which can introduce bias and reduce study power, affecting the generalisability, validity and reliability of results. Many strategies are used to improve retention but few have been formally evaluated.ObjectivesTo quantify the effect of strategies to improve retention of participants in randomised trials and to investigate if the effect varied by trial setting.Search methodsWe searched the Cochrane Central Register of Controlled Trials (CENTRAL), MEDLINE, Scopus, PsycINFO, CINAHL, Web of Science Core Collection (SCI-expanded, SSCI, CPSI-S, CPCI-SSH and ESCI) either directly with a specified search "
+    }
+   ]
+  }
+ },
+ "log": [
+  {
+   "id": "emissions-market",
+   "event": "kept 2 of 8"
+  },
+  {
+   "id": "tb-community-screening",
+   "event": "kept 3 of 8"
+  },
+  {
+   "id": "smartphones-for-women",
+   "event": "kept 2 of 8"
+  },
+  {
+   "id": "clean-cooking",
+   "event": "kept 1 of 8"
+  },
+  {
+   "id": "immunisation",
+   "event": "search failed: HTTP 500"
+  },
+  {
+   "id": "cash",
+   "event": "kept 1 of 8"
+  },
+  {
+   "id": "rural-electrification",
+   "event": "deferred: request budget"
+  },
+  {
+   "id": "graduation",
+   "event": "deferred: request budget"
+  },
+  {
+   "id": "latrine-subsidy",
+   "event": "deferred: request budget"
+  }
+ ]
+}
