@@ -8,8 +8,9 @@ import { CONNECTIONS } from './connections.gen.js';
 import { SYNTHESES_PUBLISHED } from './syntheses.gen.js';
 import { ENSEMBLE_LEDGER } from './ensemble-ledger.gen.js';
 import { PIPELINE } from './pipeline.gen.js';
+import { GRAPH_INSIGHTS } from './graph-insights.gen.js';  // KNOWLEDGE-GRAPH-1
 
-export function loopEvents(m = { SCAN, CONNECTIONS, SYNTHESES_PUBLISHED, ENSEMBLE_LEDGER, PIPELINE }) {
+export function loopEvents(m = { SCAN, CONNECTIONS, SYNTHESES_PUBLISHED, ENSEMBLE_LEDGER, PIPELINE, GRAPH_INSIGHTS }) {
   const ev = [], add = (at, kind, id) => { if (at && Number.isFinite(Date.parse(at))) ev.push({ at, kind, id }); };
   const sc = m.SCAN || {};
   add(sc.at, 'problem_scan', `${Array.isArray(sc.recent) ? sc.recent.length : 0} recent indicator reading(s) checked`);
@@ -20,6 +21,8 @@ export function loopEvents(m = { SCAN, CONNECTIONS, SYNTHESES_PUBLISHED, ENSEMBL
   const en = m.ENSEMBLE_LEDGER || {};
   add(en.at, 'ensemble_run', `${(en.totals || {}).examined ?? 0} entries examined`);
   for (const h of (m.PIPELINE || {}).history || []) if (h && h.moved > 0 && h.source === 'run') add(h.at, 'pipeline_move', `${h.moved} problem(s) moved stage`);
+  // KNOWLEDGE-GRAPH-1: what the graph found (growth, new links, rising items, bridges, leads) is a change with its evidence ids
+  for (const i of (m.GRAPH_INSIGHTS || {}).insights || []) if (i && /^graph_/.test(i.kind)) add(i.at, i.kind, i.id);
   return ev;
 }
 
