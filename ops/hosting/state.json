@@ -4,7 +4,7 @@
   "tenant-ps-web": {
    "script": "tenant-ps-web",
    "found": true,
-   "sha256": "fc258334b4544305d35cc6921114d0d2042a2604a56d4cca58c3173481718629",
+   "sha256": "4b85f78e347e17850fb129745439ca800a18a78316892f1f0ec448c81ce8a08a",
    "bindings": [
     {
      "type": "ai",
@@ -37,15 +37,15 @@
    "compat_date": "2026-10-01",
    "compat_flags": [],
    "deployment": {
-    "id": "26d5fc27-01db-465e-970d-f46d9deef160",
-    "created_on": "2026-11-25T20:07:49.172951Z"
+    "id": "02ae007c-48ef-4576-91bc-7242d1afddd0",
+    "created_on": "2026-11-25T20:50:06.121051Z"
    },
    "read_errors": []
   },
   "tenant-ps-core": {
    "script": "tenant-ps-core",
    "found": true,
-   "sha256": "a03622651c09b64b19623379062e5b4f67d8f286aa0f2ea519154c3d1fff26ec",
+   "sha256": "e78c74b5d53535d81fd83089902f6b5ea90c770eec057a60f250e2f203405d73",
    "bindings": [
     {
      "type": "d1",
@@ -82,8 +82,8 @@
     "nodejs_compat"
    ],
    "deployment": {
-    "id": "f439613c-7c87-4845-bfcf-aed11fc92fd3",
-    "created_on": "2026-11-25T19:52:28.553365Z"
+    "id": "e82b6b40-bf7b-4784-b200-4fb005fbebed",
+    "created_on": "2026-11-25T20:50:11.609712Z"
    },
    "read_errors": []
   },
