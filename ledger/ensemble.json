@@ -2,15 +2,15 @@
  "schema": "ps-ensemble/1",
  "examined": {
   "cash": {
-   "at": "2026-11-18T11:24:54.426Z",
-   "outcome": "no change proposed: The entry describes a specific study (likely the GiveDirectly Kenya study) that is not directly covered by the provided sources, but its general claims are consistent with the findings in the sources."
+   "at": "2026-11-25T15:33:56.374Z",
+   "outcome": "accepted"
   },
   "chlorine": {
-   "at": "2026-11-18T11:24:54.426Z",
-   "outcome": "no change proposed: The entry agrees with the sources."
+   "at": "2026-11-25T15:33:56.374Z",
+   "outcome": "no change proposed: No source directly contradicts or updates any field; the entry's statements are not shown to be wrong, out of date, or imprecise by the provided abstracts."
   },
   "clean-cooking": {
-   "at": "2026-11-18T11:24:54.426Z",
+   "at": "2026-11-25T15:33:56.374Z",
    "outcome": "rejected"
   },
   "deworming": {
@@ -442,6 +442,76 @@
    "status": "rejected",
    "reason": "evidence check failed: the old text is not found exactly once in the source file",
    "at": "2026-11-21T13:27:22.746Z"
+  },
+  {
+   "id": "4c9bfb5d48a4",
+   "entry": "cash",
+   "field": "claim",
+   "old": "Large one-off or regular cash transfers to very poor households raise assets, consumption and food security, and the spending also lifts neighbours' incomes.",
+   "new": "Regular unconditional cash transfers improve household dietary intake and reduce food insecurity, but evidence on asset accumulation or spillover effects to neighbours is limited.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/41688611",
+    "title": "Randomized unconditional cash transfers improved diet quantity and quality in a low-income community in Massachusetts, USA."
+   },
+   "quote": "The intervention led to increased kilocalories (+146 kcal), and increased fruit (+0.17 cup equiv.), vegetable (+0.14 cup equiv.) and unprocessed meat (+0.54 oz.) consumption.",
+   "why": "Source 3 documents dietary and food‑security gains but does not support claims about asset gains or neighbours' income effects.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [
+    {
+     "id": "llama-3.3-70b",
+     "vendor": "meta",
+     "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+     "verdict": "supports",
+     "reason": "The abstract provides evidence that regular unconditional cash transfers improved household dietary intake in a low-income community, which aligns with the new wording, but does not mention asset accu"
+    },
+    {
+     "id": "mistral-small-3.1",
+     "vendor": "mistral",
+     "model": "@cf/mistralai/mistral-small-3.1-24b-instruct",
+     "verdict": "supports",
+     "reason": "The abstract states that regular unconditional cash transfers improved dietary intake and reduced food insecurity."
+    }
+   ],
+   "status": "applied",
+   "reason": "every verifier says the source supports it",
+   "at": "2026-11-25T15:33:56.374Z",
+   "applied_at": "2026-11-25T15:37:01.610Z"
+  },
+  {
+   "id": "7adaf5f0fccc",
+   "entry": "clean-cooking",
+   "field": "limits",
+   "old": "Mixed result: mixed fuel use can leave exposure high; exposure and other outcomes (blood pressure, birth weight) have separate reports.",
+   "new": "Evidence is mixed: while some trials reduced exposure, it remains unclear whether clean‑cooking interventions improve health outcomes such as pneumonia, blood pressure, or birth weight.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/38619436",
+    "title": "Household Air Pollution Interventions to Improve Health in Low- and Middle-Income Countries: An Official American Thoracic Society Research Statement."
+   },
+   "quote": "it remains unclear which household energy interventions reduce exposure, improve health, can be scaled, and are sustainable.",
+   "why": "Source 3 explicitly states that health benefits of clean‑cooking interventions are uncertain, refining the entry's limits.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-25T15:33:56.374Z"
   }
  ],
  "health": {
@@ -480,7 +550,7 @@
    "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "mistral-small-3.1": {
-   "calls": 7,
+   "calls": 8,
    "errors": 0
   },
   "gemma-4": {
@@ -489,8 +559,8 @@
    "last": "empty"
   },
   "qwen3-30b": {
-   "calls": 11,
-   "errors": 7,
+   "calls": 12,
+   "errors": 8,
    "last": "worker-ai HTTP 502 5028: @cf/qwen/qwen3-30b-a3b-fp8 was deprecated on 2026-11-20. See the model catalog for a"
   },
   "glm-5.3-flash": {
@@ -514,12 +584,12 @@
    "last": "worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
   },
   "gpt-oss-120b": {
-   "calls": 13,
+   "calls": 16,
    "errors": 2,
    "last": "empty"
   },
   "llama-3.3-70b": {
-   "calls": 6,
+   "calls": 7,
    "errors": 0
   }
  },
@@ -530,6 +600,13 @@
    "votes": {
     "meta": "contradicts",
     "mistral": "contradicts"
+   }
+  },
+  {
+   "id": "4c9bfb5d48a4",
+   "votes": {
+    "meta": "supports",
+    "mistral": "supports"
    }
   }
  ],
@@ -769,11 +846,25 @@
     "nemotron-3: worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog",
     "nemotron-3: worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
    ]
+  },
+  {
+   "at": "2026-11-25T15:33:56.374Z",
+   "examined": 3,
+   "proposed": 2,
+   "accepted": 1,
+   "uncertain": 0,
+   "rejected": 1,
+   "pending": 0,
+   "none": 1,
+   "panel_failures": 0,
+   "failures": [
+    "qwen3-30b: worker-ai HTTP 502 5028: @cf/qwen/qwen3-30b-a3b-fp8 was deprecated on 2026-11-20. See the model catalog for a"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-24T15:51:04.930Z"
+ "at": "2026-11-25T15:33:56.374Z"
 }
