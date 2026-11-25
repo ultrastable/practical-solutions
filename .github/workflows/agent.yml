@@ -50,6 +50,13 @@ jobs:
       - name: an issue still open past 24 h fails the run, so ciwatch files it (SLA-ISSUE-1)
         if: ${{ always() }}
         run: node --no-warnings tools/agent.mjs reconcile
+      - name: chain, a run that worked an issue starts the next while untried agent-task issues remain (GitHub's scheduler skips runs)
+        if: ${{ always() }}
+        run: |
+          cat agent.*.json 2>/dev/null | grep -q '"issue"' || { echo "no issue worked: no chain"; exit 0; }
+          n=$(gh api "repos/$GITHUB_REPOSITORY/issues?state=open&labels=agent-task&per_page=100" --jq '[.[]|select((.labels|map(.name)|index("agent-failed"))|not)]|length')
+          echo "untried agent-task issues: $n"
+          if [ "$n" -gt 0 ]; then gh workflow run agent.yml || echo "chain dispatch failed; the 2-hour schedule and deploy trigger are the other routes"; fi
       - name: deploy what the agent merged (a push by the built-in token does not start workflows)
         if: ${{ always() }}
         run: cat agent.*.json | grep -q '"ok":true' && bash tools/dispatch_deploy.sh || echo "nothing merged"
