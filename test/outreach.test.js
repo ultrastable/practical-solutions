@@ -142,7 +142,7 @@ test('the tenant schedule also runs the backend tick through the CORE service bi
   const waits = [];
   await tenant.scheduled({}, env, { waitUntil: p => waits.push(p) });
   await Promise.allSettled(waits);
-  assert.deepEqual(calls.filter(c => c[0].endsWith('/internal/tick')), [['https://core.internal/internal/tick', 'POST', '1']]);  // GOALS-1 also reads /internal/goals through the same binding
+  assert.deepEqual(calls.filter(c => c[0].endsWith('/pulse/watch')), [['https://core.internal/pulse/watch', 'POST', '1']]);  // BACKEND-PULSE-1; GOALS-1 also reads /internal/goals through the same binding
 });
 
 import targetsFile from '../org/targets.json' with { type: 'json' };

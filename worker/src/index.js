@@ -11,14 +11,15 @@ import { ALLOW, FILES } from './selfmigrate.gen.js';
 import { FOOTER } from './publish.js';
 import { freshnessResponse } from './freshness.js';
 import { authorizer } from '../../ps/audit.js';
-import { graphTick, graphApi } from './kg.js';  // KGRAPH-1
+import { graphTick, graphApi, TENANT } from './kg.js';  // KGRAPH-1
+import { watch, reading, json } from './pulse.js';  // BACKEND-PULSE-1
 import { handleInbound, recordEvent, metrics, queue, approveIntent, suppressAddr, agenciesGraph } from '../../ps/outreach_step.js';
 
 
 const ORIGIN = 'https://ultrastable.org'; // the public home (tenant-ps-edge on the ultrastable.org zone); IndexNow and outreach links use it
 const ps = env => createPs({ db: env.DB, env, secrets: env, selfMigrate: { files: FILES, allow: ALLOW }, solutions: SOLUTIONS, footer: FOOTER, origin: env.PS_ORIGIN || ORIGIN });
 // KGRAPH-1: the graph run beside every tick, gated to once an hour inside graphTick. The account's cron limit leaves this Worker without a cron
-// of its own (the web Worker's schedule calls /internal/tick), so the graph must run on that route too: with scheduled() alone it never ran.
+// of its own (the web Worker's schedule calls /pulse/watch; /internal/tick stays for manual runs), so the graph must run on those routes too: with scheduled() alone it never ran.
 const graph = env => graphTick(env.DB, SOLUTIONS).then(r => { if (r && r.error) console.error('ps graph', r.error); return r; }, e => { console.error('ps graph', e && e.message || e); return { error: String(e && e.message || e) }; });
 const authed = (request, env) => Boolean(env.PS_TICK_TOKEN) && request.headers.get('x-ps-token') === env.PS_TICK_TOKEN;
 
@@ -45,6 +46,15 @@ export default {
     // AUDIT-1: public summary, verify and proof; events and writes need the tick token or this repository's Actions OIDC token.
     if (pathname === '/audit' || pathname.startsWith('/audit/')) { const r = await ps(env).org.audit.handle(request, { authorize: authorizer(env) }); if (r) return r; }
     if (pathname === '/internal/goals' && request.headers.get('x-ps-internal') === '1') { const m = await metrics(env.DB); return Response.json({ sent: m.sent, replies: m.replies, implementation_signals: m.implementation_signals }); }  // GOALS-1: reached only through the web Worker's service binding
+    // BACKEND-PULSE-1: this Worker has no cron. POST /pulse/watch runs one tick and the graph when the newest tick is older than its interval
+    // (anyone may call it; the web cron and the impact-loop workflow do). GET /pulse is the live reading: 503 when the graph never ran or is stale.
+    if (pathname === '/pulse/watch') {
+      if (request.method !== 'POST') return json({ ok: false, error: 'POST only' }, 405);
+      const r = await watch(env.DB, { halted: env.HALT === '1', by: request.headers.get('x-ps-internal') === '1' ? 'web-cron' : 'http',
+        run: async () => { const [t, g] = await Promise.all([ps(env).tick(), graph(env)]); return { tick: String(t.report || '').split('\n')[0].slice(0, 300), graph: g && { ok: !g.error, skipped: Boolean(g.skipped), nodes: g.nodes ?? null, edges: g.edges ?? null, error: g.error || null } }; } });
+      return json(r, r.ok ? 200 : 503);
+    }
+    if (pathname === '/pulse' && request.method === 'GET') { const r = await reading(env.DB, { tenant: TENANT }); return json(r, r.ok ? 200 : 503); }
     if (pathname === '/internal/tick' && request.method === 'POST' && request.headers.get('x-ps-internal') === '1') { const [t, g] = await Promise.all([ps(env).tick(), graph(env)]); return Response.json({ report: t.report, graph: g }); }
     if (pathname.startsWith('/api/graph')) return graphApi(request, env.DB);  // KGRAPH-1: graph, insights, node, live method, health; POST follow
     if (pathname === '/agencies.json') return Response.json(agenciesGraph(SOLUTIONS));
