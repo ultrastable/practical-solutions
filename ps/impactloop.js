@@ -32,7 +32,7 @@ export function metrics(rd, series = {}) {
   return out;
 }
 
-const issue = (key, title, body, extra = {}) => ({ key, title, body: `${body}\n\nFiled by the impact loop (IMPACT-LOOP-1, \`ps/impactloop.js\`). Done: the next reading of the metric named in the prediction moves toward its target; a changed fact must cite its source. Closing probe: \`node --no-warnings tools/impactloop.mjs --status\`.`, labels: ['idea', 'impact-loop'], ...extra });
+const issue = (key, title, body, extra = {}) => ({ key, title, body: `${body}\n\nFiled by the impact loop (IMPACT-LOOP-1, \`ps/impactloop.js\`). Done: the next reading of the metric named in the prediction moves toward its target; a changed fact must cite its source. Closing probe: \`node --no-warnings tools/impactloop.mjs --status\`.\n\nPaths: worker/src/implementability.js, worker/src/solutions.js\n\nEvidence rule: change a fact only when a source already in this repository supports it (the entry's own citations, ledger/evidence-leads.json, ledger/syntheses-verified.json). Never invent a figure, a programme or a citation. With no supporting source, make no change to the facts: add the limiting reason to the entry's \`limits\` text, or leave the file unchanged and say why in the summary.`, labels: ['idea', 'impact-loop'], ...extra });
 export function levers(cat, now = Date.now()) {
   const named = id => (cat.sols.find(s => s.id === id) || {}).title || id;
   const held = cat.sols.filter(s => s.impl && !s.impl.practical), effort = cat.sols.filter(s => s.impl && s.impl.practical && s.impl.score < 7);
