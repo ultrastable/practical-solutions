@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: LicenseRef-Ultrastable-USL-1.0
+# Copyright (c) 2026 Rowan Brad Quni-Gudzinas. Non-commercial use free; commercial use requires a license. See LICENSE.
+# budget: public repository, unmetered; about 1 minute a run.
+# trigger: daily; the metrics move only when merged work lands, so a faster cadence would only repeat open items.
+# free-alternative: none needed; the run reads this repository and the live counters and files items with its own GITHUB_TOKEN.
+# IMPACT-LOOP-1: record the impact and reach series, settle earlier predictions, file the next bounded items for the free code agent (agent.yml).
+name: impact-loop
+on:
+  schedule: [{ cron: '41 7 * * *' }]
+  workflow_dispatch: {}
+concurrency: { group: impact-loop, cancel-in-progress: false }
+permissions: { contents: write, issues: write, actions: write }
+jobs:
+  loop:
+    if: ${{ vars.HALT != '1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: gh label create impact-loop --color 0e8a16 || true
+      - run: node --no-warnings tools/impactloop.mjs
+      - name: commit ledger
+        run: |
+          git config user.name practical-solutions-bot
+          git config user.email bot@users.noreply.github.com
+          git add ledger/impact.json
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "impact-loop: daily readings"
+          for i in 1 2 3; do git pull --rebase -q -X theirs origin main && git push && break; sleep $((i*5)); done

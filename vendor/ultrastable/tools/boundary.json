@@ -89,6 +89,10 @@
       "class": "core",
       "role": "container executor (US-SPEC-11)"
     },
+    "core/connect": {
+      "class": "core",
+      "role": "Connection engine: knowledge graph plus vectors find novel links (close in meaning, far in the graph), ranked and calibrated by downstream outcomes; tenant-agnostic"
+    },
     "core/criticality": {
       "class": "core",
       "role": "core/criticality: a deployment must reach the point where it builds itself with nobody prompting it. Two tick steps"
@@ -173,6 +177,10 @@
       "class": "core",
       "role": "the L2 managerial layer"
     },
+    "core/discover": {
+      "class": "core",
+      "role": "Knowledge graph plus int8 vector index that proposes new connections (transfer, combination, bridge, frontier), screens them for novelty and scores itself against what the system adopts; tenant-agnostic (DISCOVER-1)"
+    },
     "core/kgraph": {
       "class": "core",
       "role": "Knowledge graph with provenance whose gaps generate the next questions; tenant-agnostic"
@@ -225,6 +233,10 @@
       "class": "core",
       "role": "Owner action page: every thing only the owner can do is one sign-in and one click (OAuth, atproto OAuth, review links), tenant-agnostic (OWNERLINK-1)"
     },
+    "core/impact": {
+      "class": "core",
+      "role": "closed loop that raises a system's own impact and reach metrics: series, plateau detection, lever planning, prediction settling (IMPACT-LOOP-1)"
+    },
     "core/pace": {
       "class": "core",
       "role": "speed at near-zero cost: cadence plan, progress per run, cost per day, reach per cost ranking"
@@ -236,6 +248,18 @@
     "core/progress": {
       "class": "core",
       "role": "Visible progress from shipped changes only: digests, release cadence judgement, Atom feed and a last-visit marker kept in the reader's browser (PROGRESS-1)"
+    },
+    "core/substance": {
+      "class": "core",
+      "role": "Is a change real: classifies a diff as behaviour, literal, comment, format, import, generated or record, so trivial merges never count as progress (SUBSTANCE-1)"
+    },
+    "core/stickiness": {
+      "class": "core",
+      "role": "A reason to come back: freshness, breadth, depth and diversity of content measured per system, a plan to fix a stale or thin one, feeds, a what's-new page and a social queue (STICKY-1)"
+    },
+    "core/flowbalance": {
+      "class": "core",
+      "role": "Issue inflow against closures and SLA ages; supersedes duplicates and batches floods (FLOW-BALANCE-1)"
     },
     "core/plus": {
       "class": "core",
