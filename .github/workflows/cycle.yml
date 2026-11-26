@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { ref: main }  # never the dispatch SHA: a queued run must start from the state the previous run committed (run 5 failed on add/add conflicts from a stale checkout)
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22 }
       - run: npm test
       - name: run one cycle on persisted state
