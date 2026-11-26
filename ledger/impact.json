@@ -1,12 +1,12 @@
 {
- "at": "2026-11-26T13:04:28.720Z",
+ "at": "2026-11-26T23:58:59.940Z",
  "readings": {
   "impact.ready_share": 0.577,
   "impact.held_back": 3,
   "impact.problems_covered": 0.952,
   "impact.problems_seeking": 811,
   "impact.catalogue_size": 47,
-  "reach.views_30d": 9997
+  "reach.views_30d": 10803
  },
  "assessments": [
   {
@@ -47,8 +47,8 @@
   {
    "id": "reach.views_30d",
    "status": "unknown",
-   "gap": 1000,
-   "value": 9997,
+   "gap": 1081,
+   "value": 10803,
    "note": "history shorter than the plateau window"
   }
  ],
@@ -100,12 +100,16 @@
    },
    {
     "at": 1795698268717,
-    "v": 9997
+    "v": 10803
    }
   ],
   "impact.problems_seeking": [
    {
     "at": 1795623896259,
+    "v": 811
+   },
+   {
+    "at": 1795737539937,
     "v": 811
    }
   ]

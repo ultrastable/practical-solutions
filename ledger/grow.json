@@ -2,8 +2,8 @@
  "schema": "ps-grow/1",
  "problems": {
   "internet": {
-   "at": "2026-11-25T20:14:49.335Z",
-   "why": "tests failed: not ok 297 - a problem without a solution says so and gets open questions; every problem has a solution today | failureType: 'testCodeFailure' | error: 'a problem with only mixed evidence is listed for researchers' | expected: true | actual: false"
+   "at": "2026-11-26T23:59:22.147Z",
+   "why": "tests failed: not ok 312 - a problem without a solution says so and gets open questions; every problem has a solution today | failureType: 'testCodeFailure' | error: 'a problem with only mixed evidence is listed for researchers' | expected: true | actual: false"
   },
   "maternal": {
    "at": "2026-11-25T22:52:59.033Z",
@@ -38,5 +38,5 @@
    ]
   }
  ],
- "at": "2026-11-26T13:05:14.691Z"
+ "at": "2026-11-26T23:59:22.147Z"
 }
