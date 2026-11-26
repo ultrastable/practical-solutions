@@ -16,6 +16,7 @@
     ]
   },
   "known_extensions": [
+    "editorconfig",
     "json",
     "jsonc",
     "jsonl",
@@ -47,6 +48,17 @@
     "(none)"
   ],
   "formats": [
+    {
+      "id": "editorconfig",
+      "covers": ".editorconfig: how every editor and agent formats files",
+      "standard": "EditorConfig",
+      "spec": "https://editorconfig.org",
+      "status": "adopted",
+      "evidence": [".editorconfig"],
+      "next": "none",
+      "trigger": "every checks run",
+      "probe": "python3 tools/openstd.py"
+    },
     {
       "id": "config-json-schema",
       "covers": "this repository's JSON config",

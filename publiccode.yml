@@ -1,0 +1,20 @@
+# https://yml.publiccode.tools/
+publiccodeYmlVersion: "0.4"
+name: "Practical Solutions"
+url: "https://github.com/ultrastable/practical-solutions"
+platforms:
+  - web
+developmentStatus: stable
+softwareType: standalone/web
+legal:
+  license: "LicenseRef-Ultrastable-USL-1.0"
+maintenance:
+  type: internal
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - en
+description:
+  en:
+    shortDescription: "Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems."
+    longDescription: "Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems."

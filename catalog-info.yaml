@@ -1,0 +1,17 @@
+# https://backstage.io/docs/features/software-catalog/descriptor-format
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: practical-solutions
+  title: "Practical Solutions"
+  description: "Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems."
+  annotations:
+    github.com/project-slug: ultrastable/practical-solutions
+  links:
+    - url: "https://github.com/ultrastable/practical-solutions"
+      title: "Source"
+spec:
+  type: tenant
+  lifecycle: production
+  owner: "group:default/ultrastable"
+  system: ultrastable

@@ -1,0 +1,9 @@
+# Practical Solutions
+
+> Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems. Licence: LicenseRef-Ultrastable-USL-1.0.
+
+## Start here
+
+- [AGENTS.md](AGENTS.md): instructions for any coding agent
+- [README.md](README.md): what this repository holds
+- [ultrastable.json](ultrastable.json): the machine-readable manifest
