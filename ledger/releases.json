@@ -43,10 +43,12 @@
    "mobile-money",
    "ors-zinc",
    "pph-bundle",
+   "reducing-newborn-deaths",
    "rural-electrification",
    "smartphones-for-women",
    "tarl",
    "tb-community-screening",
+   "tuberculosis-intervention",
    "vita",
    "women-leaders"
   ],
@@ -1157,6 +1159,155 @@
    "totals": {
     "problems": 21,
     "solutions": 24,
+    "syntheses": 3,
+    "insights": 92
+   }
+  },
+  {
+   "version": "2026.11.26",
+   "date": "2026-11-26",
+   "first": false,
+   "through": "2026-11-26T12:35:45Z",
+   "added": {
+    "problems": [],
+    "solutions": [
+     {
+      "id": "reducing-newborn-deaths",
+      "title": "Reduce Newborn Deaths"
+     },
+     {
+      "id": "tuberculosis-intervention",
+      "title": "Improve TB Outcomes"
+     }
+    ],
+    "syntheses": [],
+    "insights": [],
+    "features": [
+     {
+      "id": "48b448e",
+      "pr": 231,
+      "title": "Run the knowledge graph on the backend's internal tick and serve it through the web Worker (KGRAPH-1)"
+     },
+     {
+      "id": "703457f",
+      "pr": 230,
+      "title": "Keep file access out of the Worker bundle: graph run logic moves to worker/src/graph-run.js (fixes deploy-tenant after #229)"
+     },
+     {
+      "id": "c0c1e52",
+      "pr": 240,
+      "title": "Agent: Impact: what keeps \"Clean-fuel stoves (the largest trial found no clear pneumonia benefit)\" from ready to implement"
+     },
+     {
+      "id": "7d94dd5",
+      "pr": 241,
+      "title": "Agent: Impact: what keeps \"Subsidise hygienic latrines for the poorest households, alongside community mobilisation\" from ready to implement"
+     },
+     {
+      "id": "2bd9eee",
+      "pr": 242,
+      "title": "Agent: Impact: what keeps \"Subsidise hygienic latrines for the poorest households, alongside community mobilisation\" from ready to implement"
+     },
+     {
+      "id": "b63555a",
+      "pr": 232,
+      "title": "Impact loop: second trigger after tenant deploys (2 h gap), wider plan cap (IMPACT-LOOP-1)"
+     },
+     {
+      "id": "e7ab8f9",
+      "pr": 249,
+      "title": "Grower: search by the problem's most specific word"
+     },
+     {
+      "id": "88f7470",
+      "pr": 256,
+      "title": "Grow catalogue: Improve TB Outcomes (problem tb)"
+     },
+     {
+      "id": "2449c1c",
+      "pr": 239,
+      "title": "Agent chains itself while untried issues remain (IMPACT-LOOP-1)"
+     },
+     {
+      "id": "1d26a1b",
+      "pr": 257,
+      "title": "Fix the phone sideways scroll; give the back end a pulse route and a live graph reading"
+     },
+     {
+      "id": "26fec41",
+      "pr": 243,
+      "title": "Impact loop: grow the catalogue one sourced problem at a time"
+     },
+     {
+      "id": "95bb854",
+      "pr": 247,
+      "title": "Grower: search by the problem's own words so abstracts match"
+     },
+     {
+      "id": "9c08a30",
+      "pr": 248,
+      "title": "Grower: record why no source was found"
+     },
+     {
+      "id": "ba2e1a8",
+      "pr": 259,
+      "title": "Grow catalogue: Reduce Newborn Deaths (problem neonatal)"
+     },
+     {
+      "id": "afaf341",
+      "pr": 251,
+      "title": "Impact loop: model access for the grower (models:read, OIDC to the shared model service)"
+     },
+     {
+      "id": "06bff9d",
+      "pr": 252,
+      "title": "Grower: per-problem search words where the longest word is too vague"
+     },
+     {
+      "id": "3d44d3c",
+      "pr": 253,
+      "title": "Grower: report the failing test, not its name"
+     },
+     {
+      "id": "20a7bd2",
+      "pr": 254,
+      "title": "Grower: keep only the failure lines of a failed test run"
+     },
+     {
+      "id": "2c04f75",
+      "pr": 255,
+      "title": "Grower: list the entry before the tests run (the behaviour test reads that list)"
+     },
+     {
+      "id": "2eaadb8",
+      "pr": 260,
+      "title": "Gate against bespoke formats (JSON Schema config, CloudEvents ledgers, registered file types)"
+     },
+     {
+      "id": "870464f",
+      "pr": 258,
+      "title": "Public /health that answers, the fleet contract, and a manifest (FLEET-CONTRACT-1, HEALTH-FRONT-1)"
+     },
+     {
+      "id": "ed173be",
+      "pr": 263,
+      "title": "Agent: Impact: what keeps \"Improve TB Outcomes\" from ready to implement"
+     },
+     {
+      "id": "b0e501c",
+      "pr": 264,
+      "title": "Agent: Impact: what keeps \"Reduce Newborn Deaths\" from ready to implement"
+     },
+     {
+      "id": "3dddf09",
+      "pr": 265,
+      "title": "Fix: the backend applies the 23 migrations its database never received (MIGRATE-GAP-1)"
+     }
+    ]
+   },
+   "totals": {
+    "problems": 21,
+    "solutions": 26,
     "syntheses": 3,
     "insights": 92
    }
