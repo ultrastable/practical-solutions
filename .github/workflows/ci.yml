@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - name: core is the only source of generic code (TENANT-SYNC-1)
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - run: python3 vendor/ultrastable/tools/tenant_sync.py check --tenant .
       - run: python3 tools/openstd.py  # OPEN-STANDARDS-1: JSON Schema on config, CloudEvents on ledgers, no unregistered file type
@@ -63,7 +63,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - run: pip install numpy
       - name: the Python prototype stays a runnable behaviour reference
