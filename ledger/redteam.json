@@ -1,6 +1,6 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-25T14:54:55.098Z",
+ "at": "2026-11-26T14:25:00.961Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
@@ -481,14 +481,14 @@
    ]
   },
   "mobile-money": {
-   "at": "2026-11-20T13:35:12.423Z",
+   "at": "2026-11-26T14:25:00.961Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
      "challenge": "Lack of agent network density does not hinder money transfer",
-     "falsifier": "Observation of low money transfer rates in areas with low agent density",
+     "falsifier": "Observation of significantly reduced poverty rates in areas with low agent density",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -496,8 +496,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Households in areas with low agent density are not disadvantaged",
-     "falsifier": "Evidence of equal financial inclusion across areas with varying agent densities",
+     "challenge": "Vulnerable populations are disproportionately affected by agent network limitations",
+     "falsifier": "Data showing no significant difference in poverty rates between households with and without access to mobile money services",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -506,7 +506,7 @@
      "pass": "red_team",
      "q": 15,
      "challenge": "Assumption that agent density is the primary factor in poverty reduction",
-     "falsifier": "Discovery of other significant factors contributing to poverty reduction in studied areas",
+     "falsifier": "Evidence that other factors, such as financial literacy or access to other financial services, are more strongly correlated with poverty reduction",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -514,8 +514,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Regulatory environment does not impact the effectiveness of mobile money services",
-     "falsifier": "Identification of regulatory barriers that limit the reach and impact of mobile money services",
+     "challenge": "Regulatory barriers or lack of infrastructure hinder the effectiveness of mobile money agent networks",
+     "falsifier": "Case studies of successful mobile money implementations in areas with strict regulations or limited infrastructure",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -523,14 +523,14 @@
    ]
   },
   "ors-zinc": {
-   "at": "2026-11-20T13:35:12.423Z",
+   "at": "2026-11-26T14:25:00.961Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Zinc does not shorten episodes or reduce repeat episodes",
-     "falsifier": "A randomized controlled trial showing no significant difference in episode duration or recurrence rates between zinc-treated and non-zinc-treated groups",
+     "challenge": "Zinc has no effect on diarrhoea episode duration or recurrence",
+     "falsifier": "A randomized controlled trial showing no significant difference in episode duration or recurrence rates between zinc-treated and placebo groups",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -538,8 +538,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Delayed treatment due to reliance on zinc",
-     "falsifier": "An observational study finding increased mortality or morbidity in children who received zinc but delayed seeking medical care",
+     "challenge": "Delayed treatment due to reliance on zinc leads to increased morbidity",
+     "falsifier": "An observational study demonstrating a correlation between zinc treatment and increased hospitalization rates due to severe dehydration",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -547,8 +547,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assuming caregivers can access and administer zinc correctly",
-     "falsifier": "A survey revealing low awareness or incorrect usage of zinc supplements among primary caregivers",
+     "challenge": "Assuming caregivers can access and administer zinc effectively",
+     "falsifier": "A survey revealing that a significant proportion of caregivers are unable to obtain or correctly administer zinc supplements",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -556,8 +556,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inadequate supply chain or distribution of zinc supplements",
-     "falsifier": "An investigation uncovering stockouts or distribution issues of zinc supplements in areas with high diarrheal disease burden",
+     "challenge": "Inadequate supply chain and distribution of zinc supplements",
+     "falsifier": "An investigation uncovering frequent stockouts and distribution issues of zinc supplements in areas where they are needed most",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -969,6 +969,90 @@
      "q": 15,
      "challenge": "Inadequate consideration of contextual factors",
      "falsifier": "Identification of contextual factors (e.g., socioeconomic status, education level) that negate the effect of reserved seats on funding priorities",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "reducing-newborn-deaths": {
+   "at": "2026-11-26T14:25:00.961Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Ineffective newborn care",
+     "falsifier": "Increased newborn mortality rates despite improved care",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Vulnerable populations",
+     "falsifier": "Disproportionate newborn mortality rates in disadvantaged communities",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assumed long-term sustainability",
+     "falsifier": "Decline in newborn care effectiveness over time",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate healthcare infrastructure",
+     "falsifier": "Lack of correlation between improved newborn care and reduced mortality rates in resource-poor settings",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    }
+   ]
+  },
+  "tuberculosis-intervention": {
+   "at": "2026-11-26T14:25:00.961Z",
+   "family": "meta",
+   "findings": [
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Incidence increases despite improved treatment outcomes",
+     "falsifier": "Rising TB incidence rates in regions with high treatment success rates",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Vulnerable populations, such as those with HIV co-infection, may not benefit from improved treatment outcomes",
+     "falsifier": "No significant reduction in TB incidence among HIV-positive individuals despite improved treatment outcomes",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Assuming improved treatment outcomes directly lead to reduced incidence, without considering antibiotic resistance",
+     "falsifier": "Emergence of drug-resistant TB strains in areas with high treatment success rates",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Inadequate consideration of co-infection with HIV and antibiotic resistance in treatment outcome improvement strategies",
+     "falsifier": "High rates of TB treatment failure due to antibiotic resistance or HIV co-infection in areas with improved treatment outcomes",
      "severity": 2,
      "source": "model",
      "family": "meta"
