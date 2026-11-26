@@ -14,8 +14,8 @@
    "outcome": "rejected"
   },
   "deworming": {
-   "at": "2026-11-18T13:55:28.790Z",
-   "outcome": "no change proposed: The entry accurately describes the specific scientific debate between the Kenya trial and the Cochrane review, and the provided sources do not contradict this summary or its details."
+   "at": "2026-11-26T15:09:31.882Z",
+   "outcome": "rejected"
   },
   "emissions-market": {
    "at": "2026-11-18T13:55:28.790Z",
@@ -96,6 +96,14 @@
   "smartphones-for-women": {
    "at": "2026-11-21T13:27:22.746Z",
    "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, which do not contain data relevant to the fields in the entry."
+  },
+  "reducing-newborn-deaths": {
+   "at": "2026-11-26T15:09:31.882Z",
+   "outcome": "rejected"
+  },
+  "tuberculosis-intervention": {
+   "at": "2026-11-26T15:09:31.882Z",
+   "outcome": "rejected"
   }
  },
  "proposals": [
@@ -512,6 +520,91 @@
    "status": "rejected",
    "reason": "evidence check failed: the old text is not found exactly once in the source file",
    "at": "2026-11-25T15:33:56.374Z"
+  },
+  {
+   "id": "53a38d0d5d76",
+   "entry": "reducing-newborn-deaths",
+   "field": "first_test",
+   "old": "Pilot improved newborn care in a district hospital",
+   "new": "No documented pilot; the earliest reported effort is the design of a breathing device for low‑resource settings (2017).",
+   "source": {
+    "url": "https://europepmc.org/article/MED/29137526",
+    "title": "Tools To Reduce Newborn Deaths In Africa."
+   },
+   "quote": "An engineering team designs a breathing device specifically for premature babies born in low-resource health care settings.",
+   "why": "The entry claims a pilot in a district hospital, but none of the sources describe such a pilot; the earliest concrete activity is the device design reported in 2017.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "numbers not in the abstract: 2017",
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: numbers not in the abstract: 2017; the old text is not found exactly once in the source file",
+   "at": "2026-11-26T15:09:31.882Z"
+  },
+  {
+   "id": "8653f59aa611",
+   "entry": "tuberculosis-intervention",
+   "field": "claim",
+   "old": "Improving tuberculosis treatment outcomes reduces incidence",
+   "new": "Improving tuberculosis treatment outcomes increases treatment success rates",
+   "source": {
+    "url": "https://europepmc.org/article/MED/43075540",
+    "title": "Diagnosis and treatment outcomes of childhood TB in Zanzibar."
+   },
+   "quote": "Treatment outcomes were excellent, with 98.1% treatment success.",
+   "why": "The source reports high treatment success, supporting a claim about outcomes rather than incidence reduction.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-26T15:09:31.882Z"
+  },
+  {
+   "id": "9b5ba19b14ac",
+   "entry": "deworming",
+   "field": "claim",
+   "old": "An influential trial found that treating schoolchildren for worms raised school attendance, but a later Cochrane review found little effect on growth, school performance or survival for mass treatment.",
+   "new": "An influential trial found that treating schoolchildren for worms raised school attendance, and deworming before age five leads to 2.5 additional months of life and improvements in morbidity decades later, but a later Cochrane review found little effect on growth, school performance or survival for mass treatment.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/40857314",
+    "title": "Early-life infectious disease exposure, the \"hygiene hypothesis,\" and lifespan: Evidence from hookworm disease."
+   },
+   "quote": "Findings show deworming before age five leads to 2.5 additional months of life in a large sample of adult death records.",
+   "why": "The new text incorporates evidence from source 1 that shows deworming has long-term health benefits.",
+   "proposer": {
+    "id": "llama-3.3-70b",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-26T15:09:31.882Z"
   }
  ],
  "health": {
@@ -584,12 +677,12 @@
    "last": "worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
   },
   "gpt-oss-120b": {
-   "calls": 16,
+   "calls": 18,
    "errors": 2,
    "last": "empty"
   },
   "llama-3.3-70b": {
-   "calls": 7,
+   "calls": 8,
    "errors": 0
   }
  },
@@ -860,11 +953,23 @@
    "failures": [
     "qwen3-30b: worker-ai HTTP 502 5028: @cf/qwen/qwen3-30b-a3b-fp8 was deprecated on 2026-11-20. See the model catalog for a"
    ]
+  },
+  {
+   "at": "2026-11-26T15:09:31.882Z",
+   "examined": 3,
+   "proposed": 3,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 3,
+   "pending": 0,
+   "none": 0,
+   "panel_failures": 0,
+   "failures": []
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-25T15:33:56.374Z"
+ "at": "2026-11-26T15:09:31.882Z"
 }
