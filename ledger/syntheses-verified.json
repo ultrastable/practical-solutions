@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-25T13:29:21.368Z",
+ "at": "2026-11-26T13:06:06.648Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -97,16 +97,16 @@
        "hit": true
       },
       {
-       "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
-       "year": 2012,
-       "url": "https://openalex.org/W166737179",
-       "hit": false
-      },
-      {
        "title": "Reckoning Time in the Barber Shop:A Qualitative Study of a Barber Navigating Time, Temporality, and Rhythm",
        "year": 2014,
        "url": "https://openalex.org/W2243527285",
        "hit": true
+      },
+      {
+       "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
+       "year": 2012,
+       "url": "https://openalex.org/W166737179",
+       "hit": false
       },
       {
        "title": "Stay Beautiful -- Stay Alive: Assessing the Receptivity of African American Beauty Salon Owners to the Integration of Breast Cancer Intervention Programs into Salon Operations",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T13:28:08.287Z"
+   "checked_at": "2026-11-26T13:05:39.197Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -213,7 +213,7 @@
     },
     {
      "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1673,
+     "total": 1684,
      "closest": [
       {
        "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T13:28:12.560Z"
+   "checked_at": "2026-11-26T13:05:48.057Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -304,7 +304,7 @@
    "novelty": [
     {
      "label": "older adult volunteers delivering foundational learning in low-income countries",
-     "total": 580,
+     "total": 588,
      "closest": [
       {
        "title": "Literacy and numeracy support for homeless adults",
@@ -319,15 +319,15 @@
        "hit": false
       },
       {
-       "title": "The impact of adult literacy and numeracy on small businesses in rural Lincolnshire and Rutland: a case study",
-       "year": 2004,
-       "url": "https://openalex.org/W2101503942",
-       "hit": false
-      },
-      {
        "title": "Supporting english literacy and numeracy learning for Indigenous students in the early years",
        "year": 2003,
        "url": "https://openalex.org/W2156824084",
+       "hit": false
+      },
+      {
+       "title": "The impact of adult literacy and numeracy on small businesses in rural Lincolnshire and Rutland: a case study",
+       "year": 2004,
+       "url": "https://openalex.org/W2101503942",
        "hit": false
       },
       {
@@ -341,7 +341,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 39977,
+     "total": 40459,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -378,7 +378,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T13:29:07.933Z"
+   "checked_at": "2026-11-26T13:05:56.454Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -448,7 +448,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T13:29:14.911Z"
+   "checked_at": "2026-11-26T13:06:03.653Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -481,7 +481,7 @@
    "novelty": [
     {
      "label": "Existing studies",
-     "total": 442,
+     "total": 448,
      "closest": [
       {
        "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
@@ -518,7 +518,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-25T13:29:21.368Z"
+   "checked_at": "2026-11-26T13:06:06.648Z"
   }
  },
  "errors": []
