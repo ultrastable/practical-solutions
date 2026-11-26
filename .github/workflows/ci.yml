@@ -24,7 +24,7 @@ jobs:
       - run: node tools/build_migrations.mjs --check
       - name: the loop runs from birth on a fake clock and reports its own criticality
         run: node --no-warnings bin/ps.mjs simulate --days 150 | tee simulate.txt || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: simulate, path: simulate.txt }
   mobile:
     # MOBILE-LAYOUT-1 + PHONE-OVERFLOW-1: real pages in a real browser at 390 px, and every page the web Worker serves at 360 and 390 px for sideways
@@ -39,7 +39,7 @@ jobs:
       - run: npm install --no-save --no-package-lock playwright@1.49.1
       - run: npx playwright install --with-deps chromium
       - run: node --no-warnings tools/mobile_layout.mjs --shots mobile-shots
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with: { name: mobile-shots, path: mobile-shots }
   access:
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: node --no-warnings vendor/ultrastable/core/access/cli.mjs --config ps/access.mjs --out access-report.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with: { name: access-report, path: access-report.json }
   reference-python:
