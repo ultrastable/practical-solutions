@@ -1,18 +1,18 @@
 {
- "at": "2026-11-25T22:52:53.811Z",
+ "at": "2026-11-26T01:55:53.587Z",
  "readings": {
   "impact.ready_share": 0.577,
   "impact.held_back": 3,
   "impact.problems_covered": 0.952,
   "impact.problems_seeking": 811,
   "impact.catalogue_size": 47,
-  "reach.views_30d": 9094
+  "reach.views_30d": 9340
  },
  "assessments": [
   {
    "id": "impact.ready_share",
    "status": "unknown",
-   "gap": 0.09800000000000009,
+   "gap": 0.050000000000000044,
    "value": 0.577,
    "note": "history shorter than the plateau window"
   },
@@ -47,8 +47,8 @@
   {
    "id": "reach.views_30d",
    "status": "unknown",
-   "gap": 910,
-   "value": 9094,
+   "gap": 934,
+   "value": 9340,
    "note": "history shorter than the plateau window"
   }
  ],
@@ -80,7 +80,7 @@
   "reach.views_30d": [
    {
     "at": 1795617395822,
-    "v": 9094
+    "v": 9340
    }
   ],
   "impact.problems_seeking": [
@@ -277,6 +277,28 @@
    "due": 1796251971123,
    "prediction": "impact.ready_share >= 0.615 within 168 h",
    "at": 1795647173811
+  },
+  {
+   "key": "reach:index:2969",
+   "lever": "reindex",
+   "metric": "reach.views_30d",
+   "op": ">=",
+   "base": 9340,
+   "predicted": 9440,
+   "due": 1796262950244,
+   "prediction": "reach.views_30d >= 9440 within 168 h",
+   "at": 1795658153587
+  },
+  {
+   "key": "reach:surface:2969",
+   "lever": "surface",
+   "metric": "reach.views_30d",
+   "op": ">=",
+   "base": 9340,
+   "predicted": 9440,
+   "due": 1796262950244,
+   "prediction": "reach.views_30d >= 9440 within 168 h",
+   "at": 1795658153587
   }
  ]
 }
