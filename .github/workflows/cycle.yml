@@ -24,7 +24,7 @@ jobs:
       PS_LLM_URL: https://tenant-ps-llm.ultrastable.workers.dev/ps/llm
       GITHUB_MODELS_TOKEN: ${{ github.token }}  # the model route that needs no key a person mints: GitHub Models on the run's own token
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { ref: main }  # never the dispatch SHA: a queued run must start from the state the previous run committed (run 5 failed on add/add conflicts from a stale checkout)
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
