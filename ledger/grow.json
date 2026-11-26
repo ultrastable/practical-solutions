@@ -12,6 +12,10 @@
   "ncd": {
    "at": "2026-11-26T01:56:14.347Z",
    "why": "no usable source ([{\"id\":\"ncd\",\"event\":\"kept 0 of 8\"}], query \"diabetes\")"
+  },
+  "suicide": {
+   "at": "2026-11-26T13:05:14.691Z",
+   "why": "no usable source ([{\"id\":\"suicide\",\"event\":\"kept 0 of 8\"}], query \"Suicide\")"
   }
  },
  "added": [
@@ -34,5 +38,5 @@
    ]
   }
  ],
- "at": "2026-11-26T01:56:14.347Z"
+ "at": "2026-11-26T13:05:14.691Z"
 }

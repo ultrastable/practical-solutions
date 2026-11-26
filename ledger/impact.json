@@ -1,12 +1,12 @@
 {
- "at": "2026-11-26T01:55:53.587Z",
+ "at": "2026-11-26T13:04:28.720Z",
  "readings": {
   "impact.ready_share": 0.577,
   "impact.held_back": 3,
   "impact.problems_covered": 0.952,
   "impact.problems_seeking": 811,
   "impact.catalogue_size": 47,
-  "reach.views_30d": 9340
+  "reach.views_30d": 9997
  },
  "assessments": [
   {
@@ -47,8 +47,8 @@
   {
    "id": "reach.views_30d",
    "status": "unknown",
-   "gap": 934,
-   "value": 9340,
+   "gap": 1000,
+   "value": 9997,
    "note": "history shorter than the plateau window"
   }
  ],
@@ -57,11 +57,19 @@
    {
     "at": 1795617395822,
     "v": 0.577
+   },
+   {
+    "at": 1795698268717,
+    "v": 0.577
    }
   ],
   "impact.held_back": [
    {
     "at": 1795617395822,
+    "v": 3
+   },
+   {
+    "at": 1795698268717,
     "v": 3
    }
   ],
@@ -69,11 +77,19 @@
    {
     "at": 1795617395822,
     "v": 0.952
+   },
+   {
+    "at": 1795698268717,
+    "v": 0.952
    }
   ],
   "impact.catalogue_size": [
    {
     "at": 1795617395822,
+    "v": 47
+   },
+   {
+    "at": 1795698268717,
     "v": 47
    }
   ],
@@ -81,6 +97,10 @@
    {
     "at": 1795617395822,
     "v": 9340
+   },
+   {
+    "at": 1795698268717,
+    "v": 9997
    }
   ],
   "impact.problems_seeking": [
