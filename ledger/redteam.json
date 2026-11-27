@@ -1,6 +1,6 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-26T14:25:00.961Z",
+ "at": "2026-11-27T14:18:22.671Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
@@ -565,14 +565,14 @@
    ]
   },
   "rural-electrification": {
-   "at": "2026-11-20T13:35:12.423Z",
+   "at": "2026-11-27T14:18:22.671Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
      "challenge": "Assuming subsidised connections have no effect on income or schooling",
-     "falsifier": "Observation of significant increase in income or schooling among rural households with subsidised grid connections",
+     "falsifier": "Observation of significant increase in income or schooling among rural households with subsidised connections",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -580,8 +580,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Potential harm to taxpayers or other beneficiaries of alternative uses of subsidy funds",
-     "falsifier": "Evidence that subsidised grid connections benefit a significant proportion of rural households, justifying the cost",
+     "challenge": "Ignoring potential harm to households who do not receive subsidies",
+     "falsifier": "Evidence of widening income inequality between subsidised and non-subsidised households",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -589,8 +589,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assuming that short-run effects are representative of long-run outcomes",
-     "falsifier": "Longitudinal study showing significant positive effects on income or schooling after several years",
+     "challenge": "Assuming that short-term effects are representative of long-term outcomes",
+     "falsifier": "Longitudinal study showing significant positive effects on income or schooling after a longer period",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -598,8 +598,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Potential flaws in study design or implementation",
-     "falsifier": "Replication study with improved methodology showing significant positive effects of subsidised grid connections",
+     "challenge": "Overlooking alternative technologies or support systems that could be more effective",
+     "falsifier": "Comparison study showing that mini-grids or solar panels with productive-use support have greater positive effects on income or schooling",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -607,14 +607,14 @@
    ]
   },
   "tarl": {
-   "at": "2026-11-20T13:35:12.423Z",
+   "at": "2026-11-27T14:18:22.671Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Sorting children by grade rather than skill leads to better outcomes",
-     "falsifier": "A study showing higher reading and arithmetic scores in grade-based classrooms",
+     "challenge": "Does grouping by grade actually lead to better outcomes than grouping by skill?",
+     "falsifier": "A study showing higher reading and arithmetic scores in grade-level grouped classes compared to skill-level grouped classes",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -622,8 +622,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Protected class time is not feasible or beneficial for certain student groups",
-     "falsifier": "Data showing that students with special needs or English language learners are negatively impacted by the program",
+     "challenge": "Are certain students, such as those with special needs or English language learners, disproportionately disadvantaged by the skill-grouping approach?",
+     "falsifier": "Data showing a significant decrease in academic performance or increased frustration among students with special needs or English language learners in skill-level grouped classes",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -631,8 +631,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "The assumption that teachers can accurately assess student skills and adapt instruction accordingly",
-     "falsifier": "Observations of teachers struggling to implement the program due to inadequate training or support",
+     "challenge": "Is the assumption that teachers can effectively identify and group students by skill level accurate?",
+     "falsifier": "Observations of teachers struggling to accurately assess student skills or inconsistent grouping practices across classrooms",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -640,8 +640,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "The program's effectiveness is dependent on consistent implementation and quality control",
-     "falsifier": "Reports of inconsistent or poor program implementation leading to negligible or negative outcomes",
+     "challenge": "Are there potential implementation challenges or sustainability issues that could undermine the effectiveness of the program?",
+     "falsifier": "Reports of inadequate training or support for teachers, or lack of resources and infrastructure to maintain the program over time",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -649,14 +649,14 @@
    ]
   },
   "cash-birth-certificate": {
-   "at": "2026-11-21T12:59:19.105Z",
+   "at": "2026-11-27T14:18:22.671Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "No increase in registration",
-     "falsifier": "A significant number of households receiving unconditional cash transfers registering their children at the same rate as those with conditional transfers",
+     "challenge": "Conditioning cash transfers on birth certificates does not increase registration",
+     "falsifier": "A study showing no significant difference in registration rates between conditional and unconditional cash transfer programs",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -664,8 +664,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Exclusion of vulnerable families",
-     "falsifier": "Data showing that the majority of families excluded from the cash transfer due to lack of birth certificate are from the most disadvantaged groups",
+     "challenge": "Vulnerable families are excluded from benefits due to registration requirements",
+     "falsifier": "Data showing a significant proportion of eligible families are unable to access cash transfers due to birth certificate requirements",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -673,8 +673,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Accessibility of registration services",
-     "falsifier": "Evidence that a significant proportion of families in the province have difficulty accessing registration offices due to distance, cost, or other barriers",
+     "challenge": "Assuming all families have equal access to registration services",
+     "falsifier": "Evidence of disparities in access to registration services among different socioeconomic groups",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -682,8 +682,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inequitable distribution of benefits",
-     "falsifier": "Analysis revealing that the conditional cash transfer program disproportionately benefits families who already have access to registration services, rather than the most needy",
+     "challenge": "Inadequate support for families in registering their children",
+     "falsifier": "A review revealing that free registration and application assistance were not effectively implemented or utilized",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -691,14 +691,14 @@
    ]
   },
   "cytisine": {
-   "at": "2026-11-21T12:59:19.105Z",
+   "at": "2026-11-27T14:18:22.671Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Ineffective treatment",
-     "falsifier": "A randomized controlled trial showing no significant difference in quit rates between cytisine and placebo",
+     "challenge": "Cytisine is less effective than nicotine replacement",
+     "falsifier": "A randomized controlled trial showing nicotine replacement has a higher success rate than cytisine",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -706,8 +706,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Overestimation of efficacy",
-     "falsifier": "A study demonstrating that the self-reported abstinence rates are significantly lower when objectively verified with biomarkers",
+     "challenge": "Cytisine's side effects outweigh its benefits",
+     "falsifier": "A study demonstrating a significant increase in severe side effects, such as seizures or allergic reactions, associated with cytisine use",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -715,8 +715,17 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Lack of long-term efficacy",
-     "falsifier": "Follow-up data showing that the quit rates among cytisine users decrease significantly over time, returning to baseline levels within a year",
+     "challenge": "Cytisine's effectiveness is dependent on brief behavioral support",
+     "falsifier": "A trial showing cytisine is ineffective without intensive behavioral support, contradicting the assumption that brief support is sufficient",
+     "severity": 2,
+     "source": "model",
+     "family": "meta"
+    },
+    {
+     "pass": "red_team",
+     "q": 15,
+     "challenge": "Lack of licensing in every country indicates inadequate safety or efficacy",
+     "falsifier": "Regulatory records revealing cytisine's licensing was denied due to concerns over safety, efficacy, or manufacturing quality",
      "severity": 2,
      "source": "model",
      "family": "meta"
