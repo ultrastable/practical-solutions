@@ -5,8 +5,112 @@ export const RELEASES = {
  "schema": "ps-releases/1",
  "min_days": 1,
  "max_gap_days": 7,
- "count": 7,
+ "count": 8,
  "releases": [
+  {
+   "version": "2026.11.27",
+   "date": "2026-11-27",
+   "first": false,
+   "through": "2026-11-27T12:21:42Z",
+   "added": {
+    "problems": [],
+    "solutions": [],
+    "syntheses": [],
+    "insights": [
+     {
+      "id": "mobile-money:432e373154",
+      "title": "mobile-money: Vulnerable populations are disproportionately affected by agent network limitations"
+     },
+     {
+      "id": "mobile-money:e62d21ab46",
+      "title": "mobile-money: Regulatory barriers or lack of infrastructure hinder the effectiveness of mobile money agent networks"
+     },
+     {
+      "id": "ors-zinc:232838d354",
+      "title": "ors-zinc: Zinc has no effect on diarrhoea episode duration or recurrence"
+     },
+     {
+      "id": "ors-zinc:56fd1f93ee",
+      "title": "ors-zinc: Inadequate supply chain and distribution of zinc supplements"
+     },
+     {
+      "id": "ors-zinc:7f756d5661",
+      "title": "ors-zinc: Delayed treatment due to reliance on zinc leads to increased morbidity"
+     },
+     {
+      "id": "ors-zinc:e4d868493e",
+      "title": "ors-zinc: Assuming caregivers can access and administer zinc effectively"
+     },
+     {
+      "id": "reducing-newborn-deaths:2a0487ac7b",
+      "title": "reducing-newborn-deaths: Assumed long-term sustainability"
+     },
+     {
+      "id": "reducing-newborn-deaths:9d1a40f455",
+      "title": "reducing-newborn-deaths: Inadequate healthcare infrastructure"
+     },
+     {
+      "id": "reducing-newborn-deaths:cb91aa04bc",
+      "title": "reducing-newborn-deaths: Ineffective newborn care"
+     },
+     {
+      "id": "reducing-newborn-deaths:d5c38cabf6",
+      "title": "reducing-newborn-deaths: Vulnerable populations"
+     },
+     {
+      "id": "tuberculosis-intervention:14b2ad03eb",
+      "title": "tuberculosis-intervention: Assuming improved treatment outcomes directly lead to reduced incidence, without considering antibiotic resistance"
+     },
+     {
+      "id": "tuberculosis-intervention:1d1f5152fc",
+      "title": "tuberculosis-intervention: Incidence increases despite improved treatment outcomes"
+     },
+     {
+      "id": "tuberculosis-intervention:9025b7a990",
+      "title": "tuberculosis-intervention: Vulnerable populations, such as those with HIV co-infection, may not benefit from improved treatment outcomes"
+     },
+     {
+      "id": "tuberculosis-intervention:ca428a2ac9",
+      "title": "tuberculosis-intervention: Inadequate consideration of co-infection with HIV and antibiotic resistance in treatment outcome improvement strategies"
+     }
+    ],
+    "features": [
+     {
+      "id": "0882742",
+      "pr": 267,
+      "title": "Feat: carry the machine-readable repository files (REPO-CONFORM-1)"
+     },
+     {
+      "id": "bba4733",
+      "pr": 269,
+      "title": "Build(deps): bump actions/checkout from 4 to 7"
+     },
+     {
+      "id": "835014a",
+      "pr": 268,
+      "title": "Build(deps): bump actions/upload-artifact from 4 to 7"
+     },
+     {
+      "id": "b7310d2",
+      "pr": 272,
+      "title": "Fix: branch cleanup archives any tip main lacks before deleting"
+     }
+    ]
+   },
+   "totals": {
+    "problems": 21,
+    "solutions": 26,
+    "syntheses": 3,
+    "insights": 100
+   },
+   "counts": {
+    "problems": 0,
+    "solutions": 0,
+    "syntheses": 0,
+    "insights": 14,
+    "features": 4
+   }
+  },
   {
    "version": "2026.11.26",
    "date": "2026-11-26",

@@ -152,17 +152,27 @@
    "latrine-subsidy:96f5efb869",
    "latrine-subsidy:c33000e4f6",
    "mobile-money:0ad8117dfa",
+   "mobile-money:432e373154",
    "mobile-money:5c7b39aa56",
    "mobile-money:7296b1f2cd",
    "mobile-money:8a08dd6903",
+   "mobile-money:e62d21ab46",
    "ors-zinc:136416bf66",
+   "ors-zinc:232838d354",
    "ors-zinc:51d7f0623b",
+   "ors-zinc:56fd1f93ee",
+   "ors-zinc:7f756d5661",
    "ors-zinc:95a37c7c80",
    "ors-zinc:99c2f01257",
+   "ors-zinc:e4d868493e",
    "pph-bundle:475231e02a",
    "pph-bundle:7bbfcf5014",
    "pph-bundle:83bb276f77",
    "pph-bundle:84763fc332",
+   "reducing-newborn-deaths:2a0487ac7b",
+   "reducing-newborn-deaths:9d1a40f455",
+   "reducing-newborn-deaths:cb91aa04bc",
+   "reducing-newborn-deaths:d5c38cabf6",
    "rural-electrification:65882e63c5",
    "rural-electrification:6885048de3",
    "rural-electrification:81169aa19b",
@@ -179,6 +189,10 @@
    "tb-community-screening:25c2a785db",
    "tb-community-screening:b3af8e9d6e",
    "tb-community-screening:fd090705fa",
+   "tuberculosis-intervention:14b2ad03eb",
+   "tuberculosis-intervention:1d1f5152fc",
+   "tuberculosis-intervention:9025b7a990",
+   "tuberculosis-intervention:ca428a2ac9",
    "vita:0400647cc8",
    "vita:15478a7c79",
    "vita:e1faa40ef1",
@@ -1310,6 +1324,103 @@
     "solutions": 26,
     "syntheses": 3,
     "insights": 92
+   }
+  },
+  {
+   "version": "2026.11.27",
+   "date": "2026-11-27",
+   "first": false,
+   "through": "2026-11-27T12:21:42Z",
+   "added": {
+    "problems": [],
+    "solutions": [],
+    "syntheses": [],
+    "insights": [
+     {
+      "id": "mobile-money:432e373154",
+      "title": "mobile-money: Vulnerable populations are disproportionately affected by agent network limitations"
+     },
+     {
+      "id": "mobile-money:e62d21ab46",
+      "title": "mobile-money: Regulatory barriers or lack of infrastructure hinder the effectiveness of mobile money agent networks"
+     },
+     {
+      "id": "ors-zinc:232838d354",
+      "title": "ors-zinc: Zinc has no effect on diarrhoea episode duration or recurrence"
+     },
+     {
+      "id": "ors-zinc:56fd1f93ee",
+      "title": "ors-zinc: Inadequate supply chain and distribution of zinc supplements"
+     },
+     {
+      "id": "ors-zinc:7f756d5661",
+      "title": "ors-zinc: Delayed treatment due to reliance on zinc leads to increased morbidity"
+     },
+     {
+      "id": "ors-zinc:e4d868493e",
+      "title": "ors-zinc: Assuming caregivers can access and administer zinc effectively"
+     },
+     {
+      "id": "reducing-newborn-deaths:2a0487ac7b",
+      "title": "reducing-newborn-deaths: Assumed long-term sustainability"
+     },
+     {
+      "id": "reducing-newborn-deaths:9d1a40f455",
+      "title": "reducing-newborn-deaths: Inadequate healthcare infrastructure"
+     },
+     {
+      "id": "reducing-newborn-deaths:cb91aa04bc",
+      "title": "reducing-newborn-deaths: Ineffective newborn care"
+     },
+     {
+      "id": "reducing-newborn-deaths:d5c38cabf6",
+      "title": "reducing-newborn-deaths: Vulnerable populations"
+     },
+     {
+      "id": "tuberculosis-intervention:14b2ad03eb",
+      "title": "tuberculosis-intervention: Assuming improved treatment outcomes directly lead to reduced incidence, without considering antibiotic resistance"
+     },
+     {
+      "id": "tuberculosis-intervention:1d1f5152fc",
+      "title": "tuberculosis-intervention: Incidence increases despite improved treatment outcomes"
+     },
+     {
+      "id": "tuberculosis-intervention:9025b7a990",
+      "title": "tuberculosis-intervention: Vulnerable populations, such as those with HIV co-infection, may not benefit from improved treatment outcomes"
+     },
+     {
+      "id": "tuberculosis-intervention:ca428a2ac9",
+      "title": "tuberculosis-intervention: Inadequate consideration of co-infection with HIV and antibiotic resistance in treatment outcome improvement strategies"
+     }
+    ],
+    "features": [
+     {
+      "id": "0882742",
+      "pr": 267,
+      "title": "Feat: carry the machine-readable repository files (REPO-CONFORM-1)"
+     },
+     {
+      "id": "bba4733",
+      "pr": 269,
+      "title": "Build(deps): bump actions/checkout from 4 to 7"
+     },
+     {
+      "id": "835014a",
+      "pr": 268,
+      "title": "Build(deps): bump actions/upload-artifact from 4 to 7"
+     },
+     {
+      "id": "b7310d2",
+      "pr": 272,
+      "title": "Fix: branch cleanup archives any tip main lacks before deleting"
+     }
+    ]
+   },
+   "totals": {
+    "problems": 21,
+    "solutions": 26,
+    "syntheses": 3,
+    "insights": 100
    }
   }
  ]
