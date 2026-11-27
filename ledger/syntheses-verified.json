@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-27T13:04:37.625Z",
+ "at": "2026-11-27T14:00:09.129Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -88,7 +88,7 @@
     },
     {
      "label": "hair salon and blood pressure",
-     "total": 60,
+     "total": 62,
      "closest": [
       {
        "title": "A Literature Synthesis of Health Promotion Research in Salons and Barbershops",
@@ -103,16 +103,16 @@
        "hit": true
       },
       {
-       "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
-       "year": 2012,
-       "url": "https://openalex.org/W166737179",
-       "hit": false
-      },
-      {
        "title": "Reckoning Time in the Barber Shop:A Qualitative Study of a Barber Navigating Time, Temporality, and Rhythm",
        "year": 2014,
        "url": "https://openalex.org/W2243527285",
        "hit": true
+      },
+      {
+       "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
+       "year": 2012,
+       "url": "https://openalex.org/W166737179",
+       "hit": false
       },
       {
        "title": "Stay Beautiful -- Stay Alive: Assessing the Receptivity of African American Beauty Salon Owners to the Integration of Breast Cancer Intervention Programs into Salon Operations",
@@ -125,7 +125,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-27T13:03:05.252Z"
+   "checked_at": "2026-11-27T13:59:34.562Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -213,7 +213,7 @@
     },
     {
      "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1711,
+     "total": 1764,
      "closest": [
       {
        "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
@@ -250,7 +250,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-27T13:03:29.280Z"
+   "checked_at": "2026-11-27T13:59:44.830Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -301,9 +301,84 @@
      }
     }
    },
-   "novelty": [],
-   "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-27T13:04:14.767Z"
+   "novelty": [
+    {
+     "label": "older adult volunteers delivering foundational learning in low-income countries",
+     "total": 627,
+     "closest": [
+      {
+       "title": "Literacy and numeracy support for homeless adults",
+       "year": 2018,
+       "url": "https://doi.org/10.17635/lancaster/thesis/272",
+       "hit": false
+      },
+      {
+       "title": "Prisoners’ Experiences of Foundation Skills – an Intensive Adult Literacy and Numeracy Programme Delivered in New Zealand Prisons",
+       "year": 2014,
+       "url": "https://doi.org/10.26686/wgtn.17007358.v1",
+       "hit": false
+      },
+      {
+       "title": "Literacy and numeracy demands and usage in the workplace",
+       "year": 2016,
+       "url": "https://openalex.org/W2606968753",
+       "hit": false
+      },
+      {
+       "title": "Supporting english literacy and numeracy learning for Indigenous students in the early years",
+       "year": 2003,
+       "url": "https://openalex.org/W2156824084",
+       "hit": false
+      },
+      {
+       "title": "The impact of adult literacy and numeracy on small businesses in rural Lincolnshire and Rutland: a case study",
+       "year": 2004,
+       "url": "https://openalex.org/W2101503942",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": false
+    },
+    {
+     "label": "Teaching at the Right Level and older volunteers",
+     "total": 43020,
+     "closest": [
+      {
+       "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
+       "year": 2022,
+       "url": "https://doi.org/10.1016/j.ssmqr.2022.100061",
+       "hit": false
+      },
+      {
+       "title": "Organisational volunteering: Meanings of volunteering, professionalism, volunteer communities of practice and wellbeing",
+       "year": 2012,
+       "url": "https://openalex.org/W118528062",
+       "hit": false
+      },
+      {
+       "title": "Qualitative exploration of the impact of employment and volunteering upon the health and wellbeing of African refugees settled in regional Australia: a refugee perspective",
+       "year": 2019,
+       "url": "https://doi.org/10.1186/s12889-018-6328-2",
+       "hit": false
+      },
+      {
+       "title": "What is the effect of intergenerational activities on the wellbeing and mental health of older people?: A systematic review",
+       "year": 2023,
+       "url": "https://doi.org/10.1002/cl2.1355",
+       "hit": true
+      },
+      {
+       "title": "Older women: Employment and wellbeing in later life",
+       "year": 2017,
+       "url": "https://openalex.org/W2772598573",
+       "hit": true
+      }
+     ],
+     "possible_prior_work": true
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-27T13:59:54.924Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -333,9 +408,47 @@
      "reason": "year null is not 2019"
     }
    },
-   "novelty": [],
-   "novelty_error": "https://api.openalex.org/works -> HTTP 429",
-   "checked_at": "2026-11-27T13:04:34.502Z"
+   "novelty": [
+    {
+     "label": "Existing studies",
+     "total": 10,
+     "closest": [
+      {
+       "title": "Pediatric emergency care capacity in a low-resource setting: An assessment of district hospitals in Rwanda",
+       "year": 2017,
+       "url": "https://doi.org/10.1371/journal.pone.0173233",
+       "hit": false
+      },
+      {
+       "title": "Reducing the equity gap in under-5 mortality through an innovative community health program in Ethiopia: an implementation research study",
+       "year": 2024,
+       "url": "https://doi.org/10.1186/s12887-023-04388-1",
+       "hit": true
+      },
+      {
+       "title": "The impact of paid community health worker deployment on child survival: the connect randomized cluster trial in rural Tanzania",
+       "year": 2019,
+       "url": "https://doi.org/10.1186/s12913-019-4203-1",
+       "hit": true
+      },
+      {
+       "title": "Caregiver Behavior Change for Child Survival and Development in Low- and Middle-Income Countries: An Examination of the Evidence",
+       "year": 2014,
+       "url": "https://doi.org/10.1080/10810730.2014.940477",
+       "hit": false
+      },
+      {
+       "title": "Methodological considerations and cost to measure coverage of multisectoral nutrition interventions: protocol for the One Nutrition Coverage Survey in Bangladesh",
+       "year": 2025,
+       "url": "https://doi.org/10.1136/bmjopen-2025-099314",
+       "hit": false
+      }
+     ],
+     "possible_prior_work": true
+    }
+   ],
+   "novelty_error": null,
+   "checked_at": "2026-11-27T14:00:00.328Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -368,7 +481,7 @@
    "novelty": [
     {
      "label": "Existing studies",
-     "total": 453,
+     "total": 469,
      "closest": [
       {
        "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
@@ -405,7 +518,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-27T13:04:37.625Z"
+   "checked_at": "2026-11-27T14:00:09.129Z"
   }
  },
  "errors": []
