@@ -191,6 +191,16 @@
    "confirmed": 0,
    "dropped": 85,
    "open": 7
+  },
+  {
+   "at": "2026-11-27T15:09:18.791Z",
+   "tau": 0.9255,
+   "nodes": 814,
+   "candidates": 90,
+   "new": 0,
+   "confirmed": 0,
+   "dropped": 85,
+   "open": 7
   }
  ],
  "entries": {
@@ -211,15 +221,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9925,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Population using safely managed drinking-water services (%)\" is another measure of \"Unsafe drinking water\", \"Children dying before age five\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:a8ce6cf4": {
    "id": "transfer:a8ce6cf4",
@@ -238,13 +248,13 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9815,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z",
+   "returned": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Proportion of population using safely managed drinking water services\" is another measure of \"Unsafe drinking water\", \"Children dying before age five\", which the solution already addresses: a link to add to the catalogue, not a new test."
   },
@@ -265,15 +275,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9635,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Incidence of tuberculosis (per 100 000 population per year)\" is another measure of \"Tuberculosis\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:6d1e2881": {
    "id": "transfer:6d1e2881",
@@ -292,15 +302,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9567,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Tuberculosis incidence per 100,000 population\" is another measure of \"Tuberculosis\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:c306b9d4": {
    "id": "transfer:c306b9d4",
@@ -319,15 +329,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9558,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Number of neonatal deaths\" is another measure of \"Newborn deaths\", \"Children dying before age five\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:aad8c3f9": {
    "id": "transfer:aad8c3f9",
@@ -346,15 +356,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.955,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Population using safely managed sanitation services (%)\" is another measure of \"Unsafe sanitation\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:c8ec85b3": {
    "id": "transfer:c8ec85b3",
@@ -373,15 +383,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9539,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Incidence of tuberculosis (per 100 000 population) (HIV-positive cases)\" is another measure of \"Tuberculosis\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:45fde8be": {
    "id": "transfer:45fde8be",
@@ -400,15 +410,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9505,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Mothers dying in childbirth\" is another measure of \"Newborn deaths\", \"Children dying before age five\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:3b9fb30d": {
    "id": "transfer:3b9fb30d",
@@ -427,15 +437,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9493,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Probability of dying among children ages 5-9 years (per 1,000)\" is another measure of \"Children dying before age five\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:e394a621": {
    "id": "transfer:e394a621",
@@ -454,15 +464,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9488,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Probability of dying among children ages 5-9 years (per 1,000)\" is another measure of \"Unsafe drinking water\", \"Children dying before age five\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:7bb6c18b": {
    "id": "transfer:7bb6c18b",
@@ -481,15 +491,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9444,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Number of infant deaths\" is another measure of \"Newborn deaths\", \"Children dying before age five\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:ce9bc169": {
    "id": "transfer:ce9bc169",
@@ -508,15 +518,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9444,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"People using safely managed sanitation services, rural (% of rural population)\" is another measure of \"Unsafe sanitation\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:6d997a68": {
    "id": "transfer:6d997a68",
@@ -535,15 +545,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9372,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Death rate due to road traffic injuries\" is another measure of \"Road traffic deaths\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:8a9bee63": {
    "id": "transfer:8a9bee63",
@@ -562,15 +572,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9318,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"People using safely managed sanitation services, urban (% of urban population)\" is another measure of \"Unsafe sanitation\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:7cc49bec": {
    "id": "transfer:7cc49bec",
@@ -589,15 +599,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9296,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Estimated road traffic death rate (per 100 000 population)\" is another measure of \"Road traffic deaths\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:51c62f68": {
    "id": "transfer:51c62f68",
@@ -616,15 +626,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9272,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: different-field",
    "rejected": "\"Prevalence of stunting, height for age (modeled estimate, % of children under 5)\" is in Health, not Education or Food, and no shared mechanism is on record.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:9fd4c018": {
    "id": "transfer:9fd4c018",
@@ -643,15 +653,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9269,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Population using safely managed drinking-water services (%)\" is another measure of \"Women missing from national parliaments\", \"Unsafe drinking water\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:c8c0f540": {
    "id": "transfer:c8c0f540",
@@ -670,15 +680,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9255,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Maternal mortality ratio (per 100 000 live births)\" is another measure of \"Mothers dying in childbirth\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:23043f4a": {
    "id": "transfer:23043f4a",
@@ -697,15 +707,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9244,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Number of maternal deaths\" is another measure of \"Mothers dying in childbirth\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:5716447e": {
    "id": "transfer:5716447e",
@@ -724,15 +734,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9244,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Number of maternal deaths\" is another measure of \"Mothers dying in childbirth\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:77c6d69d": {
    "id": "transfer:77c6d69d",
@@ -751,15 +761,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9238,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: different-field",
    "rejected": "\"Prevalence of moderate or severe food insecurity in the population (%)\" is in Health, not Poverty or Food, and no shared mechanism is on record.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:5fb390b5": {
    "id": "transfer:5fb390b5",
@@ -778,13 +788,13 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9234,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z",
+   "returned": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Proportion of population using safely managed drinking water services\" is another measure of \"Women missing from national parliaments\", \"Unsafe drinking water\", which the solution already addresses: a link to add to the catalogue, not a new test."
   },
@@ -805,15 +815,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9227,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: different-field",
    "rejected": "\"Stunting numbers among children under 5 years of age (millions), model-based estimates\" is in Health, not Education or Food, and no shared mechanism is on record.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:9de75d90": {
    "id": "transfer:9de75d90",
@@ -832,15 +842,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.922,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Proportion of children under 5 years of age whose births have been registered with a civil authority, by age\" is another measure of \"Children whose birth is never registered\", which the solution already addresses: a link to add to the catalogue, not a new test.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "transfer:461b71a6": {
    "id": "transfer:461b71a6",
@@ -859,15 +869,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9178,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: different-field",
    "rejected": "\"Prevalence of severe food insecurity in the population (%)\" is in Health, not Poverty or Food, and no shared mechanism is on record.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:d10411a5": {
    "id": "combination:d10411a5",
@@ -886,8 +896,8 @@
    "novelty": "partial",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1132,
    "why_model": {
@@ -896,11 +906,11 @@
     "note": "Written by a model from the two entries only and checked for invented figures; a hypothesis, not evidence."
    },
    "why_model_tried": "2026-11-21T07:39:51.305Z",
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Chlorinate water at the point where people collect it and Reserve leadership seats for women share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:35d28123": {
    "id": "combination:35d28123",
@@ -919,17 +929,17 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.0824,
    "why_model": null,
    "why_model_tried": "2026-11-21T07:39:51.305Z",
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Require and enforce motorcycle helmets and Start kangaroo mother care at birth for small babies share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:9d63ae49": {
    "id": "combination:9d63ae49",
@@ -948,17 +958,17 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.0782,
    "why_model": null,
    "why_model_tried": "2026-11-21T07:39:51.305Z",
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Require and enforce motorcycle helmets and Oral rehydration salts plus zinc as the standard first treatment share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:e2e695c5": {
    "id": "combination:e2e695c5",
@@ -977,15 +987,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.0474,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Lay health workers deliver problem-solving therapy on a bench and Require and enforce motorcycle helmets share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:21cf2a82": {
    "id": "combination:21cf2a82",
@@ -1004,15 +1014,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.0146,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Lay health workers deliver problem-solving therapy on a bench and Measure blood loss with a calibrated drape and treat heavy bleeding with one bundle share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:a8bcc5b0": {
    "id": "combination:a8bcc5b0",
@@ -1031,15 +1041,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.001,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Subsidise hygienic latrines for the poorest households, alongside community mobilisation and Reserve leadership seats for women share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:15b21a73": {
    "id": "combination:15b21a73",
@@ -1058,8 +1068,8 @@
    "novelty": "partial",
    "status": "standing",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9835,
    "justification": {
@@ -1072,7 +1082,7 @@
      "Oral rehydration salts plus zinc as the standard first treatment: WHO and UNICEF joint statement on diarrhoea management, 2004; Lamberti et al., BMC Public Health, 2011 (zinc meta-analysis)"
     ],
     "needs_model": false,
-    "rated": "2026-11-27T09:00:22.731Z"
+    "rated": "2026-11-27T15:09:18.791Z"
    },
    "panel": {
     "at": "2026-11-21T11:39:57.474Z",
@@ -1108,15 +1118,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9825,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Start kangaroo mother care at birth for small babies and Reserve leadership seats for women share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:d647842c": {
    "id": "combination:d647842c",
@@ -1135,15 +1145,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9728,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Distribute insecticide-treated bed nets, choosing nets that beat local resistance and Measure blood loss with a calibrated drape and treat heavy bleeding with one bundle share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:59f5c5ec": {
    "id": "combination:59f5c5ec",
@@ -1162,15 +1172,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9511,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Reliable immunisation camps with a small incentive and Measure blood loss with a calibrated drape and treat heavy bleeding with one bundle share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:0d610034": {
    "id": "combination:0d610034",
@@ -1189,8 +1199,8 @@
    "novelty": "partial",
    "status": "standing",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9508,
    "justification": {
@@ -1203,7 +1213,7 @@
      "Start kangaroo mother care at birth for small babies: WHO Immediate KMC Study Group, New England Journal of Medicine, 2021"
     ],
     "needs_model": false,
-    "rated": "2026-11-27T09:00:22.731Z"
+    "rated": "2026-11-27T15:09:18.791Z"
    },
    "panel": {
     "at": "2026-11-21T11:39:57.474Z",
@@ -1241,8 +1251,8 @@
    "novelty": "partial",
    "status": "standing",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.943,
    "justification": {
@@ -1255,7 +1265,7 @@
      "Distribute insecticide-treated bed nets, choosing nets that beat local resistance: Lengeler, Cochrane Review, 2004"
     ],
     "needs_model": false,
-    "rated": "2026-11-27T09:00:22.731Z"
+    "rated": "2026-11-27T15:09:18.791Z"
    },
    "panel": {
     "at": "2026-11-21T11:39:57.474Z",
@@ -1293,8 +1303,8 @@
    "novelty": "partial",
    "status": "standing",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.9173,
    "justification": {
@@ -1307,7 +1317,7 @@
      "Oral rehydration salts plus zinc as the standard first treatment: WHO and UNICEF joint statement on diarrhoea management, 2004; Lamberti et al., BMC Public Health, 2011 (zinc meta-analysis)"
     ],
     "needs_model": false,
-    "rated": "2026-11-27T09:00:22.731Z"
+    "rated": "2026-11-27T15:09:18.791Z"
    },
    "panel": {
     "at": "2026-11-21T11:39:57.474Z",
@@ -1346,15 +1356,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.8941,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Give unconditional cash directly to poor households and School-based deworming (evidence is contested) share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:4acff686": {
    "id": "combination:4acff686",
@@ -1373,15 +1383,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.8934,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Give unconditional cash directly to poor households and Lay health workers deliver problem-solving therapy on a bench share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:8b1749b9": {
    "id": "combination:8b1749b9",
@@ -1400,15 +1410,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.8694,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Treat high blood pressure with one standard protocol and Reliable immunisation camps with a small incentive share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:6116876c": {
    "id": "combination:6116876c",
@@ -1427,15 +1437,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.8487,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Offer cytisine, a low-cost plant-based tablet, to people who want to stop smoking and Treat high blood pressure with one standard protocol share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:36bba803": {
    "id": "combination:36bba803",
@@ -1454,15 +1464,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.8395,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Give unconditional cash directly to poor households and Treat high blood pressure with one standard protocol share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:583e6d2a": {
    "id": "combination:583e6d2a",
@@ -1481,15 +1491,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.8348,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Subsidise hygienic latrines for the poorest households, alongside community mobilisation and Teaching at the Right Level: group by skill, not grade share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:966aae18": {
    "id": "combination:966aae18",
@@ -1508,15 +1518,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.8184,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "The graduation approach: a bundle of an asset, training, savings and coaching and Vitamin A supplementation in deficient populations share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:86d4dd66": {
    "id": "combination:86d4dd66",
@@ -1535,15 +1545,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.7949,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Mobile money agent networks and Teaching at the Right Level: group by skill, not grade share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:1ca6f06c": {
    "id": "combination:1ca6f06c",
@@ -1562,15 +1572,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.7888,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "Make a birth certificate a condition of a child cash transfer and Teaching at the Right Level: group by skill, not grade share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:50d1a890": {
    "id": "combination:50d1a890",
@@ -1589,15 +1599,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.7863,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "School-based deworming (evidence is contested) and The graduation approach: a bundle of an asset, training, savings and coaching share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:3f6fc211": {
    "id": "combination:3f6fc211",
@@ -1616,8 +1626,8 @@
    "novelty": "partial",
    "status": "standing",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.7848,
    "justification": {
@@ -1630,7 +1640,7 @@
      "Mobile money agent networks: Suri and Jack, Science, 2016"
     ],
     "needs_model": false,
-    "rated": "2026-11-27T09:00:22.731Z"
+    "rated": "2026-11-27T15:09:18.791Z"
    },
    "panel": {
     "at": "2026-11-21T11:39:57.474Z",
@@ -1669,15 +1679,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.7681,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-shared-mechanism",
    "rejected": "A regulated pollution market with continuous monitoring and Vitamin A supplementation in deficient populations share no main outcome, delivery channel or population, so nothing explains why they belong together.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:2fc87499": {
    "id": "bridge:2fc87499",
@@ -1694,15 +1704,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1828,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Hypertension effective treatment coverage (controlled hypertension )among adults aged 30-79, age-standardized (%)\" and \"Hypertension treatment coverage among adults aged 30-79 with hypertension, age-standardized (%)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:ed674949": {
    "id": "bridge:ed674949",
@@ -1719,15 +1729,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1814,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Hypertension: effective treatment coverage (controlled hypertension) among adults aged 30-79 with hypertension, crude (%)\" and \"Hypertension treatment coverage among adults aged 30-79 with hypertension, crude (%)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:a5ce25f6": {
    "id": "bridge:a5ce25f6",
@@ -1744,15 +1754,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1774,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Hypertension treatment coverage among adults aged 30-79 with hypertension, age-standardized (%)\" and \"Hypertension treatment coverage among adults aged 30-79 with hypertension, crude (%)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:80554d06": {
    "id": "bridge:80554d06",
@@ -1769,15 +1779,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1773,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Hypertension: diagnosis coverage among adults aged 30-79 with hypertension, age-standardized (%)\" and \"Hypertension: diagnosis coverage among adults aged 30-79 with hypertension, crude (%)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:94dfb6aa": {
    "id": "bridge:94dfb6aa",
@@ -1794,15 +1804,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1758,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Literacy rate, adult female (% of females ages 15 and above)\" and \"Literacy rate, adult total (% of people ages 15 and above)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:6926deea": {
    "id": "bridge:6926deea",
@@ -1819,15 +1829,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1694,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Literacy rate, youth female (% of females ages 15-24)\" and \"Literacy rate, youth total (% of people ages 15-24)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:ddc8faef": {
    "id": "bridge:ddc8faef",
@@ -1844,15 +1854,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1619,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Total population pushed further below the $2.15 a day poverty line by household health expenditures (%, regional, global)\" and \"Total population pushed further below the $1.90 a day poverty line by household health expenditures (%, regional, global)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:a7fdbb3d": {
    "id": "bridge:a7fdbb3d",
@@ -1869,15 +1879,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1617,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Total population pushed further below the $2.15 a day poverty line by household health expenditures (millions, regional, global)\" and \"Total population pushed further below the $1.90 a day poverty line by household health expenditures (millions, regional, global)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:9692d696": {
    "id": "bridge:9692d696",
@@ -1894,15 +1904,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1602,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"People using safely managed drinking water services, rural (% of rural population)\" and \"People using safely managed sanitation services, rural (% of rural population)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:510f17c5": {
    "id": "bridge:510f17c5",
@@ -1919,15 +1929,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1584,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Methane (CH4) emissions from Industrial Combustion (Energy) (Mt CO2e)\" and \"Carbon dioxide (CO2) emissions from Industrial Combustion (Energy) (Mt CO2e)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:1f4eb5e0": {
    "id": "bridge:1f4eb5e0",
@@ -1944,15 +1954,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 1.1583,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Prevalence of HIV, total (% of population ages 15-49)\" and \"Prevalence of HIV, male (% ages 15-24)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:ac064e50": {
    "id": "bridge:ac064e50",
@@ -2185,15 +2195,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5338,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Number of verified cases of killing, kidnapping, enforced disappearance, arbitrary detention and torture of journalists, associated media personnel, trade unionists and human rights advocates in the previous 12 months\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:ca410435": {
    "id": "frontier:ca410435",
@@ -2210,15 +2220,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5302,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Unsentenced detainees as a proportion of overall prison population\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:9547a779": {
    "id": "frontier:9547a779",
@@ -2235,15 +2245,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5233,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Trachoma\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:38b076d4": {
    "id": "frontier:38b076d4",
@@ -2260,15 +2270,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5209,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Cardiomyopathy, myocarditis, endocarditis\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:d4f40cfd": {
    "id": "frontier:d4f40cfd",
@@ -2285,15 +2295,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5177,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Average share of the built-up area of cities that is open space for public use for all, by sex, age and persons with disabilities\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:a643450e": {
    "id": "frontier:a643450e",
@@ -2310,15 +2320,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5142,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Tetanus\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:9947adc5": {
    "id": "frontier:9947adc5",
@@ -2335,15 +2345,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5137,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Trichuriasis\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:b4ba3464": {
    "id": "frontier:b4ba3464",
@@ -2360,15 +2370,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5093,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Other unintentional injuries\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:adba295f": {
    "id": "frontier:adba295f",
@@ -2385,15 +2395,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5022,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Edentulism\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:9f1bbc00": {
    "id": "frontier:9f1bbc00",
@@ -2410,15 +2420,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5017,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Proportion of seized, found or surrendered arms whose illicit origin or context has been traced or established by a competent authority in line with international instruments\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:a8ba2180": {
    "id": "frontier:a8ba2180",
@@ -2435,15 +2445,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5016,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Falls\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:abb7e7a2": {
    "id": "frontier:abb7e7a2",
@@ -2460,15 +2470,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.5007,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Congenital heart anomalies\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:046ef316": {
    "id": "frontier:046ef316",
@@ -2485,15 +2495,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4996,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"National recycling rate, tons of material recycled\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:bc48e07e": {
    "id": "frontier:bc48e07e",
@@ -2510,15 +2520,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4995,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Total alcohol consumption per capita, male (liters of pure alcohol, projected estimates, male 15+ years of age)\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:a9b7e47c": {
    "id": "frontier:a9b7e47c",
@@ -2535,15 +2545,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4982,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Other congenital anomalies\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:a7a400c7": {
    "id": "frontier:a7a400c7",
@@ -2560,15 +2570,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4941,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Red List Index\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:a64583a5": {
    "id": "frontier:a64583a5",
@@ -2585,15 +2595,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4939,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Trichomoniasis\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:4cd8ca27": {
    "id": "frontier:4cd8ca27",
@@ -2610,15 +2620,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4934,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Proportion of businesses that had at least one contact with a public official and that paid a bribe to a public official, or were asked for a bribe by those public officials during the previous 12 months\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:acb7e935": {
    "id": "frontier:acb7e935",
@@ -2635,15 +2645,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4928,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Other chromosomal anomalies\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:a5458212": {
    "id": "frontier:a5458212",
@@ -2660,15 +2670,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.491,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Other STDs\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:6de38fc5": {
    "id": "frontier:6de38fc5",
@@ -2685,15 +2695,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4893,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Proportion of traded wildlife that was poached or illicitly trafficked\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:ca9c7641": {
    "id": "frontier:ca9c7641",
@@ -2710,15 +2720,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4893,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Proportion of traded wildlife that was poached or illicitly trafficked\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:a7458538": {
    "id": "frontier:a7458538",
@@ -2735,15 +2745,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.489,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Gonorrhoea\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:afba2c85": {
    "id": "frontier:afba2c85",
@@ -2760,15 +2770,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4889,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Unintentional injuries\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "frontier:243dfb3a": {
    "id": "frontier:243dfb3a",
@@ -2785,15 +2795,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T07:39:51.305Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 19,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 20,
    "missed": 0,
    "best": 0.4887,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: no-measure",
    "rejected": "\"Other malignant neoplasms\" has no measured trend or source note, so its size and urgency are unknown.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:691306e0": {
    "id": "bridge:691306e0",
@@ -2810,15 +2820,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T11:28:10.568Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 18,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 19,
    "missed": 0,
    "best": 1.184,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"School enrollment, primary (% gross)\" and \"School enrollment, secondary (% gross)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:6c2356ac": {
    "id": "bridge:6c2356ac",
@@ -2835,15 +2845,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T11:28:10.568Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 18,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 19,
    "missed": 0,
    "best": 1.1813,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"School enrollment, primary (% net)\" and \"School enrollment, secondary (% net)\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:6aabf2c3": {
    "id": "bridge:6aabf2c3",
@@ -2860,15 +2870,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T11:28:10.568Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 18,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 19,
    "missed": 0,
    "best": 1.176,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Severe wasted numbers among children under 5 years of age (millions), model-based estimates\" and \"Severe wasted prevalence among children under 5 years of age (%), model-based estimates\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "bridge:0469ae09": {
    "id": "bridge:0469ae09",
@@ -2885,15 +2895,15 @@
    "novelty": "none",
    "status": "dropped",
    "first_seen": "2026-11-21T11:28:10.568Z",
-   "last_seen": "2026-11-27T09:00:22.731Z",
-   "runs": 18,
+   "last_seen": "2026-11-27T15:09:18.791Z",
+   "runs": 19,
    "missed": 0,
    "best": 1.1586,
-   "settled": "2026-11-27T09:00:22.731Z",
+   "settled": "2026-11-27T15:09:18.791Z",
    "reason": "unjustified: same-problem-other-measure",
    "rejected": "\"Wasted numbers among children under 5 years of age (millions), model-based estimates\" and \"Wasted prevalence among children under 5 years of age (%), model-based estimates\" measure the same thing in different ways.",
    "justification": null,
-   "returned": "2026-11-27T09:00:22.731Z"
+   "returned": "2026-11-27T15:09:18.791Z"
   },
   "combination:06e807a2": {
    "id": "combination:06e807a2",
@@ -3434,7 +3444,7 @@
      "Oral rehydration salts plus zinc as the standard first treatment: WHO and UNICEF joint statement on diarrhoea management, 2004; Lamberti et al., BMC Public Health, 2011 (zinc meta-analysis)"
     ],
     "needs_model": false,
-    "rated": "2026-11-27T09:00:22.731Z"
+    "rated": "2026-11-27T15:09:18.791Z"
    },
    "panel": {
     "at": "2026-11-21T11:39:57.474Z",
@@ -3482,7 +3492,7 @@
      "Vitamin A supplementation in deficient populations: Imdad et al., Cochrane Review, 2022"
     ],
     "needs_model": false,
-    "rated": "2026-11-27T09:00:22.731Z"
+    "rated": "2026-11-27T15:09:18.791Z"
    },
    "panel": {
     "at": "2026-11-21T11:39:57.474Z",
