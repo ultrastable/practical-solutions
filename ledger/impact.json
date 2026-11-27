@@ -1,12 +1,12 @@
 {
- "at": "2026-11-27T08:59:48.547Z",
+ "at": "2026-11-27T19:09:35.020Z",
  "readings": {
   "impact.ready_share": 0.577,
   "impact.held_back": 3,
   "impact.problems_covered": 0.952,
   "impact.problems_seeking": 811,
   "impact.catalogue_size": 47,
-  "reach.views_30d": 11105
+  "reach.views_30d": 11778
  },
  "assessments": [
   {
@@ -47,8 +47,8 @@
   {
    "id": "reach.views_30d",
    "status": "unknown",
-   "gap": 1111,
-   "value": 11105,
+   "gap": 1178,
+   "value": 11778,
    "note": "history shorter than the plateau window"
   }
  ],
@@ -61,6 +61,10 @@
    {
     "at": 1795698268717,
     "v": 0.577
+   },
+   {
+    "at": 1795806575016,
+    "v": 0.577
    }
   ],
   "impact.held_back": [
@@ -70,6 +74,10 @@
    },
    {
     "at": 1795698268717,
+    "v": 3
+   },
+   {
+    "at": 1795806575016,
     "v": 3
    }
   ],
@@ -81,6 +89,10 @@
    {
     "at": 1795698268717,
     "v": 0.952
+   },
+   {
+    "at": 1795806575016,
+    "v": 0.952
    }
   ],
   "impact.catalogue_size": [
@@ -90,6 +102,10 @@
    },
    {
     "at": 1795698268717,
+    "v": 47
+   },
+   {
+    "at": 1795806575016,
     "v": 47
    }
   ],
@@ -101,6 +117,10 @@
    {
     "at": 1795698268717,
     "v": 11105
+   },
+   {
+    "at": 1795806575016,
+    "v": 11778
    }
   ],
   "impact.problems_seeking": [

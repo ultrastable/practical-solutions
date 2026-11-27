@@ -10,7 +10,7 @@
    "why": "draft refused: evidence names a source that was not given"
   },
   "ncd": {
-   "at": "2026-11-26T01:56:14.347Z",
+   "at": "2026-11-27T19:09:55.845Z",
    "why": "no usable source ([{\"id\":\"ncd\",\"event\":\"kept 0 of 8\"}], query \"diabetes\")"
   },
   "suicide": {
@@ -38,5 +38,5 @@
    ]
   }
  ],
- "at": "2026-11-27T09:00:22.703Z"
+ "at": "2026-11-27T19:09:55.845Z"
 }
