@@ -18,16 +18,16 @@
    "outcome": "rejected"
   },
   "emissions-market": {
-   "at": "2026-11-18T13:55:28.790Z",
-   "outcome": "no change proposed: None of the sources mention pollution markets, cap-and-trade systems, or Surat, India, so the entry's claims remain unchallenged."
+   "at": "2026-11-27T15:01:47.445Z",
+   "outcome": "no change proposed: None of the provided sources discuss a cap‑and‑trade market, continuous emission monitoring, or any study in Surat, India, so there is no evidence to correct any field."
   },
   "friendship-bench": {
-   "at": "2026-11-18T13:55:28.790Z",
-   "outcome": "no sources: Europe PMC HTTP 500"
+   "at": "2026-11-27T15:01:47.445Z",
+   "outcome": "uncertain"
   },
   "graduation": {
-   "at": "2026-11-19T14:24:35.317Z",
-   "outcome": "no sources: Europe PMC HTTP 503"
+   "at": "2026-11-27T15:01:47.445Z",
+   "outcome": "no change proposed: None of the sources provide information relevant to the entry's fields."
   },
   "helmets": {
    "at": "2026-11-19T14:24:35.317Z",
@@ -185,32 +185,6 @@
    "votes": [],
    "status": "rejected",
    "reason": "evidence check failed: the old text is not found exactly once in the source file",
-   "at": "2026-11-17T18:01:45.400Z"
-  },
-  {
-   "id": "149be85936ab",
-   "entry": "friendship-bench",
-   "field": "works_where",
-   "old": "Harare clinics, Zimbabwe; adapted in other countries.",
-   "new": "Zimbabwe; adapted in Botswana and Palestine",
-   "source": {
-    "url": "https://europepmc.org/article/MED/41653177",
-    "title": "Piloting a Near-Peer Lay Counselor Based Problem Solving Therapy Intervention for Youth With and Without HIV in Botswana: An Adaptation of the Friendship Bench."
-   },
-   "quote": "The Safe Haven intervention, adapted from Zimbabwe's Friendship Bench, addresses this gap by leveraging near-peer youth lay counselors trained in Problem-Solving Therapy",
-   "why": "The quote shows that the Friendship Bench intervention has been adapted in Botswana, in addition to its original location in Zimbabwe, and also in Palestine as seen in source 4.",
-   "proposer": {
-    "id": "llama-3.3-fp8",
-    "vendor": "meta",
-    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-   },
-   "checks": {
-    "ok": true,
-    "failed": []
-   },
-   "votes": [],
-   "status": "pending",
-   "reason": "only 0 usable verifiers from distinct vendors; 2 are needed",
    "at": "2026-11-17T18:01:45.400Z"
   },
   {
@@ -605,6 +579,47 @@
    "status": "rejected",
    "reason": "evidence check failed: the old text is not found exactly once in the source file",
    "at": "2026-11-26T15:09:31.882Z"
+  },
+  {
+   "id": "149be85936ab",
+   "entry": "friendship-bench",
+   "field": "works_where",
+   "old": "Harare clinics, Zimbabwe; adapted in other countries.",
+   "new": "Zimbabwe; adapted in Botswana and Palestine",
+   "source": {
+    "url": "https://europepmc.org/article/MED/41653177",
+    "title": "Piloting a Near-Peer Lay Counselor Based Problem Solving Therapy Intervention for Youth With and Without HIV in Botswana: An Adaptation of the Friendship Bench."
+   },
+   "quote": "The Safe Haven intervention, adapted from Zimbabwe's Friendship Bench, addresses this gap by leveraging near-peer youth lay counselors trained in Problem-Solving Therapy",
+   "why": "The quote from source 3 indicates the intervention was adapted in Botswana, and source 4 shows it was also adapted in Palestine, making the current entry imprecise.",
+   "proposer": {
+    "id": "llama-3.3-70b",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": true,
+    "failed": []
+   },
+   "votes": [
+    {
+     "id": "gpt-oss-120b",
+     "vendor": "openai",
+     "model": "@cf/openai/gpt-oss-120b",
+     "verdict": "contradicts",
+     "reason": "The abstract confirms adaptation from Zimbabwe to Botswana but provides no evidence of adaptation in Palestine."
+    },
+    {
+     "id": "mistral-small-3.1",
+     "vendor": "mistral",
+     "model": "@cf/mistralai/mistral-small-3.1-24b-instruct",
+     "verdict": "supports",
+     "reason": "The abstract mentions the adaptation of the intervention in Botswana and does not contradict the mention of Palestine."
+    }
+   ],
+   "status": "uncertain",
+   "reason": "models disagree: 1 supports, 1 contradicts, 0 unclear",
+   "at": "2026-11-27T15:01:47.445Z"
   }
  ],
  "health": {
@@ -643,7 +658,7 @@
    "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "mistral-small-3.1": {
-   "calls": 8,
+   "calls": 10,
    "errors": 0
   },
   "gemma-4": {
@@ -677,12 +692,12 @@
    "last": "worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
   },
   "gpt-oss-120b": {
-   "calls": 18,
+   "calls": 20,
    "errors": 2,
    "last": "empty"
   },
   "llama-3.3-70b": {
-   "calls": 8,
+   "calls": 9,
    "errors": 0
   }
  },
@@ -699,6 +714,13 @@
    "id": "4c9bfb5d48a4",
    "votes": {
     "meta": "supports",
+    "mistral": "supports"
+   }
+  },
+  {
+   "id": "149be85936ab",
+   "votes": {
+    "openai": "contradicts",
     "mistral": "supports"
    }
   }
@@ -965,11 +987,23 @@
    "none": 0,
    "panel_failures": 0,
    "failures": []
+  },
+  {
+   "at": "2026-11-27T15:01:47.445Z",
+   "examined": 3,
+   "proposed": 1,
+   "accepted": 0,
+   "uncertain": 1,
+   "rejected": 0,
+   "pending": 0,
+   "none": 2,
+   "panel_failures": 0,
+   "failures": []
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-26T15:09:31.882Z"
+ "at": "2026-11-27T15:01:47.445Z"
 }
