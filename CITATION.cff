@@ -5,4 +5,6 @@ authors:
   - family-names: "Quni-Gudzinas"
     given-names: "Rowan Brad"
 repository-code: "https://github.com/ultrastable/practical-solutions"
-license: LicenseRef-Ultrastable-USL-1.0
+abstract: "Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems."
+license-url: "https://github.com/ultrastable/practical-solutions/blob/main/LICENSE"
+url: "https://ultrastable.org"

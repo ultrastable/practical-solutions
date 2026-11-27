@@ -22,6 +22,12 @@
         "provider": "cloudflare",
         "kind": "worker",
         "name": "tenant-ps-core"
+      },
+      {
+        "provider": "cloudflare",
+        "kind": "worker",
+        "name": "tenant-ps-web",
+        "how": "front end, deployed from this repository's main by its own workflows"
       }
     ]
   }

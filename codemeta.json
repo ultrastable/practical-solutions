@@ -1,0 +1,22 @@
+{
+ "@context": "https://w3id.org/codemeta/3.0",
+ "@type": "SoftwareSourceCode",
+ "name": "Practical Solutions",
+ "description": "Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems.",
+ "codeRepository": "https://github.com/ultrastable/practical-solutions",
+ "url": "https://ultrastable.org",
+ "license": "https://github.com/ultrastable/practical-solutions/blob/main/LICENSE",
+ "author": [
+  {
+   "@type": "Person",
+   "@id": "https://orcid.org/0009-0002-4317-5604",
+   "name": "Rowan Brad Quni-Gudzinas"
+  }
+ ],
+ "keywords": [
+  "autonomous-agents",
+  "built-on-ultrastable",
+  "cloudflare-workers",
+  "ultrastable"
+ ]
+}

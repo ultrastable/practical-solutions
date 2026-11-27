@@ -1,9 +1,29 @@
 # Practical Solutions
 
-> Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems. Licence: LicenseRef-Ultrastable-USL-1.0.
+> Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems.
+
+## Live
+
+- [Practical Solutions](https://ultrastable.org/): the running system
+- [Health report](https://ultrastable.org/health): the result of its last tick
+- [Statements](https://ultrastable.org/claims.json): what it states, and the endpoint behind each statement
+- [llms.txt](https://ultrastable.org/llms.txt): the index the running system serves, with every route it answers
 
 ## Start here
 
+- [README.md](README.md): what it is, where it runs and how it runs
 - [AGENTS.md](AGENTS.md): instructions for any coding agent
-- [README.md](README.md): what this repository holds
-- [ultrastable.json](ultrastable.json): the machine-readable manifest
+- [ultrastable.json](ultrastable.json): the manifest this file, the README blocks, CITATION.cff, publiccode.yml and codemeta.json are rendered from
+- [codemeta.json](codemeta.json): software metadata (CodeMeta 3.0)
+
+## Code
+
+- [worker/src/index.js](worker/src/index.js): the Worker's routes
+
+## Optional
+
+- [Source](https://github.com/ultrastable/practical-solutions): the repository
+- [LICENSE](LICENSE): the licence, LicenseRef-Ultrastable-USL-1.0
+- [CONTRIBUTING.md](CONTRIBUTING.md): how work is contributed
+- [SECURITY.md](SECURITY.md): how to report a vulnerability
+- [CHANGELOG.md](CHANGELOG.md): what changed, release by release
