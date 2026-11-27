@@ -1,0 +1,22 @@
+{
+ "repo": "ultrastable/practical-solutions",
+ "description": "Tenant app Practical Solutions (ultrastable.org): evidence-based solutions to global problems.",
+ "homepage": "https://ultrastable.org",
+ "topics": [
+  "autonomous-agents",
+  "built-on-ultrastable",
+  "cloudflare-workers",
+  "ultrastable"
+ ],
+ "settings": {
+  "has_wiki": false,
+  "allow_squash_merge": true,
+  "allow_merge_commit": false,
+  "allow_rebase_merge": false,
+  "allow_auto_merge": true,
+  "allow_update_branch": true,
+  "delete_branch_on_merge": true,
+  "private": false,
+  "is_template": false
+ }
+}

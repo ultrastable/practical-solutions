@@ -2,6 +2,14 @@
 
 Only running code counts. If it does not run, it fails. If it is not code, it fails.
 
+## Build and test
+
+Run these from the repository root before you push (rule 8 below).
+
+- `npm test`: the tenant's tests.
+- `npm run test:vendor`: the vendored core's tests.
+- `node tools/build_migrations.mjs --check`: the migrations equal their sources.
+
 1. Every change is code with a test that runs in `npm test`. A document is allowed only when code reads it (`org/problems.json`, SQL, workflow files).
 2. `vendor/ultrastable` is a pinned, unmodified copy of `ultrastable/workers`. Fix defects upstream and re-vendor; never edit it here. Defects found here are filed as `UPSTREAM-*` items in `ps/seed.js`; `UPSTREAM-1` is open.
 3. The reviewer of a result is never its author (`ps/verify.js` and the `reviewer_ne_author` check in `ps/steps.js`).
