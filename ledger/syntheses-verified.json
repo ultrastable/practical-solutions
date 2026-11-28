@@ -1,6 +1,6 @@
 {
  "schema": "ps-syntheses-verified/1",
- "at": "2026-11-27T14:00:09.129Z",
+ "at": "2026-11-28T12:17:58.081Z",
  "entries": {
   "barbershop-hearts": {
    "status": "verified",
@@ -48,84 +48,9 @@
      "reason": "matched"
     }
    },
-   "novelty": [
-    {
-     "label": "barbershop and hypertension, Africa or Asia",
-     "total": 19,
-     "closest": [
-      {
-       "title": "Global epidemiology, health burden and effective interventions for elevated blood pressure and hypertension",
-       "year": 2021,
-       "url": "https://doi.org/10.1038/s41569-021-00559-8",
-       "hit": false
-      },
-      {
-       "title": "Addressing global disparities in blood pressure control: perspectives of the International Society of Hypertension",
-       "year": 2022,
-       "url": "https://doi.org/10.1093/cvr/cvac130",
-       "hit": false
-      },
-      {
-       "title": "Prevalence and associated factors of hypertension among Africans",
-       "year": 2026,
-       "url": "https://openalex.org/W7224141463",
-       "hit": false
-      },
-      {
-       "title": "Hypertension in Sub-Saharan Africa: Burden, Barriers and Priorities for Improving Treatment Outcomes",
-       "year": 2025,
-       "url": "https://doi.org/10.1161/circresaha.124.323889",
-       "hit": false
-      },
-      {
-       "title": "World Heart Federation Roadmap for Hypertension – A 2021 Update",
-       "year": 2021,
-       "url": "https://doi.org/10.5334/gh.1066",
-       "hit": false
-      }
-     ],
-     "possible_prior_work": false
-    },
-    {
-     "label": "hair salon and blood pressure",
-     "total": 62,
-     "closest": [
-      {
-       "title": "A Literature Synthesis of Health Promotion Research in Salons and Barbershops",
-       "year": 2014,
-       "url": "https://doi.org/10.1016/j.amepre.2014.02.007",
-       "hit": true
-      },
-      {
-       "title": "A pilot study to examine the feasibility of involving urban beauty salons and stylists in a social marketing campaign aimed at improving calcium consumption among low income, African-American and Hispanic children",
-       "year": 2008,
-       "url": "https://doi.org/10.7282/t3v1254t",
-       "hit": true
-      },
-      {
-       "title": "Reckoning Time in the Barber Shop:A Qualitative Study of a Barber Navigating Time, Temporality, and Rhythm",
-       "year": 2014,
-       "url": "https://openalex.org/W2243527285",
-       "hit": true
-      },
-      {
-       "title": "Formative Development of a Culturally Appropriate Mammography Screening Campaign for Low-Income African-American Women.",
-       "year": 2012,
-       "url": "https://openalex.org/W166737179",
-       "hit": false
-      },
-      {
-       "title": "Stay Beautiful -- Stay Alive: Assessing the Receptivity of African American Beauty Salon Owners to the Integration of Breast Cancer Intervention Programs into Salon Operations",
-       "year": 2013,
-       "url": "https://openalex.org/W45837067",
-       "hit": true
-      }
-     ],
-     "possible_prior_work": true
-    }
-   ],
-   "novelty_error": null,
-   "checked_at": "2026-11-27T13:59:34.562Z"
+   "novelty": [],
+   "novelty_error": "https://api.openalex.org/works -> HTTP 429",
+   "checked_at": "2026-11-28T12:16:59.663Z"
   },
   "expectation-framing-hearts": {
    "status": "verified",
@@ -176,8 +101,14 @@
    "novelty": [
     {
      "label": "nocebo framing and antihypertensive adherence",
-     "total": 20,
+     "total": 21,
      "closest": [
+      {
+       "title": "The nocebo effect of drugs",
+       "year": 2016,
+       "url": "https://doi.org/10.1002/prp2.208",
+       "hit": true
+      },
       {
        "title": "Psychological aspects of hypertension treatment - Beliefs, placebo and nocebo effects",
        "year": 2017,
@@ -201,19 +132,13 @@
        "year": 2024,
        "url": "https://doi.org/10.1007/s00701-024-05943-0",
        "hit": false
-      },
-      {
-       "title": "Health care professional barriers and facilitators to discontinuing antidepressant use: A systematic review and thematic synthesis",
-       "year": 2024,
-       "url": "https://doi.org/10.1016/j.jad.2024.04.060",
-       "hit": false
       }
      ],
      "possible_prior_work": true
     },
     {
      "label": "side-effect counselling script and hypertension in Africa",
-     "total": 1764,
+     "total": 1833,
      "closest": [
       {
        "title": "Integrated management of HIV, diabetes, and hypertension in sub-Saharan Africa (INTE-AFRICA): a pragmatic cluster-randomised, controlled trial",
@@ -222,15 +147,15 @@
        "hit": false
       },
       {
-       "title": "Diabetes in sub-Saharan Africa: from clinical care to health policy",
-       "year": 2017,
-       "url": "https://doi.org/10.1016/s2213-8587(17)30181-x",
-       "hit": false
-      },
-      {
        "title": "Assessing implementation outcomes from studies addressing medication adherence for hypertension management in Sub-Saharan Africa: a systematic review",
        "year": 2025,
        "url": "https://doi.org/10.1186/s12889-025-24438-w",
+       "hit": false
+      },
+      {
+       "title": "Diabetes in sub-Saharan Africa: from clinical care to health policy",
+       "year": 2017,
+       "url": "https://doi.org/10.1016/s2213-8587(17)30181-x",
        "hit": false
       },
       {
@@ -250,7 +175,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-27T13:59:44.830Z"
+   "checked_at": "2026-11-28T12:17:17.186Z"
   },
   "elder-teaching-at-the-right-level": {
    "status": "verified",
@@ -304,7 +229,7 @@
    "novelty": [
     {
      "label": "older adult volunteers delivering foundational learning in low-income countries",
-     "total": 627,
+     "total": 653,
      "closest": [
       {
        "title": "Literacy and numeracy support for homeless adults",
@@ -325,15 +250,15 @@
        "hit": false
       },
       {
-       "title": "Supporting english literacy and numeracy learning for Indigenous students in the early years",
-       "year": 2003,
-       "url": "https://openalex.org/W2156824084",
-       "hit": false
-      },
-      {
        "title": "The impact of adult literacy and numeracy on small businesses in rural Lincolnshire and Rutland: a case study",
        "year": 2004,
        "url": "https://openalex.org/W2101503942",
+       "hit": false
+      },
+      {
+       "title": "Supporting english literacy and numeracy learning for Indigenous students in the early years",
+       "year": 2003,
+       "url": "https://openalex.org/W2156824084",
        "hit": false
       }
      ],
@@ -341,7 +266,7 @@
     },
     {
      "label": "Teaching at the Right Level and older volunteers",
-     "total": 43020,
+     "total": 45175,
      "closest": [
       {
        "title": "Self-growth, wellbeing and volunteering - Implications for social prescribing: A qualitative study",
@@ -378,7 +303,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-27T13:59:54.924Z"
+   "checked_at": "2026-11-28T12:17:35.254Z"
   },
   "kmc-ors-zinc": {
    "status": "failed",
@@ -401,11 +326,7 @@
     },
     "5": {
      "found": false,
-     "doi": "10.83842/kangaroomotcar",
-     "title": "Kangaroo Mother Care",
-     "year": null,
-     "similarity": 0.33,
-     "reason": "year null is not 2019"
+     "reason": "no Crossref title match"
     }
    },
    "novelty": [
@@ -438,9 +359,9 @@
        "hit": false
       },
       {
-       "title": "Methodological considerations and cost to measure coverage of multisectoral nutrition interventions: protocol for the One Nutrition Coverage Survey in Bangladesh",
-       "year": 2025,
-       "url": "https://doi.org/10.1136/bmjopen-2025-099314",
+       "title": "Learning From History About Reducing Infant Mortality: Contrasting the Centrality of Structural Interventions to Early 20th‐Century Successes in the United States to Their Neglect in Current Global Initiatives",
+       "year": 2019,
+       "url": "https://doi.org/10.1111/1468-0009.12376",
        "hit": false
       }
      ],
@@ -448,7 +369,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-27T14:00:00.328Z"
+   "checked_at": "2026-11-28T12:17:50.039Z"
   },
   "itn-tarl": {
    "status": "failed",
@@ -481,7 +402,7 @@
    "novelty": [
     {
      "label": "Existing studies",
-     "total": 469,
+     "total": 486,
      "closest": [
       {
        "title": "Impact of Insecticide-Treated Nets on Plasmodium falciparum Infection Rates: A Meta-Analysis",
@@ -518,7 +439,7 @@
     }
    ],
    "novelty_error": null,
-   "checked_at": "2026-11-27T14:00:09.129Z"
+   "checked_at": "2026-11-28T12:17:58.081Z"
   }
  },
  "errors": []
