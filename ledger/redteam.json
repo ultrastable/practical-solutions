@@ -1,6 +1,6 @@
 {
  "schema": "ps-redteam/1",
- "at": "2026-11-27T14:18:22.671Z",
+ "at": "2026-11-28T13:34:34.383Z",
  "model": "workers-ai (tenant model Worker)",
  "bySubject": {
   "cash": {
@@ -733,13 +733,13 @@
    ]
   },
   "latrine-subsidy": {
-   "at": "2026-11-21T12:59:19.105Z",
+   "at": "2026-11-28T13:34:34.383Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Subsidies have no effect on latrine ownership",
+     "challenge": "Subsidies do not increase latrine ownership",
      "falsifier": "A randomized controlled trial showing no significant increase in latrine ownership among subsidized households",
      "severity": 2,
      "source": "model",
@@ -748,8 +748,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Subsidies benefit only the wealthy",
-     "falsifier": "Data showing that the majority of subsidy recipients are non-poor households",
+     "challenge": "Subsidies benefit the wealthy at the expense of the poor",
+     "falsifier": "Data showing that a disproportionate number of subsidies are being claimed by wealthier households",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -757,8 +757,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Latrine ownership equals safely managed waste",
-     "falsifier": "A study demonstrating a significant gap between latrine ownership and proper waste management practices",
+     "challenge": "Latrine ownership leads to safely managed waste",
+     "falsifier": "Studies demonstrating that latrine ownership does not necessarily translate to proper waste management",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -766,8 +766,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Community mobilization alone is sufficient for behavior change",
-     "falsifier": "A trial showing that community mobilization without subsidies leads to significant and sustained increases in latrine ownership and use",
+     "challenge": "Lack of community engagement and education undermines subsidy effectiveness",
+     "falsifier": "Evaluation reports highlighting inadequate community mobilization and education as a major factor in the failure of subsidy programs",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -775,14 +775,14 @@
    ]
   },
   "pph-bundle": {
-   "at": "2026-11-21T12:59:19.105Z",
+   "at": "2026-11-28T13:34:34.383Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
      "challenge": "Ineffective treatment",
-     "falsifier": "Increased incidence of severe bleeding, surgery for bleeding, and death from bleeding",
+     "falsifier": "Increased incidence of severe bleeding, surgery for bleeding, and death from bleeding in hospitals using calibrated drapes and bundled first-response treatment",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -790,8 +790,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inadequate supply chain",
-     "falsifier": "Reports of treatment delays or failures due to shortages of calibrated drapes or essential drugs",
+     "challenge": "Inequitable access to treatment",
+     "falsifier": "Disproportionate rates of severe bleeding, surgery for bleeding, and death from bleeding among patients without access to calibrated drapes and bundled first-response treatment",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -799,8 +799,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assumed universal access to hospitals",
-     "falsifier": "Higher rates of severe bleeding, surgery for bleeding, and death from bleeding in non-hospital settings, such as home births",
+     "challenge": "Assumed availability of resources",
+     "falsifier": "Hospitals unable to maintain a steady supply of calibrated drapes and necessary drugs, resulting in inconsistent application of the treatment protocol",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -809,7 +809,7 @@
      "pass": "red_team",
      "q": 15,
      "challenge": "Inadequate training or protocol adherence",
-     "falsifier": "Instances of incorrect drape calibration, improper administration of first-response treatments, or failure to recognize heavy bleeding",
+     "falsifier": "Instances of severe bleeding, surgery for bleeding, and death from bleeding due to healthcare provider errors or deviations from the calibrated drape and bundled first-response treatment protocol",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -817,14 +817,14 @@
    ]
   },
   "smartphones-for-women": {
-   "at": "2026-11-22T12:50:52.081Z",
+   "at": "2026-11-28T13:34:34.383Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Alternative explanations for increased spending",
-     "falsifier": "Observation of decreased household spending among women who received smartphones",
+     "challenge": "No increase in household spending",
+     "falsifier": "Observation of no significant difference in household spending between smartphone recipients and non-recipients",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -832,8 +832,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Potential negative consequences for women who lose access to smartphones",
-     "falsifier": "Evidence of economic or social harm to women who no longer have access to smartphones after 13 months",
+     "challenge": "Dependence on smartphones for financial transactions",
+     "falsifier": "Evidence of increased financial vulnerability among households that rely heavily on smartphones for transactions",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -841,8 +841,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assumption that smartphone ownership is the primary driver of increased spending",
-     "falsifier": "Discovery of other factors (e.g., external economic changes, alternative forms of support) that contribute to increased household spending",
+     "challenge": "Assumption that smartphone access leads to internet use",
+     "falsifier": "Data showing that most smartphone recipients do not use their devices to access the internet",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -850,8 +850,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Anticipated challenges in maintaining smartphone access and usage",
-     "falsifier": "High rates of smartphone loss, theft, or damage, or lack of access to maintenance and repair services",
+     "challenge": "Lack of infrastructure support for long-term smartphone use",
+     "falsifier": "Observation of high rates of smartphone abandonment due to lack of access to charging facilities, maintenance, or replacement parts",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -859,14 +859,14 @@
    ]
   },
   "tb-community-screening": {
-   "at": "2026-11-22T12:50:52.081Z",
+   "at": "2026-11-28T13:34:34.383Z",
    "family": "meta",
    "findings": [
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Ineffective Reduction",
-     "falsifier": "No significant decrease in tuberculosis prevalence after three yearly rounds of sputum testing",
+     "challenge": "Ineffective reduction in tuberculosis",
+     "falsifier": "No significant decrease in tuberculosis cases after three yearly rounds of sputum testing",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -874,8 +874,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Unnecessary Testing Harm",
-     "falsifier": "Increased incidence of false positives leading to unnecessary treatment and patient harm",
+     "challenge": "Unnecessary testing and resource waste",
+     "falsifier": "High rates of false positives or unnecessary treatment among asymptomatic individuals",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -883,8 +883,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Assumed Test Accuracy",
-     "falsifier": "Discovery of significant inaccuracies in the rapid sputum tests used",
+     "challenge": "Assumed high prevalence of tuberculosis",
+     "falsifier": "Low prevalence of tuberculosis in the tested population, making the cost per case excessively high",
      "severity": 2,
      "source": "model",
      "family": "meta"
@@ -892,8 +892,8 @@
     {
      "pass": "red_team",
      "q": 15,
-     "challenge": "Inadequate Resource Allocation",
-     "falsifier": "Evidence that resources spent on mass testing could have been more effectively allocated to other healthcare initiatives",
+     "challenge": "Inadequate testing methodology or implementation",
+     "falsifier": "Poor test sensitivity or specificity, or inadequate training of testing personnel",
      "severity": 2,
      "source": "model",
      "family": "meta"
