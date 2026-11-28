@@ -2,8 +2,8 @@
  "schema": "ps-grow/1",
  "problems": {
   "internet": {
-   "at": "2026-11-26T23:59:22.147Z",
-   "why": "tests failed: not ok 312 - a problem without a solution says so and gets open questions; every problem has a solution today | failureType: 'testCodeFailure' | error: 'a problem with only mixed evidence is listed for researchers' | expected: true | actual: false"
+   "at": "2026-11-28T03:29:54.920Z",
+   "why": "draft refused: field works_where is missing or too short"
   },
   "maternal": {
    "at": "2026-11-27T09:00:22.703Z",
@@ -38,5 +38,5 @@
    ]
   }
  ],
- "at": "2026-11-27T19:09:55.845Z"
+ "at": "2026-11-28T03:29:54.920Z"
 }
