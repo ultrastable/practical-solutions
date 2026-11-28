@@ -10,7 +10,7 @@ export const IMPL = {
   chlorine: { cost: 'low', cost_note: 'Cents per person per year', adoption: 'scaled', channel: 'village water points and NGO dispenser networks', actors: 'water authorities, Evidence Action, village committees' },
   itn: { cost: 'medium', cost_note: 'Nets every 3 years plus resistance monitoring', adoption: 'scaled', channel: 'national malaria campaigns', actors: 'national malaria programmes, Global Fund' },
   tarl: { cost: 'low', cost_note: 'Regrouping and a trained volunteer or teacher', adoption: 'scaled', channel: 'primary schools and education departments', actors: 'education ministries, Pratham and partners' },
-  immunisation: { cost: 'medium', cost_note: 'Staffed camps and incentives', adoption: 'piloted', channel: 'district immunisation services', actors: 'district health officers' },
+  immunisation: { cost: 'medium', cost_note: 'Staffed camps and incentives', adoption: 'piloted', channel: 'district immunisation services', actors: 'district health officers', limits: 'No evidence of a cheaper delivery model, programme-scale adoption, or a channel beyond district immunisation services; scores 6, below the ready threshold of 7' },
   vita: { cost: 'low', cost_note: 'A few cents per capsule', adoption: 'scaled', channel: 'immunisation contacts and campaigns', actors: 'national nutrition programmes' },
   cash: { cost: 'high', cost_note: 'The transfer itself is the cost', adoption: 'scaled', channel: 'mobile money and social-protection payment systems', actors: 'social-protection ministries, GiveDirectly' },
   hypertension: { cost: 'medium', cost_note: 'Generic drugs, registry, nurse follow-up', adoption: 'scaled', channel: 'primary care, WHO HEARTS package', actors: 'primary-care networks, ministries of health' },
