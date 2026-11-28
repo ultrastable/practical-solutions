@@ -9,3 +9,4 @@
 {"at":"2026-11-25T18:10:47.801Z","tenant":"practical-solutions","seq":222,"hash":"9f01eecdc29e0e9599a889d90c4f4ab74dbc1ae10410e13ee3c6e6e13a66736e","verified":true,"days":6,"hot_events":71}
 {"at":"2026-11-26T17:53:07.957Z","tenant":"practical-solutions","seq":266,"hash":"34be57e341010e93ccfd0442e7feda33fdd0964a7b5f9d56f52a97b0799e0e90","verified":true,"days":7,"hot_events":99}
 {"at":"2026-11-27T17:38:39.127Z","tenant":"practical-solutions","seq":285,"hash":"b5abd5191cbdf417e0d2f7fab4a47de3c4b85d8ada626aefb7fb3429edac67f1","verified":true,"days":8,"hot_events":104}
+{"at":"2026-11-28T16:23:15.380Z","tenant":"practical-solutions","seq":305,"hash":"f2e004c98071534a49bff5fe392f5d671389cfeb09faf9ee2108fd281824fee9","verified":true,"days":9,"hot_events":56}
