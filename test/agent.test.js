@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, writeFileSync, readFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { MAX_ATTEMPTS, countFailures, validateChanged, allowed, parseTask, pickIssue, parseEdits, applyEdits, buildPrompt, closingProbe, overdueIssues, RECONCILE_PROBE } from '../tools/agent.mjs';
+import { sweepExhausted, MAX_ATTEMPTS, countFailures, validateChanged, allowed, parseTask, pickIssue, parseEdits, applyEdits, buildPrompt, closingProbe, overdueIssues, RECONCILE_PROBE } from '../tools/agent.mjs';
 
 test('the agent may write product code and tests, never rules, workflows, vendor or its own tool', () => {
   for (const p of ['worker/src/pages.js', 'ps/brief.js', 'test/x.test.js', 'org/problems.json']) assert.ok(allowed(p), p);
@@ -73,4 +73,15 @@ test('root causes of the 10 stuck issues: cut-off answers, whole-file rewrites, 
   assert.equal(pickIssue([{ number: 1, labels: [{ name: 'agent-task' }, { name: 'agent-exhausted' }], author_association: 'OWNER' }]), null);
   assert.ok(MAX_ATTEMPTS >= 1 && pickIssue([{ number: 2, labels: L('agent-task'), author_association: 'OWNER' }]));
   assert.match(buildPrompt({ number: 9, title: 'T', body: 'B' }, [], ['test/a.test.js']), /EXISTING TESTS: test\/a\.test\.js/);
+});
+
+test('an exhausted issue is closed even when its label cannot be added (run 132 left all 10 open)', () => {
+  const failed = n => JSON.stringify(Array.from({ length: n }, () => ({ body: 'Attempt failed, main unchanged: x' })));
+  const calls = [], say = [];
+  const run = (...a) => { calls.push(a.join(' ')); if (a[0] === 'api') return failed(a[1].includes('/issues/7/') ? 3 : 2); if (a[1] === 'edit') throw new Error("'agent-exhausted' not found"); return ''; };
+  const issues = [{ number: 7, labels: [{ name: 'agent-failed' }] }, { number: 8, labels: [{ name: 'agent-failed' }] }, { number: 9, labels: [{ name: 'agent-failed' }, { name: 'agent-exhausted' }] }];
+  assert.deepEqual(sweepExhausted(issues, { repo: 'o/r', run, say: (n, t) => say.push(n) }), [7], 'only the issue with 3 failures closes, even though labelling failed');
+  assert.deepEqual(say, [7]);
+  assert.ok(calls.includes('issue close 7 --reason not planned') && !calls.some(c => c.startsWith('issue close 8')) && !calls.some(c => c.startsWith('issue close 9')));
+  assert.deepEqual(sweepExhausted(issues, { repo: 'o/r', run, say, dry: true }), [], 'a dry pass closes nothing');
 });
