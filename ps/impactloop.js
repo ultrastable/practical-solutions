@@ -58,3 +58,9 @@ export function run({ cat, reach, hist = {}, ledger = [], open = [], now = Date.
   const p = plan({ metrics: metrics(rd, hist), series, levers: levers(cat, now, evidence), ledger: settled, open, now, cap });
   return { readings: rd, series, ledger: settled, ...p };
 }
+
+// An issue the agent exhausted is closed as not planned; its key stays out of the next pass for `days` days so the loop does not refile it in a loop.
+export function cooldownKeys(closed, now = Date.now(), days = 7) {
+  return (closed || []).filter(i => /not.?planned/i.test(String(i.stateReason || '')) && now - Date.parse(i.closedAt) < days * 864e5)
+    .flatMap(i => [...String(i.body).matchAll(/impact-key: (\S+)/g)].map(m => m[1]));
+}

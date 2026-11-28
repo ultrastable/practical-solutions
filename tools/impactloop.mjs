@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { buildCatalog } from '../worker/src/catalog.js';
 import { SOLUTIONS } from '../worker/src/solutions.js';
-import { run } from '../ps/impactloop.js';
+import { run, cooldownKeys } from '../ps/impactloop.js';
 const FILE = new URL('../ledger/impact.json', import.meta.url), ORIGIN = process.env.PS_ORIGIN || 'https://ultrastable.org';
 const state = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : { series: {}, ledger: [] };
 // second trigger (GitHub's scheduler skips runs): a finished deploy also starts a pass, at most once every 2 hours
@@ -18,7 +18,8 @@ let reach = null;
 try { const r = await fetch(`${ORIGIN}/metrics.json`, { signal: AbortSignal.timeout(15000) }); if (r.ok) { const j = await r.json(); reach = { views: Number(j.views ?? j.total ?? j.page_views) }; } else console.error(`reach unreadable: HTTP ${r.status}`); } catch (e) { console.error('reach unreadable:', e.message); }
 const dry = process.argv.includes('--dry'), gh = (...a) => execFileSync('gh', a, { encoding: 'utf8' });
 let open = [];
-if (!dry) { try { open = JSON.parse(gh('issue', 'list', '--state', 'open', '--label', 'impact-loop', '--limit', '200', '--json', 'body')).flatMap(i => [...String(i.body).matchAll(/impact-key: (\S+)/g)].map(m => m[1])); } catch (e) { console.error('issue list failed:', e.message); process.exit(1); } }
+if (!dry) { try { open = JSON.parse(gh('issue', 'list', '--state', 'open', '--label', 'impact-loop', '--limit', '200', '--json', 'body')).flatMap(i => [...String(i.body).matchAll(/impact-key: (\S+)/g)].map(m => m[1])); } catch (e) { console.error('issue list failed:', e.message); process.exit(1); }
+  try { open = open.concat(cooldownKeys(JSON.parse(gh('issue', 'list', '--state', 'closed', '--label', 'impact-loop', '--limit', '200', '--json', 'body,stateReason,closedAt')))); } catch (e) { console.error('closed issue list failed (cooldown skipped):', e.message); } }
 const EV = new URL('../ledger/impl-evidence.json', import.meta.url), evidence = existsSync(EV) ? JSON.parse(readFileSync(EV, 'utf8')).items : {};
 const out = run({ cat, reach, hist: state.series, ledger: state.ledger, open, evidence, cap: 6 });
 const filed = [];
