@@ -125,17 +125,29 @@ export const sh = (cmd, args, o = {}) => execFileSync(cmd, args, { encoding: 'ut
 export const gh = (...a) => { let last; for (let t = 0; t < 3; t++) { try { return sh('gh', a); } catch (e) { last = e; if (!/50\d|Something went wrong|timeout|ECONNRESET/i.test(String(e.stderr || e.message))) throw e; Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 2000 * (t + 1)); } } throw last; };
 export const note = (n, text) => { try { gh('issue', 'comment', String(n), '--body', text + '\n\n_Free code agent run (GitHub Models, then Workers AI through the tenant model Worker)._'); } catch (e) { console.error('comment failed', e.message); } };
 
+// Resolves, never leaves open, an issue the model failed MAX_ATTEMPTS times: one comment, a best-effort `agent-exhausted` label (the label may not exist yet, and a label
+// failure must never stop the close: run 132 left all 10 issues open because `gh issue edit --add-label` failed on the missing label before the close ran), then close as not planned.
+export function sweepExhausted(issues, { repo, dry = false, run = gh, say = note } = {}) {
+  const has = (i, n) => (i.labels || []).some(l => (l.name || l) === n);
+  const closed = [];
+  for (const i of issues) {
+    if (has(i, EXHAUSTED) || !has(i, 'agent-failed')) continue;
+    let n = 0; try { n = countFailures(JSON.parse(run('api', `repos/${repo}/issues/${i.number}/comments?per_page=100`))); } catch { continue; }
+    if (n < MAX_ATTEMPTS || dry) continue;
+    say(i.number, `Exhausted: ${n} failed attempts (limit ${MAX_ATTEMPTS}). Disposition: flagged, the free model route cannot do this task. Closed as not planned so the queue is resolved, not left to age; the impact loop will not file the same item again for ${COOLDOWN_DAYS} days.`);
+    try { run('label', 'create', EXHAUSTED, '--color', 'b60205', '--force'); run('issue', 'edit', String(i.number), '--add-label', EXHAUSTED); i.labels.push({ name: EXHAUSTED }); } catch (e) { console.error('label failed (closing anyway):', String(e.message).slice(0, 160)); }
+    try { run('issue', 'close', String(i.number), '--reason', 'not planned'); closed.push(i.number); } catch (e) { console.error('close failed:', String(e.message).slice(0, 160)); }
+  }
+  return closed;
+}
+
 export async function run({ issueNo, dry = false, root = process.cwd(), env = process.env } = {}) {
   const issues = JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/issues?state=open&labels=${LABEL}&per_page=50`));
   const writers = new Set();
   for (const login of new Set(issues.map(i => i.user && i.user.login).filter(Boolean))) {
     try { if (['admin', 'maintain', 'write'].includes(JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/collaborators/${login}/permission`)).permission)) writers.add(login); } catch { /* no read access to permissions: association alone decides */ }
   }
-  for (const i of issues) {
-    if ((i.labels || []).some(l => (l.name || l) === EXHAUSTED) || !(i.labels || []).some(l => (l.name || l) === 'agent-failed')) continue;
-    let n = 0; try { n = countFailures(JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/issues/${i.number}/comments?per_page=100`))); } catch { continue; }
-    if (n >= MAX_ATTEMPTS && !dry) { try { gh('issue', 'edit', String(i.number), '--add-label', EXHAUSTED); i.labels.push({ name: EXHAUSTED }); note(i.number, `Exhausted: ${n} failed attempts (limit ${MAX_ATTEMPTS}). Disposition: flagged, the free model route cannot do this task. Closed as not planned so the queue is resolved, not left to age; the impact loop will not file the same item again for ${COOLDOWN_DAYS} days.`); gh('issue', 'close', String(i.number), '--reason', 'not planned'); } catch (e) { console.error(e.message); } }
-  }
+  sweepExhausted(issues, { repo: env.GITHUB_REPOSITORY, dry });
   const issue = pickIssue(issues, { only: issueNo, writers });
   if (!issue) { console.log(JSON.stringify({ picked: null })); return { picked: null }; }
   const { paths } = parseTask(issue.body);
