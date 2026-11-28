@@ -6,8 +6,8 @@
    "why": "draft refused: field works_where is missing or too short"
   },
   "maternal": {
-   "at": "2026-11-27T09:00:22.703Z",
-   "why": "draft refused: evidence names a source that was not given"
+   "at": "2026-11-28T12:16:12.831Z",
+   "why": "draft refused: figure(s) 0 are not in the abstract of source 1"
   },
   "ncd": {
    "at": "2026-11-27T19:09:55.845Z",
@@ -38,5 +38,5 @@
    ]
   }
  ],
- "at": "2026-11-28T03:29:54.920Z"
+ "at": "2026-11-28T12:16:12.831Z"
 }
