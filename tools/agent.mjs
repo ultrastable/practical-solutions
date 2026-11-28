@@ -21,9 +21,10 @@ export const TRUSTED = ['OWNER', 'MEMBER', 'COLLABORATOR'];
 // its `idea` issues sat open for days (issue 204). It is the system itself, so it is trusted by name.
 export const SYSTEM_AUTHORS = ['github-actions[bot]'];
 export const SLA_HOURS = 24;
-// An issue the model has failed MAX_ATTEMPTS times is labelled `agent-exhausted` and left to a person: 66 identical failure comments on #223 taught nothing.
+// An issue the model has failed MAX_ATTEMPTS times is labelled `agent-exhausted` and closed as not planned (an Ultrastable system resolves its own issues; a failed one is a flagged disposition, not an open item): 66 identical failure comments on #223 taught nothing.
 export const MAX_ATTEMPTS = 3;
 export const EXHAUSTED = 'agent-exhausted';
+export const COOLDOWN_DAYS = 7; // ps/impactloop.js cooldownKeys reads the same number
 export const countFailures = comments => comments.filter(c => /^Attempt failed, main unchanged/.test(String(c.body || c))).length;
 // A closing probe an issue may name: `npm test` or one read-only check script. Anything else is never executed.
 export const RECONCILE_PROBE = /^(npm test|node (--no-warnings )?tools\/[a-z0-9_]+\.mjs --check)$/;
@@ -133,7 +134,7 @@ export async function run({ issueNo, dry = false, root = process.cwd(), env = pr
   for (const i of issues) {
     if ((i.labels || []).some(l => (l.name || l) === EXHAUSTED) || !(i.labels || []).some(l => (l.name || l) === 'agent-failed')) continue;
     let n = 0; try { n = countFailures(JSON.parse(gh('api', `repos/${env.GITHUB_REPOSITORY}/issues/${i.number}/comments?per_page=100`))); } catch { continue; }
-    if (n >= MAX_ATTEMPTS && !dry) { try { gh('issue', 'edit', String(i.number), '--add-label', EXHAUSTED); i.labels.push({ name: EXHAUSTED }); note(i.number, `Exhausted: ${n} failed attempts (limit ${MAX_ATTEMPTS}), so the agent stops retrying it. Needs a stronger model or a narrower task; remove the \`${EXHAUSTED}\` label to retry.`); } catch (e) { console.error(e.message); } }
+    if (n >= MAX_ATTEMPTS && !dry) { try { gh('issue', 'edit', String(i.number), '--add-label', EXHAUSTED); i.labels.push({ name: EXHAUSTED }); note(i.number, `Exhausted: ${n} failed attempts (limit ${MAX_ATTEMPTS}). Disposition: flagged, the free model route cannot do this task. Closed as not planned so the queue is resolved, not left to age; the impact loop will not file the same item again for ${COOLDOWN_DAYS} days.`); gh('issue', 'close', String(i.number), '--reason', 'not planned'); } catch (e) { console.error(e.message); } }
   }
   const issue = pickIssue(issues, { only: issueNo, writers });
   if (!issue) { console.log(JSON.stringify({ picked: null })); return { picked: null }; }

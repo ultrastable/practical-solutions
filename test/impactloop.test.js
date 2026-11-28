@@ -4,7 +4,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { buildCatalog } from '../worker/src/catalog.js';
 import { SOLUTIONS } from '../worker/src/solutions.js';
-import { readings, metrics, run } from '../ps/impactloop.js';
+import { readings, metrics, run, cooldownKeys } from '../ps/impactloop.js';
+import { COOLDOWN_DAYS } from '../tools/agent.mjs';
 const cat = buildCatalog({ problems: null, solutions: SOLUTIONS });
 test('readings come from the catalogue and match the /impact page counts', () => {
   const r = readings(cat, { views: 7879 });
@@ -21,4 +22,12 @@ test('run files bounded items with predictions, one per key, and never one that 
   assert.ok(o.items.length > 0 && o.items.length <= 3); assert.ok(o.items.every(i => /within 168 h$/.test(i.prediction) && i.key));
   const again = run({ cat, reach: { views: 7879 }, open: o.items.map(i => i.key), cap: 3 });
   assert.ok(again.items.every(i => !o.items.some(x => x.key === i.key)));
+});
+
+test('an issue the agent exhausted stays out of the loop for the cooldown, then may be filed again', () => {
+  const now = Date.parse('2026-11-28T12:00:00Z');
+  const mk = (key, reason, closedAt) => ({ body: `x\nimpact-key: ${key}`, stateReason: reason, closedAt });
+  const closed = [mk('seek:a', 'NOT_PLANNED', '2026-11-27T00:00:00Z'), mk('seek:b', 'COMPLETED', '2026-11-27T00:00:00Z'), mk('seek:c', 'NOT_PLANNED', '2026-11-10T00:00:00Z')];
+  assert.deepEqual(cooldownKeys(closed, now, COOLDOWN_DAYS), ['seek:a']);
+  assert.deepEqual(cooldownKeys(undefined, now), []);
 });
