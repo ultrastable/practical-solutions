@@ -30,12 +30,12 @@
    "outcome": "no change proposed: None of the sources provide information relevant to the entry's fields."
   },
   "helmets": {
-   "at": "2026-11-19T14:24:35.317Z",
-   "outcome": "no sources: Europe PMC HTTP 503"
+   "at": "2026-11-28T14:09:50.261Z",
+   "outcome": "rejected"
   },
   "hypertension": {
-   "at": "2026-11-19T14:24:35.317Z",
-   "outcome": "rejected"
+   "at": "2026-11-28T14:09:50.261Z",
+   "outcome": "no change proposed: The entry accurately reflects the information provided in the sources, particularly source 1, which discusses the integrated health management model at Kaiser Permanente Northern California and its im"
   },
   "immunisation": {
    "at": "2026-11-22T13:19:07.695Z",
@@ -74,7 +74,7 @@
    "outcome": "no change proposed: None of the provided sources discuss reservation of village‑council leadership seats for women, so no field can be verified or corrected."
   },
   "cytisine": {
-   "at": "2026-11-20T13:59:08.078Z",
+   "at": "2026-11-28T14:09:50.261Z",
    "outcome": "rejected"
   },
   "pph-bundle": {
@@ -620,6 +620,63 @@
    "status": "uncertain",
    "reason": "models disagree: 1 supports, 1 contradicts, 0 unclear",
    "at": "2026-11-27T15:01:47.445Z"
+  },
+  {
+   "id": "f2bc9d485a58",
+   "entry": "helmets",
+   "field": "limits",
+   "old": "The review pools observational studies, not randomised trials; benefit depends on helmet quality and on actual wearing, not just a law.",
+   "new": "The review pools observational studies, not randomised trials; benefit depends on helmet quality, actual wearing, and enforcement, and is influenced by factors such as economic constraints and regulatory gaps",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42966954",
+    "title": "Accessing quality motorcycle helmets in Ghana: a qualitative inquiry."
+   },
+   "quote": "Together, these factors limit access to quality helmets, and a systemic regulatory gap in standards and enforcement exacerbates the problem",
+   "why": "Source 1 highlights the importance of helmet quality and regulatory enforcement in addition to actual wearing, which is not fully captured in the original limits field",
+   "proposer": {
+    "id": "llama-3.3-70b",
+    "vendor": "meta",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the old text is not found exactly once in the source file",
+   "at": "2026-11-28T14:09:50.261Z"
+  },
+  {
+   "id": "20c5892a8018",
+   "entry": "cytisine",
+   "field": "claim",
+   "old": "A 25-day course of cytisine with brief behavioural support helped more smokers stay off cigarettes than nicotine replacement did, and it is among the cheapest stop-smoking medicines.",
+   "new": "Cytisine is an effective smoking‑cessation aid, but recent real‑world evidence does not demonstrate that a 25‑day cytisine regimen with brief behavioural support is more effective than nicotine replacement therapy.",
+   "source": {
+    "url": "https://europepmc.org/article/MED/42793628",
+    "title": "Patient-Level Determinants Outweigh Pharmacotherapy Choice in Smoking Cessation: Evidence from a Real-World Study in Turkey."
+   },
+   "quote": "Bupropion plus NRT combination therapy was associated with significantly higher odds of cessation than cytisine (aOR = 2.36, 95% CI: 1.10-5.08, p = 0.028), while bupropion, NRT, and non‑pharmacological treatment did not differ significantly from cytisine.",
+   "why": "The source shows cytisine was not superior to NRT, contradicting the original claim.",
+   "proposer": {
+    "id": "gpt-oss-120b",
+    "vendor": "openai",
+    "model": "@cf/openai/gpt-oss-120b"
+   },
+   "checks": {
+    "ok": false,
+    "failed": [
+     "the quote is not in the abstract",
+     "the old text is not found exactly once in the source file"
+    ]
+   },
+   "votes": [],
+   "status": "rejected",
+   "reason": "evidence check failed: the quote is not in the abstract; the old text is not found exactly once in the source file",
+   "at": "2026-11-28T14:09:50.261Z"
   }
  ],
  "health": {
@@ -658,12 +715,12 @@
    "last": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
   },
   "mistral-small-3.1": {
-   "calls": 10,
+   "calls": 11,
    "errors": 0
   },
   "gemma-4": {
-   "calls": 8,
-   "errors": 3,
+   "calls": 9,
+   "errors": 4,
    "last": "empty"
   },
   "qwen3-30b": {
@@ -692,12 +749,12 @@
    "last": "worker-ai HTTP 502 5028: @cf/nvidia/nemotron-3-120b-a12b was deprecated on 2026-11-20. See the model catalog"
   },
   "gpt-oss-120b": {
-   "calls": 20,
+   "calls": 21,
    "errors": 2,
    "last": "empty"
   },
   "llama-3.3-70b": {
-   "calls": 9,
+   "calls": 10,
    "errors": 0
   }
  },
@@ -999,11 +1056,25 @@
    "none": 2,
    "panel_failures": 0,
    "failures": []
+  },
+  {
+   "at": "2026-11-28T14:09:50.261Z",
+   "examined": 3,
+   "proposed": 2,
+   "accepted": 0,
+   "uncertain": 0,
+   "rejected": 2,
+   "pending": 0,
+   "none": 1,
+   "panel_failures": 0,
+   "failures": [
+    "gemma-4: empty"
+   ]
   }
  ],
  "metrics": {
   "measured": false,
   "pairs": []
  },
- "at": "2026-11-27T15:01:47.445Z"
+ "at": "2026-11-28T14:09:50.261Z"
 }
