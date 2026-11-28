@@ -58,9 +58,13 @@
    "expectation-framing-hearts"
   ],
   "insights": [
+   "cash-birth-certificate:2c165b1aa0",
    "cash-birth-certificate:51f00f6bcc",
    "cash-birth-certificate:7c7925bf91",
    "cash-birth-certificate:8fa0b20c5d",
+   "cash-birth-certificate:a32f242955",
+   "cash-birth-certificate:b21142b71e",
+   "cash-birth-certificate:bb0f4901ed",
    "cash-birth-certificate:f46f83318c",
    "cash:38c2c7b855",
    "cash:44f0691be4",
@@ -79,8 +83,12 @@
    "clean-cooking:77cedc4244",
    "clean-cooking:9638373a5a",
    "clean-cooking:bba6791153",
+   "cytisine:07c680f429",
    "cytisine:246a204161",
+   "cytisine:25f1e2cd5e",
    "cytisine:475231e02a",
+   "cytisine:9b632674e7",
+   "cytisine:ec93bc6821",
    "cytisine:fbe19058ac",
    "deworming:22478d2146",
    "deworming:30350ce59b",
@@ -173,15 +181,22 @@
    "reducing-newborn-deaths:9d1a40f455",
    "reducing-newborn-deaths:cb91aa04bc",
    "reducing-newborn-deaths:d5c38cabf6",
+   "rural-electrification:195fa33a23",
    "rural-electrification:65882e63c5",
    "rural-electrification:6885048de3",
    "rural-electrification:81169aa19b",
+   "rural-electrification:a18246109c",
    "rural-electrification:abdc28b896",
+   "rural-electrification:bc247ee7a0",
    "smartphones-for-women:0d322153e6",
    "smartphones-for-women:1604efccdf",
    "smartphones-for-women:a957dc24de",
    "smartphones-for-women:aaf8c880ac",
+   "tarl:3d51ff40e5",
+   "tarl:4267e21b54",
    "tarl:71fe6de957",
+   "tarl:78b3c56400",
+   "tarl:8dd89b525e",
    "tarl:9b38716027",
    "tarl:e20346b150",
    "tarl:e9360ca2fe",
@@ -1421,6 +1436,107 @@
     "solutions": 26,
     "syntheses": 3,
     "insights": 100
+   }
+  },
+  {
+   "version": "2026.11.28",
+   "date": "2026-11-28",
+   "first": false,
+   "through": "2026-11-28T11:45:42Z",
+   "added": {
+    "problems": [],
+    "solutions": [],
+    "syntheses": [],
+    "insights": [
+     {
+      "id": "cash-birth-certificate:2c165b1aa0",
+      "title": "cash-birth-certificate: Vulnerable families are excluded from benefits due to registration requirements"
+     },
+     {
+      "id": "cash-birth-certificate:a32f242955",
+      "title": "cash-birth-certificate: Assuming all families have equal access to registration services"
+     },
+     {
+      "id": "cash-birth-certificate:b21142b71e",
+      "title": "cash-birth-certificate: Conditioning cash transfers on birth certificates does not increase registration"
+     },
+     {
+      "id": "cash-birth-certificate:bb0f4901ed",
+      "title": "cash-birth-certificate: Inadequate support for families in registering their children"
+     },
+     {
+      "id": "cytisine:07c680f429",
+      "title": "cytisine: Cytisine's effectiveness is dependent on brief behavioral support"
+     },
+     {
+      "id": "cytisine:25f1e2cd5e",
+      "title": "cytisine: Cytisine is less effective than nicotine replacement"
+     },
+     {
+      "id": "cytisine:9b632674e7",
+      "title": "cytisine: Cytisine's side effects outweigh its benefits"
+     },
+     {
+      "id": "cytisine:ec93bc6821",
+      "title": "cytisine: Lack of licensing in every country indicates inadequate safety or efficacy"
+     },
+     {
+      "id": "rural-electrification:195fa33a23",
+      "title": "rural-electrification: Ignoring potential harm to households who do not receive subsidies"
+     },
+     {
+      "id": "rural-electrification:a18246109c",
+      "title": "rural-electrification: Overlooking alternative technologies or support systems that could be more effective"
+     },
+     {
+      "id": "rural-electrification:bc247ee7a0",
+      "title": "rural-electrification: Assuming that short-term effects are representative of long-term outcomes"
+     },
+     {
+      "id": "tarl:3d51ff40e5",
+      "title": "tarl: Is the assumption that teachers can effectively identify and group students by skill level accurate?"
+     },
+     {
+      "id": "tarl:4267e21b54",
+      "title": "tarl: Are there potential implementation challenges or sustainability issues that could undermine the effectiveness of the program?"
+     },
+     {
+      "id": "tarl:78b3c56400",
+      "title": "tarl: Are certain students, such as those with special needs or English language learners, disproportionately disadvantaged by the skill-grouping "
+     },
+     {
+      "id": "tarl:8dd89b525e",
+      "title": "tarl: Does grouping by grade actually lead to better outcomes than grouping by skill?"
+     }
+    ],
+    "features": [
+     {
+      "id": "b5fee25",
+      "pr": 273,
+      "title": "Machine-readable conformance (REPO-CONFORM-2): 6/18 to 18/18"
+     },
+     {
+      "id": "4ebc7b1",
+      "pr": 274,
+      "title": "Agent: cap retries and catch recurring model failures"
+     },
+     {
+      "id": "21fd759",
+      "pr": 275,
+      "title": "Agent: resolve exhausted issues instead of leaving them open"
+     },
+     {
+      "id": "c2319ab",
+      "pr": 276,
+      "title": "Agent: close an exhausted issue even when its label cannot be added"
+     }
+    ]
+   },
+   "totals": {
+    "problems": 21,
+    "solutions": 26,
+    "syntheses": 3,
+    "insights": 101
    }
   }
  ]

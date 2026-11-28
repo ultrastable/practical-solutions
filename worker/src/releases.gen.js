@@ -5,8 +5,116 @@ export const RELEASES = {
  "schema": "ps-releases/1",
  "min_days": 1,
  "max_gap_days": 7,
- "count": 8,
+ "count": 9,
  "releases": [
+  {
+   "version": "2026.11.28",
+   "date": "2026-11-28",
+   "first": false,
+   "through": "2026-11-28T11:45:42Z",
+   "added": {
+    "problems": [],
+    "solutions": [],
+    "syntheses": [],
+    "insights": [
+     {
+      "id": "cash-birth-certificate:2c165b1aa0",
+      "title": "cash-birth-certificate: Vulnerable families are excluded from benefits due to registration requirements"
+     },
+     {
+      "id": "cash-birth-certificate:a32f242955",
+      "title": "cash-birth-certificate: Assuming all families have equal access to registration services"
+     },
+     {
+      "id": "cash-birth-certificate:b21142b71e",
+      "title": "cash-birth-certificate: Conditioning cash transfers on birth certificates does not increase registration"
+     },
+     {
+      "id": "cash-birth-certificate:bb0f4901ed",
+      "title": "cash-birth-certificate: Inadequate support for families in registering their children"
+     },
+     {
+      "id": "cytisine:07c680f429",
+      "title": "cytisine: Cytisine's effectiveness is dependent on brief behavioral support"
+     },
+     {
+      "id": "cytisine:25f1e2cd5e",
+      "title": "cytisine: Cytisine is less effective than nicotine replacement"
+     },
+     {
+      "id": "cytisine:9b632674e7",
+      "title": "cytisine: Cytisine's side effects outweigh its benefits"
+     },
+     {
+      "id": "cytisine:ec93bc6821",
+      "title": "cytisine: Lack of licensing in every country indicates inadequate safety or efficacy"
+     },
+     {
+      "id": "rural-electrification:195fa33a23",
+      "title": "rural-electrification: Ignoring potential harm to households who do not receive subsidies"
+     },
+     {
+      "id": "rural-electrification:a18246109c",
+      "title": "rural-electrification: Overlooking alternative technologies or support systems that could be more effective"
+     },
+     {
+      "id": "rural-electrification:bc247ee7a0",
+      "title": "rural-electrification: Assuming that short-term effects are representative of long-term outcomes"
+     },
+     {
+      "id": "tarl:3d51ff40e5",
+      "title": "tarl: Is the assumption that teachers can effectively identify and group students by skill level accurate?"
+     },
+     {
+      "id": "tarl:4267e21b54",
+      "title": "tarl: Are there potential implementation challenges or sustainability issues that could undermine the effectiveness of the program?"
+     },
+     {
+      "id": "tarl:78b3c56400",
+      "title": "tarl: Are certain students, such as those with special needs or English language learners, disproportionately disadvantaged by the skill-grouping "
+     },
+     {
+      "id": "tarl:8dd89b525e",
+      "title": "tarl: Does grouping by grade actually lead to better outcomes than grouping by skill?"
+     }
+    ],
+    "features": [
+     {
+      "id": "b5fee25",
+      "pr": 273,
+      "title": "Machine-readable conformance (REPO-CONFORM-2): 6/18 to 18/18"
+     },
+     {
+      "id": "4ebc7b1",
+      "pr": 274,
+      "title": "Agent: cap retries and catch recurring model failures"
+     },
+     {
+      "id": "21fd759",
+      "pr": 275,
+      "title": "Agent: resolve exhausted issues instead of leaving them open"
+     },
+     {
+      "id": "c2319ab",
+      "pr": 276,
+      "title": "Agent: close an exhausted issue even when its label cannot be added"
+     }
+    ]
+   },
+   "totals": {
+    "problems": 21,
+    "solutions": 26,
+    "syntheses": 3,
+    "insights": 101
+   },
+   "counts": {
+    "problems": 0,
+    "solutions": 0,
+    "syntheses": 0,
+    "insights": 15,
+    "features": 4
+   }
+  },
   {
    "version": "2026.11.27",
    "date": "2026-11-27",
